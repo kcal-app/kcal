@@ -1,12 +1,10 @@
 <?php
 
-use App\Models\Ingredient;
-use App\Models\Recipe;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIngredientAmountsTable extends Migration
+class CreateRecipesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,12 +13,9 @@ class CreateIngredientAmountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ingredient_amounts', function (Blueprint $table) {
+        Schema::create('recipes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Ingredient::class);
-            $table->unsignedFloat('amount');
-            $table->foreignIdFor(Recipe::class);
-            $table->unsignedInteger('weight');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -32,6 +27,6 @@ class CreateIngredientAmountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ingredient_amounts');
+        Schema::dropIfExists('recipes');
     }
 }

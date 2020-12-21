@@ -9,26 +9,32 @@ class IngredientSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $default_ingredients = [
             [
-                'name' => 'black beans',
-                'unit' => 'cup',
-                'calories' => 236,
-                'protein' => 15.9,
-                'fat' => 0.972,
-                'carbohydrates' => 42.3
+                'name' => 'baking powder',
+                'unit' => 'tsp',
+                'calories' => 2.44,
+                'protein' => 0,
+                'fat' => 0,
+                'carbohydrates' => 1.27
             ],
             [
-                'name' => 'egg white',
-                'calories' => 17.2,
-                'protein' => 3.6,
-                'fat' => 0.056,
-                'carbohydrates' => 0.241
+                'name' => 'egg',
+                'calories' => 71.5,
+                'protein' => 6.28,
+                'fat' => 4.76,
+                'carbohydrates' => 0.36
+            ],
+            [
+                'name' => 'flour, all-purpose',
+                'unit' => 'cup',
+                'calories' => 455,
+                'protein' => 12.9,
+                'fat' => 1.22,
+                'carbohydrates' => 95.4
             ],
             [
                 'name' => 'milk, whole',
@@ -39,12 +45,28 @@ class IngredientSeeder extends Seeder
                 'carbohydrates' => 11.4
             ],
             [
-                'name' => 'rice, brown (cooked)',
+                'name' => 'salt',
+                'unit' => 'tsp',
+                'calories' => 0,
+                'protein' => 0,
+                'fat' => 0,
+                'carbohydrates' => 0
+            ],
+            [
+                'name' => 'sugar, white',
                 'unit' => 'cup',
-                'calories' => 238,
-                'protein' => 5.32,
-                'fat' => 1.87,
-                'carbohydrates' => 49.6
+                'calories' => 770,
+                'protein' => 0,
+                'fat' => 0.54,
+                'carbohydrates' => 199
+            ],
+            [
+                'name' => 'vegetable oil',
+                'unit' => 'tbsp',
+                'calories' => 124,
+                'protein' => 0,
+                'fat' => 14,
+                'carbohydrates' => 199
             ],
         ];
         Ingredient::factory()->createMany($default_ingredients);
