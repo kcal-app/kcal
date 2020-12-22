@@ -27,6 +27,13 @@ class Recipe extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'servings' => 'int',
+    ];
+
+    /**
      * @inheritdoc
      */
     protected array $with = ['steps', 'ingredientAmounts'];
@@ -48,28 +55,28 @@ class Recipe extends Model
     /**
      * Get total recipe calories.
      */
-    public function calories(): float {
+    public function caloriesTotal(): float {
         return $this->sumNutrient('calories');
     }
 
     /**
      * Get total recipe protein.
      */
-    public function protein(): float {
+    public function proteinTotal(): float {
         return $this->sumNutrient('protein');
     }
 
     /**
      * Get total recipe fat.
      */
-    public function fat(): float {
+    public function fatTotal(): float {
         return $this->sumNutrient('fat');
     }
 
     /**
      * Get total recipe carbohydrates.
      */
-    public function carbohydrates(): float {
+    public function carbohydratesTotal(): float {
         return $this->sumNutrient('carbohydrates');
     }
 

@@ -25,6 +25,13 @@ class RecipeStep extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'number' => 'int',
+    ];
+
+    /**
      * Get the Recipe this step belongs to.
      */
     public function recipe(): BelongsTo {

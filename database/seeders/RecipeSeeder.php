@@ -25,7 +25,7 @@ class RecipeSeeder extends Seeder
         $weight = 0;
         $amounts = [
             [
-                'ingredient_id' => Ingredient::where('name', 'flour, all-purpose')
+                'ingredient_id' => Ingredient::where('name', 'flour')
                     ->first()->id,
                 'amount' => 1,
                 'unit' => 'cup',
@@ -33,7 +33,7 @@ class RecipeSeeder extends Seeder
                 'weight' => $weight++,
             ],
             [
-                'ingredient_id' => Ingredient::where('name', 'sugar, white')
+                'ingredient_id' => Ingredient::where('name', 'sugar')
                     ->first()->id,
                 'amount' => 2,
                 'unit' => 'tbsp',
@@ -64,7 +64,7 @@ class RecipeSeeder extends Seeder
                 'weight' => $weight++,
             ],
             [
-                'ingredient_id' => Ingredient::where('name', 'milk, whole')
+                'ingredient_id' => Ingredient::where('name', 'milk')
                     ->first()->id,
                 'amount' => 1,
                 'unit' => 'cup',

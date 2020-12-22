@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int id
- * @property float amount
- * @property float unit
- * @property int weight
+ * @property float amount Amount of ingredient.
+ * @property ?string unit Ingredient unit (tsp, tbsp, cup, or grams).
+ * @property int weight Weight of ingredient in full ingredient list (lowest first).
  * @property \App\Models\Ingredient ingredient
  * @property \App\Models\Recipe recipe
  */
@@ -25,6 +25,14 @@ class IngredientAmount extends Model
         'amount',
         'unit',
         'weight',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'amount' => 'float',
+        'weight' => 'int',
     ];
 
     /**
@@ -50,42 +58,39 @@ class IngredientAmount extends Model
      * Get total calories for the ingredient amount.
      */
     public function calories(): float {
-        return $this->ingredient->calories * $this->amount * $this->unitMultiplier();
+        return $this->ingredient->calories * $this->unitMultiplier();
     }
 
     /**
      * Get total protein for the ingredient amount.
      */
     public function protein(): float {
-        return $this->ingredient->protein * $this->amount * $this->unitMultiplier();
+        return $this->ingredient->protein * $this->unitMultiplier();
     }
 
     /**
      * Get total fat for the ingredient amount.
      */
     public function fat(): float {
-        return $this->ingredient->fat * $this->amount * $this->unitMultiplier();
+        return $this->ingredient->fat * $this->unitMultiplier();
     }
 
     /**
      * Get total carbohydrates for the ingredient amount.
      */
     public function carbohydrates(): float {
-        return $this->ingredient->carbohydrates * $this->amount * $this->unitMultiplier();
+        return $this->ingredient->carbohydrates * $this->unitMultiplier();
     }
 
     /**
-     * Get the multiplier for the ingredient unit and ingredient amount unit.
+     * Get the multiplier for the ingredient unit based on weight.
      */
     private function unitMultiplier(): float {
-        return match (true) {
-            $this->ingredient->unit === 'tsp' && $this->unit === 'tbsp' => 3,
-            $this->ingredient->unit === 'tsp' && $this->unit === 'cup' => 48,
-            $this->ingredient->unit === 'tbsp' && $this->unit === 'tsp' => 1/3,
-            $this->ingredient->unit === 'tbsp' && $this->unit === 'cup' => 16,
-            $this->ingredient->unit === 'cup' && $this->unit === 'tsp' => 1/48,
-            $this->ingredient->unit === 'cup' && $this->unit === 'tbsp' => 1/16,
+        return match ($this->unit) {
+            null => $this->ingredient->unit_weight,
+            'tsp' => 1/48,
+            'tbsp' => 1/16,
             default => 1
-        };
+        } * $this->amount * ($this->ingredient->cup_weight ?? 1) / 100;
     }
 }
