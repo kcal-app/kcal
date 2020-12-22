@@ -23,13 +23,15 @@ class RecipeSeeder extends Seeder
                 'ingredient_id' => Ingredient::where('name', 'flour, all-purpose')
                     ->first()->id,
                 'amount' => 1,
+                'unit' => 'cup',
                 'recipe_id' => $recipe->id,
                 'weight' => $weight++,
             ],
             [
                 'ingredient_id' => Ingredient::where('name', 'sugar, white')
                     ->first()->id,
-                'amount' => 0.125,
+                'amount' => 2,
+                'unit' => 'tbsp',
                 'recipe_id' => $recipe->id,
                 'weight' => $weight++,
             ],
@@ -37,6 +39,7 @@ class RecipeSeeder extends Seeder
                 'ingredient_id' => Ingredient::where('name', 'baking powder')
                     ->first()->id,
                 'amount' => 2,
+                'unit' => 'tsp',
                 'recipe_id' => $recipe->id,
                 'weight' => $weight++,
             ],
@@ -44,6 +47,7 @@ class RecipeSeeder extends Seeder
                 'ingredient_id' => Ingredient::where('name', 'salt')
                     ->first()->id,
                 'amount' => 1,
+                'unit' => 'tsp',
                 'recipe_id' => $recipe->id,
                 'weight' => $weight++,
             ],
@@ -58,6 +62,7 @@ class RecipeSeeder extends Seeder
                 'ingredient_id' => Ingredient::where('name', 'milk, whole')
                     ->first()->id,
                 'amount' => 1,
+                'unit' => 'cup',
                 'recipe_id' => $recipe->id,
                 'weight' => $weight++,
             ],
@@ -65,6 +70,7 @@ class RecipeSeeder extends Seeder
                 'ingredient_id' => Ingredient::where('name', 'vegetable oil')
                     ->first()->id,
                 'amount' => 2,
+                'unit' => 'tbsp',
                 'recipe_id' => $recipe->id,
                 'weight' => $weight++,
             ],

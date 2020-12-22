@@ -5,6 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string name
+ * @property string unit
+ * @property float calories
+ * @property float protein
+ * @property float fat
+ * @property float carbohydrates
+ */
 class Ingredient extends Model
 {
     use HasFactory;

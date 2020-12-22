@@ -16,7 +16,7 @@ class CreateIngredientsTable extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('unit')->nullable();
+            $table->enum('unit', ['tsp', 'tbsp', 'cup'])->nullable();
             $table->unsignedFloat('calories')->default(0);
             $table->unsignedFloat('protein')->default(0);
             $table->unsignedFloat('fat')->default(0);

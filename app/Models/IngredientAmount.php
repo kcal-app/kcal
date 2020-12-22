@@ -5,7 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use JetBrains\PhpStorm\Pure;
 
+/**
+ * @property float amount
+ * @property float unit
+ * @property int weight
+ * @property \App\Models\Ingredient ingredient
+ * @property \App\Models\Recipe recipe
+ */
 class IngredientAmount extends Model
 {
     use HasFactory;
@@ -15,6 +23,7 @@ class IngredientAmount extends Model
      */
     protected array $fillable = [
         'amount',
+        'unit',
         'weight',
     ];
 
@@ -40,7 +49,22 @@ class IngredientAmount extends Model
     /**
      * Get total calories for the ingredient amount.
      */
-    public function calories(): float {
-        return $this->ingredient->calories * $this->amount;
+    #[Pure] public function calories(): float {
+        return $this->ingredient->calories * $this->amount * $this->unitMultiplier();
+    }
+
+    /**
+     * Get the multiplier for the ingredient unit and ingredient amount unit.
+     */
+    private function unitMultiplier(): float {
+        return match (true) {
+            $this->ingredient->unit === 'tsp' && $this->unit === 'tbsp' => 3,
+            $this->ingredient->unit === 'tsp' && $this->unit === 'cup' => 48,
+            $this->ingredient->unit === 'tbsp' && $this->unit === 'tsp' => 1/3,
+            $this->ingredient->unit === 'tbsp' && $this->unit === 'cup' => 16,
+            $this->ingredient->unit === 'cup' && $this->unit === 'tsp' => 1/48,
+            $this->ingredient->unit === 'cup' && $this->unit === 'tbsp' => 1/16,
+            default => 1
+        };
     }
 }
