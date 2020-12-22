@@ -11,12 +11,17 @@ class IngredientAmount extends Model
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
+     * @inheritdoc
      */
     protected array $fillable = [
         'amount',
         'weight',
     ];
+
+    /**
+     * @inheritdoc
+     */
+    protected array $with = ['ingredient'];
 
     /**
      * Get the Ingredient this amount belongs to.
@@ -30,5 +35,12 @@ class IngredientAmount extends Model
      */
     public function recipe(): BelongsTo {
         return $this->belongsTo(Recipe::class);
+    }
+
+    /**
+     * Get total calories for the ingredient amount.
+     */
+    public function calories(): float {
+        return $this->ingredient->calories * $this->amount;
     }
 }

@@ -12,11 +12,16 @@ class Recipe extends Model
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
+     * @inheritdoc
      */
     protected array $fillable = [
         'name',
     ];
+
+    /**
+     * @inheritdoc
+     */
+    protected array $with = ['ingredientAmounts'];
 
     /**
      * Get the Ingredient Amounts used for this Recipe.

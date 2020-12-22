@@ -12,32 +12,26 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @inheritdoc
      */
-    protected $fillable = [
+    protected array $fillable = [
         'name',
         'email',
         'password',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
+     * @inheritdoc
      */
-    protected $hidden = [
+    protected array $hidden = [
         'password',
         'remember_token',
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * @inheritdoc
      */
-    protected $casts = [
+    protected array $casts = [
         'email_verified_at' => 'datetime',
     ];
 }

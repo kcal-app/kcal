@@ -10,7 +10,7 @@ class Ingredient extends Model
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
+     * @inheritdoc
      */
     protected array $fillable = [
         'name',
