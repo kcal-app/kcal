@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * @property int id
+ * @property string name
+ * @property string description
+ * @property int servings
  * @property \App\Models\IngredientAmount[] ingredientAmounts
  */
 class Recipe extends Model
@@ -18,18 +22,27 @@ class Recipe extends Model
      */
     protected array $fillable = [
         'name',
+        'description',
+        'servings',
     ];
 
     /**
      * @inheritdoc
      */
-    protected array $with = ['ingredientAmounts'];
+    protected array $with = ['steps', 'ingredientAmounts'];
+
+    /**
+     * Get the steps for this Recipe.
+     */
+    public function steps(): HasMany {
+        return $this->hasMany(RecipeStep::class)->orderBy('number');
+    }
 
     /**
      * Get the Ingredient Amounts used for this Recipe.
      */
     public function ingredientAmounts(): HasMany {
-        return $this->hasMany(IngredientAmount::class);
+        return $this->hasMany(IngredientAmount::class)->orderBy('weight');
     }
 
     /**

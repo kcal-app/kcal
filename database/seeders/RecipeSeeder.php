@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Ingredient;
 use App\Models\IngredientAmount;
 use App\Models\Recipe;
+use App\Models\RecipeStep;
 use Illuminate\Database\Seeder;
 
 class RecipeSeeder extends Seeder
@@ -15,7 +16,11 @@ class RecipeSeeder extends Seeder
     public function run(): void
     {
         /** @var \App\Models\Recipe $recipe */
-        $recipe = Recipe::factory()->create(['name' => 'pancakes']);
+        $recipe = Recipe::factory()->create([
+            'name' => 'pancakes',
+            'description' => 'Basic pancakes in two steps.',
+            'servings' => 4,
+        ]);
 
         $weight = 0;
         $amounts = [
@@ -76,5 +81,19 @@ class RecipeSeeder extends Seeder
             ],
         ];
         IngredientAmount::factory()->createMany($amounts);
+
+        $steps = [
+            [
+                'recipe_id' => $recipe->id,
+                'number' => 1,
+                'step' => 'In a large bowl, mix flour, sugar, baking powder and salt. Make a well in the center, and pour in milk, egg and oil. Mix until smooth.',
+            ],
+            [
+                'recipe_id' => $recipe->id,
+                'number' => 2,
+                'step' => 'Heat a lightly oiled griddle or frying pan over medium high heat. Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake. Brown on both sides and serve hot.',
+            ]
+        ];
+        RecipeStep::factory()->createMany($steps);
     }
 }
