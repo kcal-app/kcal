@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @property float amount
@@ -49,8 +48,29 @@ class IngredientAmount extends Model
     /**
      * Get total calories for the ingredient amount.
      */
-    #[Pure] public function calories(): float {
+    public function calories(): float {
         return $this->ingredient->calories * $this->amount * $this->unitMultiplier();
+    }
+
+    /**
+     * Get total protein for the ingredient amount.
+     */
+    public function protein(): float {
+        return $this->ingredient->protein * $this->amount * $this->unitMultiplier();
+    }
+
+    /**
+     * Get total fat for the ingredient amount.
+     */
+    public function fat(): float {
+        return $this->ingredient->fat * $this->amount * $this->unitMultiplier();
+    }
+
+    /**
+     * Get total carbohydrates for the ingredient amount.
+     */
+    public function carbohydrates(): float {
+        return $this->ingredient->carbohydrates * $this->amount * $this->unitMultiplier();
     }
 
     /**
