@@ -53,31 +53,59 @@ class Recipe extends Model
     }
 
     /**
-     * Get total recipe calories.
+     * Get total calories.
      */
     public function caloriesTotal(): float {
         return $this->sumNutrient('calories');
     }
 
     /**
-     * Get total recipe protein.
+     * Get per serving calories.
+     */
+    public function caloriesPerServing(): float {
+        return $this->caloriesTotal() / $this->servings;
+    }
+
+    /**
+     * Get total protein.
      */
     public function proteinTotal(): float {
         return $this->sumNutrient('protein');
     }
 
     /**
-     * Get total recipe fat.
+     * Get per serving protein.
+     */
+    public function proteinPerServing(): float {
+        return $this->proteinTotal() / $this->servings;
+    }
+
+    /**
+     * Get total fat.
      */
     public function fatTotal(): float {
         return $this->sumNutrient('fat');
     }
 
     /**
-     * Get total recipe carbohydrates.
+     * Get per serving fat.
+     */
+    public function fatPerServing(): float {
+        return $this->fatTotal() / $this->servings;
+    }
+
+    /**
+     * Get total carbohydrates.
      */
     public function carbohydratesTotal(): float {
         return $this->sumNutrient('carbohydrates');
+    }
+
+    /**
+     * Get per serving carbohydrates.
+     */
+    public function carbohydratesPerServing(): float {
+        return $this->carbohydratesTotal() / $this->servings;
     }
 
     /**

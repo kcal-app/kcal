@@ -84,6 +84,11 @@ class IngredientAmount extends Model
 
     /**
      * Get the multiplier for the ingredient unit based on weight.
+     *
+     * Unit weight will be specified for ingredients that are added by unit
+     * (e.g. eggs, vegetables, etc.) and cup weight (the weight of the
+     * ingredient equal to one cup) will be specified for ingredients that are
+     * measured (e.g. flour, milk, etc.).
      */
     private function unitMultiplier(): float {
         return match ($this->unit) {
