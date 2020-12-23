@@ -13,6 +13,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int weight Weight of ingredient in full ingredient list (lowest first).
  * @property \App\Models\Ingredient ingredient
  * @property \App\Models\Recipe recipe
+ * @method float calories Get total calories.
+ * @method float carbohydrates Get total carbohydrates.
+ * @method float cholesterol Get total cholesterol.
+ * @method float fat Get total fat.
+ * @method float protein Get total protein.
+ * @method float sodium Get total sodium.
  */
 class IngredientAmount extends Model
 {
@@ -41,6 +47,18 @@ class IngredientAmount extends Model
     protected array $with = ['ingredient'];
 
     /**
+     * Nutrient calculation methods.
+     */
+    private array $nutrientMethods = [
+        'calories',
+        'carbohydrates',
+        'cholesterol',
+        'fat',
+        'protein',
+        'sodium',
+    ];
+
+    /**
      * Get the Ingredient this amount belongs to.
      */
     public function ingredient(): BelongsTo {
@@ -55,31 +73,22 @@ class IngredientAmount extends Model
     }
 
     /**
-     * Get total calories for the ingredient amount.
+     * Add nutrient calculations handling overloading.
+     *
+     * @param string $method
+     * @param array $parameters
+     *
+     * @return mixed
+     *
+     * @noinspection PhpMissingParamTypeInspection
      */
-    public function calories(): float {
-        return $this->ingredient->calories * $this->unitMultiplier();
-    }
-
-    /**
-     * Get total protein for the ingredient amount.
-     */
-    public function protein(): float {
-        return $this->ingredient->protein * $this->unitMultiplier();
-    }
-
-    /**
-     * Get total fat for the ingredient amount.
-     */
-    public function fat(): float {
-        return $this->ingredient->fat * $this->unitMultiplier();
-    }
-
-    /**
-     * Get total carbohydrates for the ingredient amount.
-     */
-    public function carbohydrates(): float {
-        return $this->ingredient->carbohydrates * $this->unitMultiplier();
+    public function __call($method, $parameters): mixed {
+        if (in_array($method, $this->nutrientMethods)) {
+            return $this->ingredient->{$method} * $this->unitMultiplier();
+        }
+        else {
+            return parent::__call($method, $parameters);
+        }
     }
 
     /**

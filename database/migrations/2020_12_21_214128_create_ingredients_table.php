@@ -16,9 +16,11 @@ class CreateIngredientsTable extends Migration
             $table->string('name');
             $table->string('detail')->nullable();
             $table->unsignedFloat('calories')->default(0);
-            $table->unsignedFloat('protein')->default(0);
-            $table->unsignedFloat('fat')->default(0);
             $table->unsignedFloat('carbohydrates')->default(0);
+            $table->unsignedFloat('cholesterol')->default(0);
+            $table->unsignedFloat('fat')->default(0);
+            $table->unsignedFloat('protein')->default(0);
+            $table->unsignedFloat('sodium')->default(0);
             $table->unsignedFloat('unit_weight')->nullable();
             $table->unsignedFloat('cup_weight')->nullable();
             $table->timestamps();
