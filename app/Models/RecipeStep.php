@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int number
  * @property string step
  * @property \App\Models\Recipe recipe
+ * @property \Illuminate\Support\Carbon created_at
+ * @property \Illuminate\Support\Carbon updated_at
  */
 class RecipeStep extends Model
 {
@@ -19,7 +21,7 @@ class RecipeStep extends Model
     /**
      * @inheritdoc
      */
-    protected array $fillable = [
+    protected $fillable = [
         'number',
         'step',
     ];
@@ -27,7 +29,7 @@ class RecipeStep extends Model
     /**
      * The attributes that should be cast.
      */
-    protected array $casts = [
+    protected $casts = [
         'number' => 'int',
     ];
 

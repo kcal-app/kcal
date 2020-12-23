@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property float sodium (per 100g).
  * @property ?float unit_weight Weight of one cup of the ingredient.
  * @property ?float cup_weight Weight of one "unit" (e.g. an egg, onion, etc.) of the ingredient.
+ * @property \Illuminate\Support\Carbon created_at
+ * @property \Illuminate\Support\Carbon updated_at
  */
 class Ingredient extends Model
 {
@@ -25,7 +27,7 @@ class Ingredient extends Model
     /**
      * @inheritdoc
      */
-    protected array $fillable = [
+    protected $fillable = [
         'name',
         'detail',
         'calories',
@@ -41,7 +43,7 @@ class Ingredient extends Model
     /**
      * The attributes that should be cast.
      */
-    protected array $casts = [
+    protected $casts = [
         'calories' => 'float',
         'carbohydrates' => 'float',
         'cholesterol' => 'float',

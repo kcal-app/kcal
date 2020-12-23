@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int weight Weight of ingredient in full ingredient list (lowest first).
  * @property \App\Models\Ingredient ingredient
  * @property \App\Models\Recipe recipe
+ * @property \Illuminate\Support\Carbon created_at
+ * @property \Illuminate\Support\Carbon updated_at
  * @method float calories Get total calories.
  * @method float carbohydrates Get total carbohydrates.
  * @method float cholesterol Get total cholesterol.
@@ -27,7 +29,7 @@ class IngredientAmount extends Model
     /**
      * @inheritdoc
      */
-    protected array $fillable = [
+    protected $fillable = [
         'amount',
         'unit',
         'weight',
@@ -36,7 +38,7 @@ class IngredientAmount extends Model
     /**
      * The attributes that should be cast.
      */
-    protected array $casts = [
+    protected $casts = [
         'amount' => 'float',
         'weight' => 'int',
     ];
@@ -44,7 +46,7 @@ class IngredientAmount extends Model
     /**
      * @inheritdoc
      */
-    protected array $with = ['ingredient'];
+    protected $with = ['ingredient'];
 
     /**
      * Nutrient calculation methods.

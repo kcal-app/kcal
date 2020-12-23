@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int servings
  * @property \App\Models\RecipeStep[] steps
  * @property \App\Models\IngredientAmount[] ingredientAmounts
+ * @property \Illuminate\Support\Carbon created_at
+ * @property \Illuminate\Support\Carbon updated_at
  * @method float caloriesTotal Get total calories.
  * @method float caloriesPerServing Get per serving calories.
  * @method float carbohydratesTotal Get total carbohydrates.
@@ -33,7 +35,7 @@ class Recipe extends Model
     /**
      * @inheritdoc
      */
-    protected array $fillable = [
+    protected $fillable = [
         'name',
         'description',
         'servings',
@@ -42,14 +44,14 @@ class Recipe extends Model
     /**
      * The attributes that should be cast.
      */
-    protected array $casts = [
+    protected $casts = [
         'servings' => 'int',
     ];
 
     /**
      * @inheritdoc
      */
-    protected array $with = ['steps', 'ingredientAmounts'];
+    protected $with = ['steps', 'ingredientAmounts'];
 
     /**
      * Nutrient total calculation methods.
