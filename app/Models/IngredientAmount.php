@@ -73,7 +73,7 @@ class IngredientAmount extends Model
     }
 
     /**
-     * Add nutrient calculations handling overloading.
+     * Add nutrient calculations handling to overloading.
      *
      * @param string $method
      * @param array $parameters

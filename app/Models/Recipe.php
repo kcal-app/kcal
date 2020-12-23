@@ -11,7 +11,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string name
  * @property string description
  * @property int servings
+ * @property \App\Models\RecipeStep[] steps
  * @property \App\Models\IngredientAmount[] ingredientAmounts
+ * @method float caloriesTotal Get total calories.
+ * @method float caloriesPerServing Get per serving calories.
+ * @method float carbohydratesTotal Get total carbohydrates.
+ * @method float carbohydratesPerServing Get per serving carbohydrates.
+ * @method float cholesterolTotal Get total cholesterol.
+ * @method float cholesterolPerServing Get per serving cholesterol.
+ * @method float fatTotal Get total fat.
+ * @method float fatPerServing Get per serving fat.
+ * @method float proteinTotal Get total protein.
+ * @method float proteinPerServing Get per serving protein.
+ * @method float sodiumTotal Get total sodium.
+ * @method float sodiumPerServing Get per serving sodium.
  */
 class Recipe extends Model
 {
@@ -39,6 +52,30 @@ class Recipe extends Model
     protected array $with = ['steps', 'ingredientAmounts'];
 
     /**
+     * Nutrient total calculation methods.
+     */
+    private array $nutrientTotalMethods = [
+        'caloriesTotal',
+        'carbohydratesTotal',
+        'cholesterolTotal',
+        'fatTotal',
+        'proteinTotal',
+        'sodiumTotal',
+    ];
+
+    /**
+     * Nutrient per serving methods.
+     */
+    private array $nutrientPerServingMethods = [
+        'caloriesPerServing',
+        'carbohydratesPerServing',
+        'cholesterolPerServing',
+        'fatPerServing',
+        'proteinPerServing',
+        'sodiumPerServing',
+    ];
+
+    /**
      * Get the steps for this Recipe.
      */
     public function steps(): HasMany {
@@ -53,66 +90,32 @@ class Recipe extends Model
     }
 
     /**
-     * Get total calories.
+     * Add nutrient calculations handling to overloading.
+     *
+     * @param string $method
+     * @param array $parameters
+     *
+     * @return mixed
+     *
+     * @noinspection PhpMissingParamTypeInspection
      */
-    public function caloriesTotal(): float {
-        return $this->sumNutrient('calories');
-    }
-
-    /**
-     * Get per serving calories.
-     */
-    public function caloriesPerServing(): float {
-        return $this->caloriesTotal() / $this->servings;
-    }
-
-    /**
-     * Get total protein.
-     */
-    public function proteinTotal(): float {
-        return $this->sumNutrient('protein');
-    }
-
-    /**
-     * Get per serving protein.
-     */
-    public function proteinPerServing(): float {
-        return $this->proteinTotal() / $this->servings;
-    }
-
-    /**
-     * Get total fat.
-     */
-    public function fatTotal(): float {
-        return $this->sumNutrient('fat');
-    }
-
-    /**
-     * Get per serving fat.
-     */
-    public function fatPerServing(): float {
-        return $this->fatTotal() / $this->servings;
-    }
-
-    /**
-     * Get total carbohydrates.
-     */
-    public function carbohydratesTotal(): float {
-        return $this->sumNutrient('carbohydrates');
-    }
-
-    /**
-     * Get per serving carbohydrates.
-     */
-    public function carbohydratesPerServing(): float {
-        return $this->carbohydratesTotal() / $this->servings;
+    public function __call($method, $parameters): mixed {
+        if (in_array($method, $this->nutrientTotalMethods)) {
+            return $this->sumNutrient(substr($method, 0, -5));
+        }
+        elseif (in_array($method, $this->nutrientPerServingMethods)) {
+            return $this->sumNutrient(substr($method, 0, -10)) / $this->servings;
+        }
+        else {
+            return parent::__call($method, $parameters);
+        }
     }
 
     /**
      * Sum a specific nutrient for all ingredient amounts.
      *
      * @param string $nutrient
-     *   Nutrient to sum ("calories", "protein", "fat", or "carbohydrates").
+     *   Nutrient to sum.
      *
      * @return float
      */
