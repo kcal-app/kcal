@@ -36,8 +36,8 @@ class Ingredient extends Model
         'fat',
         'protein',
         'sodium',
-        'unitWeight',
-        'cupWeight',
+        'unit_weight',
+        'cup_weight',
     ];
 
     /**

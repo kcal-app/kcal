@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ingredient;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class IngredientController extends Controller
@@ -20,22 +22,33 @@ class IngredientController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('ingredients.create');
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $attributes = $request->validate([
+           'name' => 'required|string',
+           'detail' => 'nullable|string',
+           'carbohydrates' => 'nullable|numeric',
+           'calories' => 'nullable|numeric',
+           'cholesterol' => 'nullable|numeric',
+           'fat' => 'nullable|numeric',
+           'protein' => 'nullable|numeric',
+           'sodium' => 'nullable|numeric',
+           'unit_weight' => 'required_without:cup_weight|nullable|numeric',
+           'cup_weight' => 'required_without:unit_weight|nullable|numeric',
+        ]);
+        /** @var \App\Models\Ingredient $ingredient */
+        $ingredient = tap(new Ingredient(array_filter($attributes)))->save();
+        return redirect()->back()->with('message', "Ingredient {$ingredient->name} added!");
     }
 
     /**
