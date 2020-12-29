@@ -12,11 +12,12 @@ class IngredientController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(): View
     {
-        //
+        return view('ingredients.index')
+            ->with('ingredients', Ingredient::all()->sortBy('name'));
     }
 
     /**
@@ -29,7 +30,7 @@ class IngredientController extends Controller
         return view('ingredients.create');
     }
 
-    /**
+    /**newly
      * Store a newly created resource in storage.
      */
     public function store(Request $request): RedirectResponse
