@@ -18,11 +18,12 @@ class RecipeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(): View
     {
-        //
+        return view('recipes.index')
+            ->with('recipes', Recipe::all()->sortBy('name'));
     }
 
     /**

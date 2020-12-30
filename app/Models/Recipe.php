@@ -106,7 +106,16 @@ class Recipe extends Model
             return $this->sumNutrient(substr($method, 0, -5));
         }
         elseif (in_array($method, $this->nutrientPerServingMethods)) {
-            return $this->sumNutrient(substr($method, 0, -10)) / $this->servings;
+            $sum = $this->sumNutrient(substr($method, 0, -10)) / $this->servings;
+
+            // Per-serving calculations are rounded, though actual food label
+            // rounding standards are more complex.
+            if ($sum > 1) {
+                return round($sum);
+            }
+            else {
+                return round($sum, 2);
+            }
         }
         else {
             return parent::__call($method, $parameters);
