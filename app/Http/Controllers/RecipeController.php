@@ -60,11 +60,11 @@ class RecipeController extends Controller
             'description' => 'required|string',
             'servings' => 'required|numeric',
             'ingredients_amount' => 'required|array',
-            'ingredients_amount.*' => 'required|numeric|min:0',
+            'ingredients_amount.*' => 'required_with:ingredients.*|nullable|numeric|min:0',
             'ingredients_unit' => 'required|array',
             'ingredients_unit.*' => 'nullable|string',
             'ingredients' => 'required|array',
-            'ingredients.*' => 'required|exists:App\Models\Ingredient,id',
+            'ingredients.*' => 'required_with:ingredients_amount.*|nullable|exists:App\Models\Ingredient,id',
         ]);
 
         $recipe = new Recipe([
@@ -79,7 +79,7 @@ class RecipeController extends Controller
                     return;
                 }
                 $ingredient_amounts = [];
-                foreach ($input['ingredients_amount'] as $key => $amount) {
+                foreach (array_filter($input['ingredients_amount']) as $key => $amount) {
                     $ingredient_amounts[$key] = new IngredientAmount([
                         'amount' => (float) $amount,
                         'unit' => $input['ingredients_unit'][$key],

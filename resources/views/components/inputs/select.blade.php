@@ -2,7 +2,7 @@
     {{ $slot }}
     @foreach ($options as $option)
         <option value="{{ $option['value'] }}"
-                @if ($option['value'] === $selectedValue) selected @endif>
+                @if ($option['value'] == $selectedValue) selected @endif>
             {{ $option['label'] }}
         </option>
     @endforeach

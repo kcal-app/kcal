@@ -70,19 +70,32 @@
                             <div class="flex flex-row space-x-4 mb-4">
                                 <x-inputs.input type="number"
                                                 name="ingredients_amount[]"
-                                                step="any"
-                                                required />
+                                                :value="old('ingredients_amount.' . $i)"
+                                                step="any" />
                                 <x-inputs.select name="ingredients_unit[]"
-                                                 :options="$ingredient_units">
+                                                 :options="$ingredient_units"
+                                                 :selectedValue="old('ingredients_unit.' . $i)">
                                     <option value=""></option>
                                 </x-inputs.select>
                                 <x-inputs.select name="ingredients[]"
                                                  :options="$ingredients"
-                                                 required>
+                                                 :selectedValue="old('ingredients.' . $i)">
                                     <option value=""></option>
                                 </x-inputs.select>
                             </div>
                         @endfor
+
+                        <!-- Steps -->
+                        <h3 class="pt-2 mb-2 font-extrabold">Steps</h3>
+                        @for($i = 1; $i < 6; $i++)
+                            <div class="flex flex-row space-x-4 mb-4">
+                                <div class="text-3xl text-gray-400 text-center">{{ $i }}</div>
+                                <x-inputs.textarea class="block mt-1 w-full"
+                                                   name="steps[]"
+                                                   :value="old('steps[$i]')" />
+                            </div>
+                        @endfor
+
                         <div class="flex items-center justify-end mt-4">
                             <x-inputs.button class="ml-3">
                                 {{ __('Add') }}
