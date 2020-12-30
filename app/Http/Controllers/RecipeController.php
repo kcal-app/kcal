@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Ingredient;
 use App\Models\IngredientAmount;
 use App\Models\Recipe;
+use App\Models\RecipeStep;
+use App\Rules\ArrayNotEmpty;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,7 +45,7 @@ class RecipeController extends Controller
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
                 ['value' => 'cup', 'label' => 'cup'],
-                ['value' => 'g', 'label' => 'g'],
+                ['value' => 'grams', 'label' => 'g'],
             ]));
     }
 
@@ -59,12 +61,14 @@ class RecipeController extends Controller
             'name' => 'required|string',
             'description' => 'required|string',
             'servings' => 'required|numeric',
-            'ingredients_amount' => 'required|array',
+            'ingredients_amount' => ['required', 'array', new ArrayNotEmpty],
             'ingredients_amount.*' => 'required_with:ingredients.*|nullable|numeric|min:0',
-            'ingredients_unit' => 'required|array',
+            'ingredients_unit' => ['required', 'array', new ArrayNotEmpty],
             'ingredients_unit.*' => 'nullable|string',
-            'ingredients' => 'required|array',
+            'ingredients' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.*' => 'required_with:ingredients_amount.*|nullable|exists:App\Models\Ingredient,id',
+            'steps' => ['required', 'array', new ArrayNotEmpty],
+            'steps.*' => 'nullable|string',
         ]);
 
         $recipe = new Recipe([
@@ -78,17 +82,28 @@ class RecipeController extends Controller
                 if (!$recipe->save()) {
                     return;
                 }
+
                 $ingredient_amounts = [];
+                $weight = 0;
                 foreach (array_filter($input['ingredients_amount']) as $key => $amount) {
                     $ingredient_amounts[$key] = new IngredientAmount([
                         'amount' => (float) $amount,
                         'unit' => $input['ingredients_unit'][$key],
-                        'weight' => (int) $key,
+                        'weight' => $weight++,
                     ]);
-                    $ingredient_amounts[$key]->recipe()->associate($recipe);
                     $ingredient_amounts[$key]->ingredient()->associate($input['ingredients'][$key]);
                 }
                 $recipe->ingredientAmounts()->saveMany($ingredient_amounts);
+
+                $steps = [];
+                $number = 1;
+                foreach (array_filter($input['steps']) as $step) {
+                    $steps[] = new RecipeStep([
+                        'number' => $number++,
+                        'step' => $step,
+                    ]);
+                }
+                $recipe->ingredientAmounts()->saveMany($steps);
             });
         } catch (\Exception $e) {
             DB::rollBack();

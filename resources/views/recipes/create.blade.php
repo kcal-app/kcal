@@ -66,7 +66,7 @@
 
                         <!-- Ingredients -->
                         <h3 class="pt-2 mb-2 font-extrabold">Ingredients</h3>
-                        @for($i = 0; $i < 5; $i++)
+                        @for($i = 0; $i < 10; $i++)
                             <div class="flex flex-row space-x-4 mb-4">
                                 <x-inputs.input type="number"
                                                 name="ingredients_amount[]"
@@ -87,12 +87,12 @@
 
                         <!-- Steps -->
                         <h3 class="pt-2 mb-2 font-extrabold">Steps</h3>
-                        @for($i = 1; $i < 6; $i++)
+                        @for($i = 0; $i < 10; $i++)
                             <div class="flex flex-row space-x-4 mb-4">
-                                <div class="text-3xl text-gray-400 text-center">{{ $i }}</div>
+                                <div class="text-3xl text-gray-400 text-center">{{ $i + 1 }}</div>
                                 <x-inputs.textarea class="block mt-1 w-full"
                                                    name="steps[]"
-                                                   :value="old('steps[$i]')" />
+                                                   :value="old('steps.' . $i)" />
                             </div>
                         @endfor
 
