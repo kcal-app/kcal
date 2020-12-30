@@ -49,7 +49,7 @@ class IngredientController extends Controller
         ]);
         /** @var \App\Models\Ingredient $ingredient */
         $ingredient = tap(new Ingredient(array_filter($attributes)))->save();
-        return redirect()->back()->with('message', "Ingredient {$ingredient->name} added!");
+        return back()->with('message', "Ingredient {$ingredient->name} added!");
     }
 
     /**

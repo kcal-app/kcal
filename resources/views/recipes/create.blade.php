@@ -25,56 +25,68 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{ route('ingredients.store') }}">
+                    <form method="POST" action="{{ route('recipes.store') }}">
                     @csrf
                         <div class="flex flex-col space-y-4">
                             <div class="grid grid-cols-5 gap-4">
                                 <!-- Name -->
                                 <div class="col-span-4">
-                                    <x-label for="name" :value="__('Name')" />
+                                    <x-inputs.label for="name" :value="__('Name')" />
 
-                                    <x-input id="name"
-                                             class="block mt-1 w-full"
-                                             type="text"
-                                             name="name"
-                                             :value="old('name')"
-                                             required />
+                                    <x-inputs.input id="name"
+                                                    class="block mt-1 w-full"
+                                                    type="text"
+                                                    name="name"
+                                                    :value="old('name')"
+                                                    required />
                                 </div>
 
                                 <!-- Servings -->
                                 <div>
-                                    <x-label for="servings" :value="__('Servings')" />
+                                    <x-inputs.label for="servings" :value="__('Servings')" />
 
-                                    <x-input id="servings"
-                                             class="block mt-1 w-full"
-                                             type="number"
-                                             name="servings"
-                                             :value="old('servings')" />
+                                    <x-inputs.input id="servings"
+                                                    class="block mt-1 w-full"
+                                                    type="number"
+                                                    name="servings"
+                                                    :value="old('servings')" />
                                 </div>
                             </div>
 
                             <!-- Description -->
                             <div>
-                                <x-label for="description" :value="__('Description')" />
+                                <x-inputs.label for="description" :value="__('Description')" />
 
-                                <x-form.textarea id="description"
-                                         class="block mt-1 w-full"
-                                         name="description"
-                                         :value="old('description')" />
+                                <x-inputs.textarea id="description"
+                                                   class="block mt-1 w-full"
+                                                   name="description"
+                                                   :value="old('description')" />
                             </div>
                         </div>
-                        <h3 class="pt-2 font-extrabold">Ingredients</h3>
-                        <div class="flex flex-row space-x-4">
-                            <x-input class="mt-1"
-                                     type="number"
-                                     name="ingredients_amount[]"
-                                     step="any"
-                                     required />
-                        </div>
+
+                        <!-- Ingredients -->
+                        <h3 class="pt-2 mb-2 font-extrabold">Ingredients</h3>
+                        @for($i = 0; $i < 5; $i++)
+                            <div class="flex flex-row space-x-4 mb-4">
+                                <x-inputs.input type="number"
+                                                name="ingredients_amount[]"
+                                                step="any"
+                                                required />
+                                <x-inputs.select name="ingredients_unit[]"
+                                                 :options="$ingredient_units">
+                                    <option value=""></option>
+                                </x-inputs.select>
+                                <x-inputs.select name="ingredients[]"
+                                                 :options="$ingredients"
+                                                 required>
+                                    <option value=""></option>
+                                </x-inputs.select>
+                            </div>
+                        @endfor
                         <div class="flex items-center justify-end mt-4">
-                            <x-button class="ml-3">
+                            <x-inputs.button class="ml-3">
                                 {{ __('Add') }}
-                            </x-button>
+                            </x-inputs.button>
                         </div>
                     </form>
                 </div>

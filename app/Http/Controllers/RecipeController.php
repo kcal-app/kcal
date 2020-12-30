@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ingredient;
+use App\Models\IngredientAmount;
 use App\Models\Recipe;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class RecipeController extends Controller
 {
@@ -25,18 +30,72 @@ class RecipeController extends Controller
      */
     public function create(): View
     {
-        return view('recipes.create');
+        $ingredients = Ingredient::all(['id', 'name', 'detail'])->collect()
+            ->map(function ($ingredient) {
+                return [
+                    'value' => $ingredient->id,
+                    'label' => "{$ingredient->name}" . ($ingredient->detail ? ", {$ingredient->detail}" : ""),
+                ];
+            });
+        return view('recipes.create')
+            ->with('ingredients', $ingredients)
+            ->with('ingredient_units', new Collection([
+                ['value' => 'tsp', 'label' => 'tsp.'],
+                ['value' => 'tbsp', 'label' => 'tbsp.'],
+                ['value' => 'cup', 'label' => 'cup'],
+                ['value' => 'g', 'label' => 'g'],
+            ]));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $input = $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'servings' => 'required|numeric',
+            'ingredients_amount' => 'required|array',
+            'ingredients_amount.*' => 'required|numeric|min:0',
+            'ingredients_unit' => 'required|array',
+            'ingredients_unit.*' => 'nullable|string',
+            'ingredients' => 'required|array',
+            'ingredients.*' => 'required|exists:App\Models\Ingredient,id',
+        ]);
+
+        $recipe = new Recipe([
+            'name' => $input['name'],
+            'description' => $input['description'],
+            'servings' => (int) $input['servings'],
+        ]);
+
+        try {
+            DB::transaction(function () use ($recipe, $input) {
+                if (!$recipe->save()) {
+                    return;
+                }
+                $ingredient_amounts = [];
+                foreach ($input['ingredients_amount'] as $key => $amount) {
+                    $ingredient_amounts[$key] = new IngredientAmount([
+                        'amount' => (float) $amount,
+                        'unit' => $input['ingredients_unit'][$key],
+                        'weight' => (int) $key,
+                    ]);
+                    $ingredient_amounts[$key]->recipe()->associate($recipe);
+                    $ingredient_amounts[$key]->ingredient()->associate($input['ingredients'][$key]);
+                }
+                $recipe->ingredientAmounts()->saveMany($ingredient_amounts);
+            });
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->withErrors("Failed to add recipe due to database error: {$e->getMessage()}.");
+        }
+
+        return back()->with('message', "Recipe {$recipe->name} added!");
     }
 
     /**
