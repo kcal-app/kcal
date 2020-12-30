@@ -42,7 +42,7 @@
                                     <div class="font-bold border-b border-gray-300">Carbohydrates</div>
                                     <div class="text-right border-b border-gray-300">{{ $ingedient->carbohydrates < 1 ? $ingedient->carbohydrates * 1000 . "m" : $ingedient->carbohydrates }}g</div>
                                     <div class="font-bold">Protein</div>
-                                    <div class="text-right">{{$ingedient->protein}}g</div>
+                                    <div class="text-right">{{ $ingedient->protein < 1 ? $ingedient->protein * 1000 . "m" : $ingedient->protein }}g</div>
                                 </div>
                             </div>
                         @endforeach

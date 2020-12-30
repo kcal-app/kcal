@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
@@ -20,11 +21,11 @@ class RecipeController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('recipes.create');
     }
 
     /**
