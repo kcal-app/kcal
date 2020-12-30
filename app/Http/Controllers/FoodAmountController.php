@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IngredientAmount;
+use App\Models\FoodAmount;
 use Illuminate\Http\Request;
 
-class IngredientAmountController extends Controller
+class FoodAmountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class IngredientAmountController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\IngredientAmount  $ingredientAmount
+     * @param  \App\Models\FoodAmount  $foodAmount
      * @return \Illuminate\Http\Response
      */
-    public function show(IngredientAmount $ingredientAmount)
+    public function show(FoodAmount $foodAmount)
     {
         //
     }
@@ -52,10 +52,10 @@ class IngredientAmountController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\IngredientAmount  $ingredientAmount
+     * @param  \App\Models\FoodAmount  $foodAmount
      * @return \Illuminate\Http\Response
      */
-    public function edit(IngredientAmount $ingredientAmount)
+    public function edit(FoodAmount $foodAmount)
     {
         //
     }
@@ -64,10 +64,10 @@ class IngredientAmountController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\IngredientAmount  $ingredientAmount
+     * @param  \App\Models\FoodAmount  $foodAmount
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, IngredientAmount $ingredientAmount)
+    public function update(Request $request, FoodAmount $foodAmount)
     {
         //
     }
@@ -75,10 +75,10 @@ class IngredientAmountController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\IngredientAmount  $ingredientAmount
+     * @param  \App\Models\FoodAmount  $foodAmount
      * @return \Illuminate\Http\Response
      */
-    public function destroy(IngredientAmount $ingredientAmount)
+    public function destroy(FoodAmount $foodAmount)
     {
         //
     }

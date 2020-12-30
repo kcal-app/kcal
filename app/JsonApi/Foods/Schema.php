@@ -1,6 +1,6 @@
 <?php
 
-namespace App\JsonApi\Ingredients;
+namespace App\JsonApi\Foods;
 
 use Neomerx\JsonApi\Schema\SchemaProvider;
 
@@ -10,7 +10,7 @@ class Schema extends SchemaProvider
     /**
      * @var string
      */
-    protected $resourceType = 'ingredients';
+    protected $resourceType = 'foods';
 
     /**
      * @inheritdoc
@@ -21,7 +21,7 @@ class Schema extends SchemaProvider
     }
 
     /**
-     * @param \App\Models\Ingredient $resource
+     * @param \App\Models\Food $resource
      *
      * @return array
      */

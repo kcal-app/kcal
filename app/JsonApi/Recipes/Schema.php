@@ -62,12 +62,12 @@ class Schema extends SchemaProvider
                     return $resource->steps;
                 },
             ],
-            'ingredient-amounts' => [
+            'food-amounts' => [
                 self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
-                self::SHOW_DATA => isset($includeRelationships['ingredient-amounts']),
+                self::SHOW_DATA => isset($includeRelationships['food-amounts']),
                 self::DATA => function () use ($resource) {
-                    return $resource->ingredientAmounts;
+                    return $resource->foodAmounts;
                 },
             ]
         ];

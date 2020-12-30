@@ -11,11 +11,11 @@
                     <h3 class="mb-2 font-bold">Description</h3>
                     <div class="text-gray-800">{{ $recipe->description }}</div>
                     <h3 class="mb-2 mt-4 font-bold">Ingredients</h3>
-                    @foreach($recipe->ingredientAmounts as $ia)
+                    @foreach($recipe->foodAmounts as $ia)
                         <div class="flex flex-row space-x-2 mb-2">
                             <div>{{ $ia->amount }}</div>
                             @if($ia->unit)<div>{{ $ia->unit }}</div>@endif
-                            <div>{{ $ia->ingredient->name }}</div>
+                            <div>{{ $ia->food->name }}</div>
                         </div>
                     @endforeach
                     <h3 class="mb-2 mt-4 font-bold">Steps</h3>

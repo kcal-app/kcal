@@ -66,8 +66,8 @@ return [
     | `'posts' => App\Post::class`
     */
     'resources' => [
-        'ingredients' => \App\Models\Ingredient::class,
-        'ingredient-amounts' => \App\Models\IngredientAmount::class,
+        'foods' => \App\Models\Food::class,
+        'food-amounts' => \App\Models\FoodAmount::class,
         'recipes' => \App\Models\Recipe::class,
         'recipe-steps' => \App\Models\RecipeStep::class,
     ],

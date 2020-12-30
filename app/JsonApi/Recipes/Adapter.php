@@ -45,7 +45,7 @@ class Adapter extends AbstractAdapter
         $this->filterWithScopes($query, $filters);
     }
 
-    protected function ingredientAmounts(): HasMany
+    protected function foodAmounts(): HasMany
     {
         return $this->hasMany();
     }

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Ingredient;
-use App\Models\IngredientAmount;
+use App\Models\Food;
+use App\Models\FoodAmount;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
 use Illuminate\Database\Seeder;
@@ -25,7 +25,7 @@ class RecipeSeeder extends Seeder
         $weight = 0;
         $amounts = [
             [
-                'ingredient_id' => Ingredient::where('name', 'flour')
+                'food_id' => Food::where('name', 'flour')
                     ->first()->id,
                 'amount' => 1,
                 'unit' => 'cup',
@@ -33,7 +33,7 @@ class RecipeSeeder extends Seeder
                 'weight' => $weight++,
             ],
             [
-                'ingredient_id' => Ingredient::where('name', 'sugar')
+                'food_id' => Food::where('name', 'sugar')
                     ->first()->id,
                 'amount' => 2,
                 'unit' => 'tbsp',
@@ -41,7 +41,7 @@ class RecipeSeeder extends Seeder
                 'weight' => $weight++,
             ],
             [
-                'ingredient_id' => Ingredient::where('name', 'baking powder')
+                'food_id' => Food::where('name', 'baking powder')
                     ->first()->id,
                 'amount' => 2,
                 'unit' => 'tsp',
@@ -49,7 +49,7 @@ class RecipeSeeder extends Seeder
                 'weight' => $weight++,
             ],
             [
-                'ingredient_id' => Ingredient::where('name', 'salt')
+                'food_id' => Food::where('name', 'salt')
                     ->first()->id,
                 'amount' => 1,
                 'unit' => 'tsp',
@@ -57,14 +57,14 @@ class RecipeSeeder extends Seeder
                 'weight' => $weight++,
             ],
             [
-                'ingredient_id' => Ingredient::where('name', 'egg')
+                'food_id' => Food::where('name', 'egg')
                     ->first()->id,
                 'amount' => 1,
                 'recipe_id' => $recipe->id,
                 'weight' => $weight++,
             ],
             [
-                'ingredient_id' => Ingredient::where('name', 'milk')
+                'food_id' => Food::where('name', 'milk')
                     ->first()->id,
                 'amount' => 1,
                 'unit' => 'cup',
@@ -72,7 +72,7 @@ class RecipeSeeder extends Seeder
                 'weight' => $weight++,
             ],
             [
-                'ingredient_id' => Ingredient::where('name', 'vegetable oil')
+                'food_id' => Food::where('name', 'vegetable oil')
                     ->first()->id,
                 'amount' => 2,
                 'unit' => 'tbsp',
@@ -80,7 +80,7 @@ class RecipeSeeder extends Seeder
                 'weight' => $weight++,
             ],
         ];
-        IngredientAmount::factory()->createMany($amounts);
+        FoodAmount::factory()->createMany($amounts);
 
         $steps = [
             [

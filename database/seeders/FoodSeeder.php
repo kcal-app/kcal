@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Ingredient;
+use App\Models\Food;
 use Illuminate\Database\Seeder;
 
-class IngredientSeeder extends Seeder
+class FoodSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $default_ingredients = [
+        $default_foods = [
             [
                 'name' => 'baking powder',
                 'calories' => 53,
@@ -75,6 +75,6 @@ class IngredientSeeder extends Seeder
                 'cup_weight' => 224,
             ],
         ];
-        Ingredient::factory()->createMany($default_ingredients);
+        Food::factory()->createMany($default_foods);
     }
 }

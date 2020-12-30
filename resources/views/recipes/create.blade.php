@@ -69,17 +69,17 @@
                         @for($i = 0; $i < 10; $i++)
                             <div class="flex flex-row space-x-4 mb-4">
                                 <x-inputs.input type="number"
-                                                name="ingredients_amount[]"
-                                                :value="old('ingredients_amount.' . $i)"
+                                                name="foods_amount[]"
+                                                :value="old('foods_amount.' . $i)"
                                                 step="any" />
-                                <x-inputs.select name="ingredients_unit[]"
-                                                 :options="$ingredient_units"
-                                                 :selectedValue="old('ingredients_unit.' . $i)">
+                                <x-inputs.select name="foods_unit[]"
+                                                 :options="$food_units"
+                                                 :selectedValue="old('foods_unit.' . $i)">
                                     <option value=""></option>
                                 </x-inputs.select>
-                                <x-inputs.select name="ingredients[]"
-                                                 :options="$ingredients"
-                                                 :selectedValue="old('ingredients.' . $i)">
+                                <x-inputs.select name="foods[]"
+                                                 :options="$foods"
+                                                 :selectedValue="old('foods.' . $i)">
                                     <option value=""></option>
                                 </x-inputs.select>
                             </div>

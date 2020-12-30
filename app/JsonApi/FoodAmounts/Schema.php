@@ -1,6 +1,6 @@
 <?php
 
-namespace App\JsonApi\IngredientAmounts;
+namespace App\JsonApi\FoodAmounts;
 
 use Neomerx\JsonApi\Schema\SchemaProvider;
 
@@ -10,7 +10,7 @@ class Schema extends SchemaProvider
     /**
      * @var string
      */
-    protected $resourceType = 'ingredient-amounts';
+    protected $resourceType = 'food-amounts';
 
     /**
      * @inheritdoc
@@ -21,7 +21,7 @@ class Schema extends SchemaProvider
     }
 
     /**
-     * @param \App\Models\IngredientAmount $resource
+     * @param \App\Models\FoodAmount $resource
      *
      * @return array
      */
@@ -48,12 +48,12 @@ class Schema extends SchemaProvider
     public function getRelationships($resource, $isPrimary, array $includeRelationships): array
     {
         return [
-            'ingredient' => [
+            'food' => [
                 self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
-                self::SHOW_DATA => isset($includeRelationships['ingredient']),
+                self::SHOW_DATA => isset($includeRelationships['food']),
                 self::DATA => function () use ($resource) {
-                    return $resource->ingredient;
+                    return $resource->food;
                 },
             ],
             'recipe' => [

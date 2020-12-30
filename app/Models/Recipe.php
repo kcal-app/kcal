@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string description
  * @property int servings
  * @property \App\Models\RecipeStep[] steps
- * @property \App\Models\IngredientAmount[] ingredientAmounts
+ * @property \App\Models\FoodAmount[] foodAmounts
  * @property \Illuminate\Support\Carbon created_at
  * @property \Illuminate\Support\Carbon updated_at
  * @method float caloriesTotal Get total calories.
@@ -51,7 +51,7 @@ class Recipe extends Model
     /**
      * @inheritdoc
      */
-    protected $with = ['steps', 'ingredientAmounts'];
+    protected $with = ['steps', 'foodAmounts'];
 
     /**
      * Nutrient total calculation methods.
@@ -85,10 +85,10 @@ class Recipe extends Model
     }
 
     /**
-     * Get the Ingredient Amounts used for this Recipe.
+     * Get the Food Amounts used for this Recipe.
      */
-    public function ingredientAmounts(): HasMany {
-        return $this->hasMany(IngredientAmount::class)->orderBy('weight');
+    public function foodAmounts(): HasMany {
+        return $this->hasMany(FoodAmount::class)->orderBy('weight');
     }
 
     /**
@@ -123,7 +123,7 @@ class Recipe extends Model
     }
 
     /**
-     * Sum a specific nutrient for all ingredient amounts.
+     * Sum a specific nutrient for all food amounts.
      *
      * @param string $nutrient
      *   Nutrient to sum.
@@ -132,8 +132,8 @@ class Recipe extends Model
      */
     private function sumNutrient(string $nutrient): float {
         $sum = 0;
-        foreach ($this->ingredientAmounts as $ingredientAmount) {
-            $sum += $ingredientAmount->{$nutrient}();
+        foreach ($this->foodAmounts as $foodAmount) {
+            $sum += $foodAmount->{$nutrient}();
         }
         return $sum;
     }

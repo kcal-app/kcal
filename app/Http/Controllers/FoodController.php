@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ingredient;
+use App\Models\Food;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class IngredientController extends Controller
+class FoodController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class IngredientController extends Controller
      */
     public function index(): View
     {
-        return view('ingredients.index')
-            ->with('ingredients', Ingredient::all()->sortBy('name'));
+        return view('foods.index')
+            ->with('foods', Food::all()->sortBy('name'));
     }
 
     /**
@@ -27,7 +27,7 @@ class IngredientController extends Controller
      */
     public function create(): View
     {
-        return view('ingredients.create');
+        return view('foods.create');
     }
 
     /**newly
@@ -47,18 +47,18 @@ class IngredientController extends Controller
            'unit_weight' => 'required_without:cup_weight|nullable|numeric',
            'cup_weight' => 'required_without:unit_weight|nullable|numeric',
         ]);
-        /** @var \App\Models\Ingredient $ingredient */
-        $ingredient = tap(new Ingredient(array_filter($attributes)))->save();
-        return back()->with('message', "Ingredient {$ingredient->name} added!");
+        /** @var \App\Models\Food $food */
+        $food = tap(new Food(array_filter($attributes)))->save();
+        return back()->with('message', "Food {$food->name} added!");
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Ingredient  $ingredient
+     * @param  \App\Models\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function show(Ingredient $ingredient)
+    public function show(Food $food)
     {
         //
     }
@@ -66,10 +66,10 @@ class IngredientController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Ingredient  $ingredient
+     * @param  \App\Models\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function edit(Ingredient $ingredient)
+    public function edit(Food $food)
     {
         //
     }
@@ -78,10 +78,10 @@ class IngredientController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Ingredient  $ingredient
+     * @param  \App\Models\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ingredient $ingredient)
+    public function update(Request $request, Food $food)
     {
         //
     }
@@ -89,10 +89,10 @@ class IngredientController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Ingredient  $ingredient
+     * @param  \App\Models\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ingredient $ingredient)
+    public function destroy(Food $food)
     {
         //
     }

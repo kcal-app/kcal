@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ingredient;
-use App\Models\IngredientAmount;
+use App\Models\Food;
+use App\Models\FoodAmount;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
 use App\Rules\ArrayNotEmpty;
@@ -33,16 +33,16 @@ class RecipeController extends Controller
      */
     public function create(): View
     {
-        $ingredients = Ingredient::all(['id', 'name', 'detail'])->collect()
-            ->map(function ($ingredient) {
+        $foods = Food::all(['id', 'name', 'detail'])->collect()
+            ->map(function ($food) {
                 return [
-                    'value' => $ingredient->id,
-                    'label' => "{$ingredient->name}" . ($ingredient->detail ? ", {$ingredient->detail}" : ""),
+                    'value' => $food->id,
+                    'label' => "{$food->name}" . ($food->detail ? ", {$food->detail}" : ""),
                 ];
             });
         return view('recipes.create')
-            ->with('ingredients', $ingredients)
-            ->with('ingredient_units', new Collection([
+            ->with('foods', $foods)
+            ->with('food_units', new Collection([
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
                 ['value' => 'cup', 'label' => 'cup'],
@@ -62,12 +62,12 @@ class RecipeController extends Controller
             'name' => 'required|string',
             'description' => 'required|string',
             'servings' => 'required|numeric',
-            'ingredients_amount' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients_amount.*' => 'required_with:ingredients.*|nullable|numeric|min:0',
-            'ingredients_unit' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients_unit.*' => 'nullable|string',
-            'ingredients' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.*' => 'required_with:ingredients_amount.*|nullable|exists:App\Models\Ingredient,id',
+            'foods_amount' => ['required', 'array', new ArrayNotEmpty],
+            'foods_amount.*' => 'required_with:foods.*|nullable|numeric|min:0',
+            'foods_unit' => ['required', 'array', new ArrayNotEmpty],
+            'foods_unit.*' => 'nullable|string',
+            'foods' => ['required', 'array', new ArrayNotEmpty],
+            'foods.*' => 'required_with:foods_amount.*|nullable|exists:App\Models\Food,id',
             'steps' => ['required', 'array', new ArrayNotEmpty],
             'steps.*' => 'nullable|string',
         ]);
@@ -84,17 +84,17 @@ class RecipeController extends Controller
                     return;
                 }
 
-                $ingredient_amounts = [];
+                $food_amounts = [];
                 $weight = 0;
-                foreach (array_filter($input['ingredients_amount']) as $key => $amount) {
-                    $ingredient_amounts[$key] = new IngredientAmount([
+                foreach (array_filter($input['foods_amount']) as $key => $amount) {
+                    $food_amounts[$key] = new FoodAmount([
                         'amount' => (float) $amount,
-                        'unit' => $input['ingredients_unit'][$key],
+                        'unit' => $input['foods_unit'][$key],
                         'weight' => $weight++,
                     ]);
-                    $ingredient_amounts[$key]->ingredient()->associate($input['ingredients'][$key]);
+                    $food_amounts[$key]->food()->associate($input['foods'][$key]);
                 }
-                $recipe->ingredientAmounts()->saveMany($ingredient_amounts);
+                $recipe->foodAmounts()->saveMany($food_amounts);
 
                 $steps = [];
                 $number = 1;
@@ -104,7 +104,7 @@ class RecipeController extends Controller
                         'step' => $step,
                     ]);
                 }
-                $recipe->ingredientAmounts()->saveMany($steps);
+                $recipe->foodAmounts()->saveMany($steps);
             });
         } catch (\Exception $e) {
             DB::rollBack();

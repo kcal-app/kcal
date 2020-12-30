@@ -1,8 +1,9 @@
 <?php
 
-namespace App\JsonApi\Ingredients;
+namespace App\JsonApi\FoodAmounts;
 
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
+use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -31,7 +32,7 @@ class Adapter extends AbstractAdapter
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new \App\Models\Ingredient(), $paging);
+        parent::__construct(new \App\Models\FoodAmount(), $paging);
     }
 
     /**
@@ -42,6 +43,16 @@ class Adapter extends AbstractAdapter
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
+    }
+
+    protected function food(): BelongsTo
+    {
+        return $this->belongsTo();
+    }
+
+    protected function recipe(): BelongsTo
+    {
+        return $this->belongsTo();
     }
 
 }

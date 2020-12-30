@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Ingredient;
+use App\Models\FoodAmount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class IngredientFactory extends Factory
+class FoodAmountFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Ingredient::class;
+    protected $model = FoodAmount::class;
 
     /**
      * Define the model's default state.

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add Ingredient') }}
+            {{ __('Add Food') }}
         </h2>
     </x-slot>
 
@@ -25,7 +25,7 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{ route('ingredients.store') }}">
+                    <form method="POST" action="{{ route('foods.store') }}">
                         @csrf
                         <div class="flex flex-col space-y-4">
                             <div class="grid grid-cols-2 gap-4">

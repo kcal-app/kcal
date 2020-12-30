@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int id
- * @property float amount Amount of ingredient.
- * @property ?string unit Ingredient unit (tsp, tbsp, cup, or grams).
- * @property int weight Weight of ingredient in full ingredient list (lowest first).
- * @property \App\Models\Ingredient ingredient
+ * @property float amount Amount of food.
+ * @property ?string unit Food unit (tsp, tbsp, cup, or grams).
+ * @property int weight Weight of food in full food list (lowest first).
+ * @property \App\Models\Food food
  * @property \App\Models\Recipe recipe
  * @property \Illuminate\Support\Carbon created_at
  * @property \Illuminate\Support\Carbon updated_at
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method float protein Get total protein.
  * @method float sodium Get total sodium.
  */
-class IngredientAmount extends Model
+class FoodAmount extends Model
 {
     use HasFactory;
 
@@ -46,7 +46,7 @@ class IngredientAmount extends Model
     /**
      * @inheritdoc
      */
-    protected $with = ['ingredient'];
+    protected $with = ['food'];
 
     /**
      * Nutrient calculation methods.
@@ -61,10 +61,10 @@ class IngredientAmount extends Model
     ];
 
     /**
-     * Get the Ingredient this amount belongs to.
+     * Get the Food this amount belongs to.
      */
-    public function ingredient(): BelongsTo {
-        return $this->belongsTo(Ingredient::class);
+    public function food(): BelongsTo {
+        return $this->belongsTo(Food::class);
     }
 
     /**
@@ -86,7 +86,7 @@ class IngredientAmount extends Model
      */
     public function __call($method, $parameters): mixed {
         if (in_array($method, $this->nutrientMethods)) {
-            return $this->ingredient->{$method} * $this->unitMultiplier();
+            return $this->food->{$method} * $this->unitMultiplier();
         }
         else {
             return parent::__call($method, $parameters);
@@ -94,19 +94,19 @@ class IngredientAmount extends Model
     }
 
     /**
-     * Get the multiplier for the ingredient unit based on weight.
+     * Get the multiplier for the food unit based on weight.
      *
-     * Unit weight will be specified for ingredients that are added by unit
+     * Unit weight will be specified for foods that are added by unit
      * (e.g. eggs, vegetables, etc.) and cup weight (the weight of the
-     * ingredient equal to one cup) will be specified for ingredients that are
+     * food equal to one cup) will be specified for foods that are
      * measured (e.g. flour, milk, etc.).
      */
     private function unitMultiplier(): float {
         return match ($this->unit) {
-            null => $this->ingredient->unit_weight,
+            null => $this->food->unit_weight,
             'tsp' => 1/48,
             'tbsp' => 1/16,
             default => 1
-        } * $this->amount * ($this->ingredient->cup_weight ?? 1) / 100;
+        } * $this->amount * ($this->food->cup_weight ?? 1) / 100;
     }
 }
