@@ -118,11 +118,11 @@ class RecipeController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Recipe  $recipe
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function show(Recipe $recipe)
+    public function show(Recipe $recipe): View
     {
-        //
+        return view('recipes.show')->with('recipe', $recipe);
     }
 
     /**

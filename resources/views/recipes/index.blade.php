@@ -18,7 +18,10 @@
                         @foreach ($recipes as $recipe)
                             <div class="p-2 font-light rounded-lg border-2 border-gray-200">
                                 <div class="pb-2 lowercase flex justify-between items-baseline">
-                                    <div class="text-2xl">{{ $recipe->name }}</div>
+                                    <div class="text-2xl">
+                                        <a href="{{ route('recipes.show', $recipe->id) }}"
+                                           class="text-gray-600 hover:text-gray-800">{{ $recipe->name }}</a>
+                                    </div>
                                 </div>
                                 <div class="grid grid-cols-2 text-sm border-t-8 border-black pt-2">
                                     <div class="col-span-2 text-xs text-right">Amount per serving</div>
