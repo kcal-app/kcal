@@ -74,6 +74,16 @@ class FoodSeeder extends Seeder
                 'fat' => 100,
                 'cup_weight' => 224,
             ],
+            [
+                'name' => 'peanut butter',
+                'detail' => 'Kirkland organic creamy',
+                'calories' => 562.5,
+                'fat' => 46.875,
+                'sodium' => 0.203125,
+                'carbohydrates' => 21.875,
+                'protein' => 25,
+                'cup_weight' => 256,
+            ],
         ];
         Food::factory()->createMany($default_foods);
     }
