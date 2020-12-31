@@ -28,7 +28,7 @@
                     <form method="POST" action="{{ route('foods.store') }}">
                         @csrf
                         <div class="flex flex-col space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-3 gap-4">
                                 <!-- Name -->
                                 <div>
                                     <x-inputs.label for="name" :value="__('Name')"/>
@@ -51,12 +51,62 @@
                                                     name="detail"
                                                     :value="old('detail')"/>
                                 </div>
+
+                                <!-- Brand -->
+                                <div>
+                                    <x-inputs.label for="brand" :value="__('Brand')"/>
+
+                                    <x-inputs.input id="brand"
+                                                    class="block mt-1 w-full"
+                                                    type="text"
+                                                    name="brand"
+                                                    :value="old('brand')"/>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-4">
+                                <!-- Serving size -->
+                                <div>
+                                    <x-inputs.label for="serving_size" :value="__('Serving size')"/>
+
+                                    <x-inputs.input id="serving_size"
+                                                    class="block mt-1"
+                                                    type="number"
+                                                    step="any"
+                                                    name="serving_size"
+                                                    size="10"
+                                                    :value="old('serving_size')"/>
+                                </div>
+
+                                <!-- Serving unit -->
+                                <div>
+                                    <x-inputs.label for="serving_unit" :value="__('Serving unit')"/>
+
+                                    <x-inputs.select name="serving_unit"
+                                                     :options="$serving_units"
+                                                     :selectedValue="old('serving_unit')">
+                                        <option value=""></option>
+                                    </x-inputs.select>
+                                </div>
+
+                                <!-- Serving weight -->
+                                <div>
+                                    <x-inputs.label for="serving_weight" :value="__('Serving weight (g)')"/>
+
+                                    <x-inputs.input id="serving_weight"
+                                                    class="block mt-1"
+                                                    type="number"
+                                                    step="any"
+                                                    name="serving_weight"
+                                                    size="10"
+                                                    :value="old('serving_weight')"/>
+                                </div>
                             </div>
 
                             <div class="grid grid-rows-3 md:grid-rows-2 lg:grid-rows-1 grid-flow-col">
                                 <!-- Calories -->
                                 <div>
-                                    <x-inputs.label for="calories" :value="__('Calories')"/>
+                                    <x-inputs.label for="calories" :value="__('Calories (g)')"/>
 
                                     <x-inputs.input id="calories"
                                                     class="block mt-1"
@@ -67,35 +117,9 @@
                                                     :value="old('calories')"/>
                                 </div>
 
-                                <!-- Carbohydrates -->
-                                <div>
-                                    <x-inputs.label for="carbohydrates" :value="__('Carbohydrates')"/>
-
-                                    <x-inputs.input id="carbohydrates"
-                                                    class="block mt-1"
-                                                    type="number"
-                                                    step="any"
-                                                    name="carbohydrates"
-                                                    size="10"
-                                                    :value="old('carbohydrates')"/>
-                                </div>
-
-                                <!-- Cholesterol -->
-                                <div>
-                                    <x-inputs.label for="cholesterol" :value="__('Cholesterol')"/>
-
-                                    <x-inputs.input id="cholesterol"
-                                                    class="block mt-1"
-                                                    type="number"
-                                                    step="any"
-                                                    name="cholesterol"
-                                                    size="10"
-                                                    :value="old('cholesterol')"/>
-                                </div>
-
                                 <!-- Fat -->
                                 <div>
-                                    <x-inputs.label for="fat" :value="__('Fat')"/>
+                                    <x-inputs.label for="fat" :value="__('Fat (g)')"/>
 
                                     <x-inputs.input id="fat"
                                                     class="block mt-1"
@@ -106,22 +130,22 @@
                                                     :value="old('fat')"/>
                                 </div>
 
-                                <!-- Protein -->
+                                <!-- Cholesterol -->
                                 <div>
-                                    <x-inputs.label for="protein" :value="__('Protein')"/>
+                                    <x-inputs.label for="cholesterol" :value="__('Cholesterol (g)')"/>
 
-                                    <x-inputs.input id="protein"
+                                    <x-inputs.input id="cholesterol"
                                                     class="block mt-1"
                                                     type="number"
                                                     step="any"
-                                                    name="protein"
+                                                    name="cholesterol"
                                                     size="10"
-                                                    :value="old('protein')"/>
+                                                    :value="old('cholesterol')"/>
                                 </div>
 
                                 <!-- Sodium -->
                                 <div>
-                                    <x-inputs.label for="sodium" :value="__('Sodium')"/>
+                                    <x-inputs.label for="sodium" :value="__('Sodium (g)')"/>
 
                                     <x-inputs.input id="sodium"
                                                     class="block mt-1"
@@ -131,37 +155,31 @@
                                                     size="10"
                                                     :value="old('sodium')"/>
                                 </div>
-                            </div>
 
-                            <div class="flex items-center">
-                                <!-- Cup weight -->
+                                <!-- Carbohydrates -->
                                 <div>
-                                    <x-inputs.label for="cup_weight" :value="__('Cup weight')"/>
+                                    <x-inputs.label for="carbohydrates" :value="__('Carbohydrates (g)')"/>
 
-                                    <x-inputs.input id="cup_weight"
+                                    <x-inputs.input id="carbohydrates"
                                                     class="block mt-1"
                                                     type="number"
                                                     step="any"
-                                                    name="cup_weight"
+                                                    name="carbohydrates"
                                                     size="10"
-                                                    :value="old('cup_weight')"/>
+                                                    :value="old('carbohydrates')"/>
                                 </div>
 
-                                <div class="p-4 font-black text-3xl">
-                                    or
-                                </div>
-
-                                <!-- Unit weight -->
+                                <!-- Protein -->
                                 <div>
-                                    <x-inputs.label for="unit_weight" :value="__('Unit weight')"/>
+                                    <x-inputs.label for="protein" :value="__('Protein (g)')"/>
 
-                                    <x-inputs.input id="unit_weight"
+                                    <x-inputs.input id="protein"
                                                     class="block mt-1"
                                                     type="number"
                                                     step="any"
-                                                    name="unit_weight"
+                                                    name="protein"
                                                     size="10"
-                                                    :value="old('unit_weight')"/>
+                                                    :value="old('protein')"/>
                                 </div>
                             </div>
                         </div>

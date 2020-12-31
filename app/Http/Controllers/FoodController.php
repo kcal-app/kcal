@@ -6,6 +6,7 @@ use App\Models\Food;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class FoodController extends Controller
 {
@@ -27,7 +28,12 @@ class FoodController extends Controller
      */
     public function create(): View
     {
-        return view('foods.create');
+        return view('foods.create')
+            ->with('serving_units', new Collection([
+                ['value' => 'tsp', 'label' => 'tsp.'],
+                ['value' => 'tbsp', 'label' => 'tbsp.'],
+                ['value' => 'cup', 'label' => 'cup'],
+            ]));
     }
 
     /**newly
@@ -36,16 +42,18 @@ class FoodController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $attributes = $request->validate([
-           'name' => 'required|string',
-           'detail' => 'nullable|string',
-           'carbohydrates' => 'nullable|numeric',
-           'calories' => 'nullable|numeric',
-           'cholesterol' => 'nullable|numeric',
-           'fat' => 'nullable|numeric',
-           'protein' => 'nullable|numeric',
-           'sodium' => 'nullable|numeric',
-           'unit_weight' => 'required_without:cup_weight|nullable|numeric',
-           'cup_weight' => 'required_without:unit_weight|nullable|numeric',
+            'name' => 'required|string',
+            'detail' => 'nullable|string',
+            'brand' => 'nullable|string',
+            'serving_size' => 'required|numeric',
+            'serving_unit' => 'nullable|string',
+            'serving_weight' => 'required|numeric',
+            'calories' => 'nullable|numeric',
+            'fat' => 'nullable|numeric',
+            'cholesterol' => 'nullable|numeric',
+            'sodium' => 'nullable|numeric',
+            'carbohydrates' => 'nullable|numeric',
+            'protein' => 'nullable|numeric',
         ]);
         /** @var \App\Models\Food $food */
         $food = tap(new Food(array_filter($attributes)))->save();

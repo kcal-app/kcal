@@ -17,20 +17,21 @@
                     <div class="grid grid-cols-3 gap-4">
                         @foreach ($foods as $food)
                             <div class="p-2 font-light rounded-lg border-2 border-gray-200">
-                                <div class="pb-2 lowercase flex justify-between items-baseline">
-                                    <div class="text-2xl">
+                                <div class="text-2xl lowercase">
                                         {{ $food->name }}@if($food->detail), <span class="text-gray-500">{{ $food->detail }}</span>@endif
+                                </div>
+                                @if($food->brand)
+                                    <div class="text-xl text-gray-600">
+                                        {{ $food->brand }}
                                     </div>
-                                    <div class="text-right text-sm">
-                                        @if ($food->unit_weight)
-                                            {{ $food->unit_weight }}g each
-                                        @else
-                                            {{ $food->cup_weight }}g per cup
-                                        @endif
-                                    </div>
+                                @endif
+                                <div class="font-bold">
+                                    Serving size {{ $food->serving_size }}
+                                    {{ $food->serving_unit }}
+                                    ({{ $food->serving_weight }}g)
                                 </div>
                                 <div class="grid grid-cols-2 text-sm border-t-8 border-black pt-2">
-                                    <div class="col-span-2 text-xs text-right">Amount per 100g</div>
+                                    <div class="col-span-2 text-xs font-bold">Amount per serving</div>
                                     <div class="font-extrabold text-lg border-b-4 border-black">Calories</div>
                                     <div class="font-extrabold text-right text-lg border-b-4 border-black">{{$food->calories}}</div>
                                     <div class="font-bold border-b border-gray-300">Fat</div>

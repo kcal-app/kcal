@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * TODO: Change this model to track nutrients _directly_.
+ */
 class JournalEntry extends Model
 {
     use HasFactory;
