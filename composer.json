@@ -5,7 +5,6 @@
     "license": "MPL-2.0",
     "require": {
         "php": "^8.0",
-        "cloudcreativity/laravel-json-api": "^3.2",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
