@@ -94,19 +94,38 @@ class FoodAmount extends Model
     }
 
     /**
-     * Get the multiplier for the food unit based on weight.
-     *
-     * Unit weight will be specified for foods that are added by unit
-     * (e.g. eggs, vegetables, etc.) and cup weight (the weight of the
-     * food equal to one cup) will be specified for foods that are
-     * measured (e.g. flour, milk, etc.).
+     * Get the multiplier for nutrient calculations based on serving data.
      */
     private function unitMultiplier(): float {
-        return match ($this->unit) {
-            null => $this->food->unit_weight,
-            'tsp' => 1/48,
-            'tbsp' => 1/16,
-            default => 1
-        } * $this->amount * ($this->food->cup_weight ?? 1) / 100;
+        if ($this->unit === 'oz') {
+            return $this->amount * 28.349523125 / $this->food->serving_weight;
+        }
+
+        if ($this->food->serving_unit === $this->unit) {
+            $multiplier = 1;
+        }
+        elseif ($this->unit === 'tsp') {
+            $multiplier = match ($this->food->serving_unit) {
+                'tbsp' => 1/3,
+                'cup' => 1/48,
+            };
+        }
+        elseif ($this->unit === 'tbsp') {
+            $multiplier = match ($this->food->serving_unit) {
+                'tsp' => 3,
+                'cup' => 1/16,
+            };
+        }
+        elseif ($this->unit === 'cup') {
+            $multiplier = match ($this->food->serving_unit) {
+                'tsp' => 48,
+                'tbsp' => 16,
+            };
+        }
+        else {
+            throw new \DomainException("Unhandled unit combination: {$this->unit}, {$this->food->serving_unit}");
+        }
+
+        return $multiplier / $this->food->serving_size * $this->amount;
     }
 }

@@ -27,8 +27,8 @@ class RecipeSeeder extends Seeder
             [
                 'food_id' => Food::where('name', 'flour')
                     ->first()->id,
-                'amount' => 1,
-                'unit' => 'cup',
+                'amount' => 4.25,
+                'unit' => 'oz',
                 'recipe_id' => $recipe->id,
                 'weight' => $weight++,
             ],
@@ -92,6 +92,48 @@ class RecipeSeeder extends Seeder
                 'recipe_id' => $recipe->id,
                 'number' => 2,
                 'step' => 'Heat a lightly oiled griddle or frying pan over medium high heat. Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake. Brown on both sides and serve hot.',
+            ]
+        ];
+        RecipeStep::factory()->createMany($steps);
+
+        /** @var \App\Models\Recipe $recipe */
+        $recipe = Recipe::factory()->create([
+            'name' => 'peanut butter corn',
+            'description' => 'Peanut butter and corn -- YUM',
+            'servings' => 4,
+        ]);
+
+        $weight = 0;
+        $amounts = [
+            [
+                'food_id' => Food::where('name', 'peanut butter')
+                    ->first()->id,
+                'amount' => 2,
+                'unit' => 'cup',
+                'recipe_id' => $recipe->id,
+                'weight' => $weight++,
+            ],
+            [
+                'food_id' => Food::where('name', 'canned corn')
+                    ->first()->id,
+                'amount' => 15.25,
+                'unit' => 'oz',
+                'recipe_id' => $recipe->id,
+                'weight' => $weight++,
+            ],
+        ];
+        FoodAmount::factory()->createMany($amounts);
+
+        $steps = [
+            [
+                'recipe_id' => $recipe->id,
+                'number' => 1,
+                'step' => 'Mix it together.',
+            ],
+            [
+                'recipe_id' => $recipe->id,
+                'number' => 2,
+                'step' => 'Eat it.',
             ]
         ];
         RecipeStep::factory()->createMany($steps);

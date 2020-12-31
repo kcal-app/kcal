@@ -19,7 +19,7 @@ class CreateFoodAmountsTable extends Migration
             $table->id();
             $table->foreignIdFor(Food::class);
             $table->unsignedFloat('amount');
-            $table->enum('unit', ['tsp', 'tbsp', 'cup', 'grams'])->nullable();
+            $table->enum('unit', ['tsp', 'tbsp', 'cup', 'oz'])->nullable();
             $table->foreignIdFor(Recipe::class);
             $table->unsignedInteger('weight');
             $table->timestamps();

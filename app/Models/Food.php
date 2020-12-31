@@ -9,14 +9,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property int id
  * @property string name Food base name.
  * @property ?string detail Some additional detail about the food (e.g. "small" with the name "onion").
- * @property float carbohydrates (per 100g).
- * @property float calories (per 100g).
- * @property float cholesterol (per 100g).
- * @property float fat (per 100g).
- * @property float protein (per 100g).
- * @property float sodium (per 100g).
- * @property ?float unit_weight Weight of one cup of the food.
- * @property ?float cup_weight Weight of one "unit" (e.g. an egg, onion, etc.) of the food.
+ * @property ?string brand Brand name.
+ * @property float carbohydrates per serving (g).
+ * @property float calories per serving (g).
+ * @property float cholesterol per serving (g).
+ * @property float fat per serving (g).
+ * @property float protein per serving (g).
+ * @property float sodium per serving (g).
+ * @property float serving_size Size of one serving of the food.
+ * @property ?string serving_unit Unit for serving weight (tsp, tbsp, cup, or null).
+ * @property float serving_weight per serving (g).
  * @property \Illuminate\Support\Carbon created_at
  * @property \Illuminate\Support\Carbon updated_at
  */
@@ -35,14 +37,16 @@ class Food extends Model
     protected $fillable = [
         'name',
         'detail',
+        'brand',
         'calories',
         'carbohydrates',
         'cholesterol',
         'fat',
         'protein',
         'sodium',
-        'unit_weight',
-        'cup_weight',
+        'serving_size',
+        'serving_unit',
+        'serving_weight',
     ];
 
     /**
@@ -52,10 +56,10 @@ class Food extends Model
         'calories' => 'float',
         'carbohydrates' => 'float',
         'cholesterol' => 'float',
-        'cup_weight' => 'float',
         'fat' => 'float',
         'protein' => 'float',
+        'serving_size' => 'float',
+        'serving_weight' => 'float',
         'sodium' => 'float',
-        'unit_weight' => 'float',
     ];
 }

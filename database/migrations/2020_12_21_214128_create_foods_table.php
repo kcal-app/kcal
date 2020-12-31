@@ -15,14 +15,16 @@ class CreateFoodsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('detail')->nullable();
+            $table->string('brand')->nullable();
+            $table->unsignedFloat('serving_size');
+            $table->enum('serving_unit', ['tsp', 'tbsp', 'cup', 'oz'])->nullable();
+            $table->unsignedFloat('serving_weight');
             $table->unsignedFloat('calories')->default(0);
-            $table->unsignedFloat('carbohydrates')->default(0);
-            $table->unsignedFloat('cholesterol')->default(0);
             $table->unsignedFloat('fat')->default(0);
-            $table->unsignedFloat('protein')->default(0);
+            $table->unsignedFloat('cholesterol')->default(0);
             $table->unsignedFloat('sodium')->default(0);
-            $table->unsignedFloat('unit_weight')->nullable();
-            $table->unsignedFloat('cup_weight')->nullable();
+            $table->unsignedFloat('carbohydrates')->default(0);
+            $table->unsignedFloat('protein')->default(0);
             $table->timestamps();
         });
     }
