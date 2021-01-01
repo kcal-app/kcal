@@ -48,11 +48,6 @@ class Recipe extends JournalableModel
     ];
 
     /**
-     * @inheritdoc
-     */
-    protected $with = ['steps', 'foodAmounts'];
-
-    /**
      * Nutrient total calculation methods.
      */
     private array $nutrientTotalMethods = [

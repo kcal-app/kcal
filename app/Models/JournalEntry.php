@@ -54,7 +54,7 @@ class JournalEntry extends Model
     /**
      * @inheritdoc
      */
-    protected $with = ['user', 'foods', 'recipes'];
+    protected $with = ['user', 'foods:id,name', 'recipes:id,name'];
 
     /**
      * Get the User this entry belongs to.

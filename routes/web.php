@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\JournalEntryController;
 use App\Http\Controllers\RecipeController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,6 @@ Route::get('/dashboard', function () {
 
 Route::resource('foods', FoodController::class);
 Route::resource('recipes', RecipeController::class);
+Route::resource('journal-entries', JournalEntryController::class);
 
 require __DIR__.'/auth.php';

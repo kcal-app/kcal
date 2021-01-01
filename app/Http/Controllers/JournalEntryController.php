@@ -3,18 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\JournalEntry;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class JournalEntryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(Request $request): View
     {
-        //
+        $date = $request->date ?? Carbon::now()->toDateString();
+        return view('journal.index')
+            ->with('entries', JournalEntry::where([
+                'user_id' => Auth::user()->id,
+                'date' => $date,
+            ])->get())
+            ->with('date', Carbon::createFromFormat('Y-m-d', $date))
+            ->with('nutrients', ['calories', 'fat', 'cholesterol', 'carbohydrates', 'sodium', 'protein']);
     }
 
     /**
