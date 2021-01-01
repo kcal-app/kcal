@@ -17,10 +17,10 @@ class CreateFoodAmountsTable extends Migration
     {
         Schema::create('food_amounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Food::class);
+            $table->foreignIdFor(Food::class)->index();
             $table->unsignedFloat('amount');
             $table->enum('unit', ['tsp', 'tbsp', 'cup', 'oz'])->nullable();
-            $table->foreignIdFor(Recipe::class);
+            $table->foreignIdFor(Recipe::class)->index();
             $table->unsignedInteger('weight');
             $table->timestamps();
         });

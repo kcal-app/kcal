@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -28,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method float sodiumTotal Get total sodium.
  * @method float sodiumPerServing Get per serving sodium.
  */
-class Recipe extends Model
+class Recipe extends JournalableModel
 {
     use HasFactory;
 

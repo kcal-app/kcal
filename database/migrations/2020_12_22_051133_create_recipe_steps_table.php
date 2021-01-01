@@ -20,6 +20,7 @@ class CreateRecipeStepsTable extends Migration
             $table->unsignedInteger('number');
             $table->longText('step');
             $table->timestamps();
+            $table->index('recipe_id', 'number');
         });
     }
 

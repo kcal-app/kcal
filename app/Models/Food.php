@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int id
@@ -22,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon created_at
  * @property \Illuminate\Support\Carbon updated_at
  */
-class Food extends Model
+class Food extends JournalableModel
 {
     use HasFactory;
 

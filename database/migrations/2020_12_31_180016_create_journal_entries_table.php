@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Food;
-use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,13 +17,17 @@ class CreateJournalEntriesTable extends Migration
         Schema::create('journal_entries', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Food::class)->nullable();
-            $table->foreignIdFor(Recipe::class)->nullable();
             $table->date('date')->useCurrent();
-            $table->unsignedFloat('amount');
-            $table->enum('unit', ['tsp', 'tbsp', 'cup', 'grams', 'serving'])->nullable();
+            $table->string('summary');
+            $table->unsignedFloat('calories')->default(0);
+            $table->unsignedFloat('fat')->default(0);
+            $table->unsignedFloat('cholesterol')->default(0);
+            $table->unsignedFloat('sodium')->default(0);
+            $table->unsignedFloat('carbohydrates')->default(0);
+            $table->unsignedFloat('protein')->default(0);
             $table->enum('meal', ['breakfast', 'lunch', 'dinner', 'snacks']);
             $table->timestamps();
+            $table->index(['user_id', 'date']);
         });
     }
 
