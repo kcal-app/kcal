@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Traits;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\JournalEntry;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-abstract class JournalableModel extends Model
+trait Journalable
 {
     /**
      * Get all of the journal entries for the recipe.

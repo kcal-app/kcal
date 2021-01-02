@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Journalable;
+use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -27,9 +30,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method float sodiumTotal Get total sodium.
  * @method float sodiumPerServing Get per serving sodium.
  */
-class Recipe extends JournalableModel
+class Recipe extends Model
 {
     use HasFactory;
+    use Journalable;
+    use Sluggable;
 
     /**
      * @inheritdoc

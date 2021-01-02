@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Journalable;
+use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int id
@@ -21,9 +24,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property \Illuminate\Support\Carbon created_at
  * @property \Illuminate\Support\Carbon updated_at
  */
-class Food extends JournalableModel
+class Food extends Model
 {
     use HasFactory;
+    use Sluggable;
+    use Journalable;
 
     /**
      * @inheritdoc
