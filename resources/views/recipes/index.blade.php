@@ -19,7 +19,7 @@
                             <div class="p-2 font-light rounded-lg border-2 border-gray-200">
                                 <div class="pb-2 lowercase flex justify-between items-baseline">
                                     <div class="text-2xl">
-                                        <a href="{{ route('recipes.show', $recipe->id) }}"
+                                        <a href="{{ route('recipes.show', $recipe) }}"
                                            class="text-gray-600 hover:text-gray-800">{{ $recipe->name }}</a>
                                     </div>
                                 </div>
