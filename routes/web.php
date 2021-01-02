@@ -24,8 +24,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::resource('foods', FoodController::class);
-Route::resource('recipes', RecipeController::class);
-Route::resource('journal-entries', JournalEntryController::class);
+Route::resource('foods', FoodController::class)->middleware(['auth']);
+Route::resource('recipes', RecipeController::class)->middleware(['auth']);
+Route::resource('journal-entries', JournalEntryController::class)->middleware(['auth']);
 
 require __DIR__.'/auth.php';
