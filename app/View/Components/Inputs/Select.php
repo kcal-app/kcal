@@ -8,17 +8,17 @@ use Illuminate\View\Component;
 
 class Select extends Component
 {
-    public Collection $options;
+    public Collection|array $options;
     public ?string $selectedValue;
 
     /**
      * Select constructor.
      *
-     * @param \Illuminate\Support\Collection $options
+     * @param \Illuminate\Support\Collection|array $options
      * @param ?string $selectedValue
      */
     public function __construct(
-        Collection $options,
+        Collection|array $options,
         ?string $selectedValue = '',
     ) {
         $this->options = $options;
