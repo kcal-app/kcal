@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\NutrientCalculator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -86,46 +87,14 @@ class FoodAmount extends Model
      */
     public function __call($method, $parameters): mixed {
         if (in_array($method, $this->nutrientMethods)) {
-            return $this->food->{$method} * $this->unitMultiplier();
+            return $this->food->{$method} * NutrientCalculator::calculateFoodNutrientMultiplier(
+                $this->food,
+                $this->amount,
+                $this->unit
+            );
         }
         else {
             return parent::__call($method, $parameters);
         }
-    }
-
-    /**
-     * Get the multiplier for nutrient calculations based on serving data.
-     */
-    private function unitMultiplier(): float {
-        if ($this->unit === 'oz') {
-            return $this->amount * 28.349523125 / $this->food->serving_weight;
-        }
-
-        if ($this->food->serving_unit === $this->unit) {
-            $multiplier = 1;
-        }
-        elseif ($this->unit === 'tsp') {
-            $multiplier = match ($this->food->serving_unit) {
-                'tbsp' => 1/3,
-                'cup' => 1/48,
-            };
-        }
-        elseif ($this->unit === 'tbsp') {
-            $multiplier = match ($this->food->serving_unit) {
-                'tsp' => 3,
-                'cup' => 1/16,
-            };
-        }
-        elseif ($this->unit === 'cup') {
-            $multiplier = match ($this->food->serving_unit) {
-                'tsp' => 48,
-                'tbsp' => 16,
-            };
-        }
-        else {
-            throw new \DomainException("Unhandled unit combination: {$this->unit}, {$this->food->serving_unit}");
-        }
-
-        return $multiplier / $this->food->serving_size * $this->amount;
     }
 }
