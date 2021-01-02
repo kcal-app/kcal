@@ -65,7 +65,9 @@
                                                     <div>
                                                         <span class="font-bold">foods:</span>
                                                         @foreach($entry->foods as $food)
-                                                            {{ $food->name }}@if(!$loop->last), @endif
+                                                            <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                                               href="{{ route('foods.show', $food) }}">
+                                                                {{ $food->name }}</a>@if(!$loop->last), @endif
                                                         @endforeach
                                                     </div>
                                                 @endif

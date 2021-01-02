@@ -64,11 +64,11 @@ class FoodController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Food  $food
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function show(Food $food)
+    public function show(Food $food): View
     {
-        //
+        return view('foods.show')->with('food', $food);
     }
 
     /**
