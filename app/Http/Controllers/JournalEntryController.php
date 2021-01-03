@@ -60,8 +60,8 @@ class JournalEntryController extends Controller
             ->with('recipes', $recipes)
             ->with('meals', [
                 ['value' => 'breakfast', 'label' => 'Breakfast'],
-                ['value' => 'lunch', 'label' => 'Lreakfast'],
-                ['value' => 'dinner', 'label' => 'Dreakfast'],
+                ['value' => 'lunch', 'label' => 'Lunch'],
+                ['value' => 'dinner', 'label' => 'Dinner'],
                 ['value' => 'snacks', 'label' => 'Snacks'],
             ])
             ->with('units', [
