@@ -7,8 +7,17 @@ use App\Models\Food;
 /**
  * TODO: Refactor for more general use.
  */
-class NutrientCalculator
+class Nutrients
 {
+    public static array $list = [
+        'calories',
+        'fat',
+        'cholesterol',
+        'sodium',
+        'carbohydrates',
+        'protein',
+    ];
+
     public static function calculateFoodNutrientMultiplier(
         Food $food,
         float $amount,
@@ -16,6 +25,9 @@ class NutrientCalculator
     ): float {
         if ($fromUnit === 'oz') {
             return $amount * 28.349523125 / $food->serving_weight;
+        }
+        elseif ($fromUnit === 'servings') {
+            return $amount;
         }
 
         if ($food->serving_unit === $fromUnit) {

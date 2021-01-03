@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Support\NutrientCalculator;
+use App\Support\Nutrients;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -87,7 +87,7 @@ class FoodAmount extends Model
      */
     public function __call($method, $parameters): mixed {
         if (in_array($method, $this->nutrientMethods)) {
-            return $this->food->{$method} * NutrientCalculator::calculateFoodNutrientMultiplier(
+            return $this->food->{$method} * Nutrients::calculateFoodNutrientMultiplier(
                 $this->food,
                 $this->amount,
                 $this->unit

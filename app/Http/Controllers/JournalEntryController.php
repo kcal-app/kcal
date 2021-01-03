@@ -9,6 +9,7 @@ use App\Models\Food;
 use App\Models\JournalEntry;
 use App\Models\Recipe;
 use App\Rules\ArrayNotEmpty;
+use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -90,14 +91,56 @@ class JournalEntryController extends Controller
             'recipes.*' => 'nullable|exists:App\Models\Recipe,id',
         ]);
 
+        $summary = [];
+        $nutrients = array_fill_keys(Nutrients::$list, 0);
+
         $foods_selected = array_filter($input['foods']);
         if (!empty($foods_selected)) {
-            /** @var \App\Models\Food $foods */
-            $foods = Food::findMany($foods_selected);
+            $foods = Food::findMany($foods_selected)->keyBy('id');
             foreach ($foods_selected as $key => $id) {
-                // TODO: Calculate totals with NutrientCalculator.
+                $food = $foods->get($id);
+                $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier(
+                    $food,
+                    $input['amounts'][$key],
+                    $input['units'][$key],
+                );
+                foreach ($nutrients as $nutrient => $amount) {
+                    $nutrients[$nutrient] += $food->{$nutrient} * $nutrient_multiplier;
+                }
+                $summary[] = "{$input['amounts'][$key]} {$input['units'][$key]} {$food->name}";
             }
         }
+
+        // TODO: Add support and/or error handling for non-servings.
+        $recipes_selected = array_filter($input['recipes']);
+        if (!empty($recipes_selected)) {
+            // TODO: Check out barryvdh/laravel-ide-helper.
+            $recipes = Recipe::findMany($recipes_selected)->keyBy('id');
+            foreach ($recipes_selected as $key => $id) {
+                $recipe = $recipes->get($id);
+                foreach ($nutrients as $nutrient => $amount) {
+                    $nutrients[$nutrient] += $recipe->{"{$nutrient}PerServing"}() * $input['amounts'][$key];
+                }
+                $summary[] = "{$input['amounts'][$key]} {$input['units'][$key]} {$recipe->name}";
+            }
+        }
+
+        $entry = new JournalEntry([
+            'summary' => implode(', ', $summary),
+            'date' => $input['date'],
+            'meal' => $input['meal'],
+        ] + $nutrients);
+        $entry->user()->associate(Auth::user());
+        if ($entry->save()) {
+            if (isset($foods)) {
+                $entry->foods()->saveMany($foods);
+            }
+            if (isset($recipes)) {
+                $entry->recipes()->saveMany($recipes);
+            }
+        }
+
+        return back()->with('message', "Journal entry added!");
     }
 
     /**
