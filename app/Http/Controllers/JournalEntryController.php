@@ -91,10 +91,28 @@ class JournalEntryController extends Controller
             'recipes.*' => 'nullable|exists:App\Models\Recipe,id',
         ]);
 
+        // Validate that at least one recipe or food is selected.
+        // TODO: refactor as custom validator.
+        $foods_selected = array_filter($input['foods']);
+        $recipes_selected = array_filter($input['recipes']);
+        if (empty($recipes_selected) && empty($foods_selected)) {
+            return back()->withInput()->withErrors('At least one food or recipe is required.');
+        }
+        elseif (!empty(array_intersect_key($foods_selected, $recipes_selected))) {
+            return back()->withInput()->withErrors('Select only one food or recipe per line.');
+        }
+
+        // Validate only "serving" unit used for recipes.
+        // TODO: refactor as custom validator.
+        foreach ($recipes_selected as $key => $id) {
+            if ($input['units'][$key] !== 'servings') {
+                return back()->withInput()->withErrors('Recipes must use the "servings" unit.');
+            }
+        }
+
         $summary = [];
         $nutrients = array_fill_keys(Nutrients::$list, 0);
 
-        $foods_selected = array_filter($input['foods']);
         if (!empty($foods_selected)) {
             $foods = Food::findMany($foods_selected)->keyBy('id');
             foreach ($foods_selected as $key => $id) {
@@ -111,8 +129,6 @@ class JournalEntryController extends Controller
             }
         }
 
-        // TODO: Add support and/or error handling for non-servings.
-        $recipes_selected = array_filter($input['recipes']);
         if (!empty($recipes_selected)) {
             $recipes = Recipe::findMany($recipes_selected)->keyBy('id');
             foreach ($recipes_selected as $key => $id) {
