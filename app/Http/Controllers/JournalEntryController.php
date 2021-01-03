@@ -114,7 +114,6 @@ class JournalEntryController extends Controller
         // TODO: Add support and/or error handling for non-servings.
         $recipes_selected = array_filter($input['recipes']);
         if (!empty($recipes_selected)) {
-            // TODO: Check out barryvdh/laravel-ide-helper.
             $recipes = Recipe::findMany($recipes_selected)->keyBy('id');
             foreach ($recipes_selected as $key => $id) {
                 $recipe = $recipes->get($id);

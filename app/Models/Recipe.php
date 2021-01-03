@@ -9,26 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property int id
- * @property string name
- * @property string description
- * @property int servings
- * @property \App\Models\RecipeStep[] steps
- * @property \App\Models\FoodAmount[] foodAmounts
- * @property \Illuminate\Support\Carbon created_at
- * @property \Illuminate\Support\Carbon updated_at
- * @method float caloriesTotal Get total calories.
- * @method float caloriesPerServing Get per serving calories.
- * @method float carbohydratesTotal Get total carbohydrates.
- * @method float carbohydratesPerServing Get per serving carbohydrates.
- * @method float cholesterolTotal Get total cholesterol.
- * @method float cholesterolPerServing Get per serving cholesterol.
- * @method float fatTotal Get total fat.
- * @method float fatPerServing Get per serving fat.
- * @method float proteinTotal Get total protein.
- * @method float proteinPerServing Get per serving protein.
- * @method float sodiumTotal Get total sodium.
- * @method float sodiumPerServing Get per serving sodium.
+ * @mixin IdeHelperRecipe
  */
 class Recipe extends Model
 {

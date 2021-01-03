@@ -8,16 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
- * @property int id
- * @property \Illuminate\Support\Carbon date
- * @property string summary
- * @property float calories
- * @property float carbohydrates
- * @property float cholesterol
- * @property float fat
- * @property float protein
- * @property float sodium
- * @property string meal
+ * @mixin IdeHelperJournalEntry
  */
 class JournalEntry extends Model
 {
