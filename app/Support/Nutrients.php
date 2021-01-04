@@ -9,7 +9,7 @@ use App\Models\Food;
  */
 class Nutrients
 {
-    public static array $list = [
+    public static array $all = [
         'calories',
         'fat',
         'cholesterol',

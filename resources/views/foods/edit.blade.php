@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add Food') }}
+            {{ ($food->exists ? 'Save' : 'Add') }} Food
         </h2>
     </x-slot>
 
@@ -25,6 +25,13 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
+                    @if ($food->exists)
+                        <form method="POST" action="{{ route('foods.update', $food) }}">
+                        @method('put')
+                    @else
+                        <form method="POST" action="{{ route('foods.store') }}">
+                    @endif
+
                     <form method="POST" action="{{ route('foods.store') }}">
                         @csrf
                         <div class="flex flex-col space-y-4">
@@ -37,7 +44,7 @@
                                                     class="block mt-1 w-full"
                                                     type="text"
                                                     name="name"
-                                                    :value="old('name')"
+                                                    :value="old('name', $food->name)"
                                                     required/>
                                 </div>
 
@@ -49,7 +56,7 @@
                                                     class="block mt-1 w-full"
                                                     type="text"
                                                     name="detail"
-                                                    :value="old('detail')"/>
+                                                    :value="old('detail', $food->detail)"/>
                                 </div>
 
                                 <!-- Brand -->
@@ -60,7 +67,7 @@
                                                     class="block mt-1 w-full"
                                                     type="text"
                                                     name="brand"
-                                                    :value="old('brand')"/>
+                                                    :value="old('brand', $food->brand)"/>
                                 </div>
                             </div>
 
@@ -75,7 +82,7 @@
                                                     step="any"
                                                     name="serving_size"
                                                     size="10"
-                                                    :value="old('serving_size')"/>
+                                                    :value="old('serving_size', $food->serving_size)"/>
                                 </div>
 
                                 <!-- Serving unit -->
@@ -84,7 +91,7 @@
 
                                     <x-inputs.select name="serving_unit"
                                                      :options="$serving_units"
-                                                     :selectedValue="old('serving_unit')">
+                                                     :selectedValue="old('serving_unit', $food->serving_unit)">
                                         <option value=""></option>
                                     </x-inputs.select>
                                 </div>
@@ -99,93 +106,30 @@
                                                     step="any"
                                                     name="serving_weight"
                                                     size="10"
-                                                    :value="old('serving_weight')"/>
+                                                    :value="old('serving_weight', $food->serving_weight)"/>
                                 </div>
                             </div>
 
                             <div class="grid grid-rows-3 md:grid-rows-2 lg:grid-rows-1 grid-flow-col">
-                                <!-- Calories -->
-                                <div>
-                                    <x-inputs.label for="calories" :value="__('Calories (g)')"/>
+                                @foreach ($nutrients as $nutrient)
+                                        <div>
+                                            <x-inputs.label for="{{ $nutrient }}"
+                                                            :value="ucfirst($nutrient) . ' (g)'"/>
 
-                                    <x-inputs.input id="calories"
-                                                    class="block mt-1"
-                                                    type="number"
-                                                    step="any"
-                                                    name="calories"
-                                                    size="10"
-                                                    :value="old('calories')"/>
-                                </div>
-
-                                <!-- Fat -->
-                                <div>
-                                    <x-inputs.label for="fat" :value="__('Fat (g)')"/>
-
-                                    <x-inputs.input id="fat"
-                                                    class="block mt-1"
-                                                    type="number"
-                                                    step="any"
-                                                    name="fat"
-                                                    size="10"
-                                                    :value="old('fat')"/>
-                                </div>
-
-                                <!-- Cholesterol -->
-                                <div>
-                                    <x-inputs.label for="cholesterol" :value="__('Cholesterol (g)')"/>
-
-                                    <x-inputs.input id="cholesterol"
-                                                    class="block mt-1"
-                                                    type="number"
-                                                    step="any"
-                                                    name="cholesterol"
-                                                    size="10"
-                                                    :value="old('cholesterol')"/>
-                                </div>
-
-                                <!-- Sodium -->
-                                <div>
-                                    <x-inputs.label for="sodium" :value="__('Sodium (g)')"/>
-
-                                    <x-inputs.input id="sodium"
-                                                    class="block mt-1"
-                                                    type="number"
-                                                    step="any"
-                                                    name="sodium"
-                                                    size="10"
-                                                    :value="old('sodium')"/>
-                                </div>
-
-                                <!-- Carbohydrates -->
-                                <div>
-                                    <x-inputs.label for="carbohydrates" :value="__('Carbohydrates (g)')"/>
-
-                                    <x-inputs.input id="carbohydrates"
-                                                    class="block mt-1"
-                                                    type="number"
-                                                    step="any"
-                                                    name="carbohydrates"
-                                                    size="10"
-                                                    :value="old('carbohydrates')"/>
-                                </div>
-
-                                <!-- Protein -->
-                                <div>
-                                    <x-inputs.label for="protein" :value="__('Protein (g)')"/>
-
-                                    <x-inputs.input id="protein"
-                                                    class="block mt-1"
-                                                    type="number"
-                                                    step="any"
-                                                    name="protein"
-                                                    size="10"
-                                                    :value="old('protein')"/>
-                                </div>
+                                            <x-inputs.input id="{{ $nutrient }}"
+                                                            class="block mt-1"
+                                                            type="number"
+                                                            step="any"
+                                                            name="{{ $nutrient }}"
+                                                            size="10"
+                                                            :value="old($nutrient, $food->{$nutrient})"/>
+                                        </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="flex items-center justify-end mt-4">
                             <x-inputs.button class="ml-3">
-                                {{ __('Add') }}
+                                {{ ($food->exists ? 'Save' : 'Add') }}
                             </x-inputs.button>
                         </div>
                     </form>

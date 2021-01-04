@@ -18,7 +18,7 @@
                         @foreach ($foods as $food)
                             <div class="p-2 font-light rounded-lg border-2 border-gray-200">
                                 <div class="text-2xl lowercase">
-                                        {{ $food->name }}@if($food->detail), <span class="text-gray-500">{{ $food->detail }}</span>@endif
+                                    {{ $food->name }}@if($food->detail), <span class="text-gray-500">{{ $food->detail }}</span>@endif
                                 </div>
                                 @if($food->brand)
                                     <div class="text-xl text-gray-600">
@@ -44,6 +44,12 @@
                                     <div class="text-right border-b border-gray-300">{{ $food->carbohydrates < 1 ? $food->carbohydrates * 1000 . "m" : $food->carbohydrates }}g</div>
                                     <div class="font-bold">Protein</div>
                                     <div class="text-right">{{ $food->protein < 1 ? $food->protein * 1000 . "m" : $food->protein }}g</div>
+                                </div>
+                                <div class="flex flex-row justify-around">
+                                    <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                       href="{{ route('foods.edit', $food) }}">edit</a>
+                                    <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                       href="{{ route('foods.destroy', $food) }}">delete (TBD)</a>
                                 </div>
                             </div>
                         @endforeach

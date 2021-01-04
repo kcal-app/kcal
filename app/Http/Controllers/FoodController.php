@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,8 +13,6 @@ class FoodController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {
@@ -28,7 +27,33 @@ class FoodController extends Controller
      */
     public function create(): View
     {
-        return view('foods.create')
+        return $this->edit(new Food());
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        return $this->update($request, new Food());
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Food $food): View
+    {
+        return view('foods.show')->with('food', $food);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Food $food): View
+    {
+        return view('foods.edit')
+            ->with('food', $food)
+            ->with('nutrients', Nutrients::$all)
             ->with('serving_units', new Collection([
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
@@ -36,10 +61,10 @@ class FoodController extends Controller
             ]));
     }
 
-    /**newly
-     * Store a newly created resource in storage.
+    /**
+     * Update the specified resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function update(Request $request, Food $food): RedirectResponse
     {
         $attributes = $request->validate([
             'name' => 'required|string',
@@ -55,43 +80,9 @@ class FoodController extends Controller
             'carbohydrates' => 'nullable|numeric',
             'protein' => 'nullable|numeric',
         ]);
-        /** @var \App\Models\Food $food */
-        $food = tap(new Food(array_filter($attributes)))->save();
-        return back()->with('message', "Food {$food->name} added!");
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Food  $food
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function show(Food $food): View
-    {
-        return view('foods.show')->with('food', $food);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Food  $food
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Food $food)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Food  $food
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Food $food)
-    {
-        //
+        $food->fill(array_filter($attributes))->save();
+        return redirect(route('foods.show', $food))
+            ->with('message', 'Changes saved!');
     }
 
     /**

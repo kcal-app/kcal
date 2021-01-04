@@ -111,7 +111,7 @@ class JournalEntryController extends Controller
         }
 
         $summary = [];
-        $nutrients = array_fill_keys(Nutrients::$list, 0);
+        $nutrients = array_fill_keys(Nutrients::$all, 0);
 
         if (!empty($foods_selected)) {
             $foods = Food::findMany($foods_selected)->keyBy('id');
