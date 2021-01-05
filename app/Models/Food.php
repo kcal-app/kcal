@@ -6,6 +6,7 @@ use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin IdeHelperFood
@@ -52,4 +53,11 @@ class Food extends Model
         'serving_weight' => 'float',
         'sodium' => 'float',
     ];
+
+    /**
+     * Get the food amounts using this food.
+     */
+    public function foodAmounts(): HasMany {
+        return $this->hasMany(FoodAmount::class);
+    }
 }

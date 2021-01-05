@@ -25,6 +25,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('foods', FoodController::class)->middleware(['auth']);
+Route::get('/foods/{food}/delete', [FoodController::class, 'delete'])
+    ->middleware(['auth'])
+    ->name('foods.delete');
 Route::resource('recipes', RecipeController::class)->middleware(['auth']);
 Route::resource('journal-entries', JournalEntryController::class)->middleware(['auth']);
 

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ ($food->exists ? 'Save' : 'Add') }} Food
+            {{ ($food->exists ? "Edit {$food->name}" : 'Add Food') }}
         </h2>
     </x-slot>
 
@@ -25,14 +25,8 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    @if ($food->exists)
-                        <form method="POST" action="{{ route('foods.update', $food) }}">
-                        @method('put')
-                    @else
-                        <form method="POST" action="{{ route('foods.store') }}">
-                    @endif
-
-                    <form method="POST" action="{{ route('foods.store') }}">
+                    <form method="POST" action="{{ ($food->exists ? route('foods.update', $food) : route('foods.store')) }}">
+                        @if ($food->exists)@method('put')@endif
                         @csrf
                         <div class="flex flex-col space-y-4">
                             <div class="grid grid-cols-3 gap-4">
@@ -131,6 +125,10 @@
                             <x-inputs.button class="ml-3">
                                 {{ ($food->exists ? 'Save' : 'Add') }}
                             </x-inputs.button>
+                            @if ($food->exists)
+                                <a class="px-4 py-2 ml-4 bg-red-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-red-700 active:bg-red-900 focus:outline-none"
+                                    href="{{ route('foods.delete', $food) }}">Delete</a>
+                            @endif
                         </div>
                     </form>
                 </div>

@@ -86,13 +86,23 @@ class FoodController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Food  $food
-     * @return \Illuminate\Http\Response
+     * Confirm removal of specified resource.
      */
-    public function destroy(Food $food)
+    public function delete(Food $food): View
     {
-        //
+        return view('foods.delete')->with('food', $food);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Food $food): RedirectResponse
+    {
+        if ($food->foodAmounts()->count()) {
+            return back()->withErrors('Cannot delete: this food is used in recipes.');
+        }
+        $food->delete();
+        return redirect(route('foods.index'))
+            ->with('message', "Food {$food->name} deleted!");
     }
 }
