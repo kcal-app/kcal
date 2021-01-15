@@ -17,7 +17,7 @@ class CreateRecipesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->unsignedInteger('servings');
             $table->timestamps();
         });

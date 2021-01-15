@@ -60,11 +60,11 @@ class RecipeController extends Controller
     {
         $input = $request->validate([
             'name' => 'required|string',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'servings' => 'required|numeric',
             'foods_amount' => ['required', 'array', new ArrayNotEmpty],
             'foods_amount.*' => 'required_with:foods.*|nullable|numeric|min:0',
-            'foods_unit' => ['required', 'array', new ArrayNotEmpty],
+            'foods_unit' => ['required', 'array'],
             'foods_unit.*' => 'nullable|string',
             'foods' => ['required', 'array', new ArrayNotEmpty],
             'foods.*' => 'required_with:foods_amount.*|nullable|exists:App\Models\Food,id',

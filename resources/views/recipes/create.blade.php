@@ -49,7 +49,8 @@
                                                     class="block mt-1 w-full"
                                                     type="number"
                                                     name="servings"
-                                                    :value="old('servings')" />
+                                                    :value="old('servings')"
+                                                    required />
                                 </div>
                             </div>
 
