@@ -29,7 +29,7 @@ class Number
     /**
      * Get a string faction representation of a float.
      *
-     * @todo Handle repeating values like 1/3, 2/3, etc.
+     * @todo Handle repeating values like 1/3, 2/3, etc. better.
      *
      * @see https://rosettacode.org/wiki/Convert_decimal_number_to_rational#PHP
      *
@@ -40,12 +40,8 @@ class Number
      */
     public static function fractionStringFromFloat(float $value): string {
         $fraction = (string) Fraction::fromFloat($value);
-        if ($fraction === '33333333/100000000') {
-            $fraction = '1/3';
-        }
-        elseif ($fraction === '66666667/100000000') {
-            $fraction = '2/3';
-        }
+        $fraction = str_replace('33333333/100000000', '1/3', $fraction);
+        $fraction = str_replace('66666667/100000000', '2/3', $fraction);
         return $fraction;
     }
 }
