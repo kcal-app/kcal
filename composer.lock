@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6798cd035bece9ee986d5e3a59036303",
+    "content-hash": "7054301f9158e201ddff5b37f41a1c5a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1828,6 +1828,49 @@
                 "source": "https://github.com/opis/closure/tree/3.6.1"
             },
             "time": "2020-11-07T02:01:34+00:00"
+        },
+        {
+            "name": "phospr/fraction",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phospr/fraction.git",
+                "reference": "3f195b920bca0ba4eac8575e397af283782c699d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phospr/fraction/zipball/3f195b920bca0ba4eac8575e397af283782c699d",
+                "reference": "3f195b920bca0ba4eac8575e397af283782c699d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phospr\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tom Haskins-Vaughan",
+                    "email": "tom@tomhv.uk"
+                }
+            ],
+            "description": "A composer-installable fractions library",
+            "support": {
+                "issues": "https://github.com/phospr/fraction/issues",
+                "source": "https://github.com/phospr/fraction/tree/master"
+            },
+            "time": "2016-12-21T15:33:12+00:00"
         },
         {
             "name": "phpoption/phpoption",

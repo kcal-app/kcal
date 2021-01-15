@@ -69,10 +69,10 @@
                         <h3 class="pt-2 mb-2 font-extrabold">Ingredients</h3>
                         @for($i = 0; $i < 20; $i++)
                             <div class="flex flex-row space-x-4 mb-4">
-                                <x-inputs.input type="number"
+                                <x-inputs.input type="text"
                                                 name="foods_amount[]"
-                                                :value="old('foods_amount.' . $i)"
-                                                step="any" />
+                                                size="5"
+                                                :value="old('foods_amount.' . $i)" />
                                 <x-inputs.select name="foods_unit[]"
                                                  :options="$food_units"
                                                  :selectedValue="old('foods_unit.' . $i)">

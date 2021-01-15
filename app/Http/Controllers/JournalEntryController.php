@@ -9,6 +9,8 @@ use App\Models\Food;
 use App\Models\JournalEntry;
 use App\Models\Recipe;
 use App\Rules\ArrayNotEmpty;
+use App\Rules\StringIsDecimalOrFraction;
+use App\Support\Number;
 use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -82,7 +84,7 @@ class JournalEntryController extends Controller
             'date' => 'required|date',
             'meal' => 'required|string',
             'amounts' => ['required', 'array', new ArrayNotEmpty],
-            'amounts.*' => 'required_with:foods.*,recipes.*|nullable|numeric|min:0',
+            'amounts.*' => ['required_with:foods.*,recipes.*', 'nullable', new StringIsDecimalOrFraction],
             'units' => ['required', 'array', new ArrayNotEmpty],
             'units.*' => 'nullable|string',
             'foods' => 'required|array',
@@ -119,7 +121,7 @@ class JournalEntryController extends Controller
                 $food = $foods->get($id);
                 $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier(
                     $food,
-                    $input['amounts'][$key],
+                    Number::floatFromString($input['amounts'][$key]),
                     $input['units'][$key],
                 );
                 foreach ($nutrients as $nutrient => $amount) {
@@ -134,7 +136,7 @@ class JournalEntryController extends Controller
             foreach ($recipes_selected as $key => $id) {
                 $recipe = $recipes->get($id);
                 foreach ($nutrients as $nutrient => $amount) {
-                    $nutrients[$nutrient] += $recipe->{"{$nutrient}PerServing"}() * $input['amounts'][$key];
+                    $nutrients[$nutrient] += $recipe->{"{$nutrient}PerServing"}() * Number::floatFromString($input['amounts'][$key]);
                 }
                 $summary[] = "{$input['amounts'][$key]} {$input['units'][$key]} {$recipe->name}";
             }

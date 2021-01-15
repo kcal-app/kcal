@@ -60,11 +60,10 @@
                             <x-inputs.label for="recipes" :value="__('Recipe')" class="col-span-4"/>
                             @for ($i = 0; $i < 10; $i++)
                                 <div>
-                                    <x-inputs.input type="number"
+                                    <x-inputs.input type="text"
                                                     name="amounts[]"
                                                     class="block w-full"
-                                                    :value="old('amounts.' . $i)"
-                                                    step="any" />
+                                                    :value="old('amounts.' . $i)" />
                                 </div>
                                 <div class="col-span-2">
                                     <x-inputs.select name="units[]"

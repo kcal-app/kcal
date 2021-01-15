@@ -33,7 +33,7 @@
                                     </div>
                                 @endif
                                 <div class="font-bold">
-                                    Serving size {{ $food->serving_size }}
+                                    Serving size {{ \App\Support\Number::fractionStringFromFloat($food->serving_size) }}
                                     {{ $food->serving_unit }}
                                     ({{ $food->serving_weight }}g)
                                 </div>

@@ -13,7 +13,7 @@
                     <h3 class="mb-2 mt-4 font-bold">Ingredients</h3>
                     @foreach($recipe->foodAmounts as $ia)
                         <div class="flex flex-row space-x-2 mb-2">
-                            <div>{{ $ia->amount }}</div>
+                            <div>{{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}</div>
                             @if($ia->unit)<div>{{ $ia->unit }}</div>@endif
                             <div>{{ $ia->food->name }}</div>
                         </div>

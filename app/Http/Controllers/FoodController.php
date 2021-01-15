@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use App\Rules\StringIsDecimalOrFraction;
+use App\Support\Number;
 use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -70,7 +72,7 @@ class FoodController extends Controller
             'name' => 'required|string',
             'detail' => 'nullable|string',
             'brand' => 'nullable|string',
-            'serving_size' => 'required|numeric',
+            'serving_size' => ['required', new StringIsDecimalOrFraction],
             'serving_unit' => 'nullable|string',
             'serving_weight' => 'required|numeric',
             'calories' => 'nullable|numeric',
@@ -80,6 +82,7 @@ class FoodController extends Controller
             'carbohydrates' => 'nullable|numeric',
             'protein' => 'nullable|numeric',
         ]);
+        $attributes['serving_size'] = Number::floatFromString($attributes['serving_size']);
         $food->fill(array_filter($attributes))->save();
         return redirect(route('foods.show', $food))
             ->with('message', 'Changes saved!');

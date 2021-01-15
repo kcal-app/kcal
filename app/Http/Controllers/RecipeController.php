@@ -7,6 +7,8 @@ use App\Models\FoodAmount;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
 use App\Rules\ArrayNotEmpty;
+use App\Rules\StringIsDecimalOrFraction;
+use App\Support\Number;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -63,7 +65,7 @@ class RecipeController extends Controller
             'description' => 'nullable|string',
             'servings' => 'required|numeric',
             'foods_amount' => ['required', 'array', new ArrayNotEmpty],
-            'foods_amount.*' => 'required_with:foods.*|nullable|numeric|min:0',
+            'foods_amount.*' => ['required_with:foods.*', 'nullable', new StringIsDecimalOrFraction],
             'foods_unit' => ['required', 'array'],
             'foods_unit.*' => 'nullable|string',
             'foods' => ['required', 'array', new ArrayNotEmpty],
@@ -88,7 +90,7 @@ class RecipeController extends Controller
                 $weight = 0;
                 foreach (array_filter($input['foods_amount']) as $key => $amount) {
                     $food_amounts[$key] = new FoodAmount([
-                        'amount' => (float) $amount,
+                        'amount' => Number::floatFromString($amount),
                         'unit' => $input['foods_unit'][$key],
                         'weight' => $weight++,
                     ]);

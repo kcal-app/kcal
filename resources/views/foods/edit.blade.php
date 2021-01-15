@@ -72,11 +72,10 @@
 
                                     <x-inputs.input id="serving_size"
                                                     class="block mt-1"
-                                                    type="number"
-                                                    step="any"
+                                                    type="text"
                                                     name="serving_size"
                                                     size="10"
-                                                    :value="old('serving_size', $food->serving_size)"/>
+                                                    :value="old('serving_size', \App\Support\Number::fractionStringFromFloat($food->serving_size))"/>
                                 </div>
 
                                 <!-- Serving unit -->
