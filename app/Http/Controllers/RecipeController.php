@@ -33,7 +33,7 @@ class RecipeController extends Controller
      */
     public function create(): View
     {
-        $foods = Food::all(['id', 'name', 'detail'])->collect()
+        $foods = Food::all(['id', 'name', 'detail'])->sortBy('name')->collect()
             ->map(function ($food) {
                 return [
                     'value' => $food->id,
