@@ -30,7 +30,7 @@ class Nutrients
             return $amount;
         }
 
-        if ($food->serving_unit === $fromUnit) {
+        if (empty($fromUnit) || $food->serving_unit === $fromUnit) {
             $multiplier = 1;
         }
         elseif ($fromUnit === 'tsp') {
@@ -52,7 +52,7 @@ class Nutrients
             };
         }
         else {
-            throw new \DomainException("Unhandled unit combination: {$fromUnit}, {$food->serving_unit}");
+            throw new \DomainException("Unhandled unit combination: {$fromUnit}, {$food->serving_unit} ({$food->name})");
         }
 
         return $multiplier / $food->serving_size * $amount;
