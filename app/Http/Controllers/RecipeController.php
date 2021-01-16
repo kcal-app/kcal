@@ -35,85 +35,20 @@ class RecipeController extends Controller
      */
     public function create(): View
     {
-        $foods = Food::all(['id', 'name', 'detail'])->sortBy('name')->collect()
-            ->map(function ($food) {
-                return [
-                    'value' => $food->id,
-                    'label' => "{$food->name}" . ($food->detail ? ", {$food->detail}" : ""),
-                ];
-            });
-        return view('recipes.create')
-            ->with('foods', $foods)
-            ->with('food_units', new Collection([
-                ['value' => 'tsp', 'label' => 'tsp.'],
-                ['value' => 'tbsp', 'label' => 'tbsp.'],
-                ['value' => 'cup', 'label' => 'cup'],
-                ['value' => 'grams', 'label' => 'g'],
-            ]));
+        return $this->edit(new Recipe());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function store(Request $request): RedirectResponse
     {
-        $input = $request->validate([
-            'name' => 'required|string',
-            'description' => 'nullable|string',
-            'servings' => 'required|numeric',
-            'foods_amount' => ['required', 'array', new ArrayNotEmpty],
-            'foods_amount.*' => ['required_with:foods.*', 'nullable', new StringIsDecimalOrFraction],
-            'foods_unit' => ['required', 'array'],
-            'foods_unit.*' => 'nullable|string',
-            'foods' => ['required', 'array', new ArrayNotEmpty],
-            'foods.*' => 'required_with:foods_amount.*|nullable|exists:App\Models\Food,id',
-            'steps' => ['required', 'array', new ArrayNotEmpty],
-            'steps.*' => 'nullable|string',
-        ]);
-
-        $recipe = new Recipe([
-            'name' => $input['name'],
-            'description' => $input['description'],
-            'servings' => (int) $input['servings'],
-        ]);
-
-        try {
-            DB::transaction(function () use ($recipe, $input) {
-                if (!$recipe->save()) {
-                    return;
-                }
-
-                $food_amounts = [];
-                $weight = 0;
-                foreach (array_filter($input['foods_amount']) as $key => $amount) {
-                    $food_amounts[$key] = new FoodAmount([
-                        'amount' => Number::floatFromString($amount),
-                        'unit' => $input['foods_unit'][$key],
-                        'weight' => $weight++,
-                    ]);
-                    $food_amounts[$key]->food()->associate($input['foods'][$key]);
-                }
-                $recipe->foodAmounts()->saveMany($food_amounts);
-
-                $steps = [];
-                $number = 1;
-                foreach (array_filter($input['steps']) as $step) {
-                    $steps[] = new RecipeStep([
-                        'number' => $number++,
-                        'step' => $step,
-                    ]);
-                }
-                $recipe->foodAmounts()->saveMany($steps);
-            });
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->withInput()->withErrors("Failed to add recipe due to database error: {$e->getMessage()}.");
-        }
-
-        return back()->with('message', "Recipe {$recipe->name} added!");
+        return $this->update($request, new Recipe());
     }
 
     /**
@@ -130,24 +65,97 @@ class RecipeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Recipe  $recipe
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Recipe $recipe
+     * @return \Illuminate\Contracts\View\View
      */
-    public function edit(Recipe $recipe)
+    public function edit(Recipe $recipe): View
     {
-        //
+        $foods = Food::all(['id', 'name', 'detail'])->sortBy('name')->collect()
+            ->map(function ($food) {
+                return [
+                    'value' => $food->id,
+                    'label' => "{$food->name}" . ($food->detail ? ", {$food->detail}" : ""),
+                ];
+            });
+        return view('recipes.edit')
+            ->with('recipe', $recipe)
+            ->with('foods', $foods)
+            ->with('food_units', new Collection([
+                ['value' => 'tsp', 'label' => 'tsp.'],
+                ['value' => 'tbsp', 'label' => 'tbsp.'],
+                ['value' => 'cup', 'label' => 'cup'],
+                ['value' => 'oz', 'label' => 'oz'],
+                ['value' => 'grams', 'label' => 'g'],
+            ]));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Recipe  $recipe
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Recipe $recipe
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
-    public function update(Request $request, Recipe $recipe)
+    public function update(Request $request, Recipe $recipe): RedirectResponse
     {
-        //
+        $input = $request->validate([
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'servings' => 'required|numeric',
+            'foods_amount' => ['required', 'array', new ArrayNotEmpty],
+            'foods_amount.*' => ['required_with:foods.*', 'nullable', new StringIsDecimalOrFraction],
+            'foods_unit' => ['required', 'array'],
+            'foods_unit.*' => 'nullable|string',
+            'foods' => ['required', 'array', new ArrayNotEmpty],
+            'foods.*' => 'required_with:foods_amount.*|nullable|exists:App\Models\Food,id',
+            'steps' => ['required', 'array', new ArrayNotEmpty],
+            'steps.*' => 'nullable|string',
+        ]);
+
+        $recipe->fill([
+            'name' => $input['name'],
+            'description' => $input['description'],
+            'servings' => (int) $input['servings'],
+        ]);
+
+        try {
+            DB::transaction(function () use ($recipe, $input) {
+                if (!$recipe->save()) {
+                    return;
+                }
+
+                $food_amounts = [];
+                $weight = 0;
+                // TODO: Handle removals.
+                foreach (array_filter($input['foods_amount']) as $key => $amount) {
+                    $food_amounts[$key] = $recipe->foodAmounts[$key] ?? new FoodAmount();
+                    $food_amounts[$key]->fill([
+                        'amount' => Number::floatFromString($amount),
+                        'unit' => $input['foods_unit'][$key],
+                        'weight' => $weight++,
+                    ]);
+                    $food_amounts[$key]->food()->associate($input['foods'][$key]);
+                }
+                $recipe->foodAmounts()->saveMany($food_amounts);
+
+                $steps = [];
+                $number = 1;
+                // TODO: Handle removals.
+                foreach (array_filter($input['steps']) as $key => $step) {
+                    $steps[$key] = $recipe->steps[$key] ?? new RecipeStep();
+                    $steps[$key]->fill(['number' => $number++, 'step' => $step]);
+                }
+                $recipe->foodAmounts()->saveMany($steps);
+            });
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->withErrors("Failed to updated recipe due to database error: {$e->getMessage()}.");
+        }
+
+        return back()->with('message', "Recipe {$recipe->name} updated!");
     }
 
     /**
