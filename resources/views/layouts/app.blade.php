@@ -31,6 +31,21 @@
 
             <!-- Page Content -->
             <main>
+                @if(session()->has('message'))
+                    <div class="bg-green-200 p-2 mb-2">
+                        {{ session()->get('message') }}
+                    </div>
+                @endif
+                @if ($errors->any())
+                    <div class="flex flex-col">
+                        <div class="font-extrabold bg-red-200 p-2 text-lg">Errors!</div>
+                        @foreach ($errors->all() as $error)
+                            <div class="bg-red-200 p-2">
+                                {{ $error }}
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
                 {{ $slot }}
             </main>
         </div>

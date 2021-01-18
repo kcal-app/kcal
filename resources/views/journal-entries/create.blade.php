@@ -7,21 +7,6 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if (session()->has('message'))
-                <div class="bg-green-200 border-2 border-green-600 p-2 mb-2">
-                    {{ session()->get('message') }}
-                </div>
-            @endif
-            @if ($errors->any())
-                <div class="flex flex-col space-y-2 pb-2">
-                    @foreach ($errors->all() as $error)
-                        <div class="bg-red-200 border-2 border-red-900 p-2">
-                            {{ $error }}
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="{{ route('journal-entries.store') }}">
