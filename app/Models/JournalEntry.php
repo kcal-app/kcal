@@ -8,7 +8,43 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
- * @mixin IdeHelperJournalEntry
+ * App\Models\JournalEntry
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property \datetime $date
+ * @property string $summary
+ * @property float $calories
+ * @property float $fat
+ * @property float $cholesterol
+ * @property float $sodium
+ * @property float $carbohydrates
+ * @property float $protein
+ * @property string $meal
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Food[] $foods
+ * @property-read int|null $foods_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Recipe[] $recipes
+ * @property-read int|null $recipes_count
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry query()
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereCalories($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereCarbohydrates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereCholesterol($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereFat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereMeal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereProtein($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereSodium($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereSummary($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereUserId($value)
+ * @mixin \Eloquent
  */
 class JournalEntry extends Model
 {

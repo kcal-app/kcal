@@ -8,7 +8,32 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperFoodAmount
+ * App\Models\FoodAmount
+ *
+ * @property int $id
+ * @property int $food_id
+ * @property float $amount
+ * @property string|null $unit
+ * @property int $recipe_id
+ * @property int $weight
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $detail
+ * @property-read \App\Models\Food $food
+ * @property-read \App\Models\Recipe $recipe
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereDetail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereFoodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereRecipeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereUnit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereWeight($value)
+ * @mixin \Eloquent
  */
 class FoodAmount extends Model
 {

@@ -9,7 +9,35 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @mixin IdeHelperRecipe
+ * App\Models\Recipe
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property int $servings
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $description
+ * @property string|null $source
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FoodAmount[] $foodAmounts
+ * @property-read int|null $food_amounts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalEntry[] $journalEntries
+ * @property-read int|null $journal_entries_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecipeStep[] $steps
+ * @property-read int|null $steps_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe findSimilarSlugs(string $attribute, array $config, string $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereServings($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Recipe extends Model
 {
