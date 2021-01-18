@@ -49,6 +49,14 @@
                                         <details>
                                             <summary>{{ $entry->summary }}</summary>
                                             <div class="border-blue-100 border-2 p-2 ml-4">
+                                                <div class="float-right">
+                                                    <a class="h-6 w-6 text-red-500 hover:text-red-700 hover:border-red-300 float-right text-sm"
+                                                       href="{{ route('journal-entries.delete', $entry) }}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </a>
+                                                </div>
                                                 <div>
                                                     <span class="font-bold">nutrients:</span>
                                                     @foreach($nutrients as $nutrient)

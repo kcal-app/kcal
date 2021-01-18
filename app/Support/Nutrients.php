@@ -30,7 +30,11 @@ class Nutrients
             return $amount;
         }
 
-        if (empty($fromUnit) || $food->serving_unit === $fromUnit) {
+        if (
+            empty($fromUnit)
+            || empty($food->serving_unit)
+            || $food->serving_unit === $fromUnit
+        ) {
             $multiplier = 1;
         }
         elseif ($fromUnit === 'tsp') {

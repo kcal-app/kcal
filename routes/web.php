@@ -30,5 +30,8 @@ Route::get('/foods/{food}/delete', [FoodController::class, 'delete'])
     ->name('foods.delete');
 Route::resource('recipes', RecipeController::class)->middleware(['auth']);
 Route::resource('journal-entries', JournalEntryController::class)->middleware(['auth']);
+Route::get('/journal-entries/{journalEntry}/delete', [JournalEntryController::class, 'delete'])
+    ->middleware(['auth'])
+    ->name('journal-entries.delete');
 
 require __DIR__.'/auth.php';

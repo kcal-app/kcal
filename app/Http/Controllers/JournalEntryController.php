@@ -195,13 +195,22 @@ class JournalEntryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\JournalEntry  $journalEntry
-     * @return \Illuminate\Http\Response
+     * Confirm removal of the specified resource.
      */
-    public function destroy(JournalEntry $journalEntry)
+    public function delete(JournalEntry $journalEntry): View
     {
-        //
+        return view('journal-entries.delete')->with('entry', $journalEntry);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(JournalEntry $journalEntry): RedirectResponse
+    {
+        $journalEntry->delete();
+        session()->flash('message', 'Journal entry deleted!');
+        return redirect(route('journal-entries.index', [
+            'date' => $journalEntry->date->toDateString()
+        ]));
     }
 }
