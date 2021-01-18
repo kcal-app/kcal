@@ -110,18 +110,18 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-rows-3 md:grid-rows-2 lg:grid-rows-1 grid-flow-col">
+                            <div class="grid grid-rows-3 sm:grid-rows-3 md:grid-rows-2 lg:grid-rows-1 grid-flow-col">
                                 @foreach ($nutrients as $nutrient)
+                                        <!-- {{ ucfirst($nutrient) }} -->
                                         <div>
                                             <x-inputs.label for="{{ $nutrient }}"
                                                             :value="ucfirst($nutrient) . ' (g)'"/>
 
                                             <x-inputs.input id="{{ $nutrient }}"
-                                                            class="block mt-1"
+                                                            class="block w-5/6 mt-1"
                                                             type="number"
                                                             step="any"
                                                             name="{{ $nutrient }}"
-                                                            size="10"
                                                             :value="old($nutrient, $food->{$nutrient})"/>
                                         </div>
                                 @endforeach
