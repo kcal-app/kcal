@@ -11,6 +11,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
+        "livewire/livewire": "^2.3",
         "phospr/fraction": "^1.2"
     },
     "require-dev": {
