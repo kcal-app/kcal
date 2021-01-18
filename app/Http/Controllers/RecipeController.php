@@ -105,6 +105,7 @@ class RecipeController extends Controller
         $input = $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
+            'source' => 'nullable|string',
             'servings' => 'required|numeric',
             'foods_amount' => ['required', 'array', new ArrayNotEmpty],
             'foods_amount.*' => ['required_with:foods.*', 'nullable', new StringIsDecimalOrFraction],
@@ -121,6 +122,7 @@ class RecipeController extends Controller
         $recipe->fill([
             'name' => Str::lower($input['name']),
             'description' => $input['description'],
+            'source' => $input['source'],
             'servings' => (int) $input['servings'],
         ]);
 
@@ -159,7 +161,8 @@ class RecipeController extends Controller
             return back()->withInput()->withErrors("Failed to updated recipe due to database error: {$e->getMessage()}.");
         }
 
-        return back()->with('message', "Recipe {$recipe->name} updated!");
+        session()->flash('message', "Recipe {$recipe->name} updated!");
+        return redirect()->route('recipes.show', $recipe);
     }
 
     /**

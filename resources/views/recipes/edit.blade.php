@@ -64,6 +64,17 @@
                                                    name="description"
                                                    :value="old('description', $recipe->description)" />
                             </div>
+
+                            <!-- Source -->
+                            <div>
+                                <x-inputs.label for="source" :value="__('Source')" />
+
+                                <x-inputs.input id="source"
+                                                class="block mt-1 w-full"
+                                                type="text"
+                                                name="source"
+                                                :value="old('source', $recipe->source)" />
+                            </div>
                         </div>
 
                         <!-- Ingredients -->
