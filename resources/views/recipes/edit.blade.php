@@ -86,11 +86,12 @@
                                                  :selectedValue="old('foods_unit.' . $i, $unit)">
                                     <option value=""></option>
                                 </x-inputs.select>
-                                <x-inputs.select name="foods[]"
-                                                 :options="$foods"
-                                                 :selectedValue="old('foods.' . $i, $food_id)">
-                                    <option value=""></option>
-                                </x-inputs.select>
+{{--                                <x-inputs.select name="foods[]"--}}
+{{--                                                 :options="$foods"--}}
+{{--                                                 :selectedValue="old('foods.' . $i, $food_id)">--}}
+{{--                                    <option value=""></option>--}}
+{{--                                </x-inputs.select>--}}
+                                <livewire:picker model="\App\Models\Food">
                                 <x-inputs.input type="text"
                                                 class="block"
                                                 name="foods_detail[]"

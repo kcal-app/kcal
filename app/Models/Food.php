@@ -7,6 +7,7 @@ use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Food
@@ -101,5 +102,12 @@ class Food extends Model
      */
     public function foodAmounts(): HasMany {
         return $this->hasMany(FoodAmount::class);
+    }
+
+    /**
+     * Gets search results for a term.
+     */
+    public static function search(string $term): Collection {
+        return (new static)::where('name', 'like', "%{$term}%")->get();
     }
 }
