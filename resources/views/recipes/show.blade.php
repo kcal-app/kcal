@@ -16,6 +16,7 @@
                             <div>{{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}</div>
                             @if($ia->unit)<div>{{ $ia->unit }}</div>@endif
                             <div>{{ $ia->food->name }}</div>
+                            @if($ia->detail)<div class="text-gray-500">{{ $ia->detail }}</div>@endif
                         </div>
                     @endforeach
                     <h3 class="mb-2 mt-4 font-bold">Steps</h3>

@@ -75,9 +75,10 @@
                                   $amount = \App\Support\Number::fractionStringFromFloat($foodAmount->amount);
                                   $unit = $foodAmount->unit;
                                   $food_id = $foodAmount->food->id;
+                                  $detail = $foodAmount->detail;
                                 } else {
                                   $foodAmount = new \App\Models\FoodAmount();
-                                  $amount = $food_id = $unit = null;
+                                  $amount = $food_id = $unit = $detail = null;
                                 }
                             @endphp
                             <div class="flex flex-row space-x-4 mb-4">
@@ -95,6 +96,10 @@
                                                  :selectedValue="old('foods.' . $i, $food_id)">
                                     <option value=""></option>
                                 </x-inputs.select>
+                                <x-inputs.input type="text"
+                                                class="block"
+                                                name="foods_detail[]"
+                                                :value="old('foods_detail.' . $i, $detail)" />
                             </div>
                         @endfor
 

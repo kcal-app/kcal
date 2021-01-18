@@ -110,6 +110,8 @@ class RecipeController extends Controller
             'foods_amount.*' => ['required_with:foods.*', 'nullable', new StringIsDecimalOrFraction],
             'foods_unit' => ['required', 'array'],
             'foods_unit.*' => 'nullable|string',
+            'foods_detail' => ['required', 'array'],
+            'foods_detail.*' => 'nullable|string',
             'foods' => ['required', 'array', new ArrayNotEmpty],
             'foods.*' => 'required_with:foods_amount.*|nullable|exists:App\Models\Food,id',
             'steps' => ['required', 'array', new ArrayNotEmpty],
@@ -136,6 +138,7 @@ class RecipeController extends Controller
                     $food_amounts[$key]->fill([
                         'amount' => Number::floatFromString($amount),
                         'unit' => $input['foods_unit'][$key],
+                        'detail' => $input['foods_detail'][$key],
                         'weight' => $weight++,
                     ]);
                     $food_amounts[$key]->food()->associate($input['foods'][$key]);

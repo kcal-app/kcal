@@ -31,6 +31,8 @@ namespace App\Models{
  * @property float $protein
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FoodAmount[] $foodAmounts
+ * @property-read int|null $food_amounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalEntry[] $journalEntries
  * @property-read int|null $journal_entries_count
  * @method static \Illuminate\Database\Eloquent\Builder|Food findSimilarSlugs(string $attribute, array $config, string $slug)
@@ -54,7 +56,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereSodium($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereUpdatedAt($value)
  */
-	class IdeHelperFood extends \Eloquent {}
+	class Food extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -70,6 +72,7 @@ namespace App\Models{
  * @property int $weight
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $detail
  * @property-read \App\Models\Food $food
  * @property-read \App\Models\Recipe $recipe
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount newModelQuery()
@@ -77,6 +80,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount query()
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereDetail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereFoodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereRecipeId($value)
@@ -84,7 +88,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereWeight($value)
  */
-	class IdeHelperFoodAmount extends \Eloquent {}
+	class FoodAmount extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -127,7 +131,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereUserId($value)
  */
-	class IdeHelperJournalEntry extends \Eloquent {}
+	class JournalEntry extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -138,10 +142,10 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property string $description
  * @property int $servings
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $description
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FoodAmount[] $foodAmounts
  * @property-read int|null $food_amounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalEntry[] $journalEntries
@@ -160,7 +164,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereUpdatedAt($value)
  */
-	class IdeHelperRecipe extends \Eloquent {}
+	class Recipe extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -185,7 +189,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeStep whereStep($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeStep whereUpdatedAt($value)
  */
-	class IdeHelperRecipeStep extends \Eloquent {}
+	class RecipeStep extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -215,6 +219,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
-	class IdeHelperUser extends \Eloquent {}
+	class User extends \Eloquent {}
 }
 

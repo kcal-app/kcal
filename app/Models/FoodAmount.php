@@ -20,6 +20,7 @@ class FoodAmount extends Model
     protected $fillable = [
         'amount',
         'unit',
+        'detail',
         'weight',
     ];
 
