@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class RecipeController extends Controller
 {
@@ -116,7 +117,7 @@ class RecipeController extends Controller
         ]);
 
         $recipe->fill([
-            'name' => $input['name'],
+            'name' => Str::lower($input['name']),
             'description' => $input['description'],
             'servings' => (int) $input['servings'],
         ]);

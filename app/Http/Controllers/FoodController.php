@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class FoodController extends Controller
 {
@@ -83,6 +84,7 @@ class FoodController extends Controller
             'protein' => 'nullable|numeric',
         ]);
         $attributes['serving_size'] = Number::floatFromString($attributes['serving_size']);
+        $attributes['name'] = Str::lower($attributes['name']);
         $food->fill(array_filter($attributes))->save();
         return redirect(route('foods.show', $food))
             ->with('message', 'Changes saved!');
