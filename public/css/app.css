@@ -31425,6 +31425,12 @@ select {
           animation: bounce 1s infinite;
 }
 
+/* See: https://ryangjchandler.co.uk/articles/hiding-elements-until-alpine-is-ready-with-x-cloak */
+
+[x-cloak] {
+  display: none !important;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

@@ -7,7 +7,17 @@ use Livewire\Component;
 
 class FoodPicker extends Component
 {
-    public string $term = '';
+    public ?string $term = NULL;
+    public int $index;
+    public ?int $defaultId = NULL;
+    public ?string $defaultName = NULL;
+
+    /**
+     * Set the default term on mount.
+     */
+    public function mount() {
+        $this->term = $this->defaultName;
+    }
 
     /**
      * Get the view / contents that represent the component.
@@ -21,6 +31,7 @@ class FoodPicker extends Component
         } else {
             $foods = [];
         }
-        return view('livewire.food-picker')->with('foods', $foods);
+        return view('livewire.food-picker')
+            ->with('foods', $foods);
     }
 }
