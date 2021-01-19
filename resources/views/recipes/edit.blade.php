@@ -91,7 +91,7 @@
 {{--                                                 :selectedValue="old('foods.' . $i, $food_id)">--}}
 {{--                                    <option value=""></option>--}}
 {{--                                </x-inputs.select>--}}
-                                <livewire:picker model="\App\Models\Food">
+                                <livewire:food-picker>
                                 <x-inputs.input type="text"
                                                 class="block"
                                                 name="foods_detail[]"

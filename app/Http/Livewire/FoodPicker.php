@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Food;
 use Livewire\Component;
 
-class Picker extends Component
+class FoodPicker extends Component
 {
-    public string $model;
     public string $term = '';
 
     /**
@@ -17,10 +17,10 @@ class Picker extends Component
     public function render()
     {
         if (!empty($this->term)) {
-            $results = $this->model::search($this->term);
+            $foods = Food::search($this->term);
         } else {
-            $results = [];
+            $foods = [];
         }
-        return view('livewire.picker')->with('results', $results);
+        return view('livewire.food-picker')->with('foods', $foods);
     }
 }
