@@ -1,3 +1,8 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+/* See: https://ryangjchandler.co.uk/articles/hiding-elements-until-alpine-is-ready-with-x-cloak */
+[x-cloak] {
+    display: none !important;
+}

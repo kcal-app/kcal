@@ -70,10 +70,11 @@
                                   $amount = \App\Support\Number::fractionStringFromFloat($foodAmount->amount);
                                   $unit = $foodAmount->unit;
                                   $food_id = $foodAmount->food->id;
+                                  $food_name = $foodAmount->food->name;
                                   $detail = $foodAmount->detail;
                                 } else {
                                   $foodAmount = new \App\Models\FoodAmount();
-                                  $amount = $food_id = $unit = $detail = null;
+                                  $amount = $food_id = $food_name = $unit = $detail = null;
                                 }
                             @endphp
                             <div class="flex flex-row space-x-4 mb-4">
@@ -86,12 +87,9 @@
                                                  :selectedValue="old('foods_unit.' . $i, $unit)">
                                     <option value=""></option>
                                 </x-inputs.select>
-{{--                                <x-inputs.select name="foods[]"--}}
-{{--                                                 :options="$foods"--}}
-{{--                                                 :selectedValue="old('foods.' . $i, $food_id)">--}}
-{{--                                    <option value=""></option>--}}
-{{--                                </x-inputs.select>--}}
-                                <livewire:food-picker>
+                                <livewire:food-picker :index="$i"
+                                                      :default-id="old('foods.' . $i, $food_id)"
+                                                      :default-name="old('foods_name.' . $i, $food_name)">
                                 <x-inputs.input type="text"
                                                 class="block"
                                                 name="foods_detail[]"

@@ -71,16 +71,8 @@ class RecipeController extends Controller
      */
     public function edit(Recipe $recipe): View
     {
-        $foods = Food::all(['id', 'name', 'detail'])->sortBy('name')->collect()
-            ->map(function ($food) {
-                return [
-                    'value' => $food->id,
-                    'label' => "{$food->name}" . ($food->detail ? ", {$food->detail}" : ""),
-                ];
-            });
         return view('recipes.edit')
             ->with('recipe', $recipe)
-            ->with('foods', $foods)
             ->with('food_units', new Collection([
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
