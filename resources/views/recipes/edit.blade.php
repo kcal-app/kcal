@@ -89,7 +89,7 @@
                                 </x-inputs.select>
                                 <livewire:food-picker :index="$i"
                                                       :default-id="old('foods.' . $i, $food_id)"
-                                                      :default-name="old('foods_name.' . $i, $food_name)">
+                                                      :default-name="old('foods_name.' . $i, $food_name)" />
                                 <x-inputs.input type="text"
                                                 class="block"
                                                 name="foods_detail[]"
@@ -99,15 +99,27 @@
 
                         <!-- Steps -->
                         <h3 class="pt-2 mb-2 font-extrabold">Steps</h3>
-                        @for($i = 0; $i < 20; $i++)
-                            @php($step = $recipe->steps[$i] ?? new \App\Models\RecipeStep())
-                            <div class="flex flex-row space-x-4 mb-4">
-                                <div class="text-3xl text-gray-400 text-center">{{ $i + 1 }}</div>
-                                <x-inputs.textarea class="block mt-1 w-full"
-                                                   name="steps[]"
-                                                   :value="old('steps.' . $i, $step->step)" />
-                            </div>
-                        @endfor
+                        @php($step_number = 0)
+                        <div x-data="{steps: 0}">
+                            @foreach($recipe->steps as $step)
+                                <div class="flex flex-row space-x-4 mb-4">
+                                    <div class="text-3xl text-gray-400 text-center">{{ $step_number++ }}</div>
+                                    <x-inputs.textarea class="block mt-1 w-full"
+                                                       name="steps[]"
+                                                       :value="old('steps.' . $loop->index, $step->step)" />
+                                </div>
+                            @endforeach
+                            <template x-for="i in steps + 1">
+                                <div class="flex flex-row space-x-4 mb-4">
+                                    <div class="text-3xl text-gray-400 text-center" x-text="{{ $step_number }} + i"></div>
+                                    <x-inputs.textarea class="block mt-1 w-full"
+                                                       name="steps[]" />
+                                </div>
+                            </template>
+                            <x-inputs.button type="button" class="ml-3" x-on:click="steps++;">
+                                Add Step
+                            </x-inputs.button>
+                        </div>
 
                         <div class="flex items-center justify-end mt-4">
                             <x-inputs.button class="ml-3">
