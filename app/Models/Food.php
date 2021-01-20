@@ -107,7 +107,7 @@ class Food extends Model
     /**
      * Gets search results for a term.
      */
-    public static function search(string $term): Collection {
-        return (new static)::where('name', 'like', "%{$term}%")->get();
+    public static function search(string $term, int $limit = 10): Collection {
+        return (new static)::where('name', 'like', "%{$term}%")->limit($limit)->get();
     }
 }
