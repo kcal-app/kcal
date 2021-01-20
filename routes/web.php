@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\IngredientPickerController;
 use App\Http\Controllers\JournalEntryController;
 use App\Http\Controllers\RecipeController;
 use Illuminate\Support\Facades\Route;
@@ -33,5 +34,9 @@ Route::resource('journal-entries', JournalEntryController::class)->middleware(['
 Route::get('/journal-entries/{journalEntry}/delete', [JournalEntryController::class, 'delete'])
     ->middleware(['auth'])
     ->name('journal-entries.delete');
+
+Route::get('/ingredient-picker/search', [IngredientPickerController::class, 'search'])
+    ->middleware(['auth'])
+    ->name('ingredient-picker.search');
 
 require __DIR__.'/auth.php';
