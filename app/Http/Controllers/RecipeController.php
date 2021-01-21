@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Food;
 use App\Models\FoodAmount;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
@@ -73,7 +72,7 @@ class RecipeController extends Controller
     {
         return view('recipes.edit')
             ->with('recipe', $recipe)
-            ->with('food_units', new Collection([
+            ->with('ingredients_units', new Collection([
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
                 ['value' => 'cup', 'label' => 'cup'],
@@ -99,14 +98,14 @@ class RecipeController extends Controller
             'description' => 'nullable|string',
             'source' => 'nullable|string',
             'servings' => 'required|numeric',
-            'foods_amount' => ['required', 'array', new ArrayNotEmpty],
-            'foods_amount.*' => ['required_with:foods.*', 'nullable', new StringIsDecimalOrFraction],
-            'foods_unit' => ['required', 'array'],
-            'foods_unit.*' => 'nullable|string',
-            'foods_detail' => ['required', 'array'],
-            'foods_detail.*' => 'nullable|string',
-            'foods' => ['required', 'array', new ArrayNotEmpty],
-            'foods.*' => 'required_with:foods_amount.*|nullable|exists:App\Models\Food,id',
+            'ingredients_amount' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients_amount.*' => ['required_with:ingredients.*', 'nullable', new StringIsDecimalOrFraction],
+            'ingredients_unit' => ['required', 'array'],
+            'ingredients_unit.*' => 'nullable|string',
+            'ingredients_detail' => ['required', 'array'],
+            'ingredients_detail.*' => 'nullable|string',
+            'ingredients' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.*' => 'required_with:ingredients_amount.*|nullable|exists:App\Models\Food,id',
             'steps' => ['required', 'array', new ArrayNotEmpty],
             'steps.*' => 'nullable|string',
         ]);
@@ -127,15 +126,15 @@ class RecipeController extends Controller
                 $food_amounts = [];
                 $weight = 0;
                 // TODO: Handle removals.
-                foreach (array_filter($input['foods_amount']) as $key => $amount) {
+                foreach (array_filter($input['ingredients_amount']) as $key => $amount) {
                     $food_amounts[$key] = $recipe->foodAmounts[$key] ?? new FoodAmount();
                     $food_amounts[$key]->fill([
                         'amount' => Number::floatFromString($amount),
-                        'unit' => $input['foods_unit'][$key],
-                        'detail' => $input['foods_detail'][$key],
+                        'unit' => $input['ingredients_unit'][$key],
+                        'detail' => $input['ingredients_detail'][$key],
                         'weight' => $weight++,
                     ]);
-                    $food_amounts[$key]->food()->associate($input['foods'][$key]);
+                    $food_amounts[$key]->food()->associate($input['ingredients'][$key]);
                 }
                 $recipe->foodAmounts()->saveMany($food_amounts);
 

@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Food;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class IngredientPickerController extends Controller
 {
     /**
      * Search for ingredients.
      */
-    public function search(): JsonResponse
+    public function search(Request $request): JsonResponse
     {
-        return response()->json([
-            ['id' => 1, 'name' => 'Flour'],
-            ['id' => 2, 'name' => 'Eggs'],
-        ]);
+        $results = [];
+        $term = $request->query->get('term');
+        if (!empty($term)) {
+            $results = Food::search($term);
+        }
+        return response()->json($results);
     }
 }
