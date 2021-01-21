@@ -64,46 +64,40 @@
                         <!-- Ingredients -->
                         <h3 class="pt-2 mb-2 font-extrabold">Ingredients</h3>
                         <div x-data="{ ingredients: 0 }">
-{{--                            @foreach($recipe->foodAmounts as $foodAmount)--}}
-{{--                                <div class="flex flex-row space-x-4 mb-4">--}}
-{{--                                    <x-inputs.input type="text"--}}
-{{--                                                    name="foods_amount[]"--}}
-{{--                                                    size="5"--}}
-{{--                                                    :value="old('foods_amount.' . $loop->index, \App\Support\Number::fractionStringFromFloat($foodAmount->amount))" />--}}
-{{--                                    <x-inputs.select name="foods_unit[]"--}}
-{{--                                                     :options="$food_units"--}}
-{{--                                                     :selectedValue="old('foods_unit.' . $loop->index, $foodAmount->unit)">--}}
-{{--                                        <option value=""></option>--}}
-{{--                                    </x-inputs.select>--}}
-{{--                                    <livewire:food-picker :index="$loop->index"--}}
-{{--                                                          :default-id="old('foods.' . $loop->index, $foodAmount->food->id)"--}}
-{{--                                                          :default-name="old('foods_name.' . $loop->index, $foodAmount->food->name)" />--}}
-{{--                                    <x-inputs.input type="text"--}}
-{{--                                                    class="block"--}}
-{{--                                                    name="foods_detail[]"--}}
-{{--                                                    :value="old('foods_detail.' . $loop->index, $foodAmount->detail)" />--}}
-{{--                                </div>--}}
-{{--                            @endforeach--}}
+                            @foreach($recipe->foodAmounts as $foodAmount)
+                                <div class="flex flex-row space-x-4 mb-4">
+                                    <x-inputs.input type="text"
+                                                    name="ingredients_amount[]"
+                                                    size="5"
+                                                    :value="old('ingredients_amount.' . $loop->index, \App\Support\Number::fractionStringFromFloat($foodAmount->amount))" />
+                                    <x-inputs.select name="ingredients_unit[]"
+                                                     :options="$ingredients_units"
+                                                     :selectedValue="old('ingredients_unit.' . $loop->index, $foodAmount->unit)">
+                                        <option value=""></option>
+                                    </x-inputs.select>
+                                    <x-ingredient-picker :default-id="old('ingredients.' . $loop->index, $foodAmount->food->id)"
+                                                         :default-name="old('ingredients_name.' . $loop->index, $foodAmount->food->name)"/>
+                                    <x-inputs.input type="text"
+                                                    class="block"
+                                                    name="ingredients_detail[]"
+                                                    :value="old('ingredients_detail.' . $loop->index, $foodAmount->detail)" />
+                                </div>
+                            @endforeach
                             <template x-for="i in ingredients + 1">
-                                <x-ingredient-picker index="1" />
+                                <div class="flex flex-row space-x-4 mb-4">
+                                    <x-inputs.input type="text"
+                                                    name="ingredients_amount[]"
+                                                    size="5" />
+                                    <x-inputs.select name="ingredients_unit[]"
+                                                     :options="$ingredients_units" >
+                                        <option value=""></option>
+                                    </x-inputs.select>
+                                    <x-ingredient-picker/>
+                                    <x-inputs.input type="text"
+                                                    class="block"
+                                                    name="ingredients_detail[]" />
+                                </div>
                             </template>
-
-{{--                            <template x-for="i in ingredients + 1">--}}
-{{--                                <div class="flex flex-row space-x-4 mb-4">--}}
-{{--                                    <x-inputs.input type="text"--}}
-{{--                                                    name="foods_amount[]"--}}
-{{--                                                    size="5" />--}}
-{{--                                    <x-inputs.select name="foods_unit[]"--}}
-{{--                                                     :options="$food_units" >--}}
-{{--                                        <option value=""></option>--}}
-{{--                                    </x-inputs.select>--}}
-{{--                                    <!-- TODO: Get this working in the template. See wire:init or use wire:click? -->--}}
-{{--                                    <livewire:food-picker index="1" />--}}
-{{--                                    <x-inputs.input type="text"--}}
-{{--                                                    class="block"--}}
-{{--                                                    name="foods_detail[]" />--}}
-{{--                                </div>--}}
-{{--                            </template>--}}
                             <x-inputs.button type="button" class="ml-3" x-on:click="ingredients++;">
                                 Add Ingredient
                             </x-inputs.button>

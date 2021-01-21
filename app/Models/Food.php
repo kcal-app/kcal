@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
+use App\Support\Number;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -84,7 +85,7 @@ class Food extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * @inheritdoc
      */
     protected $casts = [
         'calories' => 'float',
@@ -96,6 +97,18 @@ class Food extends Model
         'serving_weight' => 'float',
         'sodium' => 'float',
     ];
+
+    /**
+     * @inheritdoc
+     */
+    protected $appends = ['serving_size_formatted'];
+
+    /**
+     * Get the serving size as a fractional.
+     */
+    public function getServingSizeFormattedAttribute(): string {
+        return Number::fractionStringFromFloat($this->serving_size);
+    }
 
     /**
      * Get the food amounts using this food.
