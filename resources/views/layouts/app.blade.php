@@ -17,7 +17,6 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
 
         @isset($styles) {{ $styles }} @endisset
-        @livewireStyles
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -52,6 +51,5 @@
         </div>
 
         @isset($scripts) {{ $scripts }} @endisset
-        @livewireScripts
     </body>
 </html>
