@@ -64,50 +64,32 @@
                         <!-- Ingredients -->
                         <h3 class="pt-2 mb-2 font-extrabold">Ingredients</h3>
                         <div x-data="{ ingredients: 0 }">
-                            @foreach($recipe->foodAmounts as $foodAmount)
-                                <div class="flex flex-row space-x-4 mb-4">
-                                    <x-inputs.input type="text"
-                                                    name="ingredients_amount[]"
-                                                    size="5"
-                                                    :value="old('ingredients_amount.' . $loop->index, \App\Support\Number::fractionStringFromFloat($foodAmount->amount))" />
-                                    <x-inputs.select name="ingredients_unit[]"
-                                                     :options="$ingredients_units"
-                                                     :selectedValue="old('ingredients_unit.' . $loop->index, $foodAmount->unit)">
-                                        <option value=""></option>
-                                    </x-inputs.select>
-                                    <x-ingredient-picker :default-id="old('ingredients.' . $loop->index, $foodAmount->food->id)"
-                                                         :default-name="old('ingredients_name.' . $loop->index, $foodAmount->food->name)"/>
-                                    <x-inputs.input type="text"
-                                                    class="block"
-                                                    name="ingredients_detail[]"
-                                                    :value="old('ingredients_detail.' . $loop->index, $foodAmount->detail)" />
-                                    <x-inputs.icon-button type="button" color="red" x-on:click="$event.target.parentNode.remove();">
-                                        <svg class="h-8 w-8 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
-                                    </x-inputs.icon-button>
-                                </div>
-                            @endforeach
-                            <!-- TODO: Handle old values!! -->
+                            @if(old('ingredients'))
+                                @foreach(old('ingredients') as $i => $ingredient)
+                                    @if (empty($ingredient) && empty(old('ingredients_amount')[$i]) && empty(old('ingredients_unit')[$i]))
+                                        @continue
+                                    @endif
+                                    @include('recipes.partials.ingredient-input', [
+                                      'amount' => old('ingredients_amount')[$i],
+                                      'unit' => old('ingredients_unit')[$i],
+                                      'food_id' => old('ingredients')[$i],
+                                      'food_name' => old('ingredients_name')[$i],
+                                      'detail' => old('ingredients_detail')[$i],
+                                    ])
+                                @endforeach
+                            @else
+                                @foreach($recipe->foodAmounts as $foodAmount)
+                                    @include('recipes.partials.ingredient-input', [
+                                      'amount' => $foodAmount->amount_formatted,
+                                      'unit' => $foodAmount->unit,
+                                      'food_id' => $foodAmount->food->id,
+                                      'food_name' => $foodAmount->food->name,
+                                      'detail' => $foodAmount->detail,
+                                    ])
+                                @endforeach
+                            @endif
                             <template x-for="i in ingredients + 1">
-                                <div class="flex flex-row space-x-4 mb-4">
-                                    <x-inputs.input type="text"
-                                                    name="ingredients_amount[]"
-                                                    size="5" />
-                                    <x-inputs.select name="ingredients_unit[]"
-                                                     :options="$ingredients_units" >
-                                        <option value=""></option>
-                                    </x-inputs.select>
-                                    <x-ingredient-picker/>
-                                    <x-inputs.input type="text"
-                                                    class="block"
-                                                    name="ingredients_detail[]" />
-                                    <x-inputs.icon-button type="button" color="red" x-on:click="$event.target.parentNode.remove();">
-                                        <svg class="h-8 w-8 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
-                                    </x-inputs.icon-button>
-                                </div>
+                                @include('recipes.partials.ingredient-input')
                             </template>
                             <x-inputs.icon-button type="button" color="green" x-on:click="ingredients++;">
                                 <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -119,20 +101,27 @@
                         <!-- Steps -->
                         <h3 class="pt-2 mb-2 font-extrabold">Steps</h3>
                         @php($step_number = 0)
-                        <div x-data="{steps: 0}">
-                            @foreach($recipe->steps as $step)
-                                <div class="flex flex-row space-x-4 mb-4">
-                                    <div class="text-3xl text-gray-400 text-center">{{ $step_number++ }}</div>
-                                    <x-inputs.textarea class="block mt-1 w-full"
-                                                       name="steps[]"
-                                                       :value="old('steps.' . $loop->index, $step->step)" />
-                                </div>
-                            @endforeach
+                        <div x-data="{ steps: 0 }">
+                            @if(old('steps'))
+                                @foreach(old('steps') as $i => $step)
+                                    @if (empty($step)) @continue @endif
+                                    <div class="flex flex-row space-x-4 mb-4">
+                                        <div class="text-3xl text-gray-400 text-center">{{ $step_number++ }}</div>
+                                        <x-inputs.textarea class="block mt-1 w-full" name="steps[]" :value="$step" />
+                                    </div>
+                                @endforeach
+                            @else
+                                @foreach($recipe->steps as $step)
+                                    <div class="flex flex-row space-x-4 mb-4">
+                                        <div class="text-3xl text-gray-400 text-center">{{ $step_number++ }}</div>
+                                        <x-inputs.textarea class="block mt-1 w-full" name="steps[]" :value="$step->step" />
+                                    </div>
+                                @endforeach
+                            @endif
                             <template x-for="i in steps + 1">
                                 <div class="flex flex-row space-x-4 mb-4">
                                     <div class="text-3xl text-gray-400 text-center" x-text="{{ $step_number }} + i"></div>
-                                    <x-inputs.textarea class="block mt-1 w-full"
-                                                       name="steps[]" />
+                                    <x-inputs.textarea class="block mt-1 w-full" name="steps[]" />
                                 </div>
                             </template>
                             <x-inputs.icon-button type="button" color="green" x-on:click="steps++;">

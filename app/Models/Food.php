@@ -105,7 +105,7 @@ class Food extends Model
     protected $appends = ['serving_size_formatted'];
 
     /**
-     * Get the serving size as a fractional.
+     * Get the serving size as a formatted string (e.g. 0.5 = 1/2).
      */
     public function getServingSizeFormattedAttribute(): string {
         return Number::fractionStringFromFloat($this->serving_size);
