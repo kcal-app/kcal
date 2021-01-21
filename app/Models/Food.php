@@ -54,6 +54,7 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereSodium($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read string $serving_size_formatted
  */
 class Food extends Model
 {
