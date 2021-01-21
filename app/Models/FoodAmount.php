@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Number;
 use App\Support\Nutrients;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -73,6 +74,18 @@ class FoodAmount extends Model
         'protein',
         'sodium',
     ];
+
+    /**
+     * @inheritdoc
+     */
+    protected $appends = ['amount_formatted'];
+
+    /**
+     * Get the amount as a formatted string (e.g. 0.5 = 1/2).
+     */
+    public function getAmountFormattedAttribute(): string {
+        return Number::fractionStringFromFloat($this->amount);
+    }
 
     /**
      * Get the Food this amount belongs to.
