@@ -100,29 +100,19 @@
 
                         <!-- Steps -->
                         <h3 class="pt-2 mb-2 font-extrabold">Steps</h3>
-                        @php($step_number = 0)
-                        <div x-data="{ steps: 0 }">
+                        <div x-data="{ steps: 0, step_number: 0 }">
                             @if(old('steps'))
-                                @foreach(old('steps') as $i => $step)
+                                @foreach(old('steps') as $i => $step_default)
                                     @if (empty($step)) @continue @endif
-                                    <div class="flex flex-row space-x-4 mb-4">
-                                        <div class="text-3xl text-gray-400 text-center">{{ $step_number++ }}</div>
-                                        <x-inputs.textarea class="block mt-1 w-full" name="steps[]" :value="$step" />
-                                    </div>
+                                    @include('recipes.partials.step-input')
                                 @endforeach
                             @else
                                 @foreach($recipe->steps as $step)
-                                    <div class="flex flex-row space-x-4 mb-4">
-                                        <div class="text-3xl text-gray-400 text-center">{{ $step_number++ }}</div>
-                                        <x-inputs.textarea class="block mt-1 w-full" name="steps[]" :value="$step->step" />
-                                    </div>
+                                    @include('recipes.partials.step-input', ['step_default' => $step->step])
                                 @endforeach
                             @endif
                             <template x-for="i in steps + 1">
-                                <div class="flex flex-row space-x-4 mb-4">
-                                    <div class="text-3xl text-gray-400 text-center" x-text="{{ $step_number }} + i"></div>
-                                    <x-inputs.textarea class="block mt-1 w-full" name="steps[]" />
-                                </div>
+                                @include('recipes.partials.step-input')
                             </template>
                             <x-inputs.icon-button type="button" color="green" x-on:click="steps++;">
                                 <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
