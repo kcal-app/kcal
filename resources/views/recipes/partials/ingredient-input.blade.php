@@ -1,4 +1,5 @@
 <div class="flex flex-row space-x-4 mb-4">
+    <x-inputs.input type="hidden" name="ingredients[original_key][]" :value="$original_key ?? null" />
     <x-inputs.input type="text"
                     name="ingredients[amount][]"
                     size="5"
