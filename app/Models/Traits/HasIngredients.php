@@ -22,7 +22,7 @@ trait HasIngredients
     /**
      * Get all of the ingredients.
      */
-    public function ingredients(): MorphMany {
+    public function ingredientAmounts(): MorphMany {
         return $this->morphMany(IngredientAmount::class, 'parent');
     }
 

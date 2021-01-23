@@ -51,7 +51,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  */
 class JournalEntry extends Model
 {
-    use HasFactory, HasIngredients;
+    use HasFactory;
 
     /**
      * @inheritdoc

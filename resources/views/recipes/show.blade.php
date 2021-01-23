@@ -22,11 +22,11 @@
                     <h3 class="mb-2 font-bold">Description</h3>
                     <div class="mb-2 text-gray-800">{{ $recipe->description }}</div>
                     <h3 class="mb-2 font-bold">Ingredients</h3>
-                    @foreach($recipe->foodAmounts as $ia)
+                    @foreach($recipe->ingredientAmounts as $ia)
                         <div class="flex flex-row space-x-2 mb-2">
                             <div>{{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}</div>
                             @if($ia->unit)<div>{{ $ia->unit }}</div>@endif
-                            <div>{{ $ia->food->name }}</div>
+                            <div>{{ $ia->ingredient->name }}</div>
                             @if($ia->detail)<div class="text-gray-500">{{ $ia->detail }}</div>@endif
                         </div>
                     @endforeach
