@@ -1,34 +1,22 @@
 <div class="grid grid-cols-12 gap-4 items-center mt-2">
     <div>
         <x-inputs.input type="text"
-                        name="items[amount][]"
+                        name="ingredients[amount][]"
                         class="block w-full"
                         :value="$amount ?? null" />
     </div>
     <div class="col-span-2">
-        <x-inputs.select name="items[unit][]"
+        <x-inputs.select name="ingredients[unit][]"
                          class="block w-full"
                          :options="$units"
                          :selectedValue="$unit ?? null">
             <option value=""></option>
         </x-inputs.select>
     </div>
-    <div class="col-span-4">
-        <x-inputs.select name="items[food][]"
-                         class="block w-full"
-                         :options="$foods"
-                         :selectedValue="$food ?? null">
-            <option value=""></option>
-        </x-inputs.select>
-    </div>
-    <div class="text-center">- or -</div>
-    <div class="col-span-3">
-        <x-inputs.select name="items[recipe][]"
-                         class="block w-full"
-                         :options="$recipes"
-                         :selectedValue="$recipe ?? null">
-            <option value=""></option>
-        </x-inputs.select>
+    <div class="col-span-8">
+        <x-ingredient-picker :default-id="$id ?? null"
+                             :default-type="$type ?? null"
+                             :default-name="$name ?? null" />
     </div>
     <x-inputs.icon-button type="button" color="red" x-on:click="$event.target.parentNode.remove();">
         <svg class="h-8 w-8 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

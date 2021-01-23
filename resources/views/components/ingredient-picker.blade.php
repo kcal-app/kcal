@@ -14,6 +14,7 @@
                             value="{{ $defaultName ?? '' }}"
                             placeholder="Search..."
                             autocomplete="off"
+                            class="w-full"
                             x-ref="ingredients_name"
                             x-spread="search" />
         </div>

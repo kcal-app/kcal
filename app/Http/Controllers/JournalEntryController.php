@@ -10,6 +10,7 @@ use App\Models\JournalEntry;
 use App\Models\Recipe;
 use App\Rules\ArrayNotEmpty;
 use App\Rules\StringIsDecimalOrFraction;
+use App\Rules\UsesIngredientTrait;
 use App\Support\Number;
 use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
@@ -40,43 +41,24 @@ class JournalEntryController extends Controller
      */
     public function create(): View
     {
-        $foods = Food::all(['id', 'name', 'detail', 'brand'])
-            ->sortBy('name')
-            ->collect()
-            ->map(function ($food) {
-                return [
-                    'value' => $food->id,
-                    'label' => "{$food->name}"
-                        . ($food->detail ? ", {$food->detail}" : "")
-                        . ($food->brand ? " ({$food->brand})" : ""),
-                ];
-            });
-        $recipes = Recipe::all(['id', 'name'])
-            ->sortBy('name')
-            ->collect()
-            ->map(function ($recipe) {
-                return ['value' => $recipe->id, 'label' => $recipe->name];
-            });
-
-        $items = [];
-        if ($old = old('items')) {
+        $ingredients = [];
+        if ($old = old('ingredients')) {
             foreach ($old['amount'] as $key => $amount) {
-                if (empty($amount) && empty($old['unit'][$key]) && empty($old['food'][$key]) && empty($old['recipe'][$key])) {
+                if (empty($amount) && empty($old['unit'][$key]) && empty($old['id'][$key])) {
                     continue;
                 }
-                $items[] = [
+                $ingredients[] = [
                     'amount' => $amount,
                     'unit' => $old['unit'][$key],
-                    'food' => $old['food'][$key],
-                    'recipe' => $old['recipe'][$key],
+                    'id' => $old['id'][$key],
+                    'type' => $old['type'][$key],
+                    'name' => $old['name'][$key],
                 ];
             }
         }
 
         return view('journal-entries.create')
-            ->with('items', $items)
-            ->with('foods', $foods)
-            ->with('recipes', $recipes)
+            ->with('ingredients', $ingredients)
             ->with('meals', [
                 ['value' => 'breakfast', 'label' => 'Breakfast'],
                 ['value' => 'lunch', 'label' => 'Lunch'],
@@ -88,6 +70,7 @@ class JournalEntryController extends Controller
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
                 ['value' => 'cup', 'label' => 'cup'],
                 ['value' => 'oz', 'label' => 'oz'],
+                ['value' => 'g', 'label' => 'grams'],
                 ['value' => 'servings', 'label' => 'servings'],
             ]);
     }
@@ -100,62 +83,39 @@ class JournalEntryController extends Controller
         $input = $request->validate([
             'date' => 'required|date',
             'meal' => 'required|string',
-            'items.amount' => ['required', 'array', new ArrayNotEmpty],
-            'items.amount.*' => ['required_with:foods.*,recipes.*', 'nullable', new StringIsDecimalOrFraction],
-            'items.unit' => 'required|array',
-            'items.unit.*' => 'nullable|string',
-            'items.food' => 'required|array',
-            'items.food.*' => 'nullable|exists:App\Models\Food,id',
-            'items.recipe' => 'required|array',
-            'items.recipe.*' => 'nullable|exists:App\Models\Recipe,id',
+            'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.amount.*' => ['required_with:foods.*,recipes.*', 'nullable', new StringIsDecimalOrFraction],
+            'ingredients.unit' => 'required|array',
+            'ingredients.unit.*' => 'nullable|string',
+            'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
+            'ingredients.type' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.type.*' => ['required_with:ingredients.id.*', 'nullable', new UsesIngredientTrait()],
         ]);
-
-        // Validate that at least one recipe or food is selected.
-        // TODO: refactor as custom validator.
-        $foods_selected = array_filter($input['items']['food']);
-        $recipes_selected = array_filter($input['items']['recipe']);
-        if (empty($recipes_selected) && empty($foods_selected)) {
-            return back()->withInput()->withErrors('At least one food or recipe is required.');
-        }
-        elseif (!empty(array_intersect_key($foods_selected, $recipes_selected))) {
-            return back()->withInput()->withErrors('Select only one food or recipe per line.');
-        }
-
-        // Validate only "serving" unit used for recipes.
-        // TODO: refactor as custom validator.
-        foreach ($recipes_selected as $key => $id) {
-            if ($input['items']['unit'][$key] !== 'servings') {
-                return back()->withInput()->withErrors('Recipes must use the "servings" unit.');
-            }
-        }
 
         $summary = [];
         $nutrients = array_fill_keys(Nutrients::$all, 0);
 
-        if (!empty($foods_selected)) {
-            $foods = Food::findMany($foods_selected)->keyBy('id');
-            foreach ($foods_selected as $key => $id) {
-                $food = $foods->get($id);
+        // TODO: Improve efficiency? Potential for lots of queries here...
+        foreach ($input['ingredients']['id'] as $key => $id) {
+            if ($input['ingredients']['type'][$key] == Food::class) {
+                $food = Food::whereId($id)->first();
                 $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier(
                     $food,
-                    Number::floatFromString($input['items']['amount'][$key]),
-                    $input['items']['unit'][$key],
+                    Number::floatFromString($input['ingredients']['amount'][$key]),
+                    $input['ingredients']['unit'][$key],
                 );
                 foreach ($nutrients as $nutrient => $amount) {
                     $nutrients[$nutrient] += $food->{$nutrient} * $nutrient_multiplier;
                 }
-                $summary[] = "{$input['items']['amount'][$key]} {$input['items']['unit'][$key]} {$food->name}";
+                $summary[] = "{$input['ingredients']['amount'][$key]} {$input['ingredients']['unit'][$key]} {$food->name}";
             }
-        }
-
-        if (!empty($recipes_selected)) {
-            $recipes = Recipe::findMany($recipes_selected)->keyBy('id');
-            foreach ($recipes_selected as $key => $id) {
-                $recipe = $recipes->get($id);
+            elseif ($input['ingredients']['type'][$key] == Recipe::class) {
+                $recipe = Recipe::whereId($id)->first();
                 foreach ($nutrients as $nutrient => $amount) {
-                    $nutrients[$nutrient] += $recipe->{"{$nutrient}PerServing"}() * Number::floatFromString($input['items']['amount'][$key]);
+                    $nutrients[$nutrient] += $recipe->{"{$nutrient}PerServing"}() * Number::floatFromString($input['ingredients']['amount'][$key]);
                 }
-                $summary[] = "{$input['items']['amount'][$key]} {$input['items']['unit'][$key]} {$recipe->name}";
+                $summary[] = "{$input['ingredients']['amount'][$key]} {$input['ingredients']['unit'][$key]} {$recipe->name}";
             }
         }
 
@@ -179,40 +139,6 @@ class JournalEntryController extends Controller
             'journal-entries.index',
             ['date' => $entry->date->format('Y-m-d')]
         );
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\JournalEntry  $journalEntry
-     * @return \Illuminate\Http\Response
-     */
-    public function show(JournalEntry $journalEntry)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\JournalEntry  $journalEntry
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(JournalEntry $journalEntry)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\JournalEntry  $journalEntry
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, JournalEntry $journalEntry)
-    {
-        //
     }
 
     /**

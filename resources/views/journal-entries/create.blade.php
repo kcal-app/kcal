@@ -39,23 +39,21 @@
                         </div>
 
                         <!-- Items -->
-                        <div x-data="{ items: 0 }">
+                        <div x-data="{ ingredients: 0 }">
                             <div class="grid grid-cols-12 gap-4 items-center">
-                                <x-inputs.label for="amounts" :value="__('Amount')"/>
-                                <x-inputs.label for="units" :value="__('Unit')" class="col-span-2"/>
-                                <x-inputs.label for="foods" :value="__('Food')" class="col-span-4"/>
-                                <div class="text-center">- or -</div>
-                                <x-inputs.label for="recipes" :value="__('Recipe')" class="col-span-4"/>
+                                <x-inputs.label for="amounts" value="Amount"/>
+                                <x-inputs.label for="units" value="Unit" class="col-span-2"/>
+                                <x-inputs.label for="foods" value="Food or Recipe" class="col-span-8"/>
                             </div>
                             <div>
-                                @foreach($items as $item)
-                                    @include('journal-entries.partials.entry-item-input', $item)
+                                @foreach($ingredients as $ingredient)
+                                    @include('journal-entries.partials.entry-item-input', $ingredient)
                                 @endforeach
-                                <template x-for="i in items + 1">
+                                <template x-for="i in ingredients + 1">
                                     @include('journal-entries.partials.entry-item-input')
                                 </template>
                             </div>
-                            <x-inputs.icon-button type="button" color="green" x-on:click="items++;">
+                            <x-inputs.icon-button type="button" color="green" x-on:click="ingredients++;">
                                 <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
                                 </svg>
