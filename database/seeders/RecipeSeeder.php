@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Food;
-use App\Models\FoodAmount;
+use App\Models\IngredientAmount;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
 use Illuminate\Database\Seeder;
@@ -25,62 +25,76 @@ class RecipeSeeder extends Seeder
         $weight = 0;
         $amounts = [
             [
-                'food_id' => Food::where('name', 'flour')
+                'ingredient_id' => Food::where('name', 'flour')
                     ->first()->id,
+                'ingredient_type' => Food::class,
                 'amount' => 4.25,
                 'unit' => 'oz',
-                'recipe_id' => $recipe->id,
+                'parent_id' => $recipe->id,
+                'parent_type' => Recipe::class,
                 'weight' => $weight++,
             ],
             [
-                'food_id' => Food::where('name', 'sugar')
+                'ingredient_id' => Food::where('name', 'sugar')
                     ->first()->id,
+                'ingredient_type' => Food::class,
                 'amount' => 2,
                 'unit' => 'tbsp',
-                'recipe_id' => $recipe->id,
+                'parent_id' => $recipe->id,
+                'parent_type' => Recipe::class,
                 'weight' => $weight++,
             ],
             [
-                'food_id' => Food::where('name', 'baking powder')
+                'ingredient_id' => Food::where('name', 'baking powder')
                     ->first()->id,
+                'ingredient_type' => Food::class,
                 'amount' => 2,
                 'unit' => 'tsp',
-                'recipe_id' => $recipe->id,
+                'parent_id' => $recipe->id,
+                'parent_type' => Recipe::class,
                 'weight' => $weight++,
             ],
             [
-                'food_id' => Food::where('name', 'salt')
+                'ingredient_id' => Food::where('name', 'salt')
                     ->first()->id,
+                'ingredient_type' => Food::class,
                 'amount' => 1,
                 'unit' => 'tsp',
-                'recipe_id' => $recipe->id,
+                'parent_id' => $recipe->id,
+                'parent_type' => Recipe::class,
                 'weight' => $weight++,
             ],
             [
-                'food_id' => Food::where('name', 'egg')
+                'ingredient_id' => Food::where('name', 'egg')
                     ->first()->id,
+                'ingredient_type' => Food::class,
                 'amount' => 1,
-                'recipe_id' => $recipe->id,
+                'parent_id' => $recipe->id,
+                'parent_type' => Recipe::class,
                 'weight' => $weight++,
             ],
             [
-                'food_id' => Food::where('name', 'milk')
+                'ingredient_id' => Food::where('name', 'milk')
                     ->first()->id,
+                'ingredient_type' => Food::class,
                 'amount' => 1,
                 'unit' => 'cup',
-                'recipe_id' => $recipe->id,
+                'parent_id' => $recipe->id,
+                'parent_type' => Recipe::class,
                 'weight' => $weight++,
             ],
             [
-                'food_id' => Food::where('name', 'vegetable oil')
+                'ingredient_id' => Food::where('name', 'vegetable oil')
                     ->first()->id,
+                'ingredient_type' => Food::class,
                 'amount' => 2,
                 'unit' => 'tbsp',
-                'recipe_id' => $recipe->id,
-                'weight' => $weight++,
+                'parent_id' => $recipe->id,
+                'parent_type' => Recipe::class,
+                'weight' => $weight,
             ],
         ];
-        FoodAmount::factory()->createMany($amounts);
+        IngredientAmount::factory()->createMany($amounts);
 
         $steps = [
             [
@@ -106,23 +120,27 @@ class RecipeSeeder extends Seeder
         $weight = 0;
         $amounts = [
             [
-                'food_id' => Food::where('name', 'peanut butter')
+                'ingredient_id' => Food::where('name', 'peanut butter')
                     ->first()->id,
+                'ingredient_type' => Food::class,
                 'amount' => 2,
                 'unit' => 'cup',
-                'recipe_id' => $recipe->id,
+                'parent_id' => $recipe->id,
+                'parent_type' => Recipe::class,
                 'weight' => $weight++,
             ],
             [
-                'food_id' => Food::where('name', 'canned corn')
+                'ingredient_id' => Food::where('name', 'canned corn')
                     ->first()->id,
+                'ingredient_type' => Food::class,
                 'amount' => 15.25,
                 'unit' => 'oz',
-                'recipe_id' => $recipe->id,
-                'weight' => $weight++,
+                'parent_id' => $recipe->id,
+                'parent_type' => Recipe::class,
+                'weight' => $weight,
             ],
         ];
-        FoodAmount::factory()->createMany($amounts);
+        IngredientAmount::factory()->createMany($amounts);
 
         $steps = [
             [

@@ -9,6 +9,13 @@ use Illuminate\Support\Collection;
 trait Ingredient
 {
     /**
+     * Get all of the ingredient amounts associated with the ingredient.
+     */
+    public function ingredientAmountChildren(): MorphToMany {
+        return $this->morphToMany(IngredientAmount::class, 'ingredient');
+    }
+
+    /**
      * Gets search results for a term.
      */
     public static function search(string $term, int $limit = 10): Collection {

@@ -29,8 +29,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float $protein
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FoodAmount[] $foodAmounts
- * @property-read int|null $food_amounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalEntry[] $journalEntries
  * @property-read int|null $journal_entries_count
  * @method static \Illuminate\Database\Eloquent\Builder|Food findSimilarSlugs(string $attribute, array $config, string $slug)
@@ -57,6 +55,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read string $serving_size_formatted
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmounts
  * @property-read int|null $ingredient_amounts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountChildren
+ * @property-read int|null $ingredient_amount_children_count
  */
 class Food extends Model
 {
@@ -109,13 +109,6 @@ class Food extends Model
      */
     public function getServingSizeFormattedAttribute(): string {
         return Number::fractionStringFromFloat($this->serving_size);
-    }
-
-    /**
-     * Get the food amounts using this food.
-     */
-    public function foodAmounts(): HasMany {
-        return $this->hasMany(FoodAmount::class);
     }
 
 }
