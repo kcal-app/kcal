@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,9 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Recipe extends Model
 {
-    use HasFactory;
-    use Journalable;
-    use Sluggable;
+    use HasFactory, Ingredient, Journalable, Sluggable;
 
     /**
      * @inheritdoc
@@ -56,7 +55,7 @@ class Recipe extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * @inheritdoc
      */
     protected $casts = [
         'servings' => 'int',

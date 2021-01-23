@@ -26,11 +26,13 @@
                          x-bind:data-value="result.name">
                         <div class="pointer-events-none">
                             <div x-text="result.name"></div>
-                            <div class="text-sm text-gray-600" x-text="result.brand" x-show="result.brand"></div>
-                            <div class="text-sm">
-                                Serving size <span x-text="result.serving_size_formatted"></span>
-                                <span x-text="result.serving_unit"></span>
-                                (<span x-text="result.serving_weight"></span>g)
+                            <div x-show="result.serving_size">
+                                <div class="text-sm text-gray-600" x-text="result.brand" x-show="result.brand"></div>
+                                <div class="text-sm">
+                                    Serving size <span x-text="result.serving_size_formatted"></span>
+                                    <span x-text="result.serving_unit"></span>
+                                    (<span x-text="result.serving_weight"></span>g)
+                                </div>
                             </div>
                         </div>
                     </div>
