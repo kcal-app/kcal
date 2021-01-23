@@ -1,9 +1,9 @@
 <div class="flex flex-row space-x-4 mb-4">
     <x-inputs.input type="text"
-                    name="ingredients_amount[]"
+                    name="ingredients[amount][]"
                     size="5"
                     :value="$amount ?? null" />
-    <x-inputs.select name="ingredients_unit[]"
+    <x-inputs.select name="ingredients[unit][]"
                      :options="$ingredients_units"
                      :selectedValue="$unit ?? null">
         <option value=""></option>
@@ -12,7 +12,7 @@
                          :default-name="$food_name ?? null" />
     <x-inputs.input type="text"
                     class="block"
-                    name="ingredients_detail[]"
+                    name="ingredients[detail][]"
                     :value="$detail ?? null" />
     <x-inputs.icon-button type="button" color="red" x-on:click="$event.target.parentNode.remove();">
         <svg class="h-8 w-8 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

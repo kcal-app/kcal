@@ -64,30 +64,9 @@
                         <!-- Ingredients -->
                         <h3 class="pt-2 mb-2 font-extrabold">Ingredients</h3>
                         <div x-data="{ ingredients: 0 }">
-                            @if(old('ingredients'))
-                                @foreach(old('ingredients') as $i => $ingredient)
-                                    @if (empty($ingredient) && empty(old('ingredients_amount')[$i]) && empty(old('ingredients_unit')[$i]))
-                                        @continue
-                                    @endif
-                                    @include('recipes.partials.ingredient-input', [
-                                      'amount' => old('ingredients_amount')[$i],
-                                      'unit' => old('ingredients_unit')[$i],
-                                      'food_id' => old('ingredients')[$i],
-                                      'food_name' => old('ingredients_name')[$i],
-                                      'detail' => old('ingredients_detail')[$i],
-                                    ])
-                                @endforeach
-                            @else
-                                @foreach($recipe->foodAmounts as $foodAmount)
-                                    @include('recipes.partials.ingredient-input', [
-                                      'amount' => $foodAmount->amount_formatted,
-                                      'unit' => $foodAmount->unit,
-                                      'food_id' => $foodAmount->food->id,
-                                      'food_name' => $foodAmount->food->name,
-                                      'detail' => $foodAmount->detail,
-                                    ])
-                                @endforeach
-                            @endif
+                            @foreach($ingredients as $ingredient)
+                                @include('recipes.partials.ingredient-input', $ingredient)
+                            @endforeach
                             <template x-for="i in ingredients + 1">
                                 @include('recipes.partials.ingredient-input')
                             </template>
@@ -100,7 +79,7 @@
 
                         <!-- Steps -->
                         <h3 class="pt-2 mb-2 font-extrabold">Steps</h3>
-                        <div x-data="{ steps: 0, step_number: 0 }">
+                        <div x-data="{ steps: 0 }">
                             @if(old('steps'))
                                 @foreach(old('steps') as $i => $step_default)
                                     @if (empty($step)) @continue @endif
