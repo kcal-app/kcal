@@ -2,11 +2,11 @@
     <div>
         <div>
             <x-inputs.input type="hidden"
-                            name="ingredients[]"
+                            name="ingredients[id][]"
                             value="{{ $defaultId ?? '' }}"
                             x-ref="ingredients"/>
             <x-inputs.input type="text"
-                            name="ingredients_name[]"
+                            name="ingredients[name][]"
                             value="{{ $defaultName ?? '' }}"
                             placeholder="Search..."
                             autocomplete="off"

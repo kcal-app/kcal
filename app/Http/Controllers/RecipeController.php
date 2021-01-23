@@ -70,8 +70,37 @@ class RecipeController extends Controller
      */
     public function edit(Recipe $recipe): View
     {
+        // Pre-populate ingredients from form data or current recipe.
+        $ingredients = [];
+        if ($old = old('ingredients')) {
+            foreach ($old['id'] as $key => $food_id) {
+                if (empty($food_id)) {
+                    continue;
+                }
+                $ingredients[] = [
+                    'amount' => $old['amount'][$key],
+                    'unit' => $old['unit'][$key],
+                    'food_id' => $food_id,
+                    'food_name' => $old['name'][$key],
+                    'detail' => $old['detail'][$key],
+                ];
+            }
+        }
+        else {
+            foreach ($recipe->foodAmounts as $foodAmount) {
+                $ingredients[] = [
+                    'amount' => $foodAmount->amount_formatted,
+                    'unit' => $foodAmount->unit,
+                    'food_id' => $foodAmount->food->id,
+                    'food_name' => $foodAmount->food->name,
+                    'detail' => $foodAmount->detail,
+                ];
+            }
+        }
+
         return view('recipes.edit')
             ->with('recipe', $recipe)
+            ->with('ingredients', $ingredients)
             ->with('ingredients_units', new Collection([
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
@@ -98,14 +127,14 @@ class RecipeController extends Controller
             'description' => 'nullable|string',
             'source' => 'nullable|string',
             'servings' => 'required|numeric',
-            'ingredients_amount' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients_amount.*' => ['required_with:ingredients.*', 'nullable', new StringIsDecimalOrFraction],
-            'ingredients_unit' => ['required', 'array'],
-            'ingredients_unit.*' => 'nullable|string',
-            'ingredients_detail' => ['required', 'array'],
-            'ingredients_detail.*' => 'nullable|string',
-            'ingredients' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.*' => 'required_with:ingredients_amount.*|nullable|exists:App\Models\Food,id',
+            'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
+            'ingredients.unit' => ['required', 'array'],
+            'ingredients.unit.*' => 'nullable|string',
+            'ingredients.detail' => ['required', 'array'],
+            'ingredients.detail.*' => 'nullable|string',
+            'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable|exists:App\Models\Food,id',
             'steps' => ['required', 'array', new ArrayNotEmpty],
             'steps.*' => 'nullable|string',
         ]);
@@ -126,15 +155,15 @@ class RecipeController extends Controller
                 $food_amounts = [];
                 $weight = 0;
                 // TODO: Handle removals.
-                foreach (array_filter($input['ingredients_amount']) as $key => $amount) {
+                foreach (array_filter($input['ingredients']['id']) as $key => $food_id) {
                     $food_amounts[$key] = $recipe->foodAmounts[$key] ?? new FoodAmount();
                     $food_amounts[$key]->fill([
-                        'amount' => Number::floatFromString($amount),
-                        'unit' => $input['ingredients_unit'][$key],
-                        'detail' => $input['ingredients_detail'][$key],
+                        'amount' => Number::floatFromString($input['ingredients']['amount'][$key]),
+                        'unit' => $input['ingredients']['unit'][$key],
+                        'detail' => $input['ingredients']['detail'][$key],
                         'weight' => $weight++,
                     ]);
-                    $food_amounts[$key]->food()->associate($input['ingredients'][$key]);
+                    $food_amounts[$key]->food()->associate($food_id);
                 }
                 $recipe->foodAmounts()->saveMany($food_amounts);
 
