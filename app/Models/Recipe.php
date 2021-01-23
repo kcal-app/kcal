@@ -81,20 +81,13 @@ class Recipe extends Model
     /**
      * @inheritdoc
      */
-    protected $with = ['ingredients'];
+    protected $with = ['ingredientAmounts'];
 
     /**
      * Get the steps for this Recipe.
      */
     public function steps(): HasMany {
         return $this->hasMany(RecipeStep::class)->orderBy('number');
-    }
-
-    /**
-     * Get the Food Amounts used for this Recipe.
-     */
-    public function foodAmounts(): HasMany {
-        return $this->hasMany(FoodAmount::class)->orderBy('weight');
     }
 
     /**

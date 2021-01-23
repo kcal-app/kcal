@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FoodAmount;
+use App\Models\Food;
+use App\Models\IngredientAmount;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
 use App\Rules\ArrayNotEmpty;
@@ -73,29 +74,29 @@ class RecipeController extends Controller
         // Pre-populate relationships from form data or current recipe.
         $ingredients = [];
         if ($old = old('ingredients')) {
-            foreach ($old['id'] as $key => $food_id) {
-                if (empty($food_id)) {
+            foreach ($old['id'] as $key => $ingredient_id) {
+                if (empty($ingredient_id)) {
                     continue;
                 }
                 $ingredients[] = [
                     'original_key' => $old['original_key'][$key],
                     'amount' => $old['amount'][$key],
                     'unit' => $old['unit'][$key],
-                    'food_id' => $food_id,
-                    'food_name' => $old['name'][$key],
+                    'ingredient_id' => $ingredient_id,
+                    'ingredient_name' => $old['name'][$key],
                     'detail' => $old['detail'][$key],
                 ];
             }
         }
         else {
-            foreach ($recipe->foodAmounts as $key => $foodAmount) {
+            foreach ($recipe->ingredientAmounts as $key => $ingredientAmount) {
                 $ingredients[] = [
                     'original_key' => $key,
-                    'amount' => $foodAmount->amount_formatted,
-                    'unit' => $foodAmount->unit,
-                    'food_id' => $foodAmount->food->id,
-                    'food_name' => $foodAmount->food->name,
-                    'detail' => $foodAmount->detail,
+                    'amount' => $ingredientAmount->amount_formatted,
+                    'unit' => $ingredientAmount->unit,
+                    'ingredient_id' => $ingredientAmount->ingredient->id,
+                    'ingredient_name' => $ingredientAmount->ingredient->name,
+                    'detail' => $ingredientAmount->detail,
                 ];
             }
         }
@@ -158,7 +159,7 @@ class RecipeController extends Controller
             'ingredients.detail' => ['required', 'array'],
             'ingredients.detail.*' => 'nullable|string',
             'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable|exists:App\Models\Food,id',
+            'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
             'ingredients.original_key' => 'nullable|array',
             'steps.step' => ['required', 'array', new ArrayNotEmpty],
             'steps.step.*' => 'nullable|string',
@@ -179,30 +180,31 @@ class RecipeController extends Controller
                 }
 
                 // Delete any removed ingredients.
-                $removed = array_diff($recipe->foodAmounts->keys()->all(), $input['ingredients']['original_key']);
+                $removed = array_diff($recipe->ingredientAmounts->keys()->all(), $input['ingredients']['original_key']);
                 foreach ($removed as $removed_key) {
-                    $recipe->foodAmounts[$removed_key]->delete();
+                    $recipe->ingredientAmounts[$removed_key]->delete();
                 }
 
                 // Add/update current ingredients.
-                $food_amounts = [];
+                $ingredient_amounts = [];
                 $weight = 0;
-                foreach (array_filter($input['ingredients']['id']) as $key => $food_id) {
+                foreach (array_filter($input['ingredients']['id']) as $key => $ingredient_id) {
                     if (!is_null($input['ingredients']['original_key'][$key])) {
-                        $food_amounts[$key] = $recipe->foodAmounts[$input['ingredients']['original_key'][$key]];
+                        $ingredient_amounts[$key] = $recipe->ingredientAmounts[$input['ingredients']['original_key'][$key]];
                     }
                     else {
-                        $food_amounts[$key] = new FoodAmount();
+                        $ingredient_amounts[$key] = new IngredientAmount();
                     }
-                    $food_amounts[$key]->fill([
+                    $ingredient_amounts[$key]->fill([
                         'amount' => Number::floatFromString($input['ingredients']['amount'][$key]),
                         'unit' => $input['ingredients']['unit'][$key],
                         'detail' => $input['ingredients']['detail'][$key],
                         'weight' => $weight++,
                     ]);
-                    $food_amounts[$key]->food()->associate($food_id);
+                    $ingredient_amounts[$key]->ingredient()
+                        ->associate(Food::where('id', $ingredient_id)->first());
                 }
-                $recipe->foodAmounts()->saveMany($food_amounts);
+                $recipe->ingredientAmounts()->saveMany($ingredient_amounts);
 
                 $steps = [];
                 $number = 1;

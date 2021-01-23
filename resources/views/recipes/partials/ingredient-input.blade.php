@@ -9,8 +9,8 @@
                      :selectedValue="$unit ?? null">
         <option value=""></option>
     </x-inputs.select>
-    <x-ingredient-picker :default-id="$food_id ?? null"
-                         :default-name="$food_name ?? null" />
+    <x-ingredient-picker :default-id="$ingredient_id ?? null"
+                         :default-name="$ingredient_name ?? null" />
     <x-inputs.input type="text"
                     class="block"
                     name="ingredients[detail][]"
