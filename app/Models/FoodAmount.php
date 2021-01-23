@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FoodAmount whereWeight($value)
  * @mixin \Eloquent
+ * @property-read string $amount_formatted
  */
 class FoodAmount extends Model
 {
