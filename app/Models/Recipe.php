@@ -79,11 +79,6 @@ class Recipe extends Model
     ];
 
     /**
-     * @inheritdoc
-     */
-    protected $with = ['ingredientAmounts'];
-
-    /**
      * Get the steps for this Recipe.
      */
     public function steps(): HasMany {
