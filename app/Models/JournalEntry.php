@@ -46,6 +46,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JournalEntry whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredients
+ * @property-read int|null $ingredients_count
  */
 class JournalEntry extends Model
 {

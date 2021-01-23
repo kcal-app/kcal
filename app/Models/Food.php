@@ -55,6 +55,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read string $serving_size_formatted
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmounts
+ * @property-read int|null $ingredient_amounts_count
  */
 class Food extends Model
 {

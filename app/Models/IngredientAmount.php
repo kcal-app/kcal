@@ -8,6 +8,39 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * App\Models\IngredientAmount
+ *
+ * @property int $id
+ * @property int $ingredient_id
+ * @property string $ingredient_type
+ * @property float $amount
+ * @property string|null $unit
+ * @property string|null $detail
+ * @property int $weight
+ * @property int $parent_id
+ * @property string $parent_type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $amount_formatted
+ * @property-read Model|\Eloquent $ingredient
+ * @property-read Model|\Eloquent $parent
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount query()
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereDetail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereIngredientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereIngredientType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereParentType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereUnit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereWeight($value)
+ * @mixin \Eloquent
+ */
 class IngredientAmount extends Model
 {
     use HasFactory;
@@ -85,11 +118,15 @@ class IngredientAmount extends Model
      */
     public function __call($method, $parameters): mixed {
         if (in_array($method, $this->nutrientMethods)) {
-            return $this->ingredient->{$method} * Nutrients::calculateFoodNutrientMultiplier(
-                $this->ingredient,
-                $this->amount,
-                $this->unit
-            );
+            return match ($this->ingredient::class) {
+                Food::class => $this->ingredient->{$method} * Nutrients::calculateFoodNutrientMultiplier(
+                    $this->ingredient,
+                    $this->amount,
+                    $this->unit
+                ),
+                Recipe::class => $this->ingredient->{"{$method}Total"}(),
+                default => 0
+            };
         }
         else {
             return parent::__call($method, $parameters);

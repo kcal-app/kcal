@@ -40,6 +40,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereSource($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmounts
+ * @property-read int|null $ingredient_amounts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredients
+ * @property-read int|null $ingredients_count
  */
 class Recipe extends Model
 {
@@ -60,18 +64,6 @@ class Recipe extends Model
      */
     protected $casts = [
         'servings' => 'int',
-    ];
-
-    /**
-     * Nutrient total calculation methods.
-     */
-    private array $nutrientTotalMethods = [
-        'caloriesTotal',
-        'carbohydratesTotal',
-        'cholesterolTotal',
-        'fatTotal',
-        'proteinTotal',
-        'sodiumTotal',
     ];
 
     /**
@@ -136,19 +128,4 @@ class Recipe extends Model
         }
     }
 
-    /**
-     * Sum a specific nutrient for all food amounts.
-     *
-     * @param string $nutrient
-     *   Nutrient to sum.
-     *
-     * @return float
-     */
-    private function sumNutrient(string $nutrient): float {
-        $sum = 0;
-        foreach ($this->foodAmounts as $foodAmount) {
-            $sum += $foodAmount->{$nutrient}();
-        }
-        return $sum;
-    }
 }
