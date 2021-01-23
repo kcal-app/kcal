@@ -45,4 +45,29 @@ class IngredientAmountSchema extends SchemaProvider
             'updatedAt' => $resource->updated_at,
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRelationships($resource, $isPrimary, array $includeRelationships): array
+    {
+        return [
+            'ingredient' => [
+                self::SHOW_SELF => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA => isset($includeRelationships['ingredient']),
+                self::DATA => function () use ($resource) {
+                    return $resource->ingredient;
+                },
+            ],
+            'parent' => [
+                self::SHOW_SELF => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA => isset($includeRelationships['parent']),
+                self::DATA => function () use ($resource) {
+                    return $resource->parent;
+                },
+            ]
+        ];
+    }
 }

@@ -36,4 +36,17 @@ class RecipeStepSchema extends SchemaProvider
             'updatedAt' => $resource->updated_at,
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRelationships($resource, $isPrimary, array $includeRelationships): array
+    {
+        return [
+            'recipe' => [
+                self::SHOW_SELF => true,
+                self::SHOW_RELATED => true,
+            ]
+        ];
+    }
 }

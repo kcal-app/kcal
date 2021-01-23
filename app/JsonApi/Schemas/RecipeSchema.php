@@ -2,6 +2,7 @@
 
 namespace App\JsonApi\Schemas;
 
+use CloudCreativity\LaravelJsonApi\Eloquent\HasMany;
 use Neomerx\JsonApi\Schema\SchemaProvider;
 
 class RecipeSchema extends SchemaProvider
@@ -48,6 +49,31 @@ class RecipeSchema extends SchemaProvider
             'sodiumTotal' => $resource->sodiumTotal(),
             'createdAt' => $resource->created_at,
             'updatedAt' => $resource->updated_at,
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRelationships($resource, $isPrimary, array $includeRelationships): array
+    {
+        return [
+            'steps' => [
+                self::SHOW_SELF => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA => isset($includeRelationships['steps']),
+                self::DATA => function () use ($resource) {
+                    return $resource->steps;
+                },
+            ],
+            'ingredient-amounts' => [
+                self::SHOW_SELF => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA => isset($includeRelationships['ingredient-amounts']),
+                self::DATA => function () use ($resource) {
+                    return $resource->ingredientAmounts;
+                },
+            ]
         ];
     }
 }

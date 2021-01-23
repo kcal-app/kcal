@@ -3,6 +3,7 @@
 namespace App\JsonApi\Adapters;
 
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
+use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -42,6 +43,11 @@ class RecipeStepAdapter extends AbstractAdapter
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
+    }
+
+    protected function recipe(): BelongsTo
+    {
+        return $this->belongsTo();
     }
 
 }
