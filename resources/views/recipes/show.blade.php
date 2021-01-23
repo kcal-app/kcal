@@ -26,7 +26,16 @@
                         <div class="flex flex-row space-x-2 mb-2">
                             <div>{{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}</div>
                             @if($ia->unit)<div>{{ $ia->unit }}</div>@endif
-                            <div>{{ $ia->ingredient->name }}</div>
+                            <div>
+                                @if($ia->ingredient->type === \App\Models\Recipe::class)
+                                    <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                       href="{{ route('recipes.show', $ia->ingredient) }}">
+                                        {{ $ia->ingredient->name }}
+                                    </a>
+                                @else
+                                    {{ $ia->ingredient->name }}
+                                @endif
+                            </div>
                             @if($ia->detail)<div class="text-gray-500">{{ $ia->detail }}</div>@endif
                         </div>
                     @endforeach
