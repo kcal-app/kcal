@@ -9,6 +9,22 @@ use Illuminate\Support\Collection;
 trait Ingredient
 {
     /**
+     * Add special `type` attribute to appends.
+     */
+    public function initializeIngredient(): void {
+        $this->appends[] = 'type';
+    }
+
+    /**
+     * Gets the class name.
+     *
+     * This is necessary e.g. to provide data in ingredient picker responses.
+     */
+    public function getTypeAttribute(): string {
+        return $this::class;
+    }
+
+    /**
      * Get all of the ingredient amounts associated with the ingredient.
      */
     public function ingredientAmountChildren(): MorphToMany {

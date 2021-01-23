@@ -8,6 +8,7 @@ use App\Models\Recipe;
 use App\Models\RecipeStep;
 use App\Rules\ArrayNotEmpty;
 use App\Rules\StringIsDecimalOrFraction;
+use App\Rules\UsesIngredientTrait;
 use App\Support\Number;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -83,6 +84,7 @@ class RecipeController extends Controller
                     'amount' => $old['amount'][$key],
                     'unit' => $old['unit'][$key],
                     'ingredient_id' => $ingredient_id,
+                    'ingredient_type' => $old['type'][$key],
                     'ingredient_name' => $old['name'][$key],
                     'detail' => $old['detail'][$key],
                 ];
@@ -94,7 +96,8 @@ class RecipeController extends Controller
                     'original_key' => $key,
                     'amount' => $ingredientAmount->amount_formatted,
                     'unit' => $ingredientAmount->unit,
-                    'ingredient_id' => $ingredientAmount->ingredient->id,
+                    'ingredient_id' => $ingredientAmount->ingredient_id,
+                    'ingredient_type' => $ingredientAmount->ingredient_type,
                     'ingredient_name' => $ingredientAmount->ingredient->name,
                     'detail' => $ingredientAmount->detail,
                 ];
@@ -160,11 +163,21 @@ class RecipeController extends Controller
             'ingredients.detail.*' => 'nullable|string',
             'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
+            'ingredients.type' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.type.*' => ['required_with:ingredients.id.*', 'nullable', new UsesIngredientTrait()],
             'ingredients.original_key' => 'nullable|array',
             'steps.step' => ['required', 'array', new ArrayNotEmpty],
             'steps.step.*' => 'nullable|string',
             'steps.original_key' => 'nullable|array',
         ]);
+
+        // Validate that no ingredients are recursive.
+        // TODO: refactor as custom validator.
+        foreach (array_filter($input['ingredients']['id']) as $key => $id) {
+            if ($input['ingredients']['type'][$key] == Recipe::class && $id == $recipe->id) {
+                return back()->withInput()->withErrors('To understand recursion, you must understand recursion. Remove this recipe from this recipe.');
+            }
+        }
 
         $recipe->fill([
             'name' => Str::lower($input['name']),
@@ -202,7 +215,7 @@ class RecipeController extends Controller
                         'weight' => $weight++,
                     ]);
                     $ingredient_amounts[$key]->ingredient()
-                        ->associate(Food::where('id', $ingredient_id)->first());
+                        ->associate($input['ingredients']['type'][$key]::where('id', $ingredient_id)->first());
                 }
                 $recipe->ingredientAmounts()->saveMany($ingredient_amounts);
 
