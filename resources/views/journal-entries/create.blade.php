@@ -37,45 +37,29 @@
                                 </x-inputs.select>
                             </div>
                         </div>
-                        <div class="grid grid-cols-12 gap-4 items-center">
-                            <x-inputs.label for="amounts" :value="__('Amount')"/>
-                            <x-inputs.label for="units" :value="__('Unit')" class="col-span-2"/>
-                            <x-inputs.label for="foods" :value="__('Food')" class="col-span-4"/>
-                            <div class="text-center">- or -</div>
-                            <x-inputs.label for="recipes" :value="__('Recipe')" class="col-span-4"/>
-                            @for ($i = 0; $i < 10; $i++)
-                                <div>
-                                    <x-inputs.input type="text"
-                                                    name="amounts[]"
-                                                    class="block w-full"
-                                                    :value="old('amounts.' . $i)" />
-                                </div>
-                                <div class="col-span-2">
-                                    <x-inputs.select name="units[]"
-                                                     class="block w-full"
-                                                     :options="$units"
-                                                     :selectedValue="old('units.' . $i)">
-                                        <option value=""></option>
-                                    </x-inputs.select>
-                                </div>
-                                <div class="col-span-4">
-                                    <x-inputs.select name="foods[]"
-                                                     class="block w-full"
-                                                     :options="$foods"
-                                                     :selectedValue="old('foods.' . $i)">
-                                        <option value=""></option>
-                                    </x-inputs.select>
-                                </div>
+
+                        <!-- Items -->
+                        <div x-data="{ items: 0 }">
+                            <div class="grid grid-cols-12 gap-4 items-center">
+                                <x-inputs.label for="amounts" :value="__('Amount')"/>
+                                <x-inputs.label for="units" :value="__('Unit')" class="col-span-2"/>
+                                <x-inputs.label for="foods" :value="__('Food')" class="col-span-4"/>
                                 <div class="text-center">- or -</div>
-                                <div class="col-span-4">
-                                    <x-inputs.select name="recipes[]"
-                                                     class="block w-full"
-                                                     :options="$recipes"
-                                                     :selectedValue="old('recipes.' . $i)">
-                                        <option value=""></option>
-                                    </x-inputs.select>
-                                </div>
-                            @endfor
+                                <x-inputs.label for="recipes" :value="__('Recipe')" class="col-span-4"/>
+                            </div>
+                            <div>
+                                @foreach($items as $item)
+                                    @include('journal-entries.partials.entry-item-input', $item)
+                                @endforeach
+                                <template x-for="i in items + 1">
+                                    @include('journal-entries.partials.entry-item-input')
+                                </template>
+                            </div>
+                            <x-inputs.icon-button type="button" color="green" x-on:click="items++;">
+                                <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                                </svg>
+                            </x-inputs.icon-button>
                         </div>
                         <div class="flex items-center justify-end mt-4">
                             <x-inputs.button class="ml-3">

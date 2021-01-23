@@ -57,7 +57,24 @@ class JournalEntryController extends Controller
             ->map(function ($recipe) {
                 return ['value' => $recipe->id, 'label' => $recipe->name];
             });
+
+        $items = [];
+        if ($old = old('items')) {
+            foreach ($old['amount'] as $key => $amount) {
+                if (empty($amount) && empty($old['unit'][$key]) && empty($old['food'][$key]) && empty($old['recipe'][$key])) {
+                    continue;
+                }
+                $items[] = [
+                    'amount' => $amount,
+                    'unit' => $old['unit'][$key],
+                    'food' => $old['food'][$key],
+                    'recipe' => $old['recipe'][$key],
+                ];
+            }
+        }
+
         return view('journal-entries.create')
+            ->with('items', $items)
             ->with('foods', $foods)
             ->with('recipes', $recipes)
             ->with('meals', [
@@ -83,20 +100,20 @@ class JournalEntryController extends Controller
         $input = $request->validate([
             'date' => 'required|date',
             'meal' => 'required|string',
-            'amounts' => ['required', 'array', new ArrayNotEmpty],
-            'amounts.*' => ['required_with:foods.*,recipes.*', 'nullable', new StringIsDecimalOrFraction],
-            'units' => ['required', 'array', new ArrayNotEmpty],
-            'units.*' => 'nullable|string',
-            'foods' => 'required|array',
-            'foods.*' => 'nullable|exists:App\Models\Food,id',
-            'recipes' => 'required|array',
-            'recipes.*' => 'nullable|exists:App\Models\Recipe,id',
+            'items.amount' => ['required', 'array', new ArrayNotEmpty],
+            'items.amount.*' => ['required_with:foods.*,recipes.*', 'nullable', new StringIsDecimalOrFraction],
+            'items.unit' => 'required|array',
+            'items.unit.*' => 'nullable|string',
+            'items.food' => 'required|array',
+            'items.food.*' => 'nullable|exists:App\Models\Food,id',
+            'items.recipe' => 'required|array',
+            'items.recipe.*' => 'nullable|exists:App\Models\Recipe,id',
         ]);
 
         // Validate that at least one recipe or food is selected.
         // TODO: refactor as custom validator.
-        $foods_selected = array_filter($input['foods']);
-        $recipes_selected = array_filter($input['recipes']);
+        $foods_selected = array_filter($input['items']['food']);
+        $recipes_selected = array_filter($input['items']['recipe']);
         if (empty($recipes_selected) && empty($foods_selected)) {
             return back()->withInput()->withErrors('At least one food or recipe is required.');
         }
@@ -107,7 +124,7 @@ class JournalEntryController extends Controller
         // Validate only "serving" unit used for recipes.
         // TODO: refactor as custom validator.
         foreach ($recipes_selected as $key => $id) {
-            if ($input['units'][$key] !== 'servings') {
+            if ($input['items']['unit'][$key] !== 'servings') {
                 return back()->withInput()->withErrors('Recipes must use the "servings" unit.');
             }
         }
@@ -121,13 +138,13 @@ class JournalEntryController extends Controller
                 $food = $foods->get($id);
                 $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier(
                     $food,
-                    Number::floatFromString($input['amounts'][$key]),
-                    $input['units'][$key],
+                    Number::floatFromString($input['items']['amount'][$key]),
+                    $input['items']['unit'][$key],
                 );
                 foreach ($nutrients as $nutrient => $amount) {
                     $nutrients[$nutrient] += $food->{$nutrient} * $nutrient_multiplier;
                 }
-                $summary[] = "{$input['amounts'][$key]} {$input['units'][$key]} {$food->name}";
+                $summary[] = "{$input['items']['amount'][$key]} {$input['items']['unit'][$key]} {$food->name}";
             }
         }
 
@@ -136,9 +153,9 @@ class JournalEntryController extends Controller
             foreach ($recipes_selected as $key => $id) {
                 $recipe = $recipes->get($id);
                 foreach ($nutrients as $nutrient => $amount) {
-                    $nutrients[$nutrient] += $recipe->{"{$nutrient}PerServing"}() * Number::floatFromString($input['amounts'][$key]);
+                    $nutrients[$nutrient] += $recipe->{"{$nutrient}PerServing"}() * Number::floatFromString($input['items']['amount'][$key]);
                 }
-                $summary[] = "{$input['amounts'][$key]} {$input['units'][$key]} {$recipe->name}";
+                $summary[] = "{$input['items']['amount'][$key]} {$input['items']['unit'][$key]} {$recipe->name}";
             }
         }
 
@@ -157,7 +174,11 @@ class JournalEntryController extends Controller
             }
         }
 
-        return back()->with('message', "Journal entry added!");
+        session()->flash('message', "Journal entry added!");
+        return redirect()->route(
+            'journal-entries.index',
+            ['date' => $entry->date->format('Y-m-d')]
+        );
     }
 
     /**
