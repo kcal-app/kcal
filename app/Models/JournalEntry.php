@@ -94,7 +94,7 @@ class JournalEntry extends Model
     }
 
     /**
-     * Get all recipes related to this entry.
+     * Get all foods related to this entry.
      */
     public function foods(): MorphToMany {
         return $this->morphedByMany(Food::class, 'journalable');

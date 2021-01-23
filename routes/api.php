@@ -15,7 +15,7 @@ JsonApi::register('v1')->routes(function ($api) {
     $api->resource('foods')->readOnly();
     $api->resource('ingredient-amounts')->relationships(function ($relations) {
         $relations->hasOne('ingredient')->readOnly();
-        $relations->hasOne('ingredparentient')->readOnly();
+        $relations->hasOne('parent')->readOnly();
     })->readOnly();
     $api->resource('journal-entries')->relationships(function ($relations) {
         $relations->hasMany('foods')->readOnly();

@@ -12,23 +12,22 @@ class RecipeStepAdapter extends AbstractAdapter
 {
 
     /**
-     * Mapping of JSON API attribute field names to model keys.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $attributes = [];
 
     /**
-     * Mapping of JSON API filter names to model scopes.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $filterScopes = [];
 
     /**
-     * Adapter constructor.
-     *
-     * @param StandardStrategy $paging
+     * {@inheritdoc}
+     */
+    protected $defaultSort = ['number'];
+
+    /**
+     * {@inheritdoc}
      */
     public function __construct(StandardStrategy $paging)
     {
@@ -36,15 +35,16 @@ class RecipeStepAdapter extends AbstractAdapter
     }
 
     /**
-     * @param Builder $query
-     * @param Collection $filters
-     * @return void
+     * {@inheritdoc}
      */
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
     }
 
+    /**
+     * Recipe relationship.
+     */
     protected function recipe(): BelongsTo
     {
         return $this->belongsTo();

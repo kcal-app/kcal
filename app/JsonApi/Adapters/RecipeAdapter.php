@@ -4,31 +4,30 @@ namespace App\JsonApi\Adapters;
 
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\HasMany;
+use CloudCreativity\LaravelJsonApi\Eloquent\MorphHasMany;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class RecipeAdapter extends AbstractAdapter
 {
 
     /**
-     * Mapping of JSON API attribute field names to model keys.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $attributes = [];
 
     /**
-     * Mapping of JSON API filter names to model scopes.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $filterScopes = [];
 
     /**
-     * Adapter constructor.
-     *
-     * @param StandardStrategy $paging
+     * {@inheritdoc}
+     */
+    protected $defaultSort = ['name'];
+
+    /**
+     * {@inheritdoc}
      */
     public function __construct(StandardStrategy $paging)
     {
@@ -36,20 +35,24 @@ class RecipeAdapter extends AbstractAdapter
     }
 
     /**
-     * @param Builder $query
-     * @param Collection $filters
-     * @return void
+     * {@inheritdoc}
      */
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
     }
 
-    protected function ingredientAmounts(): HasMany
+    /**
+     * Ingredient amount relationships.
+     */
+    protected function ingredientAmounts(): MorphHasMany
     {
-        return $this->hasMany();
+        return $this->morphMany($this->hasMany('ingredientAmounts'));
     }
 
+    /**
+     * Step relationships.
+     */
     protected function steps(): HasMany
     {
         return $this->hasMany();

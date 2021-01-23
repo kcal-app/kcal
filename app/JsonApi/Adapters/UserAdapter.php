@@ -4,30 +4,28 @@ namespace App\JsonApi\Adapters;
 
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class UserAdapter extends AbstractAdapter
 {
 
     /**
-     * Mapping of JSON API attribute field names to model keys.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $attributes = [];
 
     /**
-     * Mapping of JSON API filter names to model scopes.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $filterScopes = [];
 
     /**
-     * Adapter constructor.
-     *
-     * @param StandardStrategy $paging
+     * {@inheritdoc}
+     */
+    protected $defaultSort = ['name'];
+
+    /**
+     * {@inheritdoc}
      */
     public function __construct(StandardStrategy $paging)
     {
@@ -35,9 +33,7 @@ class UserAdapter extends AbstractAdapter
     }
 
     /**
-     * @param Builder $query
-     * @param Collection $filters
-     * @return void
+     * {@inheritdoc}
      */
     protected function filter($query, Collection $filters)
     {

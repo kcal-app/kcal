@@ -2,54 +2,57 @@
 
 namespace App\JsonApi\Adapters;
 
+use App\Models\IngredientAmount;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class IngredientAmountAdapter extends AbstractAdapter
 {
 
     /**
-     * Mapping of JSON API attribute field names to model keys.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $attributes = [];
 
     /**
-     * Mapping of JSON API filter names to model scopes.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $filterScopes = [];
 
     /**
-     * Adapter constructor.
-     *
-     * @param StandardStrategy $paging
+     * {@inheritdoc}
+     */
+    protected $defaultSort = ['weight'];
+
+    /**
+     * {@inheritdoc}
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new \App\Models\IngredientAmount(), $paging);
+        parent::__construct(new IngredientAmount(), $paging);
     }
 
     /**
-     * @param Builder $query
-     * @param Collection $filters
-     * @return void
+     * {@inheritdoc}
      */
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
     }
 
+    /**
+     * Ingredient relationship.
+     */
     protected function ingredient(): BelongsTo
     {
         return $this->belongsTo();
     }
 
+    /**
+     * Parent (Recipe or JournalEntry).
+     */
     protected function parent(): BelongsTo
     {
         return $this->belongsTo();
