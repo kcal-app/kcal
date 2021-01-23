@@ -70,7 +70,7 @@ class RecipeController extends Controller
      */
     public function edit(Recipe $recipe): View
     {
-        // Pre-populate ingredients from form data or current recipe.
+        // Pre-populate relationships from form data or current recipe.
         $ingredients = [];
         if ($old = old('ingredients')) {
             foreach ($old['id'] as $key => $food_id) {
@@ -100,9 +100,31 @@ class RecipeController extends Controller
             }
         }
 
+        $steps = [];
+        if ($old = old('steps')) {
+            foreach ($old['step'] as $key => $step) {
+                if (empty($step)) {
+                    continue;
+                }
+                $steps[] = [
+                    'original_key' => $old['original_key'][$key],
+                    'step_default' => $step,
+                ];
+            }
+        }
+        else {
+            foreach ($recipe->steps as $key => $step) {
+                $steps[] = [
+                    'original_key' => $key,
+                    'step_default' => $step->step,
+                ];
+            }
+        }
+
         return view('recipes.edit')
             ->with('recipe', $recipe)
             ->with('ingredients', $ingredients)
+            ->with('steps', $steps)
             ->with('ingredients_units', new Collection([
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
@@ -138,8 +160,9 @@ class RecipeController extends Controller
             'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable|exists:App\Models\Food,id',
             'ingredients.original_key' => 'nullable|array',
-            'steps' => ['required', 'array', new ArrayNotEmpty],
-            'steps.*' => 'nullable|string',
+            'steps.step' => ['required', 'array', new ArrayNotEmpty],
+            'steps.step.*' => 'nullable|string',
+            'steps.original_key' => 'nullable|array',
         ]);
 
         $recipe->fill([
@@ -183,16 +206,27 @@ class RecipeController extends Controller
 
                 $steps = [];
                 $number = 1;
-                // TODO: Handle removals.
-                foreach (array_filter($input['steps']) as $key => $step) {
-                    $steps[$key] = $recipe->steps[$key] ?? new RecipeStep();
+
+                // Delete any removed steps.
+                $removed = array_diff($recipe->steps->keys()->all(), $input['steps']['original_key']);
+                foreach ($removed as $removed_key) {
+                    $recipe->steps[$removed_key]->delete();
+                }
+
+                foreach (array_filter($input['steps']['step']) as $key => $step) {
+                    if (!is_null($input['steps']['original_key'][$key])) {
+                        $steps[$key] = $recipe->steps[$input['steps']['original_key'][$key]];
+                    }
+                    else {
+                        $steps[$key] = new RecipeStep();
+                    }
                     $steps[$key]->fill(['number' => $number++, 'step' => $step]);
                 }
-                $recipe->foodAmounts()->saveMany($steps);
+                $recipe->steps()->saveMany($steps);
             });
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withInput()->withErrors("Failed to updated recipe due to database error: {$e->getMessage()}.");
+            return back()->withInput()->withErrors($e->getMessage());
         }
 
         session()->flash('message', "Recipe {$recipe->name} updated!");

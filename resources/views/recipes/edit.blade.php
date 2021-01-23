@@ -80,16 +80,9 @@
                         <!-- Steps -->
                         <h3 class="pt-2 mb-2 font-extrabold">Steps</h3>
                         <div x-data="{ steps: 0 }">
-                            @if(old('steps'))
-                                @foreach(old('steps') as $i => $step_default)
-                                    @if (empty($step)) @continue @endif
-                                    @include('recipes.partials.step-input')
-                                @endforeach
-                            @else
-                                @foreach($recipe->steps as $step)
-                                    @include('recipes.partials.step-input', ['step_default' => $step->step])
-                                @endforeach
-                            @endif
+                            @foreach($steps as $step)
+                                @include('recipes.partials.step-input', $step)
+                            @endforeach
                             <template x-for="i in steps + 1">
                                 @include('recipes.partials.step-input')
                             </template>
