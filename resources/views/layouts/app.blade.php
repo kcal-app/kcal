@@ -50,6 +50,6 @@
             </main>
         </div>
 
-        @isset($scripts) {{ $scripts }} @endisset
+        @stack('scripts')
     </body>
 </html>
