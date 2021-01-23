@@ -21,8 +21,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $description
  * @property string|null $source
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FoodAmount[] $foodAmounts
- * @property-read int|null $food_amounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalEntry[] $journalEntries
  * @property-read int|null $journal_entries_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecipeStep[] $steps
@@ -44,6 +42,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $ingredient_amounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredients
  * @property-read int|null $ingredients_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountChildren
+ * @property-read int|null $ingredient_amount_children_count
  */
 class Recipe extends Model
 {
