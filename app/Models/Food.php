@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
 use App\Support\Number;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * App\Models\Food
@@ -58,9 +58,7 @@ use Illuminate\Support\Collection;
  */
 class Food extends Model
 {
-    use HasFactory;
-    use Sluggable;
-    use Journalable;
+    use HasFactory, Ingredient, Journalable, Sluggable;
 
     /**
      * @inheritdoc
@@ -118,10 +116,4 @@ class Food extends Model
         return $this->hasMany(FoodAmount::class);
     }
 
-    /**
-     * Gets search results for a term.
-     */
-    public static function search(string $term, int $limit = 10): Collection {
-        return (new static)::where('name', 'like', "%{$term}%")->limit($limit)->get();
-    }
 }
