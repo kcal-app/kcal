@@ -10654,6 +10654,17 @@
         {
                         return \Illuminate\Routing\ResponseFactory::hasMacro($name);
         }
+                    /**
+         * 
+         *
+         * @see \CloudCreativity\LaravelJsonApi\ServiceProvider::bootResponseMacro()
+         * @param mixed $api
+         * @static 
+         */ 
+        public static function jsonApi($api = null)
+        {
+                        return \Illuminate\Routing\ResponseFactory::jsonApi($api);
+        }
          
     }
             /**
@@ -14528,7 +14539,97 @@
      
 }
 
-        namespace Facade\Ignition\Facades { 
+        namespace CloudCreativity\LaravelJsonApi\Facades { 
+            /**
+     * Class JsonApi
+     *
+     * @package CloudCreativity\LaravelJsonApi
+     */ 
+        class JsonApi {
+                    /**
+         * Get an API by name.
+         *
+         * @param string|null $apiName
+         * @param string|null $host
+         * @param array $parameters
+         * @return \CloudCreativity\LaravelJsonApi\Services\Api 
+         * @throws RuntimeException
+         *      if the API name is invalid.
+         * @static 
+         */ 
+        public static function api($apiName = null, $host = null, $parameters = [])
+        {
+                        /** @var \CloudCreativity\LaravelJsonApi\Services\JsonApiService $instance */
+                        return $instance->api($apiName, $host, $parameters);
+        }
+                    /**
+         * Get the current JSON API route.
+         *
+         * @return \Route 
+         * @static 
+         */ 
+        public static function currentRoute()
+        {
+                        /** @var \CloudCreativity\LaravelJsonApi\Services\JsonApiService $instance */
+                        return $instance->currentRoute();
+        }
+                    /**
+         * Get the API that is handling the inbound HTTP request.
+         *
+         * @return \CloudCreativity\LaravelJsonApi\Services\Api|null the API, or null if the there is no inbound JSON API HTTP request.
+         * @static 
+         */ 
+        public static function requestApi()
+        {
+                        /** @var \CloudCreativity\LaravelJsonApi\Services\JsonApiService $instance */
+                        return $instance->requestApi();
+        }
+                    /**
+         * Get either the request API or the default API.
+         *
+         * @param string|null $host
+         * @param array $parameters
+         * @return \CloudCreativity\LaravelJsonApi\Services\Api 
+         * @static 
+         */ 
+        public static function requestApiOrDefault($host = null, $parameters = [])
+        {
+                        /** @var \CloudCreativity\LaravelJsonApi\Services\JsonApiService $instance */
+                        return $instance->requestApiOrDefault($host, $parameters);
+        }
+                    /**
+         * 
+         *
+         * @return \CloudCreativity\LaravelJsonApi\Services\Api 
+         * @throws RuntimeException
+         *      if there is no JSON API handling the inbound request.
+         * @static 
+         */ 
+        public static function requestApiOrFail()
+        {
+                        /** @var \CloudCreativity\LaravelJsonApi\Services\JsonApiService $instance */
+                        return $instance->requestApiOrFail();
+        }
+                    /**
+         * Register the routes for an API.
+         *
+         * @param $apiName
+         * @param array|\Closure $options
+         * @param \Closure|null $routes
+         * @return \CloudCreativity\LaravelJsonApi\Services\ApiRegistration 
+         * @static 
+         */ 
+        public static function register($apiName, $options = [], $routes = null)
+        {
+                        /** @var \CloudCreativity\LaravelJsonApi\Services\JsonApiService $instance */
+                        return $instance->register($apiName, $options, $routes);
+        }
+         
+    }
+     
+}
+
+    namespace Facade\Ignition\Facades { 
             /**
      * Class Flare.
      *
@@ -14820,6 +14921,28 @@
         public static function hasValidRelativeSignature()
         {
                         return \Illuminate\Http\Request::hasValidRelativeSignature();
+        }
+         
+    }
+     
+}
+
+    namespace Illuminate\Routing { 
+            /**
+     * 
+     *
+     */ 
+        class ResponseFactory {
+                    /**
+         * 
+         *
+         * @see \CloudCreativity\LaravelJsonApi\ServiceProvider::bootResponseMacro()
+         * @param mixed $api
+         * @static 
+         */ 
+        public static function jsonApi($api = null)
+        {
+                        return \Illuminate\Routing\ResponseFactory::jsonApi($api);
         }
          
     }
@@ -17937,6 +18060,7 @@ namespace  {
             class URL extends \Illuminate\Support\Facades\URL {}
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
+            class JsonApi extends \CloudCreativity\LaravelJsonApi\Facades\JsonApi {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
      
 }
