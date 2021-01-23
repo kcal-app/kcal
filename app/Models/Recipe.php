@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasIngredients;
 use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
@@ -42,7 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Recipe extends Model
 {
-    use HasFactory, Ingredient, Journalable, Sluggable;
+    use HasFactory, HasIngredients, Ingredient, Journalable, Sluggable;
 
     /**
      * @inheritdoc
@@ -84,6 +85,11 @@ class Recipe extends Model
         'proteinPerServing',
         'sodiumPerServing',
     ];
+
+    /**
+     * @inheritdoc
+     */
+    protected $with = ['ingredients'];
 
     /**
      * Get the steps for this Recipe.

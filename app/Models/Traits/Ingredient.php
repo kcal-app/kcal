@@ -2,10 +2,19 @@
 
 namespace App\Models\Traits;
 
+use App\Models\IngredientAmount;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 
 trait Ingredient
 {
+    /**
+     * Get all of the ingredient amounts for this ingredient.
+     */
+    public function ingredientAmounts(): MorphToMany {
+        return $this->morphToMany(IngredientAmount::class, 'ingredient');
+    }
+
     /**
      * Gets search results for a term.
      */
