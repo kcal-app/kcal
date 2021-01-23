@@ -36,7 +36,7 @@ trait HasIngredients
      */
     private function sumNutrient(string $nutrient): float {
         $sum = 0;
-        foreach ($this->ingredients as $ingredientAmount) {
+        foreach ($this->ingredientAmounts as $ingredientAmount) {
             $sum += $ingredientAmount->{$nutrient}();
         }
         return $sum;
