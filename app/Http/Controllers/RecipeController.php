@@ -78,6 +78,7 @@ class RecipeController extends Controller
                     continue;
                 }
                 $ingredients[] = [
+                    'original_key' => $old['original_key'][$key],
                     'amount' => $old['amount'][$key],
                     'unit' => $old['unit'][$key],
                     'food_id' => $food_id,
@@ -87,8 +88,9 @@ class RecipeController extends Controller
             }
         }
         else {
-            foreach ($recipe->foodAmounts as $foodAmount) {
+            foreach ($recipe->foodAmounts as $key => $foodAmount) {
                 $ingredients[] = [
+                    'original_key' => $key,
                     'amount' => $foodAmount->amount_formatted,
                     'unit' => $foodAmount->unit,
                     'food_id' => $foodAmount->food->id,
@@ -135,6 +137,7 @@ class RecipeController extends Controller
             'ingredients.detail.*' => 'nullable|string',
             'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable|exists:App\Models\Food,id',
+            'ingredients.original_key' => 'nullable|array',
             'steps' => ['required', 'array', new ArrayNotEmpty],
             'steps.*' => 'nullable|string',
         ]);
@@ -152,11 +155,22 @@ class RecipeController extends Controller
                     return;
                 }
 
+                // Delete any removed ingredients.
+                $removed = array_diff($recipe->foodAmounts->keys()->all(), $input['ingredients']['original_key']);
+                foreach ($removed as $removed_key) {
+                    $recipe->foodAmounts[$removed_key]->delete();
+                }
+
+                // Add/update current ingredients.
                 $food_amounts = [];
                 $weight = 0;
-                // TODO: Handle removals.
                 foreach (array_filter($input['ingredients']['id']) as $key => $food_id) {
-                    $food_amounts[$key] = $recipe->foodAmounts[$key] ?? new FoodAmount();
+                    if (!is_null($input['ingredients']['original_key'][$key])) {
+                        $food_amounts[$key] = $recipe->foodAmounts[$input['ingredients']['original_key'][$key]];
+                    }
+                    else {
+                        $food_amounts[$key] = new FoodAmount();
+                    }
                     $food_amounts[$key]->fill([
                         'amount' => Number::floatFromString($input['ingredients']['amount'][$key]),
                         'unit' => $input['ingredients']['unit'][$key],
