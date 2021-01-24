@@ -9,15 +9,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <div x-data="foods()" x-init="loadMore()">
-                        <x-inputs.input type="text"
-                                        name="search"
-                                        placeholder="Search..."
-                                        autocomplete="off"
-                                        class="w-full mb-4"
-                                        @input.debounce.400ms="search($event)" />
-                        <div class="grid grid-cols-3 gap-4">
-                            <template x-for="food in foods" :key="food">
+                    <x-search-view :route="route('api:v1:foods.index')">
+                        <x-slot name="results">
+                            <template x-for="food in results" :key="food">
                                 <div class="p-2 font-light rounded-t border-2 border-gray-400">
                                     <a class="h-6 w-6 text-gray-500 hover:text-gray-700 hover:border-gray-300 float-right text-sm"
                                        x-bind:href="food.editUrl">
@@ -52,66 +46,10 @@
                                     </div>
                                 </div>
                             </template>
-                        </div>
-                        <x-inputs.button
-                            class="text-xl mt-4"
-                            color="blue"
-                            type="button"
-                            x-show="morePages"
-                            @click.prevent="loadMore()">
-                            Load more
-                        </x-inputs.button>
-                    </div>
+                        </x-slot>
+                    </x-search-view>
                 </div>
             </div>
         </div>
     </div>
-
-    @once
-        @push('scripts')
-            <script type="text/javascript">
-                let foods = () => {
-                    return {
-                        foods: [],
-                        number: 1,
-                        size: 12,
-                        morePages: true,
-                        searchTerm: '{{ $defaultSearch ?? null }}',
-                        reset() {
-                            this.foods = [];
-                            this.number = 1;
-                            this.searchTerm = null;
-                            this.morePages = true;
-                        },
-                        loadMore() {
-                            let url = `{{ route('api:v1:foods.index') }}?page[number]=${this.number}&page[size]=${this.size}`;
-                            if (this.searchTerm) {
-                                url += `&filter[search]=${this.searchTerm}`;
-                            }
-                            fetch(url)
-                                .then(response => response.json())
-                                .then(data => {
-                                    this.foods = [...this.foods, ...data.data.map(food => food.attributes)];
-                                    if (this.number >= data.meta.page['last-page']) {
-                                        this.morePages = false;
-                                    } else {
-                                        this.number++;
-                                    }
-                                });
-                        },
-                        search(e) {
-                            this.reset();
-                            if (e.target.value !== '') {
-                                this.searchTerm = e.target.value;
-                                this.loadMore();
-                            }
-                            else {
-                                this.loadMore();
-                            }
-                        }
-                    }
-                }
-            </script>
-        @endpush
-    @endonce
 </x-app-layout>

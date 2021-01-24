@@ -26,8 +26,7 @@ class RecipeController extends Controller
      */
     public function index(): View
     {
-        return view('recipes.index')
-            ->with('recipes', Recipe::all()->sortBy('name'));
+        return view('recipes.index');
     }
 
     /**
