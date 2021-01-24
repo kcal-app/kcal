@@ -30,7 +30,7 @@ class FoodSchema extends SchemaProvider
     public function getAttributes($resource)
     {
         return [
-            'name' => $resource->created_at,
+            'name' => $resource->name,
             'detail' => $resource->detail,
             'brand' => $resource->brand,
             'calories' => $resource->calories,
