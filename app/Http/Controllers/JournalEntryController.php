@@ -12,6 +12,7 @@ use App\Rules\ArrayNotEmpty;
 use App\Rules\InArray;
 use App\Rules\StringIsDecimalOrFraction;
 use App\Rules\UsesIngredientTrait;
+use App\Support\ArrayFormat;
 use App\Support\Number;
 use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
@@ -99,52 +100,62 @@ class JournalEntryController extends Controller
             'ingredients.type.*' => ['required_with:ingredients.id.*', 'nullable', new UsesIngredientTrait()],
         ]);
 
-        $summary = [];
-        $nutrients = array_fill_keys(Nutrients::$all, 0);
+        $ingredients = ArrayFormat::flipTwoDimensionalKeys($input['ingredients']);
 
+        /** @var \App\Models\JournalEntry[] $entries */
+        $entries = [];
         // TODO: Improve efficiency? Potential for lots of queries here...
-        foreach ($input['ingredients']['id'] as $key => $id) {
-            if ($input['ingredients']['type'][$key] == Food::class) {
-                $food = Food::whereId($id)->first();
-                $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier(
-                    $food,
-                    Number::floatFromString($input['ingredients']['amount'][$key]),
-                    $input['ingredients']['unit'][$key],
-                );
-                foreach ($nutrients as $nutrient => $amount) {
-                    $nutrients[$nutrient] += $food->{$nutrient} * $nutrient_multiplier;
+        foreach ($ingredients as $ingredient) {
+            // Prepare entry values.
+            /**
+             * @var string $date
+             * @var string $meal
+             * @var float $amount
+             * @var string $unit
+             * @var int $id
+             * @var string $type
+             */
+            extract($ingredient, EXTR_OVERWRITE);
+            $entry_key = "{$date}{$meal}";
+            $entries[$entry_key] = $entries[$entry_key] ?? JournalEntry::make([
+                'date' => $date,
+                'meal' => $meal,
+            ])->user()->associate(Auth::user());
+
+            // Calculate amounts based on ingredient type.
+            if ($type == Food::class) {
+                $item = Food::whereId($id)->first();
+                $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier($item, Number::floatFromString($amount), $unit,);
+                foreach (Nutrients::$all as $nutrient) {
+                    $entries[$entry_key]->{$nutrient} =+ $item->{$nutrient} * $nutrient_multiplier;
                 }
-                $summary[] = "{$input['ingredients']['amount'][$key]} {$input['ingredients']['unit'][$key]} {$food->name}";
+                $entries[$entry_key]->foods->add($item);
             }
-            elseif ($input['ingredients']['type'][$key] == Recipe::class) {
-                $recipe = Recipe::whereId($id)->first();
-                foreach ($nutrients as $nutrient => $amount) {
-                    $nutrients[$nutrient] += $recipe->{"{$nutrient}PerServing"}() * Number::floatFromString($input['ingredients']['amount'][$key]);
+            elseif ($type == Recipe::class) {
+                $item = Recipe::whereId($id)->first();
+                foreach (Nutrients::$all as $nutrient) {
+                    $entries[$entry_key]->{$nutrient} += $item->{"{$nutrient}PerServing"}() * Number::floatFromString($amount);
                 }
-                $summary[] = "{$input['ingredients']['amount'][$key]} {$input['ingredients']['unit'][$key]} {$recipe->name}";
+                $entries[$entry_key]->recipes->add($item);
             }
+            else {
+                return back()->withInput()->withErrors("Invalid ingredient type {$type}.");
+            }
+
+            // Update summary
+            $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null) . "{$amount} {$unit} {$item->name}";
         }
 
-        $entry = new JournalEntry([
-            'summary' => implode(', ', $summary),
-            'date' => $input['date'],
-            'meal' => $input['meal'],
-        ] + $nutrients);
-        $entry->user()->associate(Auth::user());
-        if ($entry->save()) {
-            if (isset($foods)) {
-                $entry->foods()->saveMany($foods);
-            }
-            if (isset($recipes)) {
-                $entry->recipes()->saveMany($recipes);
-            }
+        foreach ($entries as $entry) {
+            $entry->save();
+            $entry->user->save();
+            $entry->foods()->saveMany($entry->foods);
+            $entry->recipes()->saveMany($entry->recipes);
         }
 
-        session()->flash('message', "Journal entry added!");
-        return redirect()->route(
-            'journal-entries.index',
-            ['date' => $entry->date->format('Y-m-d')]
-        );
+        $count = count($entries);
+        session()->flash('message', "Added {$count} journal entries!");
+        return redirect()->route('journal-entries.index');
     }
 
     /**

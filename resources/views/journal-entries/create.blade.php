@@ -34,9 +34,7 @@
                             </x-inputs.icon-button>
                         </div>
                         <div class="flex items-center justify-end mt-4">
-                            <x-inputs.button class="ml-3">
-                                {{ __('Add') }}
-                            </x-inputs.button>
+                            <x-inputs.button class="ml-3">Add entries</x-inputs.button>
                         </div>
                     </form>
                 </div>
