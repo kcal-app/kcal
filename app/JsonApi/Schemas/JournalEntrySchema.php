@@ -8,26 +8,22 @@ class JournalEntrySchema extends SchemaProvider
 {
 
     /**
-     * @var string
+     * {@inheritdoc}
      */
     protected $resourceType = 'journal-entries';
 
     /**
-     * @param \App\Models\JournalEntry $resource
-     *      the domain record being serialized.
-     * @return string
+     * {@inheritdoc}
      */
-    public function getId($resource)
+    public function getId($resource): string
     {
         return (string) $resource->getRouteKey();
     }
 
     /**
-     * @param \App\Models\JournalEntry $resource
-     *      the domain record being serialized.
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAttributes($resource)
+    public function getAttributes($resource): array
     {
         return [
             'calories' => $resource->calories,

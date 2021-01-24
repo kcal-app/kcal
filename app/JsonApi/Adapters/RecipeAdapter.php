@@ -2,6 +2,7 @@
 
 namespace App\JsonApi\Adapters;
 
+use App\Models\Recipe;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\HasMany;
 use CloudCreativity\LaravelJsonApi\Eloquent\MorphHasMany;
@@ -31,7 +32,7 @@ class RecipeAdapter extends AbstractAdapter
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new \App\Models\Recipe(), $paging);
+        parent::__construct(new Recipe(), $paging);
     }
 
     /**
@@ -54,6 +55,14 @@ class RecipeAdapter extends AbstractAdapter
      * Step relationships.
      */
     protected function steps(): HasMany
+    {
+        return $this->hasMany();
+    }
+
+    /**
+     * Tag relationships.
+     */
+    protected function tags(): HasMany
     {
         return $this->hasMany();
     }

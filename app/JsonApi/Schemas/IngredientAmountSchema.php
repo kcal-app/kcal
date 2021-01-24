@@ -8,26 +8,22 @@ class IngredientAmountSchema extends SchemaProvider
 {
 
     /**
-     * @var string
+     * {@inheritdoc}
      */
     protected $resourceType = 'ingredient-amounts';
 
     /**
-     * @param \App\Models\IngredientAmount $resource
-     *      the domain record being serialized.
-     * @return string
+     * {@inheritdoc}
      */
-    public function getId($resource)
+    public function getId($resource): string
     {
         return (string) $resource->getRouteKey();
     }
 
     /**
-     * @param \App\Models\IngredientAmount $resource
-     *      the domain record being serialized.
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAttributes($resource)
+    public function getAttributes($resource): array
     {
         return [
             'amount' => $resource->amount,

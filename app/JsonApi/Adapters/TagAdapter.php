@@ -2,13 +2,12 @@
 
 namespace App\JsonApi\Adapters;
 
-use App\Models\RecipeStep;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
-use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
+use Spatie\Tags\Tag;
 
-class RecipeStepAdapter extends AbstractAdapter
+class TagAdapter extends AbstractAdapter
 {
 
     /**
@@ -24,14 +23,14 @@ class RecipeStepAdapter extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    protected $defaultSort = ['number'];
+    protected $defaultSort = ['name'];
 
     /**
      * {@inheritdoc}
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new RecipeStep(), $paging);
+        parent::__construct(new Tag(), $paging);
     }
 
     /**
@@ -40,14 +39,6 @@ class RecipeStepAdapter extends AbstractAdapter
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
-    }
-
-    /**
-     * Recipe relationship.
-     */
-    protected function recipe(): BelongsTo
-    {
-        return $this->belongsTo();
     }
 
 }

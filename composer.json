@@ -12,7 +12,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
-        "phospr/fraction": "^1.2"
+        "phospr/fraction": "^1.2",
+        "spatie/laravel-tags": "^3.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9",

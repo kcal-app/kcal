@@ -9,6 +9,7 @@ use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Tags\HasTags;
 
 /**
  * App\Models\Recipe
@@ -44,10 +45,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $ingredients_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountChildren
  * @property-read int|null $ingredient_amount_children_count
+ * @property-read string $type
+ * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Tags\Tag[] $tags
+ * @property-read int|null $tags_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAllTags($tags, ?string $type = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAllTagsOfAnyType($tags)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTags($tags, ?string $type = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTagsOfAnyType($tags)
  */
 class Recipe extends Model
 {
-    use HasFactory, HasIngredients, Ingredient, Journalable, Sluggable;
+    use HasFactory, HasIngredients, HasTags, Ingredient, Journalable, Sluggable;
 
     /**
      * @inheritdoc

@@ -8,26 +8,22 @@ class FoodSchema extends SchemaProvider
 {
 
     /**
-     * @var string
+     * {@inheritdoc}
      */
     protected $resourceType = 'foods';
 
     /**
-     * @param \App\Models\Food $resource
-     *      the domain record being serialized.
-     * @return string
+     * {@inheritdoc}
      */
-    public function getId($resource)
+    public function getId($resource): string
     {
         return (string) $resource->getRouteKey();
     }
 
     /**
-     * @param \App\Models\Food $resource
-     *      the domain record being serialized.
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAttributes($resource)
+    public function getAttributes($resource): array
     {
         return [
             'name' => $resource->name,
@@ -45,6 +41,23 @@ class FoodSchema extends SchemaProvider
             'servingWeight' => $resource->serving_weight,
             'createdAt' => $resource->created_at,
             'updatedAt' => $resource->updated_at,
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRelationships($resource, $isPrimary, array $includeRelationships): array
+    {
+        return [
+            'tags' => [
+                self::SHOW_SELF => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA => isset($includeRelationships['tags']),
+                self::DATA => function () use ($resource) {
+                    return $resource->tags;
+                },
+            ]
         ];
     }
 }

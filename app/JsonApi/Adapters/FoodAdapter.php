@@ -2,9 +2,10 @@
 
 namespace App\JsonApi\Adapters;
 
+use App\Models\Food;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
+use CloudCreativity\LaravelJsonApi\Eloquent\HasMany;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class FoodAdapter extends AbstractAdapter
@@ -30,7 +31,7 @@ class FoodAdapter extends AbstractAdapter
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new \App\Models\Food(), $paging);
+        parent::__construct(new Food(), $paging);
     }
 
     /**
@@ -46,6 +47,14 @@ class FoodAdapter extends AbstractAdapter
         else {
             $this->filterWithScopes($query, $filters);
         }
+    }
+
+    /**
+     * Tag relationships.
+     */
+    protected function tags(): HasMany
+    {
+        return $this->hasMany();
     }
 
 }

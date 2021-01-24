@@ -2,7 +2,6 @@
 
 namespace App\JsonApi\Schemas;
 
-use CloudCreativity\LaravelJsonApi\Eloquent\HasMany;
 use Neomerx\JsonApi\Schema\SchemaProvider;
 
 class RecipeSchema extends SchemaProvider
@@ -14,21 +13,17 @@ class RecipeSchema extends SchemaProvider
     protected $resourceType = 'recipes';
 
     /**
-     * @param \App\Models\Recipe $resource
-     *      the domain record being serialized.
-     * @return string
+     * {@inheritdoc}
      */
-    public function getId($resource)
+    public function getId($resource): string
     {
         return (string) $resource->getRouteKey();
     }
 
     /**
-     * @param \App\Models\Recipe $resource
-     *      the domain record being serialized.
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAttributes($resource)
+    public function getAttributes($resource): array
     {
         return [
             'name' => $resource->name,
@@ -58,6 +53,14 @@ class RecipeSchema extends SchemaProvider
     public function getRelationships($resource, $isPrimary, array $includeRelationships): array
     {
         return [
+            'ingredient-amounts' => [
+                self::SHOW_SELF => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA => isset($includeRelationships['ingredient-amounts']),
+                self::DATA => function () use ($resource) {
+                    return $resource->ingredientAmounts;
+                },
+            ],
             'steps' => [
                 self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
@@ -66,12 +69,12 @@ class RecipeSchema extends SchemaProvider
                     return $resource->steps;
                 },
             ],
-            'ingredient-amounts' => [
+            'tags' => [
                 self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
-                self::SHOW_DATA => isset($includeRelationships['ingredient-amounts']),
+                self::SHOW_DATA => isset($includeRelationships['tags']),
                 self::DATA => function () use ($resource) {
-                    return $resource->ingredientAmounts;
+                    return $resource->tags;
                 },
             ]
         ];

@@ -8,26 +8,22 @@ class RecipeStepSchema extends SchemaProvider
 {
 
     /**
-     * @var string
+     * {@inheritdoc}
      */
     protected $resourceType = 'recipe-steps';
 
     /**
-     * @param \App\Models\RecipeStep $resource
-     *      the domain record being serialized.
-     * @return string
+     * {@inheritdoc}
      */
-    public function getId($resource)
+    public function getId($resource): string
     {
         return (string) $resource->getRouteKey();
     }
 
     /**
-     * @param \App\Models\RecipeStep $resource
-     *      the domain record being serialized.
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAttributes($resource)
+    public function getAttributes($resource): array
     {
         return [
             'number' => $resource->number,

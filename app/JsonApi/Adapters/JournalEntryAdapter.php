@@ -2,6 +2,7 @@
 
 namespace App\JsonApi\Adapters;
 
+use App\Models\JournalEntry;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Eloquent\MorphHasMany;
@@ -31,7 +32,7 @@ class JournalEntryAdapter extends AbstractAdapter
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new \App\Models\JournalEntry(), $paging);
+        parent::__construct(new JournalEntry(), $paging);
     }
 
     /**

@@ -4,13 +4,13 @@ namespace App\JsonApi\Schemas;
 
 use Neomerx\JsonApi\Schema\SchemaProvider;
 
-class UserSchema extends SchemaProvider
+class TagSchema extends SchemaProvider
 {
 
     /**
      * {@inheritdoc}
      */
-    protected $resourceType = 'users';
+    protected $resourceType = 'tags';
 
     /**
      * {@inheritdoc}
@@ -27,9 +27,8 @@ class UserSchema extends SchemaProvider
     {
         return [
             'name' => $resource->name,
-            'email' => $resource->email,
-            'createdAt' => $resource->created_at,
-            'updatedAt' => $resource->updated_at,
+            'slug' => $resource->slug,
         ];
     }
+
 }

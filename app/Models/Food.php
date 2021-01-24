@@ -9,6 +9,7 @@ use App\Support\Number;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Tags\HasTags;
 
 /**
  * App\Models\Food
@@ -57,10 +58,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $ingredient_amounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountChildren
  * @property-read int|null $ingredient_amount_children_count
+ * @property-read string $type
+ * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Tags\Tag[] $tags
+ * @property-read int|null $tags_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Food withAllTags($tags, ?string $type = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Food withAllTagsOfAnyType($tags)
+ * @method static \Illuminate\Database\Eloquent\Builder|Food withAnyTags($tags, ?string $type = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Food withAnyTagsOfAnyType($tags)
  */
 class Food extends Model
 {
-    use HasFactory, Ingredient, Journalable, Sluggable;
+    use HasFactory, HasTags, Ingredient, Journalable, Sluggable;
 
     /**
      * @inheritdoc
