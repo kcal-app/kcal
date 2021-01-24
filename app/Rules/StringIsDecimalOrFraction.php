@@ -8,11 +8,7 @@ use Illuminate\Contracts\Validation\Rule;
 class StringIsDecimalOrFraction implements Rule
 {
     /**
-     * Determine if the string is a decimal or fraction, excluding zero.
-     *
-     * @param string $attribute
-     * @param mixed $value
-     * @return bool
+     * {@inheritdoc}
      */
     public function passes($attribute, $value): bool
     {
@@ -27,9 +23,7 @@ class StringIsDecimalOrFraction implements Rule
     }
 
     /**
-     * Get the validation error message.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function message(): string
     {

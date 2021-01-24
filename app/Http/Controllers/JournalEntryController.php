@@ -9,6 +9,7 @@ use App\Models\Food;
 use App\Models\JournalEntry;
 use App\Models\Recipe;
 use App\Rules\ArrayNotEmpty;
+use App\Rules\InArray;
 use App\Rules\StringIsDecimalOrFraction;
 use App\Rules\UsesIngredientTrait;
 use App\Support\Number;
@@ -44,10 +45,18 @@ class JournalEntryController extends Controller
         $ingredients = [];
         if ($old = old('ingredients')) {
             foreach ($old['amount'] as $key => $amount) {
-                if (empty($amount) && empty($old['unit'][$key]) && empty($old['id'][$key])) {
+                if (
+                    empty($old['date'][$key])
+                    && empty($old['meal'][$key])
+                    && empty($amount)
+                    && empty($old['unit'][$key])
+                    && empty($old['id'][$key])
+                ) {
                     continue;
                 }
                 $ingredients[] = [
+                    'date' => $old['date'][$key],
+                    'meal' => $old['meal'][$key],
                     'amount' => $amount,
                     'unit' => $old['unit'][$key],
                     'id' => $old['id'][$key],
@@ -59,12 +68,7 @@ class JournalEntryController extends Controller
 
         return view('journal-entries.create')
             ->with('ingredients', $ingredients)
-            ->with('meals', [
-                ['value' => 'breakfast', 'label' => 'Breakfast'],
-                ['value' => 'lunch', 'label' => 'Lunch'],
-                ['value' => 'dinner', 'label' => 'Dinner'],
-                ['value' => 'snacks', 'label' => 'Snacks'],
-            ])
+            ->with('meals', JournalEntry::$meals)
             ->with('units', [
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
@@ -81,12 +85,14 @@ class JournalEntryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $input = $request->validate([
-            'date' => 'required|date',
-            'meal' => 'required|string',
+            'ingredients.date' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.date.*' => ['nullable', 'date', 'required_with:ingredients.id.*'],
+            'ingredients.meal' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.meal.*' => ['nullable', 'string', 'required_with:ingredients.id.*', new InArray(array_column(JournalEntry::$meals, 'value'))],
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.amount.*' => ['required_with:foods.*,recipes.*', 'nullable', new StringIsDecimalOrFraction],
-            'ingredients.unit' => 'required|array',
-            'ingredients.unit.*' => 'nullable|string',
+            'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
+            'ingredients.unit' => ['required', 'array'],
+            'ingredients.unit.*' => ['nullable', 'string'],
             'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
             'ingredients.type' => ['required', 'array', new ArrayNotEmpty],

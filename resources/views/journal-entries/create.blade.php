@@ -11,39 +11,13 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="{{ route('journal-entries.store') }}">
                     @csrf
-                        <div class="flex flex-row mb-4 space-x-4">
-                            <!-- Date -->
-                            <div>
-                                <x-inputs.label for="date" :value="__('Date')"/>
-
-                                <x-inputs.input id="date"
-                                                class="block mt-1"
-                                                type="date"
-                                                name="date"
-                                                :value="old('date', \Illuminate\Support\Carbon::now()->toDateString())"
-                                                required />
-                            </div>
-
-                            <!-- Meal -->
-                            <div>
-                                <x-inputs.label for="meal" :value="__('Meal')"/>
-
-                                <x-inputs.select name="meal"
-                                                 class="block mt-1"
-                                                 :options="$meals"
-                                                 :selectedValue="old('meal')"
-                                                 required>
-                                    <option value=""></option>
-                                </x-inputs.select>
-                            </div>
-                        </div>
-
-                        <!-- Items -->
-                        <div x-data="{ ingredients: 0 }">
+                        <div x-data="{ ingredients: {{ empty($ingredients) ? 0 : -1 }} }">
                             <div class="grid grid-cols-12 gap-4 items-center">
-                                <x-inputs.label for="amounts" value="Amount"/>
-                                <x-inputs.label for="units" value="Unit" class="col-span-2"/>
-                                <x-inputs.label for="foods" value="Food or Recipe" class="col-span-8"/>
+                                <x-inputs.label for="ingredients[date][]" value="Date" class="col-span-2"/>
+                                <x-inputs.label for="ingredients[meal][]" value="Meal" class="col-span-2"/>
+                                <x-inputs.label for="ingredients[amount][]" value="Amount"/>
+                                <x-inputs.label for="ingredients[unit][]" value="Unit" class="col-span-2"/>
+                                <x-inputs.label for="ingredients[id][]" value="Food or Recipe" class="col-span-4"/>
                             </div>
                             <div>
                                 @foreach($ingredients as $ingredient)

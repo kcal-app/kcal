@@ -87,6 +87,16 @@ class JournalEntry extends Model
     protected $with = ['user', 'foods:id,name,slug', 'recipes:id,name,slug'];
 
     /**
+     * Valid meal options.
+     */
+    public static array $meals = [
+        ['value' => 'breakfast', 'label' => 'Breakfast'],
+        ['value' => 'lunch', 'label' => 'Lunch'],
+        ['value' => 'dinner', 'label' => 'Dinner'],
+        ['value' => 'snacks', 'label' => 'Snacks'],
+    ];
+
+    /**
      * Get the User this entry belongs to.
      */
     public function user(): BelongsTo {

@@ -7,11 +7,7 @@ use Illuminate\Contracts\Validation\Rule;
 class ArrayNotEmpty implements Rule
 {
     /**
-     * Determine if the array is empty.
-     *
-     * @param string $attribute
-     * @param mixed $value
-     * @return bool
+     * {@inheritdoc}
      */
     public function passes($attribute, $value): bool
     {
@@ -19,9 +15,7 @@ class ArrayNotEmpty implements Rule
     }
 
     /**
-     * Get the validation error message.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function message(): string
     {

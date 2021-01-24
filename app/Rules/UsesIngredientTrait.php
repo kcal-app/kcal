@@ -8,11 +8,7 @@ use Illuminate\Contracts\Validation\Rule;
 class UsesIngredientTrait implements Rule
 {
     /**
-     * Determine if the array is empty.
-     *
-     * @param string $attribute
-     * @param mixed $value
-     * @return bool
+     * {@inheritdoc}
      */
     public function passes($attribute, $value): bool
     {
@@ -23,9 +19,7 @@ class UsesIngredientTrait implements Rule
     }
 
     /**
-     * Get the validation error message.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function message(): string
     {
