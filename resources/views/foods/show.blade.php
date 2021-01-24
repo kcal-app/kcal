@@ -1,4 +1,1 @@
-@php
-    $foods = [$food];
-@endphp
-@include('foods.index')
+@include('foods.index', ['defaultSearch' => $food->name])

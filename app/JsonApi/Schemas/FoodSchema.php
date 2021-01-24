@@ -26,6 +26,7 @@ class FoodSchema extends SchemaProvider
     public function getAttributes($resource): array
     {
         return [
+            'slug' => $resource->slug,
             'name' => $resource->name,
             'detail' => $resource->detail,
             'brand' => $resource->brand,
@@ -41,6 +42,8 @@ class FoodSchema extends SchemaProvider
             'servingWeight' => $resource->serving_weight,
             'createdAt' => $resource->created_at,
             'updatedAt' => $resource->updated_at,
+            'showUrl' => route('foods.show', $resource),
+            'editUrl' => route('foods.edit', $resource),
         ];
     }
 

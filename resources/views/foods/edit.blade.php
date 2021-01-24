@@ -110,7 +110,12 @@
                                         </div>
                                 @endforeach
                             </div>
+
+                            <!-- Tags -->
+                            <x-tagger :defaultTags="$food->tags->pluck('name')"/>
+
                         </div>
+
                         <div class="flex items-center justify-end mt-4">
                             <x-inputs.button class="ml-3">
                                 {{ ($food->exists ? 'Save' : 'Add') }}

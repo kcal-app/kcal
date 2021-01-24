@@ -15,10 +15,18 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="mb-2 text-gray-500 text-sm">
-                        <span class="font-extrabold">Source:</span>
-                        {{ $recipe->source }}
-                    </div>
+                    @if($recipe->tags)
+                        <div class="mb-2 text-gray-700 text-sm">
+                            <span class="font-extrabold">Tags:</span>
+                            {{ implode(', ', $recipe->tags->pluck('name')->all()) }}
+                        </div>
+                    @endif
+                    @if($recipe->source)
+                        <div class="mb-2 text-gray-500 text-sm">
+                            <span class="font-extrabold">Source:</span>
+                            {{ $recipe->source }}
+                        </div>
+                    @endif
                     <h3 class="mb-2 font-bold">Description</h3>
                     <div class="mb-2 text-gray-800">{{ $recipe->description }}</div>
                     <h3 class="mb-2 font-bold">Ingredients</h3>

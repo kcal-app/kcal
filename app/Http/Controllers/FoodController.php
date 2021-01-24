@@ -19,8 +19,7 @@ class FoodController extends Controller
      */
     public function index(): View
     {
-        return view('foods.index')
-            ->with('foods', Food::all()->sortBy('name'));
+        return view('foods.index');
     }
 
     /**
@@ -86,8 +85,13 @@ class FoodController extends Controller
         $attributes['serving_size'] = Number::floatFromString($attributes['serving_size']);
         $attributes['name'] = Str::lower($attributes['name']);
         $food->fill(array_filter($attributes))->save();
-        return redirect(route('foods.show', $food))
-            ->with('message', 'Changes saved!');
+
+        // Sync tags.
+        $tags = explode(',', $request->get('tags'));
+        $food->syncTags($tags);
+
+        session()->flash('message', "Food {$food->name} updated!");
+        return redirect()->route('foods.show', $food);
     }
 
     /**

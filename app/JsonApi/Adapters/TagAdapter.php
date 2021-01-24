@@ -38,7 +38,12 @@ class TagAdapter extends AbstractAdapter
      */
     protected function filter($query, Collection $filters)
     {
-        $this->filterWithScopes($query, $filters);
+        if ($term = $filters->get('name')) {
+            $query->where('tags.name', 'like', "%{$term}%");
+        }
+        else {
+            $this->filterWithScopes($query, $filters);
+        }
     }
 
 }

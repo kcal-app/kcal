@@ -26,6 +26,7 @@ class RecipeSchema extends SchemaProvider
     public function getAttributes($resource): array
     {
         return [
+            'slug' => $resource->slug,
             'name' => $resource->name,
             'description' => $resource->description,
             'source' => $resource->source,
@@ -44,6 +45,8 @@ class RecipeSchema extends SchemaProvider
             'sodiumTotal' => $resource->sodiumTotal(),
             'createdAt' => $resource->created_at,
             'updatedAt' => $resource->updated_at,
+            'showUrl' => route('recipes.show', $resource),
+            'editUrl' => route('recipes.edit', $resource),
         ];
     }
 

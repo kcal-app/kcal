@@ -186,6 +186,10 @@ class RecipeController extends Controller
             'servings' => (int) $input['servings'],
         ]);
 
+        // Sync tags.
+        $tags = explode(',', $request->get('tags'));
+        $recipe->syncTags($tags);
+
         try {
             DB::transaction(function () use ($recipe, $input) {
                 if (!$recipe->save()) {

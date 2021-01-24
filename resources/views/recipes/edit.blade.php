@@ -39,16 +39,6 @@
                                 </div>
                             </div>
 
-                            <!-- Description -->
-                            <div>
-                                <x-inputs.label for="description" :value="__('Description')" />
-
-                                <x-inputs.textarea id="description"
-                                                   class="block mt-1 w-full"
-                                                   name="description"
-                                                   :value="old('description', $recipe->description)" />
-                            </div>
-
                             <!-- Source -->
                             <div>
                                 <x-inputs.label for="source" :value="__('Source')" />
@@ -59,6 +49,19 @@
                                                 name="source"
                                                 :value="old('source', $recipe->source)" />
                             </div>
+
+                            <!-- Description -->
+                            <div>
+                                <x-inputs.label for="description" :value="__('Description')" />
+
+                                <x-inputs.textarea id="description"
+                                                   class="block mt-1 w-full"
+                                                   name="description"
+                                                   :value="old('description', $recipe->description)" />
+                            </div>
+
+                            <!-- Tags -->
+                            <x-tagger :defaultTags="$recipe->tags->pluck('name')"/>
                         </div>
 
                         <!-- Ingredients -->
