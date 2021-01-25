@@ -4,7 +4,7 @@
         <x-inputs.input class="block w-full"
                         type="date"
                         name="ingredients[date][]"
-                        :value="$date ?? \Illuminate\Support\Carbon::now()->toDateString()"
+                        :value="$date ?? $default_date->toDateString()"
                         required />
     </div>
 

@@ -22,7 +22,7 @@
                                     @include('journal-entries.partials.entry-item-input', $ingredient)
                                 @endforeach
                                 <template x-for="i in ingredients + 1">
-                                    @include('journal-entries.partials.entry-item-input')
+                                    @include('journal-entries.partials.entry-item-input', ['default_date' => $default_date])
                                 </template>
                             </div>
                             <x-inputs.icon-button type="button" color="green" x-on:click="ingredients++;">

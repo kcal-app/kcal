@@ -13,9 +13,9 @@
                         @if ($food->exists)@method('put')@endif
                         @csrf
                         <div class="flex flex-col space-y-4">
-                            <div class="grid grid-cols-3 gap-4">
+                            <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
                                 <!-- Name -->
-                                <div>
+                                <div class="flex-auto">
                                     <x-inputs.label for="name" value="Name"/>
 
                                     <x-inputs.input id="name"
@@ -27,7 +27,7 @@
                                 </div>
 
                                 <!-- Detail -->
-                                <div>
+                                <div class="flex-auto">
                                     <x-inputs.label for="detail" value="Detail"/>
 
                                     <x-inputs.input id="detail"
@@ -38,7 +38,7 @@
                                 </div>
 
                                 <!-- Brand -->
-                                <div>
+                                <div class="flex-auto">
                                     <x-inputs.label for="brand" value="Brand"/>
 
                                     <x-inputs.input id="brand"
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center space-x-4">
+                            <div class="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                                 <!-- Serving size -->
                                 @php
                                 if (!empty($food->serving_size)) {
@@ -62,7 +62,7 @@
                                     <x-inputs.label for="serving_size" value="Serving size"/>
 
                                     <x-inputs.input id="serving_size"
-                                                    class="block mt-1"
+                                                    class="block mt-1 w-full"
                                                     type="text"
                                                     name="serving_size"
                                                     size="10"
@@ -74,6 +74,7 @@
                                     <x-inputs.label for="serving_unit" value="Serving unit"/>
 
                                     <x-inputs.select name="serving_unit"
+                                                     class="block mt-1 w-full"
                                                      :options="$serving_units"
                                                      :selectedValue="old('serving_unit', $food->serving_unit)">
                                         <option value=""></option>
@@ -85,7 +86,7 @@
                                     <x-inputs.label for="serving_weight" value="Serving weight (g)"/>
 
                                     <x-inputs.input id="serving_weight"
-                                                    class="block mt-1"
+                                                    class="block mt-1 w-full"
                                                     type="number"
                                                     step="any"
                                                     name="serving_weight"
@@ -94,7 +95,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-col md:flex-row">
+                            <div class="flex flex-col space-y-4 md:flex-row md:space-y-0">
                                 @foreach ($nutrients as $nutrient)
                                         <!-- {{ ucfirst($nutrient) }} -->
                                         <div class="flex-auto">
@@ -102,7 +103,7 @@
                                                             :value="ucfirst($nutrient) . ' (g)'"/>
 
                                             <x-inputs.input id="{{ $nutrient }}"
-                                                            class="block w-5/6 mt-1"
+                                                            class="block w-full mt-1 md:w-5/6"
                                                             type="number"
                                                             step="any"
                                                             name="{{ $nutrient }}"

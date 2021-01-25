@@ -25,7 +25,8 @@
                     <div class="p-1 border-b-2 border-gray-500 hover:bg-yellow-300 cursor-pointer"
                          x-bind:data-id="result.id"
                          x-bind:data-type="result.type"
-                         x-bind:data-name="result.name">
+                         x-bind:data-name="result.name"
+                         x-bind:data-detail="result.detail">
                         <div class="pointer-events-none">
                             <div>
                                 <span x-text="result.name"></span><span class="text-gray-600" x-text="', ' + result.detail" x-show="result.detail"></span>
@@ -77,7 +78,7 @@
                             if (selected.dataset.id) {
                                 this.$refs.ingredients.value = selected.dataset.id;
                                 this.$refs.ingredients_type.value = selected.dataset.type;
-                                this.$refs.ingredients_name.value = selected.dataset.name;
+                                this.$refs.ingredients_name.value = `${selected.dataset.name}, ${selected.dataset.detail}`;
                                 this.searching = false;
                             }
                         }

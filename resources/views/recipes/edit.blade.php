@@ -12,35 +12,33 @@
                     <form method="POST" action="{{ ($recipe->exists ? route('recipes.update', $recipe) : route('recipes.store')) }}">
                     @if ($recipe->exists)@method('put')@endif
                     @csrf
-                        <div class="flex flex-col space-y-4">
-                            <div class="grid grid-cols-5 gap-4">
-                                <!-- Name -->
-                                <div class="col-span-4">
-                                    <x-inputs.label for="name" value="Name" />
+                        <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+                            <!-- Name -->
+                            <div class="flex-auto">
+                                <x-inputs.label for="name" value="Name" />
 
-                                    <x-inputs.input id="name"
-                                                    class="block mt-1 w-full"
-                                                    type="text"
-                                                    name="name"
-                                                    :value="old('name', $recipe->name)"
-                                                    required />
-                                </div>
+                                <x-inputs.input id="name"
+                                                class="block mt-1 w-full"
+                                                type="text"
+                                                name="name"
+                                                :value="old('name', $recipe->name)"
+                                                required />
+                            </div>
 
-                                <!-- Servings -->
-                                <div>
-                                    <x-inputs.label for="servings" value="Servings" />
+                            <!-- Servings -->
+                            <div class="flex-auto">
+                                <x-inputs.label for="servings" value="Servings" />
 
-                                    <x-inputs.input id="servings"
-                                                    class="block mt-1 w-full"
-                                                    type="number"
-                                                    name="servings"
-                                                    :value="old('servings', $recipe->servings)"
-                                                    required />
-                                </div>
+                                <x-inputs.input id="servings"
+                                                class="block mt-1 w-full"
+                                                type="number"
+                                                name="servings"
+                                                :value="old('servings', $recipe->servings)"
+                                                required />
                             </div>
 
                             <!-- Source -->
-                            <div>
+                            <div class="flex-auto">
                                 <x-inputs.label for="source" value="Source" />
 
                                 <x-inputs.input id="source"
@@ -49,7 +47,8 @@
                                                 name="source"
                                                 :value="old('source', $recipe->source)" />
                             </div>
-
+                        </div>
+                        <div class="flex flex-col space-y-4 mt-4">
                             <!-- Description -->
                             <div>
                                 <x-inputs.label for="description" value="Description" />
@@ -65,12 +64,12 @@
                         </div>
 
                         <!-- Ingredients -->
-                        <h3 class="pt-2 mb-2 font-extrabold">Ingredients</h3>
-                        <div x-data="{ ingredients: 0 }">
+                        <h3 class="mt-6 mb-2 font-extrabold text-lg">Ingredients</h3>
+                        <div x-data="{ ingredients: 1 }" class="space-y-4">
                             @foreach($ingredients as $ingredient)
                                 @include('recipes.partials.ingredient-input', $ingredient)
                             @endforeach
-                            <template x-for="i in ingredients + 1">
+                            <template x-if="ingredients > 0" x-for="i in ingredients">
                                 @include('recipes.partials.ingredient-input')
                             </template>
                             <x-inputs.icon-button type="button" color="green" x-on:click="ingredients++;">
@@ -81,7 +80,7 @@
                         </div>
 
                         <!-- Steps -->
-                        <h3 class="pt-2 mb-2 font-extrabold">Steps</h3>
+                        <h3 class="mt-6 mb-2 font-extrabold text-lg">Steps</h3>
                         <div x-data="{ steps: 0 }">
                             @foreach($steps as $step)
                                 @include('recipes.partials.step-input', $step)

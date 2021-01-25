@@ -41,7 +41,7 @@
                                         {{ $ia->ingredient->name }}
                                     </a>
                                 @else
-                                    {{ $ia->ingredient->name }}
+                                    {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
                                 @endif
                             </div>
                             @if($ia->detail)<div class="text-gray-500">{{ $ia->detail }}</div>@endif

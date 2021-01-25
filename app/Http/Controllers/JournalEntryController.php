@@ -34,15 +34,15 @@ class JournalEntryController extends Controller
                 'user_id' => Auth::user()->id,
                 'date' => $date,
             ])->get())
-            ->with('date', Carbon::createFromFormat('Y-m-d', $date))
-            ->with('nutrients', ['calories', 'fat', 'cholesterol', 'carbohydrates', 'sodium', 'protein']);
+            ->with('date', Carbon::createFromFormat('Y-m-d', $date));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
+        $date = $request->date ?? Carbon::now()->toDateString();
         $ingredients = [];
         if ($old = old('ingredients')) {
             foreach ($old['amount'] as $key => $amount) {
@@ -77,7 +77,8 @@ class JournalEntryController extends Controller
                 ['value' => 'oz', 'label' => 'oz'],
                 ['value' => 'g', 'label' => 'grams'],
                 ['value' => 'servings', 'label' => 'servings'],
-            ]);
+            ])
+            ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
 
     /**
