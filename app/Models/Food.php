@@ -66,7 +66,7 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAnyTags($tags, ?string $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAnyTagsOfAnyType($tags)
  */
-class Food extends Model
+final class Food extends Model
 {
     use HasFactory, HasTags, Ingredient, Journalable, Sluggable;
 

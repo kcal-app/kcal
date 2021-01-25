@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  *
  * @property int $id
  * @property int $user_id
- * @property \datetime $date
+ * @property \Illuminate\Support\Carbon $date
  * @property string $summary
  * @property float $calories
  * @property float $fat
@@ -49,7 +49,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredients
  * @property-read int|null $ingredients_count
  */
-class JournalEntry extends Model
+final class JournalEntry extends Model
 {
     use HasFactory;
 

@@ -124,43 +124,38 @@ class JournalEntryController extends Controller
         // TODO: Improve efficiency? Potential for lots of queries here...
         foreach ($ingredients as $ingredient) {
             // Prepare entry values.
-            /**
-             * @var string $date
-             * @var string $meal
-             * @var float $amount
-             * @var string $unit
-             * @var int $id
-             * @var string $type
-             */
-            extract($ingredient, EXTR_OVERWRITE);
-            $entry_key = "{$date}{$meal}";
+            $entry_key = "{$ingredient['date']}{$ingredient['meal']}";
             $entries[$entry_key] = $entries[$entry_key] ?? JournalEntry::make([
-                'date' => $date,
-                'meal' => $meal,
+                'date' => $ingredient['date'],
+                'meal' => $ingredient['meal'],
             ])->user()->associate(Auth::user());
 
             // Calculate amounts based on ingredient type.
-            if ($type == Food::class) {
-                $item = Food::whereId($id)->first();
-                $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier($item, Number::floatFromString($amount), $unit,);
+            if ($ingredient['type'] == Food::class) {
+                $item = Food::whereId($ingredient['id'])->first();
+                $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier(
+                    $item,
+                    Number::floatFromString($ingredient['amount']),
+                    $ingredient['unit']
+                );
                 foreach (Nutrients::$all as $nutrient) {
                     $entries[$entry_key]->{$nutrient} =+ $item->{$nutrient} * $nutrient_multiplier;
                 }
                 $entries[$entry_key]->foods->add($item);
             }
-            elseif ($type == Recipe::class) {
-                $item = Recipe::whereId($id)->first();
+            elseif ($ingredient['type'] == Recipe::class) {
+                $item = Recipe::whereId($ingredient['id'])->first();
                 foreach (Nutrients::$all as $nutrient) {
-                    $entries[$entry_key]->{$nutrient} += $item->{"{$nutrient}PerServing"}() * Number::floatFromString($amount);
+                    $entries[$entry_key]->{$nutrient} += $item->{"{$nutrient}PerServing"}() * Number::floatFromString($ingredient['amount']);
                 }
                 $entries[$entry_key]->recipes->add($item);
             }
             else {
-                return back()->withInput()->withErrors("Invalid ingredient type {$type}.");
+                return back()->withInput()->withErrors("Invalid ingredient type {$ingredient['type']}.");
             }
 
             // Update summary
-            $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null) . "{$amount} {$unit} {$item->name}";
+            $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null) . "{$ingredient['amount']} {$ingredient['unit']} {$item->name}";
         }
 
         foreach ($entries as $entry) {

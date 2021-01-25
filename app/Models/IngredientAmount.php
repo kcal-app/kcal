@@ -23,8 +23,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string $amount_formatted
- * @property-read Model|\Eloquent $ingredient
- * @property-read Model|\Eloquent $parent
+ * @property-read \App\Models\Food|\App\Models\Recipe $ingredient
+ * @property-read \App\Models\Recipe|\App\Models\JournalEntry $parent
  * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount query()
@@ -41,7 +41,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereWeight($value)
  * @mixin \Eloquent
  */
-class IngredientAmount extends Model
+final class IngredientAmount extends Model
 {
     use HasFactory;
 

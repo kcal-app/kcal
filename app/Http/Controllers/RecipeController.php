@@ -251,14 +251,4 @@ class RecipeController extends Controller
         return redirect()->route('recipes.show', $recipe);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Recipe  $recipe
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Recipe $recipe)
-    {
-        //
-    }
 }

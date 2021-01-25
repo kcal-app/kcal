@@ -41,18 +41,21 @@ class Nutrients
             $multiplier = match ($food->serving_unit) {
                 'tbsp' => 1/3,
                 'cup' => 1/48,
+                default => throw new \DomainException(),
             };
         }
         elseif ($fromUnit === 'tbsp') {
             $multiplier = match ($food->serving_unit) {
                 'tsp' => 3,
                 'cup' => 1/16,
+                default => throw new \DomainException(),
             };
         }
         elseif ($fromUnit === 'cup') {
             $multiplier = match ($food->serving_unit) {
                 'tsp' => 48,
                 'tbsp' => 16,
+                default => throw new \DomainException(),
             };
         }
         else {

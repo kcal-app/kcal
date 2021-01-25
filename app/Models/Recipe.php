@@ -53,7 +53,7 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTags($tags, ?string $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTagsOfAnyType($tags)
  */
-class Recipe extends Model
+final class Recipe extends Model
 {
     use HasFactory, HasIngredients, HasTags, Ingredient, Journalable, Sluggable;
 

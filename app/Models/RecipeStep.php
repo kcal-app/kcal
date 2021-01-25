@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeStep whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class RecipeStep extends Model
+final class RecipeStep extends Model
 {
     use HasFactory;
 
