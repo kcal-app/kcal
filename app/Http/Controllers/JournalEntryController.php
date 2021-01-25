@@ -81,6 +81,23 @@ class JournalEntryController extends Controller
     }
 
     /**
+     * Show the form for creating a journal entry from nutrients directly.
+     */
+    public function createFromNutrients(): View
+    {
+        return view('journal-entries.create-from-nutrients')
+            ->with('meals', JournalEntry::$meals)
+            ->with('units', [
+                ['value' => 'tsp', 'label' => 'tsp.'],
+                ['value' => 'tbsp', 'label' => 'tbsp.'],
+                ['value' => 'cup', 'label' => 'cup'],
+                ['value' => 'oz', 'label' => 'oz'],
+                ['value' => 'g', 'label' => 'grams'],
+                ['value' => 'servings', 'label' => 'servings'],
+            ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request): RedirectResponse
@@ -156,6 +173,32 @@ class JournalEntryController extends Controller
         $count = count($entries);
         session()->flash('message', "Added {$count} journal entries!");
         return redirect()->route('journal-entries.index');
+    }
+
+    /**
+     * Store an entry from nutrients.
+     */
+    public function storeFromNutrients(Request $request): RedirectResponse {
+        $attributes = $request->validate([
+            'date' => ['required', 'date'],
+            'meal' => ['required', 'string', new InArray(array_column(JournalEntry::$meals, 'value'))],
+            'summary' => ['required', 'string'],
+            'calories' => ['nullable', 'required_without_all:fat,cholesterol,sodium,carbohydrates,protein', 'numeric'],
+            'fat' => ['nullable', 'required_without_all:calories,cholesterol,sodium,carbohydrates,protein', 'numeric'],
+            'cholesterol' => ['nullable', 'required_without_all:calories,fat,sodium,carbohydrates,protein', 'numeric'],
+            'sodium' => ['nullable', 'required_without_all:calories,fat,cholesterol,carbohydrates,protein', 'numeric'],
+            'carbohydrates' => ['nullable', 'required_without_all:calories,fat,cholesterol,sodium,protein', 'numeric'],
+            'protein' => ['nullable', 'required_without_all:calories,fat,cholesterol,sodium,carbohydrates', 'numeric'],
+        ]);
+
+        $entry = JournalEntry::make(array_filter($attributes))
+            ->user()->associate(Auth::user());
+        $entry->save();
+        session()->flash('message', "Journal entry added!");
+        return redirect()->route(
+            'journal-entries.index',
+            ['date' => $entry->date->format('Y-m-d')]
+        );
     }
 
     /**

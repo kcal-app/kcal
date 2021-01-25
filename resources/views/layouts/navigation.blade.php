@@ -39,6 +39,9 @@
                             <x-dropdown-link :href="route('journal-entries.create')">
                                 {{ __('Add Entries') }}
                             </x-dropdown-link>
+                            <x-dropdown-link :href="route('journal-entries.create.from-nutrients')">
+                                {{ __('Add Nutrient Entry') }}
+                            </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>
