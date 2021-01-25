@@ -4,6 +4,8 @@ use App\Http\Controllers\FoodController;
 use App\Http\Controllers\IngredientPickerController;
 use App\Http\Controllers\JournalEntryController;
 use App\Http\Controllers\RecipeController;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,13 +19,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function (): RedirectResponse {
+    return new RedirectResponse(RouteServiceProvider::HOME);
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 // Foods.
 Route::resource('foods', FoodController::class)->middleware(['auth']);

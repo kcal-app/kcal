@@ -5,16 +5,9 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ \App\Providers\RouteServiceProvider::HOME }}">
                         <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
                 </div>
 
                 <!-- Journal Dropdown -->
@@ -22,8 +15,7 @@
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
                             <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                <div>Jorunal</div>
-
+                                <div>Journal</div>
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -33,15 +25,9 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('journal-entries.index')">
-                                {{ __('View Journal') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('journal-entries.create')">
-                                {{ __('Add Entries') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('journal-entries.create.from-nutrients')">
-                                {{ __('Add Nutrient Entry') }}
-                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('journal-entries.index')">View Journal</x-dropdown-link>
+                            <x-dropdown-link :href="route('journal-entries.create')">Add Entries</x-dropdown-link>
+                            <x-dropdown-link :href="route('journal-entries.create.from-nutrients')">Add Nutrient Entry</x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -62,12 +48,8 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('recipes.create')">
-                                {{ __('Add Recipe') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('recipes.index')">
-                                {{ __('List Recipes') }}
-                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('recipes.create')">Add Recipe</x-dropdown-link>
+                            <x-dropdown-link :href="route('recipes.index')">List Recipes</x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -78,7 +60,6 @@
                         <x-slot name="trigger">
                             <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                                 <div>Foods</div>
-
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -88,12 +69,8 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('foods.create')">
-                                {{ __('Add Food') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('foods.index')">
-                                {{ __('List Foods') }}
-                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('foods.create')">Add Food</x-dropdown-link>
+                            <x-dropdown-link :href="route('foods.index')">List Foods</x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -116,14 +93,9 @@
 
                     <x-slot name="content">
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" x-data>
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Logout') }}
-                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('logout')" @click.prevent="$el.closest('form').submit();">Logout</x-dropdown-link>
                         </form>
                     </x-slot>
                 </x-dropdown>
@@ -144,9 +116,9 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('journal-entries.index')" :active="request()->routeIs('journal-entries.index')">Journal</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.index')">Recipes</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('foods.index')" :active="request()->routeIs('foods.index')">Foods</x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -166,14 +138,9 @@
 
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Logout') }}
-                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('logout')" @click.prevent="$el.closest('form').submit();">Logout</x-responsive-nav-link>
                 </form>
             </div>
         </div>

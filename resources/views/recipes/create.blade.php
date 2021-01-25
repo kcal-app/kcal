@@ -1,8 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add Recipe') }}
-        </h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Add Recipe</h2>
     </x-slot>
 
     <div class="py-12">
@@ -15,7 +13,7 @@
                             <div class="grid grid-cols-5 gap-4">
                                 <!-- Name -->
                                 <div class="col-span-4">
-                                    <x-inputs.label for="name" :value="__('Name')" />
+                                    <x-inputs.label for="name" value="Name" />
 
                                     <x-inputs.input id="name"
                                                     class="block mt-1 w-full"
@@ -27,7 +25,7 @@
 
                                 <!-- Servings -->
                                 <div>
-                                    <x-inputs.label for="servings" :value="__('Servings')" />
+                                    <x-inputs.label for="servings" value="Servings" />
 
                                     <x-inputs.input id="servings"
                                                     class="block mt-1 w-full"
@@ -40,7 +38,7 @@
 
                             <!-- Description -->
                             <div>
-                                <x-inputs.label for="description" :value="__('Description')" />
+                                <x-inputs.label for="description" value="Description" />
 
                                 <x-inputs.textarea id="description"
                                                    class="block mt-1 w-full"
@@ -82,9 +80,7 @@
                         @endfor
 
                         <div class="flex items-center justify-end mt-4">
-                            <x-inputs.button class="ml-3">
-                                {{ __('Add') }}
-                            </x-inputs.button>
+                            <x-inputs.button class="ml-3">Add</x-inputs.button>
                         </div>
                     </form>
                 </div>

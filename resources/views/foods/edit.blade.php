@@ -16,7 +16,7 @@
                             <div class="grid grid-cols-3 gap-4">
                                 <!-- Name -->
                                 <div>
-                                    <x-inputs.label for="name" :value="__('Name')"/>
+                                    <x-inputs.label for="name" value="Name"/>
 
                                     <x-inputs.input id="name"
                                                     class="block mt-1 w-full"
@@ -28,7 +28,7 @@
 
                                 <!-- Detail -->
                                 <div>
-                                    <x-inputs.label for="detail" :value="__('Detail')"/>
+                                    <x-inputs.label for="detail" value="Detail"/>
 
                                     <x-inputs.input id="detail"
                                                     class="block mt-1 w-full"
@@ -39,7 +39,7 @@
 
                                 <!-- Brand -->
                                 <div>
-                                    <x-inputs.label for="brand" :value="__('Brand')"/>
+                                    <x-inputs.label for="brand" value="Brand"/>
 
                                     <x-inputs.input id="brand"
                                                     class="block mt-1 w-full"
@@ -59,7 +59,7 @@
                                 }
                                 @endphp
                                 <div>
-                                    <x-inputs.label for="serving_size" :value="__('Serving size')"/>
+                                    <x-inputs.label for="serving_size" value="Serving size"/>
 
                                     <x-inputs.input id="serving_size"
                                                     class="block mt-1"
@@ -71,7 +71,7 @@
 
                                 <!-- Serving unit -->
                                 <div>
-                                    <x-inputs.label for="serving_unit" :value="__('Serving unit')"/>
+                                    <x-inputs.label for="serving_unit" value="Serving unit"/>
 
                                     <x-inputs.select name="serving_unit"
                                                      :options="$serving_units"
@@ -82,7 +82,7 @@
 
                                 <!-- Serving weight -->
                                 <div>
-                                    <x-inputs.label for="serving_weight" :value="__('Serving weight (g)')"/>
+                                    <x-inputs.label for="serving_weight" value="Serving weight (g)"/>
 
                                     <x-inputs.input id="serving_weight"
                                                     class="block mt-1"
