@@ -48,10 +48,10 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-auto">
+                        <div class="flex flex-col md:flex-row">
                         @foreach (\App\Support\Nutrients::$all as $nutrient)
                             <!-- {{ ucfirst($nutrient) }} -->
-                                <div>
+                                <div class="flex-auto">
                                     <x-inputs.label for="{{ $nutrient }}"
                                                     :value="ucfirst($nutrient) . ' (g)'"/>
 

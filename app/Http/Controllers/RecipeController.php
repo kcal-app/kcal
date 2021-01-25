@@ -186,8 +186,9 @@ class RecipeController extends Controller
         ]);
 
         // Sync tags.
-        $tags = explode(',', $request->get('tags'));
-        $recipe->syncTags($tags);
+        if ($tags = $request->get('tags')) {
+            $recipe->syncTags(explode(',', $tags));
+        }
 
         try {
             DB::transaction(function () use ($recipe, $input) {

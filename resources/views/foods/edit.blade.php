@@ -94,10 +94,10 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-rows-3 sm:grid-rows-3 md:grid-rows-2 lg:grid-rows-1 grid-flow-col">
+                            <div class="flex flex-col md:flex-row">
                                 @foreach ($nutrients as $nutrient)
                                         <!-- {{ ucfirst($nutrient) }} -->
-                                        <div>
+                                        <div class="flex-auto">
                                             <x-inputs.label for="{{ $nutrient }}"
                                                             :value="ucfirst($nutrient) . ' (g)'"/>
 

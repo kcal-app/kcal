@@ -87,8 +87,9 @@ class FoodController extends Controller
         $food->fill(array_filter($attributes))->save();
 
         // Sync tags.
-        $tags = explode(',', $request->get('tags'));
-        $food->syncTags($tags);
+        if ($tags = $request->get('tags')) {
+            $food->syncTags(explode(',', $tags));
+        }
 
         session()->flash('message', "Food {$food->name} updated!");
         return redirect()->route('foods.show', $food);
