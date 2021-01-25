@@ -46,8 +46,9 @@
                                 this.results = [...this.results, ...data.data.map(result => result.attributes)];
                                 if (this.number < data.meta.page['last-page']) {
                                     this.morePages = true;
-                                } else {
                                     this.number++;
+                                } else {
+                                    this.morePages = false;
                                 }
                             });
                     },
