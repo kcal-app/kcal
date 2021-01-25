@@ -139,7 +139,7 @@ class JournalEntryController extends Controller
                     $ingredient['unit']
                 );
                 foreach (Nutrients::$all as $nutrient) {
-                    $entries[$entry_key]->{$nutrient} =+ $item->{$nutrient} * $nutrient_multiplier;
+                    $entries[$entry_key]->{$nutrient} += $item->{$nutrient} * $nutrient_multiplier;
                 }
                 $entries[$entry_key]->foods->add($item);
             }
