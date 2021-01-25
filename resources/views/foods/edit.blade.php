@@ -120,10 +120,6 @@
                             <x-inputs.button class="ml-3">
                                 {{ ($food->exists ? 'Save' : 'Add') }}
                             </x-inputs.button>
-                            @if ($food->exists)
-                                <a class="px-4 py-2 ml-4 bg-red-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-red-700 active:bg-red-900 focus:outline-none"
-                                    href="{{ route('foods.delete', $food) }}">Delete</a>
-                            @endif
                         </div>
                     </form>
                 </div>
