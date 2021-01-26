@@ -78,7 +78,7 @@
                             if (selected.dataset.id) {
                                 this.$refs.ingredients.value = selected.dataset.id;
                                 this.$refs.ingredients_type.value = selected.dataset.type;
-                                this.$refs.ingredients_name.value = `${selected.dataset.name}, ${selected.dataset.detail}`;
+                                this.$refs.ingredients_name.value = selected.dataset.name + (selected.dataset.detail ? `, ${selected.dataset.detail}` : '');
                                 this.searching = false;
                             }
                         }
