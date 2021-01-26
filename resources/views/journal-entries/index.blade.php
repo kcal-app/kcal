@@ -1,9 +1,27 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                {{ Auth::user()->name }}'s Journal
-                <div class="text-base text-gray-500">{{ $date->format('D, j M Y') }}</div>
+            <h2 class="leading-tight text-center">
+                <div class="text-2xl font-semibold text-gray-800">{{ Auth::user()->name }}'s Journal</div>
+                <div class="flex items-center space-x-2">
+                    <div>
+                        <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                           href="{{ route(Route::current()->getName(), ['date' => $date->copy()->subDay(1)->toDateString()]) }}">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="text-base text-gray-500">{{ $date->format('D, j M Y') }}</div>
+                    <div>
+                        <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                           href="{{ route(Route::current()->getName(), ['date' => $date->copy()->addDay(1)->toDateString()]) }}">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
             </h2>
             <a href="{{ route('journal-entries.create', ['date' => $date->format('Y-m-d')]) }}" class="inline-flex items-center rounded-md font-semibold text-white p-2 bg-green-500 tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-green-600 disabled:opacity-25 transition ease-in-out duration-150">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -18,13 +36,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex flex-row">
-                        <div class="w-1/12 mr-4">
-                            <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                               href="{{ route(Route::current()->getName(), ['date' => $date->copy()->subDay(1)->toDateString()]) }}">
-                                previous</a>
-                        </div>
-                        <div class="w-3/12 mr-4">
+                    <div class="flex align-top flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
+                        <div class="w-full sm:w-2/5 md:w-1/3 lg:w-1/4">
                             <h3 class="font-semibold text-xl text-gray-800">{{ $date->format('D, j M Y') }}</h3>
                             <div class="text-gray-700">{{ $entries->count() }} {{ \Illuminate\Support\Pluralizer::plural('entry', $entries->count()) }}</div>
                             <div class="grid grid-cols-2 text-sm border-t-8 border-black pt-2">
@@ -42,11 +55,14 @@
                                 <div class="text-right">{{ round($entries->sum('protein'), 2) }}g</div>
                             </div>
                         </div>
-                        <div class="flex flex-col space-y-4 w-full mr-4">
+                        <div class="w-full sm:w-3/5 md:w-2/3 lg:w-3/4 flex flex-col space-y-4">
                             @foreach(['breakfast', 'lunch', 'dinner', 'snacks'] as $meal)
                                 <div>
                                     <h3 class="font-semibold text-lg text-gray-800">
-                                        {{ Str::ucfirst($meal) }}
+                                        <div class="flex items-center">
+                                            <div>{{ Str::ucfirst($meal) }}</div>
+                                            <div class="ml-2 w-full"><hr/></div>
+                                        </div>
                                         <span class="text-sm text-gray-500">
                                         @foreach(\App\Support\Nutrients::$all as $nutrient)
                                                 {{ round($entries->where('meal', $meal)->sum($nutrient), 2) }}g
@@ -100,11 +116,6 @@
                                     @endforelse
                                 </div>
                             @endforeach
-                        </div>
-                        <div class="w-1/12 text-right">
-                            <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                               href="{{ route(Route::current()->getName(), ['date' => $date->copy()->addDay(1)->toDateString()]) }}">
-                                next</a>
                         </div>
                     </div>
                 </div>

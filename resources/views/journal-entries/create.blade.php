@@ -9,19 +9,12 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="{{ route('journal-entries.store') }}">
                     @csrf
-                        <div x-data="{ ingredients: {{ empty($ingredients) ? 0 : -1 }} }">
-                            <div class="grid grid-cols-12 gap-4 items-center">
-                                <x-inputs.label for="ingredients[date][]" value="Date" class="col-span-2"/>
-                                <x-inputs.label for="ingredients[meal][]" value="Meal" class="col-span-2"/>
-                                <x-inputs.label for="ingredients[amount][]" value="Amount"/>
-                                <x-inputs.label for="ingredients[unit][]" value="Unit" class="col-span-2"/>
-                                <x-inputs.label for="ingredients[id][]" value="Food or Recipe" class="col-span-4"/>
-                            </div>
-                            <div>
+                        <div x-data="{ ingredients: 1 }">
+                            <div class="space-y-4">
                                 @foreach($ingredients as $ingredient)
                                     @include('journal-entries.partials.entry-item-input', $ingredient)
                                 @endforeach
-                                <template x-for="i in ingredients + 1">
+                                <template x-if="ingredients > 0" x-for="i in ingredients">
                                     @include('journal-entries.partials.entry-item-input', ['default_date' => $default_date])
                                 </template>
                             </div>
