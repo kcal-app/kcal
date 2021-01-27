@@ -26,7 +26,7 @@ class Nutrients
         if ($fromUnit === 'oz') {
             return $amount * 28.349523125 / $food->serving_weight;
         }
-        elseif ($fromUnit === 'servings') {
+        elseif ($fromUnit === 'serving') {
             return $amount;
         }
 
