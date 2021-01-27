@@ -39,9 +39,9 @@
                                         <div class="font-bold border-b border-gray-300">Fat</div>
                                         <div class="text-right border-b border-gray-300" x-text="`${recipe.fatPerServing}g`"></div>
                                         <div class="font-bold border-b border-gray-300">Cholesterol</div>
-                                        <div class="text-right border-b border-gray-300" x-text="`${Math.round(recipe.cholesterolPerServing)}mg`"></div>
+                                        <div class="text-right border-b border-gray-300" x-text="`${recipe.cholesterolPerServing}g`"></div>
                                         <div class="font-bold border-b border-gray-300">Sodium</div>
-                                        <div class="text-right border-b border-gray-300" x-text="`${Math.round(recipe.sodiumPerServing)}mg`"></div>
+                                        <div class="text-right border-b border-gray-300" x-text="`${recipe.sodiumPerServing}g`"></div>
                                         <div class="font-bold border-b border-gray-300">Carbohydrates</div>
                                         <div class="text-right border-b border-gray-300" x-text="`${recipe.carbohydratesPerServing}g`"></div>
                                         <div class="font-bold">Protein</div>
