@@ -10,9 +10,9 @@
                     </a>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('journal-entries.index')" :active="request()->routeIs('journal-entries.index')">Journal</x-nav-link>
-                    <x-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.index')">Recipes</x-nav-link>
-                    <x-nav-link :href="route('foods.index')" :active="request()->routeIs('foods.index')">Foods</x-nav-link>
+                    <x-nav-link :href="route('journal-entries.index')" :active="request()->routeIs('journal-entries.*')">Journal</x-nav-link>
+                    <x-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.*')">Recipes</x-nav-link>
+                    <x-nav-link :href="route('foods.index')" :active="request()->routeIs('foods.*')">Foods</x-nav-link>
                 </div>
             </div>
 
@@ -56,9 +56,9 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('journal-entries.index')" :active="request()->routeIs('journal-entries.index')">Journal</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.index')">Recipes</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('foods.index')" :active="request()->routeIs('foods.index')">Foods</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('journal-entries.index')" :active="request()->routeIs('journal-entries.*')">Journal</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.*')">Recipes</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('foods.index')" :active="request()->routeIs('foods.*')">Foods</x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
