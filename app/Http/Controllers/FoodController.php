@@ -72,6 +72,8 @@ class FoodController extends Controller
             'name' => 'required|string',
             'detail' => 'nullable|string',
             'brand' => 'nullable|string',
+            'source' => 'nullable|string',
+            'notes' => 'nullable|string',
             'serving_size' => ['required', new StringIsDecimalOrFraction],
             'serving_unit' => 'nullable|string',
             'serving_weight' => 'required|numeric',

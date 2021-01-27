@@ -30,6 +30,8 @@ class FoodSchema extends SchemaProvider
             'name' => $resource->name,
             'detail' => $resource->detail,
             'brand' => $resource->brand,
+            'source' => $resource->source,
+            'notes' => $resource->notes,
             'calories' => $resource->calories,
             'carbohydrates' => $resource->carbohydrates,
             'cholesterol' => $resource->cholesterol,

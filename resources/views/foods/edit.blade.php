@@ -115,6 +115,24 @@
                             <!-- Tags -->
                             <x-tagger :defaultTags="$food->tags->pluck('name')"/>
 
+                            <!-- Source -->
+                            <div class="flex-auto">
+                                <x-inputs.label for="source" value="Source" />
+
+                                <x-inputs.input name="source"
+                                                type="text"
+                                                class="block mt-1 w-full"
+                                                :value="old('source', $food->source)" />
+                            </div>
+
+                            <!-- Notes -->
+                            <div>
+                                <x-inputs.label for="description" value="Description" />
+
+                                <x-inputs.textarea name="notes"
+                                                   class="block mt-1 w-full"
+                                                   :value="old('notes', $food->notes)" />
+                            </div>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

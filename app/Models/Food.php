@@ -65,6 +65,10 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAllTagsOfAnyType($tags)
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAnyTags($tags, ?string $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAnyTagsOfAnyType($tags)
+ * @property string|null $source
+ * @property string|null $notes
+ * @method static \Illuminate\Database\Eloquent\Builder|Food whereNotes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Food whereSource($value)
  */
 final class Food extends Model
 {
@@ -82,6 +86,8 @@ final class Food extends Model
         'name',
         'detail',
         'brand',
+        'source',
+        'notes',
         'calories',
         'carbohydrates',
         'cholesterol',
