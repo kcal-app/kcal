@@ -12,7 +12,7 @@
                              class="block"
                              :options="$ingredients_units"
                              :selectedValue="$unit ?? null">
-                <option value=""></option>
+                <option value="" selected>Unit</option>
             </x-inputs.select>
             <div class="w-full">
                 <x-ingredient-picker :default-id="$ingredient_id ?? null"

@@ -133,7 +133,8 @@ class RecipeController extends Controller
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
                 ['value' => 'cup', 'label' => 'cup'],
                 ['value' => 'oz', 'label' => 'oz'],
-                ['value' => 'grams', 'label' => 'g'],
+                ['value' => 'g', 'label' => 'grams'],
+                ['value' => 'serving', 'label' => 'servings'],
             ]));
     }
 
@@ -157,7 +158,7 @@ class RecipeController extends Controller
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
             'ingredients.unit' => ['required', 'array'],
-            'ingredients.unit.*' => 'nullable|string',
+            'ingredients.unit.*' => ['required_with:ingredients.id.*'],
             'ingredients.detail' => ['required', 'array'],
             'ingredients.detail.*' => 'nullable|string',
             'ingredients.id' => ['required', 'array', new ArrayNotEmpty],

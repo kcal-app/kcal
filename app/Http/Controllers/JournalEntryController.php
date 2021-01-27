@@ -76,7 +76,7 @@ class JournalEntryController extends Controller
                 ['value' => 'cup', 'label' => 'cup'],
                 ['value' => 'oz', 'label' => 'oz'],
                 ['value' => 'g', 'label' => 'grams'],
-                ['value' => 'servings', 'label' => 'servings'],
+                ['value' => 'serving', 'label' => 'servings'],
             ])
             ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
@@ -94,7 +94,7 @@ class JournalEntryController extends Controller
                 ['value' => 'cup', 'label' => 'cup'],
                 ['value' => 'oz', 'label' => 'oz'],
                 ['value' => 'g', 'label' => 'grams'],
-                ['value' => 'servings', 'label' => 'servings'],
+                ['value' => 'serving', 'label' => 'servings'],
             ]);
     }
 
@@ -111,7 +111,7 @@ class JournalEntryController extends Controller
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
             'ingredients.unit' => ['required', 'array'],
-            'ingredients.unit.*' => ['nullable', 'string'],
+            'ingredients.unit.*' => ['required_with:ingredients.id.*'],
             'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
             'ingredients.type' => ['required', 'array', new ArrayNotEmpty],

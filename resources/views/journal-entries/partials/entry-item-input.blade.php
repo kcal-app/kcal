@@ -41,7 +41,7 @@
                                  class="block w-full"
                                  :options="$units"
                                  :selectedValue="$unit ?? null">
-                    <option value=""></option>
+                    <option value="">Unit</option>
                 </x-inputs.select>
             </div>
         </div>
