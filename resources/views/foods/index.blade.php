@@ -18,35 +18,53 @@
                     <x-search-view :route="route('api:v1:foods.index')">
                         <x-slot name="results">
                             <template x-for="food in results" :key="food">
-                                <div class="p-2 font-light rounded-t border-2 border-gray-400">
-                                    <div class="flex justify-between items-baseline">
-                                        <div class="text-2xl">
-                                            <a x-bind:href="food.showUrl"
-                                               class="text-gray-600 hover:text-gray-800">
-                                                <span x-text="food.name"></span><span class="text-gray-500" x-text="`, ${food.detail}`" x-show="food.detail"></span>
-                                            </a>
+                                <div class="p-1 border-2 border-black font-sans">
+                                    <div class="text-2xl lowercase font-extrabold leading-none">
+                                        <a x-bind:href="food.showUrl"
+                                           class="hover:text-gray-600">
+                                            <span x-text="food.name"></span><span class="text-gray-500" x-text="`, ${food.detail}`" x-show="food.detail"></span>
+                                        </a>
+                                    </div>
+                                    <div class="lowercase text-lg text-gray-600" x-text="food.brand" x-show="food.brand"></div>
+                                    <div class="flex justify-between font-bold border-b-8 border-black">
+                                        <div>Serving size</div>
+                                        <div>
+                                            <span x-text="food.servingSizeFormatted"></span>
+                                            <span x-text="food.servingUnit ?? 'unit'"></span>
+                                            <span x-text="`(${food.servingWeight}g)`"></span>
                                         </div>
                                     </div>
-                                    <div class="text-xl text-gray-600" x-text="food.brand" x-show="food.brand"></div>
-                                    <div class="font-bold">
-                                        Serving size <span x-text="food.servingSizeFormatted"></span>
-                                        <span x-text="food.servingUnit"></span>
-                                        <span x-text="`(${food.servingWeight}g)`"></span>
+                                    <div class="font-bold text-right">Amount per serving</div>
+                                    <div class="flex justify-between items-end font-extrabold">
+                                        <div class="text-xl">Calories</div>
+                                        <div class="text-xl" x-text="food.calories"></div>
                                     </div>
-                                    <div class="grid grid-cols-2 text-sm border-t-8 border-black pt-2">
-                                        <div class="col-span-2 text-xs font-bold text-right">Amount per serving</div>
-                                        <div class="font-extrabold text-lg border-b-4 border-black">Calories</div>
-                                        <div class="font-extrabold text-right text-lg border-b-4 border-black" x-text="`${food.calories}g`"></div>
-                                        <div class="font-bold border-b border-gray-300">Fat</div>
-                                        <div class="text-right border-b border-gray-300" x-text="`${food.fat}g`"></div>
-                                        <div class="font-bold border-b border-gray-300">Cholesterol</div>
-                                        <div class="text-right border-b border-gray-300" x-text="`${Math.round(food.cholesterol*1000)}mg`"></div>
-                                        <div class="font-bold border-b border-gray-300">Sodium</div>
-                                        <div class="text-right border-b border-gray-300" x-text="`${Math.round(food.sodium*1000)}mg`">{</div>
-                                        <div class="font-bold border-b border-gray-300">Carbohydrates</div>
-                                        <div class="text-right border-b border-gray-300" x-text="`${food.carbohydrates}g`"></div>
-                                        <div class="font-bold">Protein</div>
-                                        <div class="text-right" x-text="`${food.protein}g`"></div>
+                                    <div class="border-t-4 border-black text-sm">
+                                        <hr class="border-gray-500"/>
+                                        <div class="flex justify-between">
+                                            <div class="font-bold">Total Fat</div>
+                                            <div x-text="`${food.fat}g`"></div>
+                                        </div>
+                                        <hr class="border-gray-500"/>
+                                        <div class="flex justify-between">
+                                            <div class="font-bold">Cholesterol</div>
+                                            <div x-text="`${Math.round(food.cholesterol*1000)}mg`"></div>
+                                        </div>
+                                        <hr class="border-gray-500"/>
+                                        <div class="flex justify-between">
+                                            <div class="font-bold">Sodium</div>
+                                            <div x-text="`${Math.round(food.sodium*1000)}mg`"></div>
+                                        </div>
+                                        <hr class="border-gray-500"/>
+                                        <div class="flex justify-between">
+                                            <div class="font-bold">Total Carbohydrate</div>
+                                            <div x-text="`${food.carbohydrates}g`"></div>
+                                        </div>
+                                        <hr class="border-gray-500"/>
+                                        <div class="flex justify-between">
+                                            <div class="font-bold">Protein</div>
+                                            <div x-text="`${food.protein}g`"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </template>

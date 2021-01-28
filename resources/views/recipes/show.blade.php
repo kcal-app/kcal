@@ -47,24 +47,42 @@
                             @endforeach
                         </div>
                         <div>
-                            <h3 class="mb-2 font-bold text-2xl">Nutritional Facts</h3>
-                            <div class="grid grid-cols-2 text-sm border-t-8 border-black pt-2 mb-2">
-                                <div class="col-span-2 text-xs text-right">Amount per serving</div>
-                                <div class="font-extrabold text-lg border-b-4 border-black">Calories</div>
-                                <div class="font-extrabold text-right text-lg border-b-4 border-black">{{ $recipe->caloriesPerServing() }}</div>
-                                <div class="font-bold border-b border-gray-300">Fat</div>
-                                <div class="text-right border-b border-gray-300">{{ $recipe->fatPerServing() }}g</div>
-                                <div class="font-bold border-b border-gray-300">Cholesterol</div>
-                                <div class="text-right border-b border-gray-300">{{ $recipe->cholesterolPerServing() }}g</div>
-                                <div class="font-bold border-b border-gray-300">Sodium</div>
-                                <div class="text-right border-b border-gray-300">{{ $recipe->sodiumPerServing() }}g</div>
-                                <div class="font-bold border-b border-gray-300">Carbohydrates</div>
-                                <div class="text-right border-b border-gray-300">{{ $recipe->carbohydratesPerServing() }}g</div>
-                                <div class="font-bold">Protein</div>
-                                <div class="text-right">{{ $recipe->proteinPerServing() }}g</div>
+                            <div class="p-1 border-2 border-black font-sans md:w-72">
+                                <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
+                                <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
+                                <div class="font-bold text-right border-t-8 border-black">Amount per serving</div>
+                                <div class="flex justify-between items-end font-extrabold">
+                                    <div class="text-3xl">Calories</div>
+                                    <div class="text-4xl">{{ $recipe->caloriesPerServing() }}</div>
+                                </div>
+                                <div class="border-t-4 border-black text-sm">
+                                    <hr class="border-gray-500"/>
+                                    <div class="flex justify-between">
+                                        <div class="font-bold">Total Fat</div>
+                                        <div>{{ $recipe->fatPerServing() }}g</div>
+                                    </div>
+                                    <hr class="border-gray-500"/>
+                                    <div class="flex justify-between">
+                                        <div class="font-bold">Cholesterol</div>
+                                        <div>{{ $recipe->cholesterolPerServing() }}g</div>
+                                    </div>
+                                    <hr class="border-gray-500"/>
+                                    <div class="flex justify-between">
+                                        <div class="font-bold">Sodium</div>
+                                        <div>{{ $recipe->sodiumPerServing() }}g</div>
+                                    </div>
+                                    <hr class="border-gray-500"/>
+                                    <div class="flex justify-between">
+                                        <div class="font-bold">Total Carbohydrate</div>
+                                        <div>{{ $recipe->carbohydratesPerServing() }}g</div>
+                                    </div>
+                                    <hr class="border-gray-500"/>
+                                    <div class="flex justify-between">
+                                        <div class="font-bold">Protein</div>
+                                        <div>{{ $recipe->proteinPerServing() }}g</div>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 class="mb-2 font-bold text-2xl">Servings</h3>
-                            <div class="ext-gray-800">{{ $recipe->servings }}</div>
                         </div>
                     </div>
                     <h3 class="mb-2 font-bold text-2xl">Steps</h3>

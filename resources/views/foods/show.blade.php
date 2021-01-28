@@ -21,7 +21,56 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    TODO! Show stats, tags, attached recipes, etc.
+                    <!-- TODO: tags, recipes, etc. -->
+                    <h3 class="text-2xl font-extrabold">
+                        {{ $food->name }}@if($food->detail), <span class="text-2xl font-extrabold">{{ $food->detail }}</span>@endif
+                    </h3>
+                    @if($food->brand)
+                        <div class="text-2xl font-extrabold">{{ $food->brand }}</div>
+                    @endif
+                    <div class="p-1 border-2 border-black font-sans md:w-72">
+                        <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
+                        <div class="flex justify-between font-bold border-b-8 border-black">
+                            <div>Serving size</div>
+                            <div>
+                                {{ $food->servingSizeFormatted }}
+                                {{ $food->serving_unit }}
+                                ({{ $food->serving_weight }}g)
+                            </div>
+                        </div>
+                        <div class="font-bold text-right">Amount per serving</div>
+                        <div class="flex justify-between items-end font-extrabold">
+                            <div class="text-3xl">Calories</div>
+                            <div class="text-4xl">{{ $food->calories }}</div>
+                        </div>
+                        <div class="border-t-4 border-black text-sm">
+                            <hr class="border-gray-500"/>
+                            <div class="flex justify-between">
+                                <div class="font-bold">Total Fat</div>
+                                <div>{{ $food->fat }}g</div>
+                            </div>
+                            <hr class="border-gray-500"/>
+                            <div class="flex justify-between">
+                                <div class="font-bold">Cholesterol</div>
+                                <div>{{ $food->cholesterol }}g</div>
+                            </div>
+                            <hr class="border-gray-500"/>
+                            <div class="flex justify-between">
+                                <div class="font-bold">Sodium</div>
+                                <div>{{ $food->sodium }}g</div>
+                            </div>
+                            <hr class="border-gray-500"/>
+                            <div class="flex justify-between">
+                                <div class="font-bold">Total Carbohydrate</div>
+                                <div>{{ $food->carbohydrates }}g</div>
+                            </div>
+                            <hr class="border-gray-500"/>
+                            <div class="flex justify-between">
+                                <div class="font-bold">Protein</div>
+                                <div>{{ $food->protein }}g</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
