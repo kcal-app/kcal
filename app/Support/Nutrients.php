@@ -18,6 +18,15 @@ class Nutrients
         'protein',
     ];
 
+    public static array $units = [
+        ['value' => 'tsp', 'label' => 'tsp.'],
+        ['value' => 'tbsp', 'label' => 'tbsp.'],
+        ['value' => 'cup', 'label' => 'cup'],
+        ['value' => 'oz', 'label' => 'oz'],
+        ['value' => 'gram', 'label' => 'grams'],
+        ['value' => 'serving', 'label' => 'servings'],
+    ];
+
     public static function calculateFoodNutrientMultiplier(
         Food $food,
         float $amount,
@@ -28,6 +37,9 @@ class Nutrients
         }
         elseif ($fromUnit === 'serving') {
             return $amount;
+        }
+        elseif ($fromUnit === 'gram') {
+            return $amount / $food->serving_weight;
         }
 
         if (

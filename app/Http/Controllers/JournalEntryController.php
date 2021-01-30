@@ -70,14 +70,7 @@ class JournalEntryController extends Controller
         return view('journal-entries.create')
             ->with('ingredients', $ingredients)
             ->with('meals', JournalEntry::$meals)
-            ->with('units', [
-                ['value' => 'tsp', 'label' => 'tsp.'],
-                ['value' => 'tbsp', 'label' => 'tbsp.'],
-                ['value' => 'cup', 'label' => 'cup'],
-                ['value' => 'oz', 'label' => 'oz'],
-                ['value' => 'g', 'label' => 'grams'],
-                ['value' => 'serving', 'label' => 'servings'],
-            ])
+            ->with('units', Nutrients::$units)
             ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
 
@@ -88,14 +81,7 @@ class JournalEntryController extends Controller
     {
         return view('journal-entries.create-from-nutrients')
             ->with('meals', JournalEntry::$meals)
-            ->with('units', [
-                ['value' => 'tsp', 'label' => 'tsp.'],
-                ['value' => 'tbsp', 'label' => 'tbsp.'],
-                ['value' => 'cup', 'label' => 'cup'],
-                ['value' => 'oz', 'label' => 'oz'],
-                ['value' => 'g', 'label' => 'grams'],
-                ['value' => 'serving', 'label' => 'servings'],
-            ]);
+            ->with('units', Nutrients::$units);
     }
 
     /**

@@ -10,6 +10,7 @@ use App\Rules\ArrayNotEmpty;
 use App\Rules\StringIsDecimalOrFraction;
 use App\Rules\UsesIngredientTrait;
 use App\Support\Number;
+use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -128,14 +129,7 @@ class RecipeController extends Controller
             ->with('recipe', $recipe)
             ->with('ingredients', $ingredients)
             ->with('steps', $steps)
-            ->with('ingredients_units', new Collection([
-                ['value' => 'tsp', 'label' => 'tsp.'],
-                ['value' => 'tbsp', 'label' => 'tbsp.'],
-                ['value' => 'cup', 'label' => 'cup'],
-                ['value' => 'oz', 'label' => 'oz'],
-                ['value' => 'g', 'label' => 'grams'],
-                ['value' => 'serving', 'label' => 'servings'],
-            ]));
+            ->with('ingredients_units', Nutrients::$units);
     }
 
     /**
