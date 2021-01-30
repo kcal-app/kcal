@@ -9,16 +9,16 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="{{ route('journal-entries.store') }}">
                     @csrf
-                        <div x-data="{ ingredients: 1 }">
+                        <div x-data="{ ingredients: {{ $ingredients ? 0 : 1 }} }">
                             <div class="space-y-4">
                                 @foreach($ingredients as $ingredient)
                                     @include('journal-entries.partials.entry-item-input', $ingredient)
                                 @endforeach
                                 <template x-if="ingredients > 0" x-for="i in ingredients">
-                                    @include('journal-entries.partials.entry-item-input', ['default_date' => $default_date])
+                                    @include('journal-entries.partials.entry-item-input', ['template' => true, 'default_date' => $default_date])
                                 </template>
                             </div>
-                            <x-inputs.icon-button type="button" color="green" x-on:click="ingredients++;">
+                            <x-inputs.icon-button type="button" color="green" x-on:click="ingredients++">
                                 <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
                                 </svg>
