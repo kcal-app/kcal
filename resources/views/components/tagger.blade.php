@@ -25,6 +25,7 @@
                             </template>
                             <a @click.prevent="addTag(searchTerm)"
                                class="block py-1 px-5 cursor-pointer hover:bg-indigo-600 hover:text-white"
+                               x-show="!results.includes(searchTerm)"
                                x-text="searchTerm"></a>
                         </div>
                     </div>
