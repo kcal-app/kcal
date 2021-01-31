@@ -180,16 +180,9 @@ class RecipeController extends Controller
             'servings' => (int) $input['servings'],
         ]);
 
-        // Sync tags.
-        if ($tags = $request->get('tags')) {
-            $recipe->syncTags(explode(',', $tags));
-        }
-
         try {
             DB::transaction(function () use ($recipe, $input) {
-                if (!$recipe->save()) {
-                    return;
-                }
+                $recipe->saveOrFail();
 
                 // Delete any removed ingredients.
                 $removed = array_diff($recipe->ingredientAmounts->keys()->all(), $input['ingredients']['original_key']);
@@ -241,6 +234,11 @@ class RecipeController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()->withErrors($e->getMessage());
+        }
+
+        // Sync tags.
+        if ($tags = $request->get('tags')) {
+            $recipe->syncTags(explode(',', $tags));
         }
 
         session()->flash('message', "Recipe {$recipe->name} updated!");
