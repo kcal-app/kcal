@@ -125,8 +125,15 @@ class RecipeController extends Controller
             }
         }
 
+        // Convert string tags (from old form data) to a Collection.
+        $recipe_tags = old('tags', $recipe->tags->pluck('name'));
+        if (is_string($recipe_tags)) {
+            $recipe_tags = new Collection(explode(',', $recipe_tags));
+        }
+
         return view('recipes.edit')
             ->with('recipe', $recipe)
+            ->with('recipe_tags', $recipe_tags)
             ->with('ingredients', $ingredients)
             ->with('steps', $steps)
             ->with('ingredients_units', Nutrients::$units);

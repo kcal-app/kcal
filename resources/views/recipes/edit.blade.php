@@ -60,7 +60,7 @@
                             </div>
 
                             <!-- Tags -->
-                            <x-tagger :defaultTags="$recipe->tags->pluck('name')"/>
+                            <x-tagger :defaultTags="$recipe_tags"/>
                         </div>
 
                         <!-- Ingredients -->

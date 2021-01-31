@@ -53,8 +53,15 @@ class FoodController extends Controller
      */
     public function edit(Food $food): View
     {
+        // Convert string tags (from old form data) to a Collection.
+        $food_tags = old('tags', $food->tags->pluck('name'));
+        if (is_string($food_tags)) {
+            $food_tags = new Collection(explode(',', $food_tags));
+        }
+
         return view('foods.edit')
             ->with('food', $food)
+            ->with('food_tags', $food_tags)
             ->with('nutrients', Nutrients::$all)
             ->with('serving_units', new Collection([
                 ['value' => 'tsp', 'label' => 'tsp.'],

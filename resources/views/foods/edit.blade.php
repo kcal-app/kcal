@@ -66,7 +66,8 @@
                                                     type="text"
                                                     name="serving_size"
                                                     size="10"
-                                                    :value="old('serving_size', $old_value)"/>
+                                                    :value="old('serving_size', $old_value)"
+                                                    required/>
                                 </div>
 
                                 <!-- Serving unit -->
@@ -91,7 +92,8 @@
                                                     step="any"
                                                     name="serving_weight"
                                                     size="10"
-                                                    :value="old('serving_weight', $food->serving_weight)"/>
+                                                    :value="old('serving_weight', $food->serving_weight)"
+                                                    required/>
                                 </div>
                             </div>
 
@@ -113,7 +115,7 @@
                             </div>
 
                             <!-- Tags -->
-                            <x-tagger :defaultTags="$food->tags->pluck('name')"/>
+                            <x-tagger :defaultTags="$food_tags"/>
 
                             <!-- Source -->
                             <div class="flex-auto">
