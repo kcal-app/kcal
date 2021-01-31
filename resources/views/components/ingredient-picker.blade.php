@@ -67,6 +67,9 @@
                                         this.searching = true;
                                     });
                             }
+                            else {
+                                this.searching = false;
+                            }
                         },
                         ['@focusout.debounce.200ms']() {
                             this.searching = false;
