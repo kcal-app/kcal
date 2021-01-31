@@ -31,6 +31,9 @@
                             <div>
                                 <span x-text="result.name"></span><span class="text-gray-600" x-text="', ' + result.detail" x-show="result.detail"></span>
                             </div>
+                            <div x-show="result.servings">
+                                <div class="text-sm">Servings: <span x-text="result.servings"></span></div>
+                            </div>
                             <div x-show="result.serving_size">
                                 <div class="text-sm text-gray-600" x-text="result.brand" x-show="result.brand"></div>
                                 <div class="text-sm">
