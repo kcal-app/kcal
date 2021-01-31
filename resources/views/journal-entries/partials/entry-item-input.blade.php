@@ -1,4 +1,4 @@
-<div x-data @isset($template)x-init="setDefaultsFromPrevious($el);"@endisset class="flex items-center space-x-2">
+<div x-data class="flex items-center space-x-2">
     <div class="flex flex-col space-y-4 w-full">
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
             <!-- Date -->
@@ -68,33 +68,3 @@
         </x-inputs.icon-button>
     </div>
 </div>
-
-@once
-    @push('scripts')
-        <script type="text/javascript">
-            let setDefaultsFromPrevious = ($el) => {
-                let previousEl = $el.previousElementSibling;
-
-                // Skip the <template> node.
-                if (previousEl && previousEl.nodeName === 'TEMPLATE') {
-                    previousEl = previousEl.previousElementSibling;
-                }
-
-                // Do not continue if there is no previous element.
-                if (!previousEl) {
-                    return;
-                }
-
-                // Set date and meal from the previous element.
-                let currentDateEl = $el.querySelector('input[name="ingredients[date][]"]');
-                let currentMealEl = $el.querySelector('select[name="ingredients[meal][]"]');
-                let previousDateEl = previousEl.querySelector('input[name="ingredients[date][]"]');
-                let previousMealEl = previousEl.querySelector('select[name="ingredients[meal][]"]');
-                if (currentDateEl && currentMealEl && previousDateEl && previousMealEl) {
-                    currentDateEl.value = previousDateEl.value;
-                    currentMealEl.value = previousMealEl.value;
-                }
-            }
-        </script>
-    @endpush
-@endonce
