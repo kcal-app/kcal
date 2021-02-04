@@ -7,6 +7,7 @@ use App\Support\Nutrients;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Pluralizer;
 
 /**
  * App\Models\IngredientAmount
@@ -83,13 +84,33 @@ final class IngredientAmount extends Model
     /**
      * @inheritdoc
      */
-    protected $appends = ['amount_formatted'];
+    protected $appends = ['amount_formatted', 'unit_formatted'];
 
     /**
      * Get the amount as a formatted string (e.g. 0.5 = 1/2).
      */
     public function getAmountFormattedAttribute(): string {
         return Number::fractionStringFromFloat($this->amount);
+    }
+
+    /**
+     * Get a "formatted" unit.
+     *
+     * @see \App\Models\Food::getServingUnitFormattedAttribute()
+     */
+    public function getUnitFormattedAttribute(): ?string {
+        $unit = $this->unit;
+
+        // Inherit formatted unit from Food.
+        if ($unit === 'serving' && $this->ingredient->type === Food::class) {
+            $unit = $this->ingredient->serving_unit_formatted;
+        }
+
+        if ($unit && $unit != 'tsp' && $unit != 'tbsp') {
+            $unit = Pluralizer::plural($unit, ceil($this->amount));
+        }
+
+        return $unit;
     }
 
     /**

@@ -41,6 +41,7 @@ class FoodSchema extends SchemaProvider
             'servingSize' => $resource->serving_size,
             'servingSizeFormatted' => $resource->serving_size_formatted,
             'servingUnit' => $resource->serving_unit,
+            'servingUnitFormatted' => $resource->serving_unit_formatted,
             'servingWeight' => $resource->serving_weight,
             'createdAt' => $resource->created_at,
             'updatedAt' => $resource->updated_at,

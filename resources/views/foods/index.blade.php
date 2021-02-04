@@ -30,7 +30,7 @@
                                         <div>Serving size</div>
                                         <div>
                                             <span x-text="food.servingSizeFormatted"></span>
-                                            <span x-text="food.servingUnit ?? 'unit'"></span>
+                                            <span x-text="food.servingUnitFormatted ?? food.name"></span>
                                             <span x-text="`(${food.servingWeight}g)`"></span>
                                         </div>
                                     </div>

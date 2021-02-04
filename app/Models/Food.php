@@ -96,6 +96,7 @@ final class Food extends Model
         'sodium',
         'serving_size',
         'serving_unit',
+        'serving_unit_name',
         'serving_weight',
     ];
 
@@ -116,13 +117,27 @@ final class Food extends Model
     /**
      * @inheritdoc
      */
-    protected $appends = ['serving_size_formatted'];
+    protected $appends = [
+        'serving_size_formatted',
+        'serving_unit_formatted'
+    ];
 
     /**
      * Get the serving size as a formatted string (e.g. 0.5 = 1/2).
      */
     public function getServingSizeFormattedAttribute(): string {
         return Number::fractionStringFromFloat($this->serving_size);
+    }
+
+    /**
+     * Get the "formatted" serving unit (for custom unit support).
+     */
+    public function getServingUnitFormattedAttribute(): ?string {
+        $unit = $this->serving_unit;
+        if (empty($unit)) {
+            $unit = $this->serving_unit_name ?? null;
+        }
+        return $unit;
     }
 
 }

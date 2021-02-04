@@ -34,7 +34,7 @@
                             <div>Serving size</div>
                             <div>
                                 {{ $food->servingSizeFormatted }}
-                                {{ $food->serving_unit }}
+                                {{ $food->servingUnitFormatted ?? $food->name }}
                                 ({{ $food->serving_weight }}g)
                             </div>
                         </div>
