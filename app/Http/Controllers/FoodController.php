@@ -83,6 +83,7 @@ class FoodController extends Controller
             'notes' => 'nullable|string',
             'serving_size' => ['required', new StringIsDecimalOrFraction],
             'serving_unit' => 'nullable|string',
+            'serving_unit_name' => 'nullable|string',
             'serving_weight' => 'required|numeric',
             'calories' => 'nullable|numeric',
             'fat' => 'nullable|numeric',
@@ -93,7 +94,7 @@ class FoodController extends Controller
         ]);
         $attributes['serving_size'] = Number::floatFromString($attributes['serving_size']);
         $attributes['name'] = Str::lower($attributes['name']);
-        $food->fill(array_filter($attributes))->save();
+        $food->fill($attributes)->save();
 
         // Sync tags.
         if ($tags = $request->get('tags')) {

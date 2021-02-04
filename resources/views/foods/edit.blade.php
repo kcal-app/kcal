@@ -82,6 +82,18 @@
                                     </x-inputs.select>
                                 </div>
 
+                                <!-- Serving unit name -->
+                                <div>
+                                    <x-inputs.label for="serving_unit_name" value="Serving unit name"/>
+
+                                    <x-inputs.input name="serving_unit_name"
+                                                    placeholder="e.g. clove, egg"
+                                                    class="block mt-1 w-full"
+                                                    type="text"
+                                                    size="10"
+                                                    :value="old('serving_unit_name', $food->serving_unit_name)"/>
+                                </div>
+
                                 <!-- Serving weight -->
                                 <div>
                                     <x-inputs.label for="serving_weight" value="Serving weight (g)"/>

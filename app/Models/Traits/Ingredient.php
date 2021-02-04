@@ -16,7 +16,7 @@ trait Ingredient
     }
 
     /**
-     * Gets the class name.
+     * Get the class name.
      *
      * This is necessary e.g. to provide data in ingredient picker responses.
      */
@@ -32,7 +32,7 @@ trait Ingredient
     }
 
     /**
-     * Gets search results for a term.
+     * Get search results for a term.
      */
     public static function search(string $term, int $limit = 10): Collection {
         return (new static)::where('name', 'like', "%{$term}%")->limit($limit)->get();
