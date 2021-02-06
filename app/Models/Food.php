@@ -69,6 +69,9 @@ use Spatie\Tags\HasTags;
  * @property string|null $notes
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereSource($value)
+ * @property string|null $serving_unit_name
+ * @property-read string|null $serving_unit_formatted
+ * @method static \Illuminate\Database\Eloquent\Builder|Food whereServingUnitName($value)
  */
 final class Food extends Model
 {

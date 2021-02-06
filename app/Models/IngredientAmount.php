@@ -41,6 +41,7 @@ use Illuminate\Support\Pluralizer;
  * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereWeight($value)
  * @mixin \Eloquent
+ * @property-read string|null $unit_formatted
  */
 final class IngredientAmount extends Model
 {
@@ -106,7 +107,7 @@ final class IngredientAmount extends Model
             $unit = $this->ingredient->serving_unit_formatted;
         }
 
-        if ($unit && $unit != 'tsp' && $unit != 'tbsp') {
+        if ($unit && $unit != 'tsp' && $unit != 'tbsp'&& $unit != 'oz') {
             $unit = Pluralizer::plural($unit, ceil($this->amount));
         }
 

@@ -38,7 +38,7 @@
                                 <div class="text-sm text-gray-600" x-text="result.brand" x-show="result.brand"></div>
                                 <div class="text-sm">
                                     Serving size <span x-text="result.serving_size_formatted"></span>
-                                    <span x-text="result.serving_unit"></span>
+                                    <span x-text="result.serving_unit_formatted"></span>
                                     (<span x-text="result.serving_weight"></span>g)
                                 </div>
                             </div>
