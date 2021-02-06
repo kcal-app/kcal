@@ -142,7 +142,9 @@ class JournalEntryController extends Controller
             }
 
             // Update summary
-            $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null) . "{$ingredient['amount']} {$ingredient['unit']} {$item->name}";
+            $unit = $item->serving_unit_formatted ?? $ingredient['unit'];
+            $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null);
+            $entries[$entry_key]->summary .= "{$ingredient['amount']} {$unit} {$item->name}";
         }
 
         foreach ($entries as $entry) {
