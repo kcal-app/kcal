@@ -77,11 +77,13 @@ class JournalEntryController extends Controller
     /**
      * Show the form for creating a journal entry from nutrients directly.
      */
-    public function createFromNutrients(): View
+    public function createFromNutrients(Request $request): View
     {
+        $date = $request->date ?? Carbon::now()->toDateString();
         return view('journal-entries.create-from-nutrients')
             ->with('meals', JournalEntry::$meals)
-            ->with('units', Nutrients::$units);
+            ->with('units', Nutrients::$units)
+            ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
 
     /**

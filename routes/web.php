@@ -31,8 +31,8 @@ Route::get('/foods/{food}/delete', [FoodController::class, 'delete'])->middlewar
 Route::resource('recipes', RecipeController::class)->middleware(['auth']);
 
 // Journal entries.
-Route::get('/journal-entries/create-from-nutrients', [JournalEntryController::class, 'createFromNutrients'])->middleware(['auth'])->name('journal-entries.create.from-nutrients');
-Route::post('/journal-entries/create-from-nutrients', [JournalEntryController::class, 'storeFromNutrients'])->middleware(['auth'])->name('journal-entries.store.from-nutrients');
+Route::get('/journal-entries/create/from-nutrients', [JournalEntryController::class, 'createFromNutrients'])->middleware(['auth'])->name('journal-entries.create.from-nutrients');
+Route::post('/journal-entries/create/from-nutrients', [JournalEntryController::class, 'storeFromNutrients'])->middleware(['auth'])->name('journal-entries.store.from-nutrients');
 Route::resource('journal-entries', JournalEntryController::class)->middleware(['auth']);
 Route::get('/journal-entries/{journalEntry}/delete', [JournalEntryController::class, 'delete'])->middleware(['auth'])->name('journal-entries.delete');
 

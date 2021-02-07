@@ -1,6 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Add Nutrient Journal Entry</h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Add Entry</h2>
+            <a href="{{ route('journal-entries.create', ['date' => $default_date->format('Y-m-d')]) }}" class="inline-flex items-center rounded-md font-semibold text-white p-2 bg-green-500 tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-green-600 disabled:opacity-25 transition ease-in-out duration-150">
+                Add by Recipes/Food
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -9,24 +14,24 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="{{ route('journal-entries.store.from-nutrients') }}">
                     @csrf
-                        <div class="flex mb-4 space-x-4">
+                        <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full mb-4">
                             <!-- Date -->
-                            <div>
+                            <div class="w-full">
                                 <x-inputs.label for="date" value="Date"/>
 
                                 <x-inputs.input name="date"
                                                 type="date"
-                                                class="block mt-1"
-                                                :value="old('date', \Illuminate\Support\Carbon::now()->toDateString())"
+                                                class="block w-full"
+                                                :value="old('date', $default_date->toDateString())"
                                                 required />
                             </div>
 
                             <!-- Meal -->
-                            <div>
+                            <div class="w-full">
                                 <x-inputs.label for="meal" value="Meal"/>
 
                                 <x-inputs.select name="meal"
-                                                 class="block mt-1"
+                                                 class="block w-full"
                                                  :options="$meals"
                                                  :selectedValue="old('meal')"
                                                  required>
@@ -40,13 +45,13 @@
 
                                 <x-inputs.input name="summary"
                                                 type="text"
-                                                class="block mt-1 w-full"
+                                                class="block w-full"
                                                 :value="old('summary')"
                                                 required />
                             </div>
                         </div>
 
-                        <div class="flex flex-col md:flex-row">
+                        <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
                         @foreach (\App\Support\Nutrients::$all as $nutrient)
                             <!-- {{ ucfirst($nutrient) }} -->
                                 <div class="flex-auto">
@@ -54,7 +59,7 @@
                                                     :value="ucfirst($nutrient) . ' (g)'"/>
 
                                     <x-inputs.input id="{{ $nutrient }}"
-                                                    class="block w-5/6 mt-1"
+                                                    class="block w-full"
                                                     type="number"
                                                     step="any"
                                                     name="{{ $nutrient }}"
