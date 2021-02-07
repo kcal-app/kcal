@@ -16,7 +16,7 @@
                     @csrf
                         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full mb-4">
                             <!-- Date -->
-                            <div class="w-full">
+                            <div class="w-full sm:w-auto">
                                 <x-inputs.label for="date" value="Date"/>
 
                                 <x-inputs.input name="date"
@@ -27,7 +27,7 @@
                             </div>
 
                             <!-- Meal -->
-                            <div class="w-full">
+                            <div class="w-full sm:w-auto">
                                 <x-inputs.label for="meal" value="Meal"/>
 
                                 <x-inputs.select name="meal"
