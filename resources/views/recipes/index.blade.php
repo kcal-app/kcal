@@ -29,7 +29,7 @@
                                     <div class="font-bold text-right">Amount per serving</div>
                                     <div class="flex justify-between items-end font-extrabold">
                                         <div class="text-xl">Calories</div>
-                                        <div class="text-xl" x-text="`${recipe.caloriesPerServing}g`"></div>
+                                        <div class="text-xl" x-text="`${recipe.caloriesPerServing}`"></div>
                                     </div>
                                     <div class="border-t-4 border-black text-sm">
                                         <hr class="border-gray-500"/>

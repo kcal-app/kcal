@@ -42,7 +42,7 @@
                             <div class="text-gray-700">{{ $entries->count() }} {{ \Illuminate\Support\Pluralizer::plural('entry', $entries->count()) }}</div>
                             <div class="grid grid-cols-2 text-sm border-t-8 border-black pt-2">
                                 <div class="font-extrabold text-lg border-b-4 border-black">Calories</div>
-                                <div class="font-extrabold text-right text-lg border-b-4 border-black">{{ round($entries->sum('calories'), 2) }}g</div>
+                                <div class="font-extrabold text-right text-lg border-b-4 border-black">{{ round($entries->sum('calories'), 2) }}</div>
                                 <div class="font-bold border-b border-gray-300">Fat</div>
                                 <div class="text-right border-b border-gray-300">{{ round($entries->sum('fat'), 2) }}g</div>
                                 <div class="font-bold border-b border-gray-300">Cholesterol</div>
