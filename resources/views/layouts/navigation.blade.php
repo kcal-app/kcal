@@ -3,85 +3,74 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
-                <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ \App\Providers\RouteServiceProvider::HOME }}">
-                        <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
-                    </a>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('journal-entries.index')" :active="request()->routeIs('journal-entries.*')">Journal</x-nav-link>
-                    <x-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.*')">Recipes</x-nav-link>
-                    <x-nav-link :href="route('foods.index')" :active="request()->routeIs('foods.*')">Foods</x-nav-link>
+                <div class="flex space-x-8">
+                    <x-nav-link :href="route('journal-entries.index')" :active="request()->routeIs('journal-entries.*')" title="Journal">
+                        <!-- journal by Loki Ba from the Noun Project -->
+                        <!-- https://thenounproject.com/search/?q=journal&i=2026623 -->
+                        <svg class="h-14 w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43 53.75" fill="currentColor">
+                            <path d="M33.648,19.941h-6.909c-0.739,0-2.898,2.953-2.898,3.566s2.159,3.566,2.898,3.566h6.909c0.739,0,1.337-0.6,1.337-1.338  v-4.458C34.985,20.54,34.388,19.941,33.648,19.941z M28.355,25.18c-0.923,0-1.672-0.749-1.672-1.672  c0-0.924,0.749-1.672,1.672-1.672s1.671,0.748,1.671,1.672C30.026,24.431,29.278,25.18,28.355,25.18z"/>
+                            <path d="M22.504,23.508c0-1.145,2.573-4.904,4.235-4.904h5.794v-6.186c0-0.554-0.449-1.003-1.003-1.003H23.54l-3.784,10.397  c-0.21,0.574-0.676,1.373-3.571,3.615c-0.393,0.305-0.879,0.473-1.37,0.473c-0.258,0-0.512-0.045-0.754-0.134  c-0.717-0.261-1.245-0.867-1.41-1.622c-0.776-3.584-0.619-4.495-0.411-5.068l2.789-7.661h-1.776c-2.39,0-5.238,1.103-5.238,6.353  v15.604c0,1.127,0.131,2.062,0.36,2.836c0.017,0.125,0.056,0.242,0.114,0.348c0.909,2.544,2.967,3.168,4.764,3.168h18.278  c0.413,0,0.781-0.256,0.932-0.641c0.15-0.384,0.047-0.824-0.256-1.104c-0.01-0.01-1.03-0.965-1.047-2.185  c-0.01-0.726,0.351-1.45,1.071-2.149c0.001-0.001,0.002-0.002,0.002-0.002c0-0.001,0-0.002,0.002-0.002l0,0c0,0,0-0.001,0.001-0.002  c0.001,0,0.001-0.001,0.001-0.001c0.001-0.002,0.001-0.002,0.001-0.002c0.019-0.019,0.036-0.038,0.052-0.056  c0.001-0.001,0.001-0.001,0.001-0.001c0.001-0.001,0.001-0.002,0.002-0.003c0.141-0.164,0.229-0.374,0.239-0.604  c0-0.019,0.001-0.037,0.001-0.056v-4.505h-5.794C25.077,28.411,22.504,24.651,22.504,23.508z M29.605,37.717H13.253  c-1.488,0-2.416-0.561-2.878-1.811c0.043-1.527,0.741-1.979,4.605-1.979h14.586c-0.287,0.615-0.426,1.256-0.413,1.918  C29.167,36.551,29.356,37.185,29.605,37.717z"/>
+                            <path d="M13.958,23.859c0.066,0.305,0.275,0.547,0.56,0.65s0.601,0.052,0.847-0.139c2.835-2.196,3.06-2.814,3.134-3.017l5.419-14.89  c0.378-1.039-0.076-2.163-1.012-2.504l-1.605-0.584c-0.937-0.342-2.007,0.228-2.385,1.268l-5.418,14.889  C13.423,19.736,13.198,20.354,13.958,23.859z M20.173,5.102c0.122-0.335,0.435-0.555,0.671-0.469l1.605,0.584  c0.235,0.086,0.334,0.455,0.212,0.791L22.457,6.57c-0.33-0.314-0.715-0.561-1.148-0.717c-0.433-0.158-0.887-0.218-1.34-0.189  L20.173,5.102z M14.75,20.029c0.95-0.322,1.948,0.04,2.47,0.897c-0.166,0.269-0.902,0.974-2.103,1.938  C14.814,21.34,14.703,20.32,14.75,20.029z"/>
+                        </svg>
+                    </x-nav-link>
+                    <x-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.*')" title="Recipes">
+                        <!-- meal by Vectorstall from the Noun Project -->
+                        <!-- https://thenounproject.com/vectorstall/collection/gastronomy-set-line-glyphs/?i=2764279 -->
+                        <svg class="h-14 w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 87.5" fill="currentColor">
+                            <g>
+                                <path d="M39.3782501,28.1001415c-0.4699707,0.5599976-0.6599731,1.2999878-0.5199585,2.0199585   c0.1400146,0.7200317,0.5999756,1.3200073,1.2600098,1.6699829c0.3499756,0.1800537,0.7299805,0.2700176,1.1099854,0.2700176   c0.6300049,0,1.2399902-0.2499981,1.7000122-0.7199688l18.4099731-18.8099976c0,0,0,0,0.0100098,0   c1.2299805-1.2600098,1.2399902-3.25,0.0200195-4.5400386c-0.6300049-0.6599731-1.5100098-1.0100098-2.4400024-1   c-0.9200439,0.0200195-1.7900391,0.4299927-2.3900146,1.1300044L44.1883087,22.5101147   c-0.0082397,0.0082397-0.0165405,0.0165405-0.0247803,0.0247803c-0.0070801,0.0068359-0.0134888,0.0132446-0.0203247,0.0203247   c-0.0149536,0.0149536-0.0299683,0.0299683-0.0449219,0.0449219L39.3782501,28.1001415z"/>
+                                <path d="M67.4882965,14.9501162c-0.4800415-0.7000122-1.2300415-1.1600342-2.0599976-1.2800293   c-0.8300171-0.1199951-1.6700439,0.1199951-2.3200073,0.6600342L45.4082794,29.1100903   c-0.5300293,0.4299927-0.8300171,1.0700073-0.8099976,1.75c0.0100098,0.6900024,0.3300171,1.3200054,0.8900146,1.7499981   c0.3999634,0.2900391,0.8699951,0.4400024,1.3399658,0.4400024c0.460022,0,0.9200439-0.1499634,1.3099976-0.4299927   l18.6300049-13.5800152C68.0782623,18.0901318,68.3882599,16.2900829,67.4882965,14.9501162z"/>
+                                <path d="M45.2434235,34.7301445c-0.3243408-0.1308594-0.638916-0.2903442-0.9293823-0.5009766   c-0.3170166-0.2432251-0.5799561-0.5252075-0.8129272-0.824707c-0.6802979,0.4182739-1.4558105,0.6557617-2.2730103,0.6557617   c-0.6982422,0-1.3974609-0.1699219-2.0229492-0.4907227c-1.2236328-0.6484375-2.0566406-1.7622051-2.3100586-3.0683575   c-0.2563477-1.3164063,0.090332-2.6601563,0.9506607-3.6860352l4.3589706-5.0795288   c-1.140625,0.3125-2.1021729,1.173645-2.6164551,2.3445435c-0.8800049-0.2999878-1.9299927-0.1699829-2.8099976,0.3300171   c-0.1599731-0.3400269-0.3800049-0.6700439-0.6599731-0.9500122c-0.5500488-0.5499878-1.2900391-0.8200073-2.1100464-0.8300171   c-0.9199829,0.0100098-1.7599487,0.460022-2.329958,1.1900024c-0.4299927-0.2199707-0.9100342-0.3200073-1.4000244-0.2700195   c-0.5200195-1.5100098-1.8399658-2.5700073-3.3900146-2.5700073c-0.5899658,0-1.1599731,0.1600342-1.6599731,0.4700317   c-0.6600342-1.1799927-1.8200073-1.9500122-3.1300049-1.9500122c-1.9099731,0-3.4799805,1.5900269-3.7000122,3.6400146   c-1.7700195,0.289978-3.1699829,1.8200073-3.4599609,3.7700195c-0.3800049-0.0300293-0.75,0.0199585-1.1200562,0.1399536   c-0.5999756-1.1900024-1.7299805-1.9699707-3.0099487-1.9699707c-1.6400146,0-3.0300288,1.2600098-3.4100337,2.9500122   c-0.2099609-0.0500488-0.4199829-0.0700073-0.6400146-0.0700073c-1.8699951,0-3.3899536,1.6799927-3.3899536,3.75   c0,0.6499615,0.1599731,1.2799664,0.4699707,1.8399639c-0.322876,0.3373413-0.5766602,0.7397461-0.7571411,1.1800537H45.2434235z"/>
+                                <path d="M57.7752838,28.0705395l-8.4588013,6.1659527c-0.289856,0.2077637-0.5999756,0.364563-0.9181519,0.4936523H59.668045   c0.2469482,0,0.4863892,0.039917,0.7206421,0.0982056c0.1837158-0.6020508,0.2896118-1.262085,0.2896118-1.9782104   C60.678299,30.6829662,59.4727325,28.8349438,57.7752838,28.0705395z"/>
+                                <path d="M59.6682892,36.7300835H2.9983048c-0.2700195,0-0.5200195,0.1100464-0.710022,0.3000488   s-0.2899781,0.4400024-0.2899781,0.7099609C2.1259294,49.1330376,8.2486095,56.3383598,20.176466,59.2167168l0.5518188,2.9733887   c0.0800171,0.4799805,0.5,0.8200073,0.9799805,0.8200073h19.2500019c0.4800415,0,0.8900146-0.3400269,0.9800415-0.8200073   l0.5600586-2.9731445c11.9191895-2.878418,18.0422363-10.0933838,18.1699219-21.4768677   c0-0.2699585-0.1000366-0.5199585-0.2900391-0.7099609C60.1883087,36.8401299,59.9383087,36.7300835,59.6682892,36.7300835z"/>
+                            </g>
+                        </svg>
+                    </x-nav-link>
+                    <x-nav-link :href="route('foods.index')" :active="request()->routeIs('foods.*')" title="Foods">
+                        <!-- Food by Adrien Coquet from the Noun Project -->
+                        <!-- https://thenounproject.com/search/?q=food&i=1749565 -->
+                        <svg class="h-14 w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 125" fill="currentColor">
+                            <g>
+                                <path d="M57.1,22.1c1.4-1.1,1.3-3.3-0.3-4.1c-0.6-0.3-1.4-0.4-2.1-0.1l-8.4,3.4l3.3-9.6c0.4-1.1-0.1-2.4-1.2-3L48,8.6     C47,8,45.7,8.3,44.9,9.2l-6.1,8L37,8.4c-0.1-0.7-0.6-1.3-1.2-1.7c-1.3-0.7-2.7-0.1-3.3,1c-0.2,0.3-0.3,0.7-0.3,1l-0.8,13.1     L46.6,30L57.1,22.1z"/>
+                                <path d="M21.8,54.8c0.4-0.8,1.5-1.1,2.3-0.7l10,5.3l13-15.5c3-3.6,1.9-9.1-2.2-11.3l-14.7-7.9c-4.1-2.2-9.3-0.1-10.6,4.4l-1,3.3     l13.6,7.3c0.8,0.4,1.2,1.5,0.7,2.3l-0.5,1c-0.4,0.8-1.5,1.1-2.3,0.7L17.1,37L8.9,64.6l7.8,4.2c0.8,0.4,1.1,1.5,0.7,2.3l-0.5,1     c-0.4,0.8-1.5,1.1-2.3,0.7l-7-3.7L2.7,85.5c-1.2,4,4,6.8,6.7,3.6L31.1,63l-9.1-4.9c-0.8-0.4-1.2-1.5-0.7-2.3L21.8,54.8z"/>
+                                <path d="M87.3,51.6c-0.3,1.7-1.7,3.1-3.5,3.4l-1.3,0.2l3.9,7.3c0.7,1.3,0.7,2.9-0.1,4.3c-0.8,1.3-2.2,2.1-3.7,2.1     c-0.8,0-1.5-0.2-2.2-0.6l-10.9-6.4l-10.6,6.4c-0.7,0.4-1.5,0.6-2.2,0.6c-1.5,0-2.8-0.8-3.7-2c-0.8-1.2-0.9-2.8-0.3-4.1l3.5-7.6     l-2.3-0.6c-1.4-0.4-2.5-1.4-3-2.7c-5.9,4.3-9.7,10.7-9.7,17.9c0,13.1,12.6,23.7,28.1,23.7c15.5,0,28.1-10.6,28.1-23.7     C97.5,62.5,93.5,55.9,87.3,51.6z"/>
+                                <path d="M54.8,51l6,1.5c0.3,0.1,0.5,0.5,0.4,0.8l-5.1,11.1c-0.2,0.5,0.3,1,0.8,0.7l12.2-7.4c0.2-0.1,0.4-0.1,0.6,0l12.5,7.4     c0.5,0.3,1.1-0.3,0.8-0.8l-6-11.2c-0.2-0.3,0-0.8,0.4-0.8l5.6-1c0.6-0.1,0.6-1,0.1-1.1c-2.8-0.8-7.6-2.1-11.4-2.6     c0.3-3.6,1.5-8.4,2.4-10.4c0.7-1.6-4.9-1.7-5.5,0c-0.5,1.5-1.4,6.5-1.7,10.3c-3.9,0.4-9.2,1.6-12.2,2.4     C54.3,50.1,54.3,50.9,54.8,51z"/>
+                            </g>
+                        </svg>
+                    </x-nav-link>
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
+            <div class="flex items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div class="hidden sm:block">{{ Auth::user()->name }}</div>
 
                             <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                <svg class="h-10 w-10 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </div>
                         </button>
                     </x-slot>
 
                     <x-slot name="content">
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}" x-data>
-                            @csrf
-                            <x-dropdown-link :href="route('logout')" @click.prevent="$el.closest('form').submit();">Logout</x-dropdown-link>
-                        </form>
+                        <div class="ml-3">
+                            <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                            <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                        </div>
+
+                        <div class="mt-3 space-y-1">
+                            <!-- Authentication -->
+                            <form method="POST" action="{{ route('logout') }}" x-data>
+                                @csrf
+                                <x-dropdown-link :href="route('logout')" @click.prevent="$el.closest('form').submit();">Logout</x-dropdown-link>
+                            </form>
+                        </div>
                     </x-slot>
                 </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('journal-entries.index')" :active="request()->routeIs('journal-entries.*')">Journal</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.*')">Recipes</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('foods.index')" :active="request()->routeIs('foods.*')">Foods</x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="flex items-center px-4">
-                <div class="flex-shrink-0">
-                    <svg class="h-10 w-10 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                </div>
-
-                <div class="ml-3">
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                </div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}" x-data>
-                    @csrf
-                    <x-responsive-nav-link :href="route('logout')" @click.prevent="$el.closest('form').submit();">Logout</x-responsive-nav-link>
-                </form>
             </div>
         </div>
     </div>
