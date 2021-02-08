@@ -144,7 +144,15 @@ class JournalEntryController extends Controller
             }
 
             // Update summary
-            $unit = $item->serving_unit_formatted ?? $ingredient['unit'];
+            if (empty($item->serving_unit) && empty($item->serving_unit_name)) {
+                $unit = null;
+            }
+            elseif (!empty($item->serving_unit_name)) {
+                $unit = $item->serving_unit_formatted;
+            }
+            else {
+                $unit = $ingredient['unit'];
+            }
             $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null);
             $entries[$entry_key]->summary .= "{$ingredient['amount']} {$unit} {$item->name}";
         }

@@ -136,9 +136,13 @@ final class Food extends Model
      * Get the "formatted" serving unit (for custom unit support).
      */
     public function getServingUnitFormattedAttribute(): ?string {
-        $unit = $this->serving_unit;
-        if (empty($unit)) {
-            $unit = $this->serving_unit_name ?? null;
+        // No unit or unit name can be used for e.g. "bell pepper" or "onion" so
+        // the food name will be displayed directly.
+        if (empty($this->serving_unit) && empty($this->serving_unit_name)) {
+            $unit = null;
+        }
+        else {
+            $unit = $this->serving_unit_name ?? $this->serving_unit ?? 'serving';
         }
         return $unit;
     }
