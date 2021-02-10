@@ -40,12 +40,12 @@
                                         <hr class="border-gray-500"/>
                                         <div class="flex justify-between">
                                             <div class="font-bold">Cholesterol</div>
-                                            <div x-text="`${recipe.cholesterolPerServing}g`"></div>
+                                            <div x-text="`${recipe.cholesterolPerServing}mg`"></div>
                                         </div>
                                         <hr class="border-gray-500"/>
                                         <div class="flex justify-between">
                                             <div class="font-bold">Sodium</div>
-                                            <div x-text="`${recipe.sodiumPerServing}g`"></div>
+                                            <div x-text="`${recipe.sodiumPerServing}mg`"></div>
                                         </div>
                                         <hr class="border-gray-500"/>
                                         <div class="flex justify-between">

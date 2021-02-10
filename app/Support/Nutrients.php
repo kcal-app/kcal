@@ -10,12 +10,12 @@ use App\Models\Food;
 class Nutrients
 {
     public static array $all = [
-        'calories',
-        'fat',
-        'cholesterol',
-        'sodium',
-        'carbohydrates',
-        'protein',
+        ['value' => 'calories', 'unit' => null],
+        ['value' => 'fat', 'unit' => 'g'],
+        ['value' => 'cholesterol', 'unit' => 'mg'],
+        ['value' => 'sodium', 'unit' => 'mg'],
+        ['value' => 'carbohydrates', 'unit' => 'g'],
+        ['value' => 'protein', 'unit' => 'g'],
     ];
 
     public static array $units = [

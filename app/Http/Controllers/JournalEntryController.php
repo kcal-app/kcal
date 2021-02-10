@@ -128,14 +128,14 @@ class JournalEntryController extends Controller
                     $ingredient['unit']
                 );
                 foreach (Nutrients::$all as $nutrient) {
-                    $entries[$entry_key]->{$nutrient} += $item->{$nutrient} * $nutrient_multiplier;
+                    $entries[$entry_key]->{$nutrient['value']} += $item->{$nutrient['value']} * $nutrient_multiplier;
                 }
                 $entries[$entry_key]->foods->add($item);
             }
             elseif ($ingredient['type'] == Recipe::class) {
                 $item = Recipe::whereId($ingredient['id'])->first();
                 foreach (Nutrients::$all as $nutrient) {
-                    $entries[$entry_key]->{$nutrient} += $item->{"{$nutrient}PerServing"}() * Number::floatFromString($ingredient['amount']);
+                    $entries[$entry_key]->{$nutrient['value']} += $item->{"{$nutrient['value']}PerServing"}() * Number::floatFromString($ingredient['amount']);
                 }
                 $entries[$entry_key]->recipes->add($item);
             }

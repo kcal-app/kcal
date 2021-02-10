@@ -110,18 +110,17 @@
                             </div>
 
                             <div class="flex flex-col space-y-4 md:flex-row md:space-y-0">
-                                @foreach ($nutrients as $nutrient)
-                                        <!-- {{ ucfirst($nutrient) }} -->
+                                @foreach (\App\Support\Nutrients::$all as $nutrient)
+                                        <!-- {{ ucfirst($nutrient['value']) }} -->
                                         <div class="flex-auto">
-                                            <x-inputs.label for="{{ $nutrient }}"
-                                                            :value="ucfirst($nutrient) . ' (g)'"/>
+                                            <x-inputs.label for="{{ $nutrient['value'] }}"
+                                                            :value="ucfirst($nutrient['value']) . ($nutrient['unit'] ? ' (' . $nutrient['unit'] . ')' : '')"/>
 
-                                            <x-inputs.input id="{{ $nutrient }}"
-                                                            class="block w-full mt-1 md:w-5/6"
+                                            <x-inputs.input name="{{ $nutrient['value'] }}"
                                                             type="number"
+                                                            class="block w-full mt-1 md:w-5/6"
                                                             step="any"
-                                                            name="{{ $nutrient }}"
-                                                            :value="old($nutrient, $food->{$nutrient})"/>
+                                                            :value="old($nutrient['value'], $food->{$nutrient['value']})"/>
                                         </div>
                                 @endforeach
                             </div>

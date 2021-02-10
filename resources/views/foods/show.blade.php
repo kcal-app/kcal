@@ -52,12 +52,12 @@
                             <hr class="border-gray-500"/>
                             <div class="flex justify-between">
                                 <div class="font-bold">Cholesterol</div>
-                                <div>{{ $food->cholesterol }}g</div>
+                                <div>{{ $food->cholesterol }}mg</div>
                             </div>
                             <hr class="border-gray-500"/>
                             <div class="flex justify-between">
                                 <div class="font-bold">Sodium</div>
-                                <div>{{ $food->sodium }}g</div>
+                                <div>{{ $food->sodium }}mg</div>
                             </div>
                             <hr class="border-gray-500"/>
                             <div class="flex justify-between">

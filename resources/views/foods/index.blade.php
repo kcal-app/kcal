@@ -48,12 +48,12 @@
                                         <hr class="border-gray-500"/>
                                         <div class="flex justify-between">
                                             <div class="font-bold">Cholesterol</div>
-                                            <div x-text="`${Math.round(food.cholesterol*1000)}mg`"></div>
+                                            <div x-text="`${food.cholesterol}mg`"></div>
                                         </div>
                                         <hr class="border-gray-500"/>
                                         <div class="flex justify-between">
                                             <div class="font-bold">Sodium</div>
-                                            <div x-text="`${Math.round(food.sodium*1000)}mg`"></div>
+                                            <div x-text="`${food.sodium}mg`"></div>
                                         </div>
                                         <hr class="border-gray-500"/>
                                         <div class="flex justify-between">

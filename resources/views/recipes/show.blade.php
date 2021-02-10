@@ -64,12 +64,12 @@
                                     <hr class="border-gray-500"/>
                                     <div class="flex justify-between">
                                         <div class="font-bold">Cholesterol</div>
-                                        <div>{{ $recipe->cholesterolPerServing() }}g</div>
+                                        <div>{{ $recipe->cholesterolPerServing() }}mg</div>
                                     </div>
                                     <hr class="border-gray-500"/>
                                     <div class="flex justify-between">
                                         <div class="font-bold">Sodium</div>
-                                        <div>{{ $recipe->sodiumPerServing() }}g</div>
+                                        <div>{{ $recipe->sodiumPerServing() }}mg</div>
                                     </div>
                                     <hr class="border-gray-500"/>
                                     <div class="flex justify-between">

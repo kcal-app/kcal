@@ -62,7 +62,6 @@ class FoodController extends Controller
         return view('foods.edit')
             ->with('food', $food)
             ->with('food_tags', $food_tags)
-            ->with('nutrients', Nutrients::$all)
             ->with('serving_units', new Collection([
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],

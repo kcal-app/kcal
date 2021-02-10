@@ -53,16 +53,16 @@
 
                         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
                         @foreach (\App\Support\Nutrients::$all as $nutrient)
-                            <!-- {{ ucfirst($nutrient) }} -->
+                            <!-- {{ ucfirst($nutrient['value']) }} -->
                                 <div class="flex-auto">
-                                    <x-inputs.label for="{{ $nutrient }}"
+                                    <x-inputs.label for="{{ $nutrient['value'] }}"
                                                     :value="ucfirst($nutrient) . ' (g)'"/>
 
-                                    <x-inputs.input id="{{ $nutrient }}"
+                                    <x-inputs.input id="{{ $nutrient['value'] }}"
                                                     class="block w-full"
                                                     type="number"
                                                     step="any"
-                                                    name="{{ $nutrient }}"
+                                                    name="{{ $nutrient['value'] }}"
                                                     :value="old($nutrient)"/>
                                 </div>
                             @endforeach

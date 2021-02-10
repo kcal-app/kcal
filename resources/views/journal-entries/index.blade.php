@@ -46,9 +46,9 @@
                                 <div class="font-bold border-b border-gray-300">Fat</div>
                                 <div class="text-right border-b border-gray-300">{{ round($entries->sum('fat'), 2) }}g</div>
                                 <div class="font-bold border-b border-gray-300">Cholesterol</div>
-                                <div class="text-right border-b border-gray-300">{{ round($entries->sum('cholesterol'), 2) }}g</div>
+                                <div class="text-right border-b border-gray-300">{{ round($entries->sum('cholesterol'), 2) }}mg</div>
                                 <div class="font-bold border-b border-gray-300">Sodium</div>
-                                <div class="text-right border-b border-gray-300">{{ round($entries->sum('sodium'), 2) }}g</div>
+                                <div class="text-right border-b border-gray-300">{{ round($entries->sum('sodium'), 2) }}mg</div>
                                 <div class="font-bold border-b border-gray-300">Carbohydrates</div>
                                 <div class="text-right border-b border-gray-300">{{ round($entries->sum('carbohydrates'), 2) }}g</div>
                                 <div class="font-bold">Protein</div>
@@ -65,8 +65,8 @@
                                         </div>
                                         <span class="text-sm text-gray-500">
                                         @foreach(\App\Support\Nutrients::$all as $nutrient)
-                                                {{ round($entries->where('meal', $meal)->sum($nutrient), 2) }}g
-                                                {{ $nutrient }}@if(!$loop->last), @endif
+                                                {{ round($entries->where('meal', $meal)->sum($nutrient['value']), 2) }}{{ $nutrient['unit'] }}
+                                                {{ $nutrient['value'] }}@if(!$loop->last), @endif
                                             @endforeach
                                     </span>
                                     </h3>
@@ -85,8 +85,8 @@
                                                 <div>
                                                     <span class="font-bold">nutrients:</span>
                                                     @foreach(\App\Support\Nutrients::$all as $nutrient)
-                                                        {{ round($entry->{$nutrient}, 2) }}g
-                                                        {{ $nutrient }}@if(!$loop->last), @endif
+                                                        {{ round($entry->{$nutrient['value']}, 2) }}{{ $nutrient['unit'] }}
+                                                        {{ $nutrient['value'] }}@if(!$loop->last), @endif
                                                     @endforeach
                                                 </div>
                                                 @if($entry->foods()->exists())
