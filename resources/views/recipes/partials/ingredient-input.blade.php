@@ -2,6 +2,11 @@
     <x-inputs.input type="hidden" name="ingredients[original_key][]" :value="$original_key ?? null" />
     <div class="flex items-center space-x-2">
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
+            <div class="w-full">
+                <x-ingredient-picker :default-id="$ingredient_id ?? null"
+                                     :default-type="$ingredient_type ?? null"
+                                     :default-name="$ingredient_name ?? null" />
+            </div>
             <x-inputs.input name="ingredients[amount][]"
                             type="text"
                             size="5"
@@ -14,11 +19,6 @@
                              :selectedValue="$unit ?? null">
                 <option value="" selected>Unit</option>
             </x-inputs.select>
-            <div class="w-full">
-                <x-ingredient-picker :default-id="$ingredient_id ?? null"
-                                     :default-type="$ingredient_type ?? null"
-                                     :default-name="$ingredient_name ?? null" />
-            </div>
             <x-inputs.input name="ingredients[detail][]"
                             type="text"
                             class="block"

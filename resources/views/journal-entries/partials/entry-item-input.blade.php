@@ -1,5 +1,14 @@
 <div x-data class="flex items-center space-x-2">
     <div class="flex flex-col space-y-4 w-full">
+        <div class="w-full">
+            <!-- Ingredient -->
+            <div class="w-full">
+                <x-inputs.label for="ingredients[id][]" value="Food or Recipe" class="md:hidden"/>
+                <x-ingredient-picker :default-id="$id ?? null"
+                                     :default-type="$type ?? null"
+                                     :default-name="$name ?? null" />
+            </div>
+        </div>
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
             <!-- Date -->
             <div class="w-full">
@@ -43,15 +52,6 @@
                                  :selectedValue="$unit ?? null">
                     <option value="">-- Unit --</option>
                 </x-inputs.select>
-            </div>
-        </div>
-        <div class="w-full">
-            <!-- Ingredient -->
-            <div class="w-full">
-                <x-inputs.label for="ingredients[id][]" value="Food or Recipe" class="md:hidden"/>
-                <x-ingredient-picker :default-id="$id ?? null"
-                                     :default-type="$type ?? null"
-                                     :default-name="$name ?? null" />
             </div>
         </div>
         <div class="w-full">
