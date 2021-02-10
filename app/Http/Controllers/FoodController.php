@@ -93,6 +93,14 @@ class FoodController extends Controller
         ]);
         $attributes['serving_size'] = Number::floatFromString($attributes['serving_size']);
         $attributes['name'] = Str::lower($attributes['name']);
+
+        // Default nutrients to zero.
+        foreach (Nutrients::$all as $nutrient) {
+            if (is_null($attributes[$nutrient['value']])) {
+                $attributes[$nutrient['value']] = 0;
+            }
+        }
+
         $food->fill($attributes)->save();
 
         // Sync tags.
