@@ -56,14 +56,14 @@
                             <!-- {{ ucfirst($nutrient['value']) }} -->
                                 <div class="flex-auto">
                                     <x-inputs.label for="{{ $nutrient['value'] }}"
-                                                    :value="ucfirst($nutrient) . ' (g)'"/>
+                                                    :value="ucfirst($nutrient['value']) . ($nutrient['unit'] ? ' (' . $nutrient['unit'] . ')' : '')"/>
 
                                     <x-inputs.input id="{{ $nutrient['value'] }}"
                                                     class="block w-full"
                                                     type="number"
                                                     step="any"
                                                     name="{{ $nutrient['value'] }}"
-                                                    :value="old($nutrient)"/>
+                                                    :value="old($nutrient['value'])"/>
                                 </div>
                             @endforeach
                         </div>
