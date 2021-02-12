@@ -50,6 +50,12 @@
                             <div class="p-1 border-2 border-black font-sans md:w-72">
                                 <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
                                 <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
+                                @if($recipe->serving_weight)
+                                    <div class="flex justify-between items-end font-extrabold">
+                                        <div>Serving weight</div>
+                                        <div>{{ $recipe->serving_weight }}g</div>
+                                    </div>
+                                @endif
                                 <div class="font-bold text-right border-t-8 border-black">Amount per serving</div>
                                 <div class="flex justify-between items-end font-extrabold">
                                     <div class="text-3xl">Calories</div>

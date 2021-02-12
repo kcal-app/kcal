@@ -23,10 +23,14 @@
                                         <a x-bind:href="recipe.showUrl"
                                            class="hover:text-gray-600" x-text="recipe.name"></a>
                                     </div>
-                                    <div class="flex justify-between font-bold border-b-8 border-black">
+                                    <div class="flex justify-between">
                                         <div class="leading-snug" x-text="`${recipe.servings} servings`"></div>
                                     </div>
-                                    <div class="font-bold text-right">Amount per serving</div>
+                                    <div class="flex justify-between items-end font-extrabold" x-show="recipe.serving_weight">
+                                        <div>Serving weight</div>
+                                        <div x-text="`${recipe.serving_weight}g`"></div>
+                                    </div>
+                                    <div class="font-bold text-right border-t-8 border-black">Amount per serving</div>
                                     <div class="flex justify-between items-end font-extrabold">
                                         <div class="text-xl">Calories</div>
                                         <div class="text-xl" x-text="`${recipe.caloriesPerServing}`"></div>

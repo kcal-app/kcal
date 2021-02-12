@@ -17,10 +17,9 @@
                             <div class="flex-auto">
                                 <x-inputs.label for="name" value="Name" />
 
-                                <x-inputs.input id="name"
-                                                class="block mt-1 w-full"
+                                <x-inputs.input name="name"
                                                 type="text"
-                                                name="name"
+                                                class="block mt-1 w-full"
                                                 :value="old('name', $recipe->name)"
                                                 required />
                             </div>
@@ -29,33 +28,41 @@
                             <div class="flex-auto">
                                 <x-inputs.label for="servings" value="Servings" />
 
-                                <x-inputs.input id="servings"
-                                                class="block mt-1 w-full"
+                                <x-inputs.input name="servings"
                                                 type="number"
-                                                name="servings"
+                                                class="block mt-1 w-full"
                                                 :value="old('servings', $recipe->servings)"
                                                 required />
                             </div>
 
+                            <!-- Weight -->
+                            <div class="flex-auto">
+                                <x-inputs.label for="weight" value="Total weight (g)" />
+
+                                <x-inputs.input name="weight"
+                                                type="number"
+                                                step="any"
+                                                class="block mt-1 w-full"
+                                                :value="old('weight', $recipe->weight)" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-4 mt-4">
                             <!-- Source -->
                             <div class="flex-auto">
                                 <x-inputs.label for="source" value="Source" />
 
-                                <x-inputs.input id="source"
-                                                class="block mt-1 w-full"
+                                <x-inputs.input name="source"
                                                 type="text"
-                                                name="source"
+                                                class="block mt-1 w-full"
                                                 :value="old('source', $recipe->source)" />
                             </div>
-                        </div>
-                        <div class="flex flex-col space-y-4 mt-4">
+
                             <!-- Description -->
                             <div>
                                 <x-inputs.label for="description" value="Description" />
 
-                                <x-inputs.textarea id="description"
+                                <x-inputs.textarea name="description"
                                                    class="block mt-1 w-full"
-                                                   name="description"
                                                    :value="old('description', $recipe->description)" />
                             </div>
 

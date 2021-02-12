@@ -156,6 +156,7 @@ class RecipeController extends Controller
             'description' => 'nullable|string',
             'source' => 'nullable|string',
             'servings' => 'required|numeric',
+            'weight' => 'nullable|numeric',
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
             'ingredients.unit' => ['required', 'array'],
@@ -185,6 +186,7 @@ class RecipeController extends Controller
             'description' => $input['description'],
             'source' => $input['source'],
             'servings' => (int) $input['servings'],
+            'weight' => $input['weight'],
         ]);
 
         try {

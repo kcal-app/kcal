@@ -20,6 +20,7 @@ class CreateRecipesTable extends Migration
             $table->longText('description')->nullable();
             $table->string('source')->nullable();
             $table->unsignedInteger('servings');
+            $table->unsignedFloat('weight')->nullable();
             $table->timestamps();
         });
     }

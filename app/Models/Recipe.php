@@ -6,6 +6,7 @@ use App\Models\Traits\HasIngredients;
 use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
+use App\Support\Number;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -65,6 +66,7 @@ final class Recipe extends Model
         'description',
         'source',
         'servings',
+        'weight',
     ];
 
     /**
@@ -72,6 +74,7 @@ final class Recipe extends Model
      */
     protected $casts = [
         'servings' => 'int',
+        'weight' => 'float',
     ];
 
     /**
@@ -85,6 +88,23 @@ final class Recipe extends Model
         'proteinPerServing',
         'sodiumPerServing',
     ];
+
+    /**
+     * @inheritdoc
+     */
+    protected $appends = [
+        'serving_weight',
+    ];
+
+    /**
+     * Get the serving weight (rounded).
+     */
+    public function getServingWeightAttribute(): ?float {
+        if (empty($this->weight)) {
+            return null;
+        }
+        return round($this->weight / $this->servings, 2);
+    }
 
     /**
      * Get the steps for this Recipe.
