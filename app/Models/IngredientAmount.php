@@ -146,7 +146,12 @@ final class IngredientAmount extends Model
                     $this->amount,
                     $this->unit
                 ),
-                Recipe::class => $this->ingredient->{"{$method}PerServing"}() * $this->amount,
+                Recipe::class => Nutrients::calculateRecipeNutrientAmount(
+                    $this->ingredient,
+                    $method,
+                    $this->amount,
+                    $this->unit
+                ),
                 default => 0
             };
         }

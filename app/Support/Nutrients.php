@@ -3,12 +3,12 @@
 namespace App\Support;
 
 use App\Models\Food;
+use App\Models\Recipe;
 
-/**
- * TODO: Refactor for more general use.
- */
 class Nutrients
 {
+    public static float $gramsPerOunce = 28.349523125;
+
     public static array $all = [
         ['value' => 'calories', 'unit' => null],
         ['value' => 'fat', 'unit' => 'g'],
@@ -27,13 +27,22 @@ class Nutrients
         ['value' => 'serving', 'label' => 'servings'],
     ];
 
+    /**
+     * Calculate a nutrient multiplier for a Food.
+     *
+     * @param \App\Models\Food $food
+     * @param float $amount
+     * @param string|null $fromUnit
+     *
+     * @return float
+     */
     public static function calculateFoodNutrientMultiplier(
         Food $food,
         float $amount,
         string|null $fromUnit
     ): float {
         if ($fromUnit === 'oz') {
-            return $amount * 28.349523125 / $food->serving_weight;
+            return $amount * self::$gramsPerOunce / $food->serving_weight;
         }
         elseif ($fromUnit === 'serving') {
             return $amount;
@@ -75,5 +84,35 @@ class Nutrients
         }
 
         return $multiplier / $food->serving_size * $amount;
+    }
+
+    /**
+     * Calculate a nutrient amount for a recipe.
+     *
+     * @param \App\Models\Recipe $recipe
+     * @param string $nutrient
+     * @param float $amount
+     * @param string $fromUnit
+     *
+     * @return float
+     */
+    public static function calculateRecipeNutrientAmount(
+        Recipe $recipe,
+        string $nutrient,
+        float $amount,
+        string $fromUnit
+    ): float {
+        if ($fromUnit === 'oz') {
+            return $amount * self::$gramsPerOunce / $recipe->weight * $recipe->{"{$nutrient}Total"}();
+        }
+        elseif ($fromUnit === 'serving') {
+            return $recipe->{"{$nutrient}PerServing"}() * $amount;
+        }
+        elseif ($fromUnit === 'gram') {
+            return $amount / $recipe->weight * $recipe->{"{$nutrient}Total"}();
+        }
+        else {
+            throw new \DomainException("Unsupported recipe unit: {$fromUnit}");
+        }
     }
 }

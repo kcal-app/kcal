@@ -29,12 +29,17 @@
                          x-bind:data-detail="result.detail">
                         <div class="pointer-events-none">
                             <div>
-                                <span x-text="result.name"></span><span class="text-gray-600" x-text="', ' + result.detail" x-show="result.detail"></span>
+                                <span class="font-bold" x-text="result.name"></span><span class="text-gray-600" x-text="', ' + result.detail" x-show="result.detail"></span>
                             </div>
-                            <div x-show="result.servings">
-                                <div class="text-sm">Servings: <span x-text="result.servings"></span></div>
+                            <div x-show="result.type === 'App\\Models\\Recipe'">
+                                <div x-show="result.serving_weight">
+                                    <div class="text-sm">Serving weight <span x-text="result.serving_weight"></span>g</div>
+                                </div>
+                                <div x-show="result.servings">
+                                    <div class="text-sm">Servings: <span x-text="result.servings"></span></div>
+                                </div>
                             </div>
-                            <div x-show="result.serving_size">
+                            <div x-show="result.type === 'App\\Models\\Food'">
                                 <div class="text-sm text-gray-600" x-text="result.brand" x-show="result.brand"></div>
                                 <div class="text-sm">
                                     Serving size <span x-text="result.serving_size_formatted"></span>

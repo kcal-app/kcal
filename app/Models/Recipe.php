@@ -53,6 +53,9 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAllTagsOfAnyType($tags)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTags($tags, ?string $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTagsOfAnyType($tags)
+ * @property float|null $weight
+ * @property-read float|null $serving_weight
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereWeight($value)
  */
 final class Recipe extends Model
 {

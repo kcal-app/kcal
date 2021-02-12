@@ -135,7 +135,12 @@ class JournalEntryController extends Controller
             elseif ($ingredient['type'] == Recipe::class) {
                 $item = Recipe::whereId($ingredient['id'])->first();
                 foreach (Nutrients::$all as $nutrient) {
-                    $entries[$entry_key]->{$nutrient['value']} += $item->{"{$nutrient['value']}PerServing"}() * Number::floatFromString($ingredient['amount']);
+                    $entries[$entry_key]->{$nutrient['value']} += Nutrients::calculateRecipeNutrientAmount(
+                        $item,
+                        $nutrient['value'],
+                        Number::floatFromString($ingredient['amount']),
+                        $ingredient['unit']
+                    );
                 }
                 $entries[$entry_key]->recipes->add($item);
             }
@@ -144,14 +149,14 @@ class JournalEntryController extends Controller
             }
 
             // Update summary
-            if (empty($item->serving_unit) && empty($item->serving_unit_name)) {
-                $unit = null;
-            }
-            elseif (!empty($item->serving_unit_name)) {
-                $unit = $item->serving_unit_formatted;
-            }
-            else {
-                $unit = $ingredient['unit'];
+            $unit = $ingredient['unit'];
+            if ($item instanceof Food) {
+                if (empty($item->serving_unit) && empty($item->serving_unit_name)) {
+                    $unit = null;
+                }
+                elseif (!empty($item->serving_unit_name)) {
+                    $unit = $item->serving_unit_formatted;
+                }
             }
             $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null);
             $entries[$entry_key]->summary .= "{$ingredient['amount']} {$unit} {$item->name}";
