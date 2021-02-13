@@ -32,27 +32,24 @@
                                                     :value="old('to', $goal->to)" />
                                 </div>
 
-                                <!-- Attribute -->
+                                <!-- Amount -->
                                 <div class="flex-auto">
-                                    <x-inputs.label for="attribute" value="Attribute"/>
-
-                                    <x-inputs.select name="attribute"
-                                                     class="block mt-1 w-full"
-                                                     :options="$attributeOptions"
-                                                     :selectedValue="old('attribute', $goal->attribute)">
-                                        <option value=""></option>
-                                    </x-inputs.select>
+                                    <x-inputs.label for="amount" value="Amount" />
+                                    <x-inputs.input name="amount"
+                                                    type="number"
+                                                    step="any"
+                                                    class="block w-full"
+                                                    :value="old('amount', $goal->amount)"/>
                                 </div>
 
                                 <!-- Goal -->
                                 <div class="flex-auto">
-                                    <x-inputs.label for="goal" value="Goal"/>
-
-                                    <x-inputs.input name="goal"
-                                                    type="number"
-                                                    step="any"
-                                                    class="block mt-1 w-full"
-                                                    :value="old('goal', $goal->goal)"/>
+                                    <x-inputs.label for="goal" value="Goal" />
+                                    <x-inputs.select name="goal"
+                                                     class="block w-full"
+                                                     :options="$goalOptions"
+                                                     :selectedValue="old('goal', $goal->goal)">
+                                    </x-inputs.select>
                                 </div>
                             </div>
                         </div>

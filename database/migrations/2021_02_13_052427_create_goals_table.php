@@ -19,8 +19,8 @@ class CreateGoalsTable extends Migration
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->date('from')->nullable();
             $table->date('to')->nullable();
-            $table->string('attribute');
-            $table->unsignedFloat('goal');
+            $table->string('goal');
+            $table->unsignedFloat('amount');
             $table->timestamps();
             $table->index('user_id');
         });

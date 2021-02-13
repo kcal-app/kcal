@@ -51,7 +51,7 @@ class GoalController extends Controller
     {
         return view('goals.edit')
             ->with('goal', $goal)
-            ->with('attributeOptions', Goal::getAttributeOptions());
+            ->with('goalOptions', Goal::getGoalOptions());
     }
 
     /**
@@ -62,8 +62,8 @@ class GoalController extends Controller
         $attributes = $request->validate([
             'from' => ['nullable', 'date'],
             'to' => ['nullable', 'date'],
-            'attribute' => ['required', 'string'],
-            'goal' => ['required', 'numeric'],
+            'goal' => ['required', 'string'],
+            'amount' => ['required', 'numeric'],
         ]);
         $goal->fill(array_filter($attributes))
             ->user()->associate(Auth::user());

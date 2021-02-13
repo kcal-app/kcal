@@ -6,7 +6,6 @@ use App\Support\Nutrients;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str;
 
 /**
  * App\Models\Goal
@@ -15,15 +14,15 @@ use Illuminate\Support\Str;
  * @property int $user_id
  * @property \datetime|null $from
  * @property \datetime|null $to
- * @property string $attribute
- * @property float $goal
+ * @property string $goal
+ * @property float $amount
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Goal newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Goal newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Goal query()
- * @method static \Illuminate\Database\Eloquent\Builder|Goal whereAttribute($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Goal whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereFrom($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereGoal($value)
@@ -33,7 +32,7 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereUserId($value)
  * @mixin \Eloquent
  */
-class Goal extends Model
+final class Goal extends Model
 {
     use HasFactory;
 
@@ -43,8 +42,8 @@ class Goal extends Model
     protected $fillable = [
         'from',
         'to',
-        'attribute',
         'goal',
+        'amount',
     ];
 
     /**
@@ -53,7 +52,7 @@ class Goal extends Model
     protected $casts = [
         'from' => 'datetime:Y-m-d',
         'to' => 'datetime:Y-m-d',
-        'goal' => 'float',
+        'amount' => 'float',
     ];
 
     /**
@@ -64,20 +63,18 @@ class Goal extends Model
     }
 
     /**
-     * Get options for the "attribute" column.
+     * Get options for the "goal" column.
      *
      * @return array
      */
-    public static function getAttributeOptions(): array {
+    public static function getGoalOptions(): array {
         $options = [];
         foreach (Nutrients::$all as $nutrient) {
-            foreach (['daily', 'weekly', 'monthly', 'yearly'] as $frequency) {
-                $key = "{$nutrient['value']}_{$frequency}";
-                $options[$key] = [
-                    'value' => $key,
-                    'label' => Str::ucfirst("{$frequency} {$nutrient['value']}")
-                ];
-            }
+            $key = "{$nutrient['value']}_per_day";
+            $options[$key] = [
+                'value' => $key,
+                'label' => "{$nutrient['value']} per day",
+            ];
         }
         return $options;
     }

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Delete {{ $goal->attribute }} Goal?
+            Delete {{ $goal->goal }} goal?
         </h2>
     </x-slot>
 
@@ -13,7 +13,7 @@
                         @method('delete')
                         @csrf
                         <div class="text-lg pb-3">
-                            Are you sure what to delete your <span class="font-extrabold">{{ $goal->attribute }}</span> goal?
+                            Are you sure what to delete your <span class="font-extrabold">{{ $goal->goal }}</span> goal?
                         </div>
                         <x-inputs.button class="bg-red-800 hover:bg-red-700">
                             Yes, delete
