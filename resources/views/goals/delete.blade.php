@@ -13,7 +13,7 @@
                         @method('delete')
                         @csrf
                         <div class="text-lg pb-3">
-                            Are you sure what to delete your <span class="font-extrabold">{{ $goal->goal }}</span> goal?
+                            Are you sure what to delete your <span class="font-extrabold">{{ $goalOptions[$goal->goal]['label'] }}</span> goal?
                         </div>
                         <x-inputs.button class="bg-red-800 hover:bg-red-700">
                             Yes, delete

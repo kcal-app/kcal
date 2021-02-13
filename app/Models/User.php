@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\User
@@ -68,5 +70,32 @@ final class User extends Authenticatable
      */
     public function goals(): HasMany {
         return $this->hasMany(Goal::class);
+    }
+
+    /**
+     * Get User's past, present, and future goals.
+     *
+     * @return \App\Models\Goal[]
+     */
+    public function getGoalsByTime(?Carbon $date = null): array {
+        $now = $date ?? Carbon::now();
+        $goals = ['past' => [], 'present' => [], 'future' => []];
+        Goal::all()->where('user_id', Auth::user()->id)
+            ->each(function ($item) use(&$goals, $now) {
+                if ($item->to && $now->isAfter($item->to)) {
+                    $goals['past'][$item->id] = $item;
+                }
+                elseif ($item->from && $now->isBefore($item->from)) {
+                    $goals['future'][$item->id] = $item;
+                }
+                elseif (
+                    empty($item->from)
+                    || empty($item->to)
+                    || $now->isBetween($item->from, $item->to)
+                ) {
+                    $goals['present'][$item->id] = $item;
+                }
+            });
+        return $goals;
     }
 }

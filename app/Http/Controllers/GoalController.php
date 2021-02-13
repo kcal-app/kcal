@@ -6,6 +6,7 @@ use App\Models\Goal;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class GoalController extends Controller
@@ -13,9 +14,18 @@ class GoalController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('goals.index');
+        if ($request->date) {
+            $date = Carbon::createFromFormat('Y-m-d', $request->date);
+        }
+        else {
+            $date = Carbon::now();
+        }
+        return view('goals.index')
+            ->with('date', $date)
+            ->with('goals', Auth::user()->getGoalsByTime($date))
+            ->with('goalOptions', Goal::getGoalOptions());
     }
 
     /**
@@ -77,7 +87,9 @@ class GoalController extends Controller
      */
     public function delete(Goal $goal): View
     {
-        return view('goals.delete')->with('goal', $goal);
+        return view('goals.delete')
+            ->with('goal', $goal)
+            ->with('goalOptions', Goal::getGoalOptions());
     }
 
     /**

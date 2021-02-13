@@ -74,6 +74,7 @@ final class Goal extends Model
             $options[$key] = [
                 'value' => $key,
                 'label' => "{$nutrient['value']} per day",
+                'unit' => $nutrient['unit'],
             ];
         }
         return $options;
