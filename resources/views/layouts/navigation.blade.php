@@ -63,6 +63,10 @@
                         </div>
 
                         <div class="mt-3 space-y-1">
+                            <x-dropdown-link :href="route('goals.index')">Goals</x-dropdown-link>
+                        </div>
+
+                        <div class="mt-3 space-y-1">
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
