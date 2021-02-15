@@ -69,7 +69,7 @@ final class JournalEntry extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * @inheritdoc
      */
     protected $casts = [
         'calories' => 'float',

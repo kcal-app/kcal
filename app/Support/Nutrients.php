@@ -10,21 +10,21 @@ class Nutrients
     public static float $gramsPerOunce = 28.349523125;
 
     public static array $all = [
-        ['value' => 'calories', 'unit' => null],
-        ['value' => 'fat', 'unit' => 'g'],
-        ['value' => 'cholesterol', 'unit' => 'mg'],
-        ['value' => 'sodium', 'unit' => 'mg'],
-        ['value' => 'carbohydrates', 'unit' => 'g'],
-        ['value' => 'protein', 'unit' => 'g'],
+        'calories' => ['value' => 'calories', 'label' => 'calories', 'unit' => null],
+        'carbohydrates' => ['value' => 'carbohydrates', 'label' => 'carbohydrates', 'unit' => 'g'],
+        'cholesterol' => ['value' => 'cholesterol', 'label' => 'cholesterol', 'unit' => 'mg'],
+        'fat' => ['value' => 'fat', 'label' => 'fat', 'unit' => 'g'],
+        'protein' => ['value' => 'protein', 'label' => 'protein', 'unit' => 'g'],
+        'sodium' => ['value' => 'sodium', 'label' => 'sodium', 'unit' => 'mg'],
     ];
 
     public static array $units = [
-        ['value' => 'tsp', 'label' => 'tsp.'],
-        ['value' => 'tbsp', 'label' => 'tbsp.'],
-        ['value' => 'cup', 'label' => 'cup'],
-        ['value' => 'oz', 'label' => 'oz'],
-        ['value' => 'gram', 'label' => 'grams'],
-        ['value' => 'serving', 'label' => 'servings'],
+        'cup' => ['value' => 'cup', 'label' => 'cup'],
+        'gram' => ['value' => 'gram', 'label' => 'grams'],
+        'oz' => ['value' => 'oz', 'label' => 'oz'],
+        'serving' => ['value' => 'serving', 'label' => 'servings'],
+        'tbsp' => ['value' => 'tbsp', 'label' => 'tbsp.'],
+        'tsp' => ['value' => 'tsp', 'label' => 'tsp.'],
     ];
 
     /**

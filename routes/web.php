@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\GoalController;
 use App\Http\Controllers\IngredientPickerController;
 use App\Http\Controllers\JournalEntryController;
 use App\Http\Controllers\RecipeController;
@@ -27,8 +28,12 @@ Route::get('/', function (): RedirectResponse {
 Route::resource('foods', FoodController::class)->middleware(['auth']);
 Route::get('/foods/{food}/delete', [FoodController::class, 'delete'])->middleware(['auth'])->name('foods.delete');
 
-// Recipes.
-Route::resource('recipes', RecipeController::class)->middleware(['auth']);
+// Goals.
+Route::resource('goals', GoalController::class)->middleware(['auth']);
+Route::get('/goals/{goal}/delete', [GoalController::class, 'delete'])->middleware(['auth'])->name('goals.delete');
+
+// Ingredient picker.
+Route::get('/ingredient-picker/search', [IngredientPickerController::class, 'search'])->middleware(['auth'])->name('ingredient-picker.search');
 
 // Journal entries.
 Route::get('/journal-entries/create/from-nutrients', [JournalEntryController::class, 'createFromNutrients'])->middleware(['auth'])->name('journal-entries.create.from-nutrients');
@@ -36,8 +41,7 @@ Route::post('/journal-entries/create/from-nutrients', [JournalEntryController::c
 Route::resource('journal-entries', JournalEntryController::class)->middleware(['auth']);
 Route::get('/journal-entries/{journalEntry}/delete', [JournalEntryController::class, 'delete'])->middleware(['auth'])->name('journal-entries.delete');
 
-// Custom.
-// TODO: Change this to a custom JSON API endpoint.
-Route::get('/ingredient-picker/search', [IngredientPickerController::class, 'search'])->middleware(['auth'])->name('ingredient-picker.search');
+// Recipes.
+Route::resource('recipes', RecipeController::class)->middleware(['auth']);
 
 require __DIR__.'/auth.php';

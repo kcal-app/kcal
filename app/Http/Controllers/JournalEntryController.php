@@ -29,12 +29,39 @@ class JournalEntryController extends Controller
     public function index(Request $request): View
     {
         $date = $request->date ?? Carbon::now()->toDateString();
+        $date = Carbon::rawCreateFromFormat('Y-m-d', $date);
+
+        // Get entries and nutrient sums for the day.
+        $entries = JournalEntry::where([
+            'user_id' => Auth::user()->id,
+            'date' => $date->toDateString(),
+        ])->get();
+        $sums = [];
+        foreach (Nutrients::$all as $nutrient) {
+            $sums[$nutrient['value']] = round($entries->sum($nutrient['value']));
+        }
+
+        // Get daily goals data for user.
+        $goals = Auth::user()->getGoalsByTime($date);
+        $dailyGoals = [];
+        foreach (Nutrients::$all as $nutrient) {
+            $goal = $goals['present']
+                ->where('frequency', 'daily')
+                ->where('name', $nutrient['value'])
+                ->first();
+            if ($goal) {
+                $dailyGoals[$goal->name] = round($sums[$goal->name] / $goal->goal * 100);
+                if ($dailyGoals[$goal->name] > 0) {
+                    $dailyGoals[$goal->name] .= '%';
+                }
+            }
+        }
+
         return view('journal-entries.index')
-            ->with('entries', JournalEntry::where([
-                'user_id' => Auth::user()->id,
-                'date' => $date,
-            ])->get())
-            ->with('date', Carbon::createFromFormat('Y-m-d', $date));
+            ->with('entries', $entries)
+            ->with('sums', $sums)
+            ->with('dailyGoals', $dailyGoals)
+            ->with('date', $date);
     }
 
     /**
