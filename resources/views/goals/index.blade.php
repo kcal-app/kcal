@@ -36,10 +36,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-800">Goals</h3>
                     @forelse($goals['present'] as $goal)
                         <details>
-                            <summary>{{ number_format($goal->amount, 0) }}{{ $goalOptions[$goal->goal]['unit'] }} {{ $goalOptions[$goal->goal]['label'] }}</summary>
+                            <summary>{{ $goal->summary }}</summary>
                             TODO: Details for the day!
                             <div class="flex">
                                 <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"

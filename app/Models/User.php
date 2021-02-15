@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -79,7 +80,7 @@ final class User extends Authenticatable
      */
     public function getGoalsByTime(?Carbon $date = null): array {
         $now = $date ?? Carbon::now();
-        $goals = ['past' => [], 'present' => [], 'future' => []];
+        $goals = ['past' => new Collection(), 'present' => new Collection(), 'future' => new Collection()];
         Goal::all()->where('user_id', Auth::user()->id)
             ->each(function ($item) use(&$goals, $now) {
                 if ($item->to && $now->isAfter($item->to)) {

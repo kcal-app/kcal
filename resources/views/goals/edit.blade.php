@@ -32,24 +32,36 @@
                                                     :value="old('to', $goal->to)" />
                                 </div>
 
-                                <!-- Amount -->
+                                <!-- Frequency -->
                                 <div class="flex-auto">
-                                    <x-inputs.label for="amount" value="Amount" />
-                                    <x-inputs.input name="amount"
-                                                    type="number"
-                                                    step="any"
-                                                    class="block w-full"
-                                                    :value="old('amount', $goal->amount)"/>
+                                    <x-inputs.label for="frequency" value="Frequency" />
+                                    <x-inputs.select name="frequency"
+                                                     class="block w-full"
+                                                     :options="$frequencyOptions"
+                                                     :selectedValue="old('frequency', $goal->frequency)">
+                                    </x-inputs.select>
+                                </div>
+
+                                <!-- Name -->
+                                <div class="flex-auto">
+                                    <x-inputs.label for="name" value="Trackable" />
+                                    <x-inputs.select name="name"
+                                                     class="block w-full"
+                                                     :options="$nameOptions"
+                                                     :selectedValue="old('name', $goal->name)"
+                                                     required>
+                                    </x-inputs.select>
                                 </div>
 
                                 <!-- Goal -->
                                 <div class="flex-auto">
                                     <x-inputs.label for="goal" value="Goal" />
-                                    <x-inputs.select name="goal"
-                                                     class="block w-full"
-                                                     :options="$goalOptions"
-                                                     :selectedValue="old('goal', $goal->goal)">
-                                    </x-inputs.select>
+                                    <x-inputs.input name="goal"
+                                                    type="number"
+                                                    step="any"
+                                                    class="block w-full"
+                                                    :value="old('goal', $goal->goal)"
+                                                    required />
                                 </div>
                             </div>
                         </div>

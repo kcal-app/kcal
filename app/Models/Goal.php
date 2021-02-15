@@ -14,19 +14,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $user_id
  * @property \datetime|null $from
  * @property \datetime|null $to
- * @property string $goal
- * @property float $amount
+ * @property string|null $frequency
+ * @property string $name
+ * @property float $goal
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $summary
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Goal newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Goal newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Goal query()
- * @method static \Illuminate\Database\Eloquent\Builder|Goal whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Goal whereFrequency($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereFrom($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereGoal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Goal whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereUserId($value)
@@ -37,13 +40,21 @@ final class Goal extends Model
     use HasFactory;
 
     /**
+     * Supported options for thr frequency attribute.
+     */
+    public static array $frequencyOptions = [
+        ['value' => 'daily', 'label' => 'daily'],
+    ];
+
+    /**
      * @inheritdoc
      */
     protected $fillable = [
+        'frequency',
         'from',
-        'to',
         'goal',
-        'amount',
+        'name',
+        'to',
     ];
 
     /**
@@ -51,8 +62,15 @@ final class Goal extends Model
      */
     protected $casts = [
         'from' => 'datetime:Y-m-d',
+        'goal' => 'float',
         'to' => 'datetime:Y-m-d',
-        'amount' => 'float',
+    ];
+
+    /**
+     * @inheritdoc
+     */
+    protected $appends = [
+        'summary',
     ];
 
     /**
@@ -62,18 +80,20 @@ final class Goal extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getSummaryAttribute(): string {
+        $nameOptions = self::getNameOptions();
+        return number_format($this->goal) . "{$nameOptions[$this->name]['unit']} {$nameOptions[$this->name]['label']} {$this->frequency}";
+    }
+
     /**
-     * Get options for the "goal" column.
-     *
-     * @return array
+     * Get options for the "name" column.
      */
-    public static function getGoalOptions(): array {
+    public static function getNameOptions(): array {
         $options = [];
         foreach (Nutrients::$all as $nutrient) {
-            $key = "{$nutrient['value']}_per_day";
-            $options[$key] = [
-                'value' => $key,
-                'label' => "{$nutrient['value']} per day",
+            $options[$nutrient['value']] = [
+                'value' => $nutrient['value'],
+                'label' => $nutrient['label'],
                 'unit' => $nutrient['unit'],
             ];
         }

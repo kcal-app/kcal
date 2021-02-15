@@ -24,8 +24,7 @@ class GoalController extends Controller
         }
         return view('goals.index')
             ->with('date', $date)
-            ->with('goals', Auth::user()->getGoalsByTime($date))
-            ->with('goalOptions', Goal::getGoalOptions());
+            ->with('goals', Auth::user()->getGoalsByTime($date));
     }
 
     /**
@@ -61,7 +60,8 @@ class GoalController extends Controller
     {
         return view('goals.edit')
             ->with('goal', $goal)
-            ->with('goalOptions', Goal::getGoalOptions());
+            ->with('nameOptions', Goal::getNameOptions())
+            ->with('frequencyOptions', Goal::$frequencyOptions);
     }
 
     /**
@@ -72,11 +72,11 @@ class GoalController extends Controller
         $attributes = $request->validate([
             'from' => ['nullable', 'date'],
             'to' => ['nullable', 'date'],
-            'goal' => ['required', 'string'],
-            'amount' => ['required', 'numeric'],
+            'frequency' => ['nullable', 'string'],
+            'name' => ['required', 'string'],
+            'goal' => ['required', 'numeric'],
         ]);
-        $goal->fill(array_filter($attributes))
-            ->user()->associate(Auth::user());
+        $goal->fill($attributes)->user()->associate(Auth::user());
         $goal->save();
         session()->flash('message', "Goal updated!");
         return redirect()->route('goals.show', $goal);
@@ -87,9 +87,7 @@ class GoalController extends Controller
      */
     public function delete(Goal $goal): View
     {
-        return view('goals.delete')
-            ->with('goal', $goal)
-            ->with('goalOptions', Goal::getGoalOptions());
+        return view('goals.delete')->with('goal', $goal);
     }
 
     /**
