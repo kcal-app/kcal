@@ -50,7 +50,10 @@ class GoalController extends Controller
      */
     public function show(Goal $goal): View
     {
-        return view('goals.show')->with('goal', $goal);
+        return view('goals.show')
+            ->with('goal', $goal)
+            ->with('nameOptions', Goal::getNameOptions())
+            ->with('frequencyOptions', Goal::$frequencyOptions);
     }
 
     /**

@@ -21,7 +21,18 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    TODO: GOAL SHOW PAGE
+                    <div class="grid grid-cols-2 gap-y-1 gap-x-3 max-w-md inline-grid">
+                        <div class="font-bold">From</div>
+                        <div>{{ $goal->from?->toDateString() ?? 'Any' }}</div>
+                        <div class="font-bold">To</div>
+                        <div>{{ $goal->to?->toDateString() ?? 'Any' }}</div>
+                        <div class="font-bold">Frequency</div>
+                        <div>{{ \Illuminate\Support\Str::ucfirst($frequencyOptions[$goal->frequency]['label']) }}</div>
+                        <div class="font-bold">Trackable</div>
+                        <div>{{ \Illuminate\Support\Str::ucfirst($nameOptions[$goal->name]['label']) }}</div>
+                        <div class="font-bold">Goal</div>
+                        <div>{{ $goal->goal }}{{ $nameOptions[$goal->name]['unit'] }}</div>
+                    </div>
                 </div>
             </div>
         </div>

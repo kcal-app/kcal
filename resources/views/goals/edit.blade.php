@@ -20,7 +20,7 @@
                                     <x-inputs.input name="from"
                                                     type="date"
                                                     class="block w-full"
-                                                    :value="old('from', $goal->from)" />
+                                                    :value="old('from', $goal->from?->toDateString())" />
                                 </div>
 
                                 <!-- To -->
@@ -29,7 +29,7 @@
                                     <x-inputs.input name="to"
                                                     type="date"
                                                     class="block w-full"
-                                                    :value="old('to', $goal->to)" />
+                                                    :value="old('to', $goal->to?->toDateString())" />
                                 </div>
 
                                 <!-- Frequency -->

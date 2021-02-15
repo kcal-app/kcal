@@ -43,7 +43,7 @@ final class Goal extends Model
      * Supported options for thr frequency attribute.
      */
     public static array $frequencyOptions = [
-        ['value' => 'daily', 'label' => 'daily'],
+        'daily' => ['value' => 'daily', 'label' => 'daily'],
     ];
 
     /**

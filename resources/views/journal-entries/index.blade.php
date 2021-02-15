@@ -37,46 +37,58 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="flex align-top flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                        <div class="w-full sm:w-5/12 md:w-5/12">
-                            <h3 class="font-semibold text-xl text-gray-800">{{ $date->format('D, j M Y') }}</h3>
-                            <div class="text-gray-700">{{ $entries->count() }} {{ \Illuminate\Support\Pluralizer::plural('entry', $entries->count()) }}</div>
-                            <div class="text-right border-t-8 border-black pt-2">% Daily goal</div>
-                            <div class="grid grid-cols-2 text-sm">
-                                <div class="border-b-4 border-black">
+                        <div class="w-full sm:w-5/12 lg:w-4/12">
+                            <div class="flex justify-between items-baseline">
+                                <h3 class="font-semibold text-lg text-gray-800">{{ $date->format('D, j M Y') }}</h3>
+                                <div class="text-gray-700">{{ $entries->count() }} {{ \Illuminate\Support\Pluralizer::plural('entry', $entries->count()) }}</div>
+                            </div>
+                            <div class="text-right border-t-8 border-black text-sm pt-2">% Daily goal</div>
+                            <div class="flex justify-between items-baseline border-b-4 border-black">
+                                <div>
                                     <span class="font-extrabold text-2xl">Calories</span>
                                     <span class="text-lg">{{ number_format($sums['calories']) }}</span>
                                 </div>
-                                <div class="font-extrabold text-right text-lg border-b-4 border-black">
+                                <div class="font-extrabold text-right text-lg">
                                     {{ $dailyGoals['calories'] ?? 'N/A' }}
                                 </div>
-                                <div class="border-b border-gray-300">
+                            </div>
+                            <div class="flex justify-between items-baseline border-b border-gray-300 text-sm">
+                                <div>
                                     <span class="font-bold">Fat</span>
                                     {{ number_format($sums['fat']) }}g
                                 </div>
-                                <div class="text-right border-b border-gray-300">
+                                <div class="text-right">
                                     {{ $dailyGoals['fat'] ?? 'N/A' }}
                                 </div>
-                                <div class="border-b border-gray-300">
+                            </div>
+                            <div class="flex justify-between items-baseline border-b border-gray-300 text-sm">
+                                <div>
                                     <span class="font-bold">Cholesterol</span>
                                     {{ number_format($sums['cholesterol']) }}mg
                                 </div>
-                                <div class="text-right border-b border-gray-300">
+                                <div class="text-right">
                                     {{ $dailyGoals['cholesterol'] ?? 'N/A' }}
                                 </div>
-                                <div class="border-b border-gray-300">
+                            </div>
+                            <div class="flex justify-between items-baseline border-b border-gray-300 text-sm">
+                                <div>
                                     <span class="font-bold">Sodium</span>
                                     {{ number_format($sums['sodium']) }}mg
                                 </div>
-                                <div class="text-right border-b border-gray-300">
+                                <div class="text-right">
                                     {{ $dailyGoals['sodium'] ?? 'N/A' }}
                                 </div>
-                                <div class="border-b border-gray-300">
+                            </div>
+                            <div class="flex justify-between items-baseline border-b border-gray-300 text-sm">
+                                <div>
                                     <span class="font-bold">Carbohydrates</span>
                                     {{ number_format($sums['carbohydrates']) }}g
                                 </div>
-                                <div class="text-right border-b border-gray-300">
+                                <div class="text-right">
                                     {{ $dailyGoals['carbohydrates'] ?? 'N/A' }}
                                 </div>
+                            </div>
+                            <div class="flex justify-between items-baseline text-sm">
                                 <div>
                                     <span class="font-bold">Protein</span>
                                     {{ number_format($sums['protein']) }}g
