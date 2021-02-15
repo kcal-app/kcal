@@ -37,22 +37,53 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="flex align-top flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                        <div class="w-full sm:w-2/5 md:w-1/3 lg:w-1/4">
+                        <div class="w-full sm:w-5/12 md:w-5/12">
                             <h3 class="font-semibold text-xl text-gray-800">{{ $date->format('D, j M Y') }}</h3>
                             <div class="text-gray-700">{{ $entries->count() }} {{ \Illuminate\Support\Pluralizer::plural('entry', $entries->count()) }}</div>
-                            <div class="grid grid-cols-2 text-sm border-t-8 border-black pt-2">
-                                <div class="font-extrabold text-lg border-b-4 border-black">Calories</div>
-                                <div class="font-extrabold text-right text-lg border-b-4 border-black">{{ round($entries->sum('calories'), 2) }}</div>
-                                <div class="font-bold border-b border-gray-300">Fat</div>
-                                <div class="text-right border-b border-gray-300">{{ round($entries->sum('fat'), 2) }}g</div>
-                                <div class="font-bold border-b border-gray-300">Cholesterol</div>
-                                <div class="text-right border-b border-gray-300">{{ round($entries->sum('cholesterol'), 2) }}mg</div>
-                                <div class="font-bold border-b border-gray-300">Sodium</div>
-                                <div class="text-right border-b border-gray-300">{{ round($entries->sum('sodium'), 2) }}mg</div>
-                                <div class="font-bold border-b border-gray-300">Carbohydrates</div>
-                                <div class="text-right border-b border-gray-300">{{ round($entries->sum('carbohydrates'), 2) }}g</div>
-                                <div class="font-bold">Protein</div>
-                                <div class="text-right">{{ round($entries->sum('protein'), 2) }}g</div>
+                            <div class="text-right border-t-8 border-black pt-2">% Daily goal</div>
+                            <div class="grid grid-cols-2 text-sm">
+                                <div class="border-b-4 border-black">
+                                    <span class="font-extrabold text-2xl">Calories</span>
+                                    <span class="text-lg">{{ number_format($sums['calories']) }}</span>
+                                </div>
+                                <div class="font-extrabold text-right text-lg border-b-4 border-black">
+                                    {{ $dailyGoals['calories'] ?? 'N/A' }}
+                                </div>
+                                <div class="border-b border-gray-300">
+                                    <span class="font-bold">Fat</span>
+                                    {{ number_format($sums['fat']) }}g
+                                </div>
+                                <div class="text-right border-b border-gray-300">
+                                    {{ $dailyGoals['fat'] ?? 'N/A' }}
+                                </div>
+                                <div class="border-b border-gray-300">
+                                    <span class="font-bold">Cholesterol</span>
+                                    {{ number_format($sums['cholesterol']) }}mg
+                                </div>
+                                <div class="text-right border-b border-gray-300">
+                                    {{ $dailyGoals['cholesterol'] ?? 'N/A' }}
+                                </div>
+                                <div class="border-b border-gray-300">
+                                    <span class="font-bold">Sodium</span>
+                                    {{ number_format($sums['sodium']) }}mg
+                                </div>
+                                <div class="text-right border-b border-gray-300">
+                                    {{ $dailyGoals['sodium'] ?? 'N/A' }}
+                                </div>
+                                <div class="border-b border-gray-300">
+                                    <span class="font-bold">Carbohydrates</span>
+                                    {{ number_format($sums['carbohydrates']) }}g
+                                </div>
+                                <div class="text-right border-b border-gray-300">
+                                    {{ $dailyGoals['carbohydrates'] ?? 'N/A' }}
+                                </div>
+                                <div>
+                                    <span class="font-bold">Protein</span>
+                                    {{ number_format($sums['protein']) }}g
+                                </div>
+                                <div class="text-right">
+                                    {{ $dailyGoals['protein'] ?? 'N/A' }}
+                                </div>
                             </div>
                         </div>
                         <div class="w-full sm:w-3/5 md:w-2/3 lg:w-3/4 flex flex-col space-y-4">
