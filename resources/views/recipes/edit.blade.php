@@ -72,7 +72,7 @@
 
                         <!-- Ingredients -->
                         <h3 class="mt-6 mb-2 font-extrabold text-lg">Ingredients</h3>
-                        <div x-data="{ ingredients: 1 }" class="space-y-4">
+                        <div x-data="{ ingredients: 1 }" class="ingredients space-y-4">
                             @foreach($ingredients as $ingredient)
                                 @include('recipes.partials.ingredient-input', $ingredient)
                             @endforeach
@@ -88,7 +88,7 @@
 
                         <!-- Steps -->
                         <h3 class="mt-6 mb-2 font-extrabold text-lg">Steps</h3>
-                        <div x-data="{ steps: 0 }">
+                        <div x-data="{ steps: 0 }" class="steps">
                             @foreach($steps as $step)
                                 @include('recipes.partials.step-input', $step)
                             @endforeach
@@ -112,4 +112,29 @@
             </div>
         </div>
     </div>
+
+    @once
+        @push('scripts')
+            <script src="{{ asset('js/recipes/edit.js') }}"></script>
+            <script type="text/javascript">
+                new Draggable.Sortable(document.querySelector('.ingredients'), {
+                    draggable: '.ingredient',
+                    handle: '.draggable-handle',
+                    mirror: {
+                        appendTo: '.ingredients',
+                        constrainDimensions: true,
+                    },
+                })
+
+                new Draggable.Sortable(document.querySelector('.steps'), {
+                    draggable: '.step',
+                    handle: '.draggable-handle',
+                    mirror: {
+                        appendTo: '.steps',
+                        constrainDimensions: true,
+                    },
+                })
+            </script>
+        @endpush
+    @endonce
 </x-app-layout>

@@ -1,7 +1,12 @@
-<div>
+<div class="ingredient">
     <x-inputs.input type="hidden" name="ingredients[original_key][]" :value="$original_key ?? null" />
     <div class="flex items-center space-x-2">
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
+            <div class="draggable-handle self-center text-gray-500 bg-gray-100 w-full md:w-auto p-2 cursor-move">
+                <svg class="h-6 w-6 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                </svg>
+            </div>
             <div class="w-full">
                 <x-ingredient-picker :default-id="$ingredient_id ?? null"
                                      :default-type="$ingredient_type ?? null"

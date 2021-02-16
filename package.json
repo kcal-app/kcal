@@ -23,6 +23,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "@shopify/draggable": "^1.0.0-beta.8",
         "alpine-magic-helpers": "^0.5.1"
     }
 }
