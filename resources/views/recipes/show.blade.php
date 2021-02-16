@@ -16,7 +16,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="flex flex-col-reverse justify-between pb-4 sm:flex-row">
-                        <div>
+                        <div x-data="{showNutrientsSummary: false}">
                             @if(!$recipe->tags->isEmpty())
                                 <div class="mb-2 text-gray-700 text-sm">
                                     <span class="font-extrabold">Tags:</span>
@@ -27,24 +27,33 @@
                                 <h3 class="mb-2 font-bold text-2xl">Description</h3>
                                 <div class="mb-2 text-gray-800">{{ $recipe->description }}</div>
                             @endif
-                            <h3 class="mb-2 font-bold text-2xl">Ingredients</h3>
-                            @foreach($recipe->ingredientAmounts as $ia)
-                                <div class="flex flex-row space-x-2 mb-2">
-                                    <div>{{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}</div>
-                                    @if($ia->unitFormatted)<div>{{ $ia->unitFormatted }}</div>@endif
+                            <h3 class="mb-2 font-bold text-2xl">
+                                Ingredients
+                                <span class="text-sm font-normal cursor-pointer"
+                                      x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
+                            </h3>
+                            <div class="space-y-2">
+                                @foreach($recipe->ingredientAmounts as $ia)
                                     <div>
-                                        @if($ia->ingredient->type === \App\Models\Recipe::class)
-                                            <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                               href="{{ route('recipes.show', $ia->ingredient) }}">
-                                                {{ $ia->ingredient->name }}
-                                            </a>
-                                        @else
-                                            {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
-                                        @endif
+                                        <div class="flex flex-row space-x-2">
+                                            <div>{{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}</div>
+                                            @if($ia->unitFormatted)<div>{{ $ia->unitFormatted }}</div>@endif
+                                            <div>
+                                                @if($ia->ingredient->type === \App\Models\Recipe::class)
+                                                    <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                                       href="{{ route('recipes.show', $ia->ingredient) }}">
+                                                        {{ $ia->ingredient->name }}
+                                                    </a>
+                                                @else
+                                                    {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
+                                                @endif
+                                            </div>
+                                            @if($ia->detail)<div class="text-gray-500">{{ $ia->detail }}</div>@endif
+                                        </div>
+                                        <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $ia->nutrients_summary }}</div>
                                     </div>
-                                    @if($ia->detail)<div class="text-gray-500">{{ $ia->detail }}</div>@endif
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
                         <div>
                             <div class="p-1 border-2 border-black font-sans md:w-72">

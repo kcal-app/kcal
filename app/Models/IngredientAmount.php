@@ -85,13 +85,31 @@ final class IngredientAmount extends Model
     /**
      * @inheritdoc
      */
-    protected $appends = ['amount_formatted', 'unit_formatted'];
+    protected $appends = [
+        'amount_formatted',
+        'nutrients_summary',
+        'unit_formatted'
+    ];
 
     /**
      * Get the amount as a formatted string (e.g. 0.5 = 1/2).
      */
     public function getAmountFormattedAttribute(): string {
         return Number::fractionStringFromFloat($this->amount);
+    }
+
+    /**
+     * Get a simple string summary of nutrients for the ingredient amount.
+     *
+     * TODO: Move to HasIngredients trait.
+     */
+    public function getNutrientsSummaryAttribute(): string {
+        $summary = [];
+        foreach (Nutrients::$all as $nutrient) {
+            $amount = round($this->{$nutrient['value']}(), 2);
+            $summary[] = "{$nutrient['label']}: {$amount}";
+        }
+        return implode(', ', $summary);
     }
 
     /**

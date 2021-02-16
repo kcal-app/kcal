@@ -36,6 +36,7 @@ class IngredientAmountSchema extends SchemaProvider
             'protein' => $resource->protein(),
             'sodium' => $resource->sodium(),
             'detail' => $resource->detail,
+            'nutrientsSummary' => $resource->nutrients_summary,
             'weight' => $resource->weight,
             'createdAt' => $resource->created_at,
             'updatedAt' => $resource->updated_at,
