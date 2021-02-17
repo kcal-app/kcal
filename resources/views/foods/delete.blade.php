@@ -14,11 +14,17 @@
                         @csrf
                         <div class="text-lg pb-3">
                             Are you sure what to delete <span class="font-extrabold">{{ $food->name }}</span>?
-                            <div class="grid grid-cols-2 w-max">
-                                <div class="font-bold pr-2">Detail:</div>
-                                <div>{{ $food->detail ?? 'None' }}</div>
-                                <div class="font-bold pr-2">Brand:</div>
-                                <div>{{ $food->brand ?? 'None' }}</div>
+                            <div class="flex flex-col space-y-2 mt-2 mb-2 text-lg">
+                                <div>
+                                    <span class="font-bold">Detail:</span>
+                                    <span>{{ $food->detail }}</span>
+                                </div>
+                                @if($food->brand)
+                                    <div>
+                                        <span class="font-bold">Brand:</span>
+                                        <span>{{ $food->brand }}</span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <x-inputs.button class="bg-red-800 hover:bg-red-700">

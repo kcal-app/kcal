@@ -23,7 +23,9 @@ trait HasIngredients
      * Get all of the ingredients.
      */
     public function ingredientAmounts(): MorphMany {
-        return $this->morphMany(IngredientAmount::class, 'parent')->orderBy('weight');
+        return $this->morphMany(IngredientAmount::class, 'parent')
+            ->with('ingredient')
+            ->orderBy('weight');
     }
 
     /**

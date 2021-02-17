@@ -3,7 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Models\IngredientAmount;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 
 trait Ingredient
@@ -27,8 +27,8 @@ trait Ingredient
     /**
      * Get all of the ingredient amounts associated with the ingredient.
      */
-    public function ingredientAmountChildren(): MorphToMany {
-        return $this->morphToMany(IngredientAmount::class, 'ingredient');
+    public function ingredientAmountRelationships(): MorphMany {
+        return $this->morphMany(IngredientAmount::class, 'ingredient')->with('parent');
     }
 
     /**

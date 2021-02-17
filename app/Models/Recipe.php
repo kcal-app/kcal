@@ -44,8 +44,8 @@ use Spatie\Tags\HasTags;
  * @property-read int|null $ingredient_amounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredients
  * @property-read int|null $ingredients_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountChildren
- * @property-read int|null $ingredient_amount_children_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountRelationships
+ * @property-read int|null $ingredient_amount_relationships_count
  * @property-read string $type
  * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Tags\Tag[] $tags
  * @property-read int|null $tags_count

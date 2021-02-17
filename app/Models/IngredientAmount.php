@@ -42,6 +42,7 @@ use Illuminate\Support\Pluralizer;
  * @method static \Illuminate\Database\Eloquent\Builder|IngredientAmount whereWeight($value)
  * @mixin \Eloquent
  * @property-read string|null $unit_formatted
+ * @property-read string $nutrients_summary
  */
 final class IngredientAmount extends Model
 {
@@ -64,11 +65,6 @@ final class IngredientAmount extends Model
         'amount' => 'float',
         'weight' => 'int',
     ];
-
-    /**
-     * @inheritdoc
-     */
-    protected $with = ['ingredient'];
 
     /**
      * Nutrient calculation methods.

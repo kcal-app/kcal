@@ -125,7 +125,7 @@ class FoodController extends Controller
      */
     public function destroy(Food $food): RedirectResponse
     {
-        if ($food->ingredientAmountChildren()->count()) {
+        if (!empty($food->ingredientAmountRelationships)) {
             return back()->withErrors('Cannot delete: this food is used in recipes.');
         }
         $food->delete();
