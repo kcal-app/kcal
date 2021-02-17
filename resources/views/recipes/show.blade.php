@@ -29,7 +29,7 @@
                             @endif
                             <h3 class="mb-2 font-bold text-2xl">
                                 Ingredients
-                                <span class="text-sm font-normal cursor-pointer"
+                                <span class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"
                                       x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
                             </h3>
                             <div class="space-y-2">
