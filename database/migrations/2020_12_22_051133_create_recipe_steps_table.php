@@ -16,11 +16,10 @@ class CreateRecipeStepsTable extends Migration
     {
         Schema::create('recipe_steps', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Recipe::class);
-            $table->unsignedInteger('number');
+            $table->foreignIdFor(Recipe::class)->index()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedInteger('number')->index();
             $table->longText('step');
             $table->timestamps();
-            $table->index('recipe_id', 'number');
         });
     }
 

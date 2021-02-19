@@ -15,7 +15,7 @@ class CreateJournalablesTable extends Migration
     public function up()
     {
         Schema::create('journalables', function (Blueprint $table) {
-            $table->foreignIdFor(JournalEntry::class)->index();
+            $table->foreignIdFor(JournalEntry::class)->index()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedInteger('journalable_id');
             $table->string('journalable_type');
         });

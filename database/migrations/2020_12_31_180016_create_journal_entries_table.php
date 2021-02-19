@@ -16,8 +16,8 @@ class CreateJournalEntriesTable extends Migration
     {
         Schema::create('journal_entries', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->date('date')->useCurrent();
+            $table->foreignIdFor(User::class)->index()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->date('date')->index()->useCurrent();
             $table->string('summary');
             $table->unsignedFloat('calories')->default(0);
             $table->unsignedFloat('fat')->default(0);
@@ -27,7 +27,6 @@ class CreateJournalEntriesTable extends Migration
             $table->unsignedFloat('protein')->default(0);
             $table->enum('meal', ['breakfast', 'lunch', 'dinner', 'snacks']);
             $table->timestamps();
-            $table->index(['user_id', 'date']);
         });
     }
 

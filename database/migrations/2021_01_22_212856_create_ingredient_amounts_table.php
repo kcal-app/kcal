@@ -21,7 +21,7 @@ class CreateIngredientAmountsTable extends Migration
             $table->enum('unit', ['tsp', 'tbsp', 'cup', 'oz', 'gram', 'serving'])->nullable();
             $table->string('detail')->nullable();
             $table->unsignedInteger('weight');
-            $table->unsignedInteger('parent_id');
+            $table->unsignedInteger('parent_id')->index();
             $table->string('parent_type');
             $table->timestamps();
         });
