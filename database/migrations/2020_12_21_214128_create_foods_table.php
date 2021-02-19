@@ -21,6 +21,7 @@ class CreateFoodsTable extends Migration
             $table->string('notes')->nullable();
             $table->unsignedFloat('serving_size');
             $table->enum('serving_unit', ['tsp', 'tbsp', 'cup', 'oz'])->nullable();
+            $table->string('serving_unit_name')->nullable();
             $table->unsignedFloat('serving_weight');
             $table->unsignedFloat('calories')->default(0);
             $table->unsignedFloat('fat')->default(0);
