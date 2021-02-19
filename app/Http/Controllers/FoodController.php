@@ -125,8 +125,9 @@ class FoodController extends Controller
      */
     public function destroy(Food $food): RedirectResponse
     {
-        if (!empty($food->ingredientAmountRelationships)) {
-            return back()->withErrors('Cannot delete: this food is used in recipes.');
+        // Remove the food from any recipes.
+        foreach ($food->ingredientAmountRelationships as $ia) {
+            $ia->delete();
         }
         $food->delete();
         return redirect(route('foods.index'))
