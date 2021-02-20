@@ -254,4 +254,26 @@ class RecipeController extends Controller
         return redirect()->route('recipes.show', $recipe);
     }
 
+    /**
+     * Confirm removal of specified resource.
+     */
+    public function delete(Recipe $recipe): View
+    {
+        return view('recipes.delete')->with('recipe', $recipe);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Recipe $recipe): RedirectResponse
+    {
+        // Remove the recipe from any recipes.
+        foreach ($recipe->ingredientAmountRelationships as $ia) {
+            $ia->delete();
+        }
+        $recipe->delete();
+        return redirect(route('recipes.index'))
+            ->with('message', "Recipe {$recipe->name} deleted!");
+    }
+
 }
