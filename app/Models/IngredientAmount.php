@@ -101,7 +101,7 @@ final class IngredientAmount extends Model
      */
     public function getNutrientsSummaryAttribute(): string {
         $summary = [];
-        foreach (Nutrients::$all as $nutrient) {
+        foreach (Nutrients::all() as $nutrient) {
             $amount = round($this->{$nutrient['value']}(), 2);
             $summary[] = "{$nutrient['label']}: {$amount}";
         }

@@ -95,9 +95,9 @@ class FoodController extends Controller
         $attributes['name'] = Str::lower($attributes['name']);
 
         // Default nutrients to zero.
-        foreach (Nutrients::$all as $nutrient) {
-            if (is_null($attributes[$nutrient['value']])) {
-                $attributes[$nutrient['value']] = 0;
+        foreach (Nutrients::all()->pluck('value') as $nutrient) {
+            if (is_null($attributes[$nutrient])) {
+                $attributes[$nutrient] = 0;
             }
         }
 

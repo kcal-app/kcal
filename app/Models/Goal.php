@@ -90,7 +90,7 @@ final class Goal extends Model
      */
     public static function getNameOptions(): array {
         $options = [];
-        foreach (Nutrients::$all as $nutrient) {
+        foreach (Nutrients::all() as $nutrient) {
             $options[$nutrient['value']] = [
                 'value' => $nutrient['value'],
                 'label' => $nutrient['label'],

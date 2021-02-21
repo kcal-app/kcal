@@ -4,19 +4,11 @@ namespace App\Support;
 
 use App\Models\Food;
 use App\Models\Recipe;
+use Illuminate\Support\Collection;
 
 class Nutrients
 {
     public static float $gramsPerOunce = 28.349523125;
-
-    public static array $all = [
-        'calories' => ['value' => 'calories', 'label' => 'calories', 'unit' => null],
-        'carbohydrates' => ['value' => 'carbohydrates', 'label' => 'carbohydrates', 'unit' => 'g'],
-        'cholesterol' => ['value' => 'cholesterol', 'label' => 'cholesterol', 'unit' => 'mg'],
-        'fat' => ['value' => 'fat', 'label' => 'fat', 'unit' => 'g'],
-        'protein' => ['value' => 'protein', 'label' => 'protein', 'unit' => 'g'],
-        'sodium' => ['value' => 'sodium', 'label' => 'sodium', 'unit' => 'mg'],
-    ];
 
     public static array $units = [
         'cup' => ['value' => 'cup', 'label' => 'cup'],
@@ -26,6 +18,56 @@ class Nutrients
         'tbsp' => ['value' => 'tbsp', 'label' => 'tbsp.'],
         'tsp' => ['value' => 'tsp', 'label' => 'tsp.'],
     ];
+
+    /**
+     * Get all trackable "nutrients" (calories are not technically a nutrient).
+     *
+     * Each entry has four keys:
+     *  - value: Machine name for the entry.
+     *  - label: Human-readable name for the entry.
+     *  - unit: Unit of measure for the entry.
+     *  - weight: Sort weight for presentation.
+     */
+    public static function all(): Collection {
+        return new Collection([
+            'calories' => [
+                'value' => 'calories',
+                'label' => 'calories',
+                'unit' => null,
+                'weight' => 0,
+            ],
+            'carbohydrates' => [
+                'value' => 'carbohydrates',
+                'label' => 'carbohydrates',
+                'unit' => 'g',
+                'weight' => 40,
+            ],
+            'cholesterol' => [
+                'value' => 'cholesterol',
+                'label' => 'cholesterol',
+                'unit' => 'mg',
+                'weight' => 20,
+            ],
+            'fat' => [
+                'value' => 'fat',
+                'label' => 'fat',
+                'unit' => 'g',
+                'weight' => 10,
+            ],
+            'protein' => [
+                'value' => 'protein',
+                'label' => 'protein',
+                'unit' => 'g',
+                'weight' => 50,
+            ],
+            'sodium' => [
+                'value' => 'sodium',
+                'label' => 'sodium',
+                'unit' => 'mg',
+                'weight' => 30,
+            ],
+        ]);
+    }
 
     /**
      * Calculate a nutrient multiplier for a Food.

@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
-                        @foreach (\App\Support\Nutrients::$all as $nutrient)
+                        @foreach (\App\Support\Nutrients::all()->sortBy('weight') as $nutrient)
                             <!-- {{ ucfirst($nutrient['value']) }} -->
                                 <div class="flex-auto">
                                     <x-inputs.label for="{{ $nutrient['value'] }}"

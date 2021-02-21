@@ -37,17 +37,17 @@ class JournalEntryController extends Controller
             'date' => $date->toDateString(),
         ])->get();
         $sums = [];
-        foreach (Nutrients::$all as $nutrient) {
-            $sums[$nutrient['value']] = round($entries->sum($nutrient['value']));
+        foreach (Nutrients::all()->pluck('value') as $nutrient) {
+            $sums[$nutrient] = round($entries->sum($nutrient));
         }
 
         // Get daily goals data for user.
         $goals = Auth::user()->getGoalsByTime($date);
         $dailyGoals = [];
-        foreach (Nutrients::$all as $nutrient) {
+        foreach (Nutrients::all()->pluck('value') as $nutrient) {
             $goal = $goals['present']
                 ->where('frequency', 'daily')
-                ->where('name', $nutrient['value'])
+                ->where('name', $nutrient)
                 ->first();
             if ($goal) {
                 $dailyGoals[$goal->name] = round($sums[$goal->name] / $goal->goal * 100);
@@ -154,17 +154,17 @@ class JournalEntryController extends Controller
                     Number::floatFromString($ingredient['amount']),
                     $ingredient['unit']
                 );
-                foreach (Nutrients::$all as $nutrient) {
-                    $entries[$entry_key]->{$nutrient['value']} += $item->{$nutrient['value']} * $nutrient_multiplier;
+                foreach (Nutrients::all()->pluck('value') as $nutrient) {
+                    $entries[$entry_key]->{$nutrient} += $item->{$nutrient} * $nutrient_multiplier;
                 }
                 $entries[$entry_key]->foods->add($item);
             }
             elseif ($ingredient['type'] == Recipe::class) {
                 $item = Recipe::whereId($ingredient['id'])->first();
-                foreach (Nutrients::$all as $nutrient) {
-                    $entries[$entry_key]->{$nutrient['value']} += Nutrients::calculateRecipeNutrientAmount(
+                foreach (Nutrients::all()->pluck('value') as $nutrient) {
+                    $entries[$entry_key]->{$nutrient} += Nutrients::calculateRecipeNutrientAmount(
                         $item,
-                        $nutrient['value'],
+                        $nutrient,
                         Number::floatFromString($ingredient['amount']),
                         $ingredient['unit']
                     );
