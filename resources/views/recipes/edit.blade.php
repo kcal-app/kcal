@@ -72,15 +72,17 @@
 
                         <!-- Ingredients -->
                         <h3 class="mt-6 mb-2 font-extrabold text-lg">Ingredients</h3>
-                        <div x-data="{ ingredients: 1 }" class="ingredients space-y-4">
-                            @foreach($ingredients as $ingredient)
+                        <div x-data class="ingredients space-y-4">
+                            @forelse($ingredients as $ingredient)
                                 @include('recipes.partials.ingredient-input', $ingredient)
-                            @endforeach
-                            <template x-if="ingredients > 0" x-for="i in ingredients">
+                            @empty
                                 @include('recipes.partials.ingredient-input')
-                            </template>
-                            <x-inputs.icon-button type="button" color="green" x-on:click="ingredients++;">
-                                <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            @endforelse
+                            <div class="entry-template hidden">
+                                @include('recipes.partials.ingredient-input')
+                            </div>
+                            <x-inputs.icon-button type="button" color="green" x-on:click="addEntryNode($el);">
+                                <svg class="h-10 w-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
                                 </svg>
                             </x-inputs.icon-button>
@@ -88,22 +90,24 @@
 
                         <!-- Steps -->
                         <h3 class="mt-6 mb-2 font-extrabold text-lg">Steps</h3>
-                        <div x-data="{ steps: 0 }" class="steps">
-                            @foreach($steps as $step)
+                        <div x-data class="steps">
+                            @forelse($steps as $step)
                                 @include('recipes.partials.step-input', $step)
-                            @endforeach
-                            <template x-for="i in steps + 1">
+                            @empty
                                 @include('recipes.partials.step-input')
-                            </template>
-                            <x-inputs.icon-button type="button" color="green" x-on:click="steps++;">
+                            @endforelse
+                            <div class="entry-template hidden">
+                                @include('recipes.partials.step-input')
+                            </div>
+                            <x-inputs.icon-button type="button" color="green" x-on:click="addEntryNode($el);">
                                 <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
                                 </svg>
                             </x-inputs.icon-button>
                         </div>
 
-                        <div class="flex items-center justify-end mt-4">
-                            <x-inputs.button class="ml-3">
+                        <div x-data class="flex items-center justify-end mt-4">
+                            <x-inputs.button x-on:click="removeTemplates();" class="ml-3">
                                 {{ ($recipe->exists ? 'Save' : 'Add') }}
                             </x-inputs.button>
                         </div>
@@ -134,6 +138,28 @@
                         constrainDimensions: true,
                     },
                 })
+            </script>
+            <script type="text/javascript">
+                /**
+                 * Adds a set of entry form fields from the template.
+                 *
+                 * @param {object} $el Entry lines parent element.
+                 */
+                let addEntryNode = ($el) => {
+                    // Create clone of template entry.
+                    let template = $el.querySelector(':scope .entry-template');
+                    let newEntry = template.cloneNode(true).firstElementChild;
+
+                    // Insert new entry before add button.
+                    $el.insertBefore(newEntry, template);
+                }
+
+                /**
+                 * Removes any hidden templates before form submit.
+                 */
+                let removeTemplates = () => {
+                    document.querySelector(':scope .entry-template').remove();
+                }
             </script>
         @endpush
     @endonce

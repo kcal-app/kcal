@@ -91,6 +91,7 @@
                                 this.$refs.ingredients_type.value = selected.dataset.type;
                                 this.$refs.ingredients_name.value = selected.dataset.name + (selected.dataset.detail ? `, ${selected.dataset.detail}` : '');
                                 this.searching = false;
+                                this.results = [];
                             }
                         }
                     }
