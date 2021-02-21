@@ -8,7 +8,7 @@ use App\Models\Traits\Sluggable;
 use App\Support\Number;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 use Spatie\Tags\HasTags;
 
 /**
@@ -30,8 +30,18 @@ use Spatie\Tags\HasTags;
  * @property float $protein
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $source
+ * @property string|null $notes
+ * @property string|null $serving_unit_name
+ * @property-read string $serving_size_formatted
+ * @property-read string|null $serving_unit_formatted
+ * @property-read string $type
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountRelationships
+ * @property-read int|null $ingredient_amount_relationships_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalEntry[] $journalEntries
  * @property-read int|null $journal_entries_count
+ * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Tags\Tag[] $tags
+ * @property-read int|null $tags_count
  * @method static \Illuminate\Database\Eloquent\Builder|Food findSimilarSlugs(string $attribute, array $config, string $slug)
  * @method static \Illuminate\Database\Eloquent\Builder|Food newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Food newQuery()
@@ -45,37 +55,25 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereFat($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Food whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereProtein($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereServingSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereServingUnit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Food whereServingUnitName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereServingWeight($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereSodium($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Food whereSource($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Food whereUpdatedAt($value)
- * @mixin \Eloquent
- * @property-read string $serving_size_formatted
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmounts
- * @property-read int|null $ingredient_amounts_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountRelationships
- * @property-read int|null $ingredient_amount_relationships_count
- * @property-read string $type
- * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Tags\Tag[] $tags
- * @property-read int|null $tags_count
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAllTags($tags, ?string $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAllTagsOfAnyType($tags)
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAnyTags($tags, ?string $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAnyTagsOfAnyType($tags)
- * @property string|null $source
- * @property string|null $notes
- * @method static \Illuminate\Database\Eloquent\Builder|Food whereNotes($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Food whereSource($value)
- * @property string|null $serving_unit_name
- * @property-read string|null $serving_unit_formatted
- * @method static \Illuminate\Database\Eloquent\Builder|Food whereServingUnitName($value)
+ * @mixin \Eloquent
  */
 final class Food extends Model
 {
-    use HasFactory, HasTags, Ingredient, Journalable, Sluggable;
+    use HasFactory, HasTags, Ingredient, Journalable, Searchable, Sluggable;
 
     /**
      * @inheritdoc
@@ -124,6 +122,21 @@ final class Food extends Model
         'serving_size_formatted',
         'serving_unit_formatted'
     ];
+
+    /**
+     * @inheritdoc
+     */
+    public function toSearchableArray(): array
+    {
+        $this->tags;
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'detail' => $this->detail,
+            'brand' => $this->brand,
+            'tags' => $this->tags->pluck('name'),
+        ];
+    }
 
     /**
      * Get the serving size as a formatted string (e.g. 0.5 = 1/2).

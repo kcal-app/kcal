@@ -17,8 +17,8 @@ class IngredientPickerController extends Controller
         $results = [];
         $term = $request->query->get('term');
         if (!empty($term)) {
-            $results = Food::search($term);
-            $results = $results->merge(Recipe::search($term));
+            $results = Food::search($term)->get();
+            $results = $results->merge(Recipe::search($term)->get());
         }
         return response()->json($results);
     }
