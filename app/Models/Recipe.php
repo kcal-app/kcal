@@ -6,10 +6,10 @@ use App\Models\Traits\HasIngredients;
 use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
-use App\Support\Number;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 use Spatie\Tags\HasTags;
 
 /**
@@ -23,10 +23,19 @@ use Spatie\Tags\HasTags;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $description
  * @property string|null $source
+ * @property float|null $weight
+ * @property-read float|null $serving_weight
+ * @property-read string $type
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountRelationships
+ * @property-read int|null $ingredient_amount_relationships_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmounts
+ * @property-read int|null $ingredient_amounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalEntry[] $journalEntries
  * @property-read int|null $journal_entries_count
+ * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Tags\Tag[] $tags
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecipeStep[] $steps
  * @property-read int|null $steps_count
+ * @property-read int|null $tags_count
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe findSimilarSlugs(string $attribute, array $config, string $slug)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe newQuery()
@@ -39,27 +48,16 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereSource($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereUpdatedAt($value)
- * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmounts
- * @property-read int|null $ingredient_amounts_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredients
- * @property-read int|null $ingredients_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredientAmountRelationships
- * @property-read int|null $ingredient_amount_relationships_count
- * @property-read string $type
- * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Tags\Tag[] $tags
- * @property-read int|null $tags_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereWeight($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAllTags($tags, ?string $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAllTagsOfAnyType($tags)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTags($tags, ?string $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTagsOfAnyType($tags)
- * @property float|null $weight
- * @property-read float|null $serving_weight
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereWeight($value)
+ * @mixin \Eloquent
  */
 final class Recipe extends Model
 {
-    use HasFactory, HasIngredients, HasTags, Ingredient, Journalable, Sluggable;
+    use HasFactory, HasIngredients, HasTags, Ingredient, Journalable, Searchable, Sluggable;
 
     /**
      * @inheritdoc
@@ -98,6 +96,20 @@ final class Recipe extends Model
     protected $appends = [
         'serving_weight',
     ];
+
+    /**
+     * @inheritdoc
+     */
+    public function toSearchableArray(): array
+    {
+        $this->tags;
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'source' => $this->source,
+            'tags' => $this->tags->pluck('name'),
+        ];
+    }
 
     /**
      * Get the serving weight (rounded).

@@ -30,11 +30,4 @@ trait Ingredient
     public function ingredientAmountRelationships(): MorphMany {
         return $this->morphMany(IngredientAmount::class, 'ingredient')->with('parent');
     }
-
-    /**
-     * Get search results for a term.
-     */
-    public static function search(string $term, int $limit = 10): Collection {
-        return (new static)::where('name', 'like', "%{$term}%")->limit($limit)->get();
-    }
 }
