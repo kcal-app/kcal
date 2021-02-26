@@ -158,7 +158,7 @@
                  * Removes any hidden templates before form submit.
                  */
                 let removeTemplates = () => {
-                    document.querySelector(':scope .entry-template').remove();
+                    document.querySelectorAll(':scope .entry-template').forEach(e => e.remove());
                 }
             </script>
         @endpush
