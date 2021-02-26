@@ -30,7 +30,6 @@
                     morePages: false,
                     searchTerm: '{{ $defaultSearch ?? null }}',
                     reset() {
-                        this.results = [];
                         this.number = 1;
                         this.searchTerm = null;
                         this.morePages = false;
@@ -43,6 +42,7 @@
                         fetch(url)
                             .then(response => response.json())
                             .then(data => {
+                                this.results = [];
                                 this.results = [...this.results, ...data.data.map(result => result.attributes)];
                                 if (this.number < data.meta.page['last-page']) {
                                     this.morePages = true;
