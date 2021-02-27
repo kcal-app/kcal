@@ -19,7 +19,11 @@ class FoodAdapter extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    protected $filterScopes = [];
+    protected $filterScopes = [
+        'tags' => 'withAllTags',
+        'tags.all' => 'withAllTags',
+        'tags.any' => 'withAnyTags',
+    ];
 
     /**
      * {@inheritdoc}

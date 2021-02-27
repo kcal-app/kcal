@@ -42,15 +42,20 @@
                     size: 12,
                     morePages: false,
                     searchTerm: '{{ $defaultSearch ?? null }}',
+                    filterTag: null,
                     reset() {
                         this.number = 1;
                         this.searchTerm = null;
+                        this.filterTag = null;
                         this.morePages = false;
                     },
                     loadMore() {
                         let url = `{{ $route }}?page[number]=${this.number}&page[size]=${this.size}`;
                         if (this.searchTerm) {
                             url += `&filter[search]=${this.searchTerm}`;
+                        }
+                        if (this.filterTag) {
+                            url += `&filter[tags]=${this.filterTag}`;
                         }
                         fetch(url)
                             .then(response => response.json())
@@ -69,14 +74,13 @@
                         this.reset();
                         if (e.target.value !== '') {
                             this.searchTerm = e.target.value;
-                            this.loadMore();
                         }
-                        else {
-                            this.loadMore();
-                        }
+                        this.loadMore();
                     },
                     filterByTag(e) {
-                        console.log(e.target.text);
+                        this.reset();
+                        this.filterTag = e.target.text;
+                        this.loadMore();
                     }
                 }
             }
