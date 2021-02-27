@@ -19,7 +19,7 @@ class FoodController extends Controller
      */
     public function index(): View
     {
-        return view('foods.index');
+        return view('foods.index')->with('tags', Food::getTagTotals());
     }
 
     /**

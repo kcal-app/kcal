@@ -1,22 +1,35 @@
 <div x-data="searchView()" x-init="loadMore()">
-    <x-inputs.input type="text"
-                    name="search"
-                    placeholder="Search..."
-                    autocomplete="off"
-                    class="w-full mb-4"
-                    @input.debounce.400ms="search($event)" />
-    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start">
-        {{ $results }}
+    <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+        <div class="md:w-1/4">
+            <x-inputs.input type="text"
+                            name="search"
+                            placeholder="Search..."
+                            autocomplete="off"
+                            class="w-full mb-4"
+                            @input.debounce.400ms="search($event)" />
+            <details open>
+                <summary>Tags</summary>
+                @foreach($tags as $tag)
+                    <a class="m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 font-bold text-sm leading-loose cursor-pointer"
+                       x-on:click="filterByTag($event);">{{ $tag->name }}</a>
+                @endforeach
+            </details>
+        </div>
+        <div class="md:w-3/4">
+            <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start">
+                {{ $results }}
+            </div>
+            <x-inputs.button
+                class="text-xl mt-4"
+                color="blue"
+                type="button"
+                x-show="morePages"
+                x-cloak
+                @click.prevent="loadMore()">
+                Load more
+            </x-inputs.button>
+        </div>
     </div>
-    <x-inputs.button
-        class="text-xl mt-4"
-        color="blue"
-        type="button"
-        x-show="morePages"
-        x-cloak
-        @click.prevent="loadMore()">
-        Load more
-    </x-inputs.button>
 </div>
 
 @once
@@ -61,6 +74,9 @@
                         else {
                             this.loadMore();
                         }
+                    },
+                    filterByTag(e) {
+                        console.log(e.target.text);
                     }
                 }
             }

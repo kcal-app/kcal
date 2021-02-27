@@ -27,7 +27,7 @@ class RecipeController extends Controller
      */
     public function index(): View
     {
-        return view('recipes.index');
+        return view('recipes.index')->with('tags', Recipe::getTagTotals());
     }
 
     /**
