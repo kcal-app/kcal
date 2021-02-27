@@ -46,9 +46,11 @@ class RecipeAdapter extends AbstractAdapter
     {
         $this->filterWithScopes($query, $filters->except('search'));
         if ($term = $filters->get('search')) {
-            $query->where('recipes.name', 'like', "%{$term}%")
+            $query->where(function ($query) use ($term) {
+                $query->where('recipes.name', 'like', "%{$term}%")
                 ->orWhere('recipes.description', 'like', "%{$term}%")
                 ->orWhere('recipes.source', 'like', "%{$term}%");
+            });
         }
     }
 

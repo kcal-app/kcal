@@ -45,9 +45,11 @@ class FoodAdapter extends AbstractAdapter
     {
         $this->filterWithScopes($query, $filters->except('search'));
         if ($term = $filters->get('search')) {
-            $query->where('foods.name', 'like', "%{$term}%")
-                ->orWhere('foods.detail', 'like', "%{$term}%")
-                ->orWhere('foods.brand', 'like', "%{$term}%");
+            $query->where(function ($query) use ($term) {
+                $query->where('foods.name', 'like', "%{$term}%")
+                    ->orWhere('foods.detail', 'like', "%{$term}%")
+                    ->orWhere('foods.brand', 'like', "%{$term}%");
+            });
         }
     }
 
