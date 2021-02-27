@@ -8,11 +8,14 @@
                             class="w-full mb-4"
                             @input.debounce.400ms="search($event)" />
             <details open>
-                <summary>Tags</summary>
-                @foreach($tags as $tag)
-                    <a class="m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 font-bold text-sm leading-loose cursor-pointer"
-                       x-on:click="filterByTag($event);">{{ $tag->name }}</a>
-                @endforeach
+                <summary>Filters</summary>
+                <div class="my-2 pl-2 p-1 border-blue-200 border-b-2 font-bold">Tags</div>
+                <div class="flex flex-wrap">
+                    @foreach($tags as $tag)
+                        <a class="m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 leading-loose cursor-pointer"
+                           x-on:click="updateFilters($event);">{{ $tag->name }}</a>
+                    @endforeach
+                </div>
             </details>
         </div>
         <div class="md:w-3/4">
@@ -42,11 +45,9 @@
                     size: 12,
                     morePages: false,
                     searchTerm: '{{ $defaultSearch ?? null }}',
-                    filterTag: null,
-                    reset() {
+                    filterTags: [],
+                    resetPagination() {
                         this.number = 1;
-                        this.searchTerm = null;
-                        this.filterTag = null;
                         this.morePages = false;
                     },
                     loadMore() {
@@ -54,9 +55,7 @@
                         if (this.searchTerm) {
                             url += `&filter[search]=${this.searchTerm}`;
                         }
-                        if (this.filterTag) {
-                            url += `&filter[tags]=${this.filterTag}`;
-                        }
+                        this.filterTags.every(tag => url += `&filter[tags.all][]=${tag}`)
                         fetch(url)
                             .then(response => response.json())
                             .then(data => {
@@ -71,15 +70,26 @@
                             });
                     },
                     search(e) {
-                        this.reset();
+                        this.resetPagination();
                         if (e.target.value !== '') {
                             this.searchTerm = e.target.value;
                         }
+                        else {
+                            this.searchTerm = null;
+                        }
                         this.loadMore();
                     },
-                    filterByTag(e) {
-                        this.reset();
-                        this.filterTag = e.target.text;
+                    updateFilters(e) {
+                        this.resetPagination();
+                        const newTag = e.target.text;
+                        if (this.filterTags.includes(newTag)) {
+                            this.filterTags = this.filterTags.filter(tag => tag !== newTag)
+                            e.target.classList.remove('bg-gray-600', 'text-white');
+                        }
+                        else {
+                            this.filterTags.push(newTag)
+                            e.target.classList.add('bg-gray-600', 'text-white');
+                        }
                         this.loadMore();
                     }
                 }
