@@ -26,8 +26,12 @@
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
                                 </svg>
                             </x-inputs.icon-button>
-                            <div class="flex items-center justify-end mt-4">
-                                <x-inputs.button class="ml-3" x-on:click="removeTemplate($el);">Add entries</x-inputs.button>
+                            <div class="flex items-center justify-end mt-4 space-x-4">
+                                <fieldset class="flex space-x-2">
+                                    <x-inputs.label for="groupEntries" value="Group entries by day and meal" />
+                                    <x-inputs.input type="checkbox" name="group_entries" value="1" checked />
+                                </fieldset>
+                                <x-inputs.button x-on:click="removeTemplate($el);">Add entries</x-inputs.button>
                             </div>
                         </div>
                     </form>

@@ -131,16 +131,25 @@ class JournalEntryController extends Controller
             'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
             'ingredients.type' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.type.*' => ['required_with:ingredients.id.*', 'nullable', new UsesIngredientTrait()],
+            'group_entries' => ['nullable', 'boolean'],
         ]);
 
         $ingredients = ArrayFormat::flipTwoDimensionalKeys($input['ingredients']);
 
         /** @var \App\Models\JournalEntry[] $entries */
         $entries = [];
-        // TODO: Improve efficiency? Potential for lots of queries here...
+        $entry_key = 0;
+        // TODO: Improve efficiency. Potential for lots of queries here...
         foreach ($ingredients as $ingredient) {
+            // Set entry key (combined date and meal or individual entries).
+            if (isset($input['group_entries']) && (bool) $input['group_entries']) {
+                $entry_key = "{$ingredient['date']}{$ingredient['meal']}";
+            }
+            else {
+                $entry_key++;
+            }
+
             // Prepare entry values.
-            $entry_key = "{$ingredient['date']}{$ingredient['meal']}";
             $entries[$entry_key] = $entries[$entry_key] ?? JournalEntry::make([
                 'date' => $ingredient['date'],
                 'meal' => $ingredient['meal'],
