@@ -184,7 +184,7 @@ class JournalEntryController extends Controller
                 return back()->withInput()->withErrors("Invalid ingredient type {$ingredient['type']}.");
             }
 
-            // Update summary
+            // Set entry summary.
             $unit = $ingredient['unit'];
             if ($item instanceof Food) {
                 if ($unit === 'serving') {
@@ -209,7 +209,14 @@ class JournalEntryController extends Controller
 
         $count = count($entries);
         session()->flash('message', "Added {$count} journal entries!");
-        return redirect()->route('journal-entries.index');
+
+        // Redirect to the date if only one date is used.
+        $parameters = [];
+        $unique_dates = array_unique($input['ingredients']['date']);
+        if (count($unique_dates) === 1) {
+            $parameters['date'] = reset($unique_dates);
+        }
+        return redirect()->route('journal-entries.index', $parameters);
     }
 
     /**
