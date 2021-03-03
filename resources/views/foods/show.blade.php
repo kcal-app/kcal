@@ -28,7 +28,7 @@
                     @if($food->brand)
                         <div class="text-2xl font-extrabold">{{ $food->brand }}</div>
                     @endif
-                    <div class="p-1 border-2 border-black font-sans md:w-72">
+                    <div class="p-1 mb-2 border-2 border-black font-sans md:w-72">
                         <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
                         <div class="flex justify-between font-bold border-b-8 border-black">
                             <div>Serving size</div>
@@ -71,6 +71,16 @@
                             </div>
                         </div>
                     </div>
+                    @if($food->source)
+                        <div class="mb-2 text-gray-500 text-sm">
+                            <span class="font-extrabold">Source:</span>
+                            @if(filter_var($food->source, FILTER_VALIDATE_URL))
+                                <a href="{{ $food->source }}">{{ $food->source }}</a>
+                            @else
+                                {{ $food->source }}
+                            @endif
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -116,7 +116,11 @@
                     @if($recipe->source)
                         <div class="mb-2 text-gray-500 text-sm">
                             <span class="font-extrabold">Source:</span>
-                            {{ $recipe->source }}
+                            @if(filter_var($recipe->source, FILTER_VALIDATE_URL))
+                                <a href="{{ $recipe->source }}">{{ $recipe->source }}</a>
+                            @else
+                                {{ $recipe->source }}
+                            @endif
                         </div>
                     @endif
                 </div>
