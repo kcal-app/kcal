@@ -1,7 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto">
-            {{ $food->name }}
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto items-center">
+            <div>
+                {{ $food->name }}@if($food->detail), {{ $food->detail }}@endif
+                @if($food->brand)
+                    <div>{{ $food->brand }}</div>
+                @endif
+            </div>
             <a class="ml-2 text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"
                href="{{ route('foods.edit', $food) }}">
                 <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -21,66 +26,84 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <!-- TODO: tags, recipes, etc. -->
-                    <h3 class="text-2xl font-extrabold">
-                        {{ $food->name }}@if($food->detail), <span class="text-2xl font-extrabold">{{ $food->detail }}</span>@endif
-                    </h3>
-                    @if($food->brand)
-                        <div class="text-2xl font-extrabold">{{ $food->brand }}</div>
-                    @endif
-                    <div class="p-1 mb-2 border-2 border-black font-sans md:w-72">
-                        <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
-                        <div class="flex justify-between font-bold border-b-8 border-black">
-                            <div>Serving size</div>
-                            <div>
-                                {{ $food->servingSizeFormatted }}
-                                {{ $food->servingUnitFormatted ?? $food->name }}
-                                ({{ $food->serving_weight }}g)
+                    <div class="flex flex-col space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0">
+                        <div class="p-1 mb-2 border-2 border-black font-sans md:w-72">
+                            <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
+                            <div class="flex justify-between font-bold border-b-8 border-black">
+                                <div>Serving size</div>
+                                <div>
+                                    {{ $food->servingSizeFormatted }}
+                                    {{ $food->servingUnitFormatted ?? $food->name }}
+                                    ({{ $food->serving_weight }}g)
+                                </div>
+                            </div>
+                            <div class="font-bold text-right">Amount per serving</div>
+                            <div class="flex justify-between items-end font-extrabold">
+                                <div class="text-3xl">Calories</div>
+                                <div class="text-4xl">{{ $food->calories }}</div>
+                            </div>
+                            <div class="border-t-4 border-black text-sm">
+                                <hr class="border-gray-500"/>
+                                <div class="flex justify-between">
+                                    <div class="font-bold">Total Fat</div>
+                                    <div>{{ $food->fat }}g</div>
+                                </div>
+                                <hr class="border-gray-500"/>
+                                <div class="flex justify-between">
+                                    <div class="font-bold">Cholesterol</div>
+                                    <div>{{ $food->cholesterol }}mg</div>
+                                </div>
+                                <hr class="border-gray-500"/>
+                                <div class="flex justify-between">
+                                    <div class="font-bold">Sodium</div>
+                                    <div>{{ $food->sodium }}mg</div>
+                                </div>
+                                <hr class="border-gray-500"/>
+                                <div class="flex justify-between">
+                                    <div class="font-bold">Total Carbohydrate</div>
+                                    <div>{{ $food->carbohydrates }}g</div>
+                                </div>
+                                <hr class="border-gray-500"/>
+                                <div class="flex justify-between">
+                                    <div class="font-bold">Protein</div>
+                                    <div>{{ $food->protein }}g</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="font-bold text-right">Amount per serving</div>
-                        <div class="flex justify-between items-end font-extrabold">
-                            <div class="text-3xl">Calories</div>
-                            <div class="text-4xl">{{ $food->calories }}</div>
-                        </div>
-                        <div class="border-t-4 border-black text-sm">
-                            <hr class="border-gray-500"/>
-                            <div class="flex justify-between">
-                                <div class="font-bold">Total Fat</div>
-                                <div>{{ $food->fat }}g</div>
-                            </div>
-                            <hr class="border-gray-500"/>
-                            <div class="flex justify-between">
-                                <div class="font-bold">Cholesterol</div>
-                                <div>{{ $food->cholesterol }}mg</div>
-                            </div>
-                            <hr class="border-gray-500"/>
-                            <div class="flex justify-between">
-                                <div class="font-bold">Sodium</div>
-                                <div>{{ $food->sodium }}mg</div>
-                            </div>
-                            <hr class="border-gray-500"/>
-                            <div class="flex justify-between">
-                                <div class="font-bold">Total Carbohydrate</div>
-                                <div>{{ $food->carbohydrates }}g</div>
-                            </div>
-                            <hr class="border-gray-500"/>
-                            <div class="flex justify-between">
-                                <div class="font-bold">Protein</div>
-                                <div>{{ $food->protein }}g</div>
-                            </div>
-                        </div>
-                    </div>
-                    @if($food->source)
-                        <div class="mb-2 text-gray-500 text-sm">
-                            <span class="font-extrabold">Source:</span>
-                            @if(filter_var($food->source, FILTER_VALIDATE_URL))
-                                <a href="{{ $food->source }}">{{ $food->source }}</a>
-                            @else
-                                {{ $food->source }}
+                        <div class="flex flex-col space-y-2">
+                            @if(!$food->tags->isEmpty())
+                                <h3 class="font-bold text-2xl">Tags</h3>
+                                <div class="flex flex-wrap">
+                                    @foreach ($food->tags as $tag)
+                                        <span class="m-1 bg-gray-200 rounded-full px-2 leading-loose">{{ $tag->name }}</span>
+                                    @endforeach
+                                </div>
+                            @endif
+                            @if($food->description)
+                                <h3 class="font-bold text-2xl">Description</h3>
+                                <div class="text-gray-800">{{ $food->description }}</div>
+                            @endif
+                                @if(!$food->ingredientAmountRelationships->isEmpty())
+                                    <h3 class="font-bold text-2xl">Recipes</h3>
+                                    <ul class="list-disc list-inside ml-3 space-y-1">
+                                        @foreach ($food->ingredientAmountRelationships as $ia)
+                                            <li> <a class="text-gray-500 hover:text-gray-700"
+                                                    href="{{ route('recipes.show', $ia->parent) }}">{{ $ia->parent->name }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            @if($food->source)
+                                <h3 class="font-bold text-2xl">Source</h3>
+                                <div>
+                                    @if(filter_var($food->source, FILTER_VALIDATE_URL))
+                                        <a class="text-gray-500 hover:text-gray-700" href="{{ $food->source }}">{{ $food->source }}</a>
+                                    @else
+                                        {{ $food->source }}
+                                    @endif
+                                </div>
                             @endif
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>
