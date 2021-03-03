@@ -187,11 +187,13 @@ class JournalEntryController extends Controller
             // Update summary
             $unit = $ingredient['unit'];
             if ($item instanceof Food) {
-                if (empty($item->serving_unit) && empty($item->serving_unit_name)) {
-                    $unit = null;
-                }
-                elseif (!empty($item->serving_unit_name)) {
-                    $unit = $item->serving_unit_formatted;
+                if ($unit === 'serving') {
+                    if (empty($item->serving_unit) && empty($item->serving_unit_name)) {
+                        $unit = null;
+                    }
+                    elseif (!empty($item->serving_unit_name)) {
+                        $unit = $item->serving_unit_formatted;
+                    }
                 }
             }
             $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null);
