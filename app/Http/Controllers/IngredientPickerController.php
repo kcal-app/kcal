@@ -21,6 +21,6 @@ class IngredientPickerController extends Controller
             $results = $results->merge(Food::search($term)->get());
             $results = $results->merge(Recipe::search($term)->get());
         }
-        return response()->json($results->sortBy('name')->values());
+        return response()->json($results->values());
     }
 }
