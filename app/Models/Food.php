@@ -137,7 +137,7 @@ final class Food extends Model
     {
         return [
             'name' => $this->name,
-            'tags' => $this->tags->pluck('name')->implode(','),
+            'tags' => $this->tags->pluck('name')->toArray(),
             'detail' => $this->detail,
             'brand' => $this->brand,
             'source' => $this->source,

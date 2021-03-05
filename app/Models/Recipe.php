@@ -112,7 +112,7 @@ final class Recipe extends Model
     {
         return [
             'name' => $this->name,
-            'tags' => $this->tags->pluck('name')->implode(','),
+            'tags' => $this->tags->pluck('name')->toArray(),
             'description' => $this->description,
             'source' => $this->source,
             'created_at' => $this->created_at,
