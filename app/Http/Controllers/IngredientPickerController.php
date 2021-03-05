@@ -31,7 +31,7 @@ class IngredientPickerController extends Controller
                     ->fields(['name', 'name._2gram', 'name._3gram', 'detail', 'brand', 'source'])
                     ->query($term)
                     ->type('bool_prefix')
-                    ->analyzer('whitespace')
+                    ->analyzer('simple')
                     ->fuzziness('AUTO'))
 
                 // Attempt to match on any tags in the term.
