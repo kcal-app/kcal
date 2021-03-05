@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('SCOUT_DRIVER', 'tntsearch'),
+    'driver' => env('SCOUT_DRIVER', 'elastic'),
 
     /*
     |--------------------------------------------------------------------------
@@ -114,25 +114,6 @@ return [
     'algolia' => [
         'id' => env('ALGOLIA_APP_ID', ''),
         'secret' => env('ALGOLIA_SECRET', ''),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | TNT Search Configuration
-    |--------------------------------------------------------------------------
-    */
-
-    'tntsearch' => [
-        'storage'  => storage_path() . '/indexes',
-        'fuzziness' => env('TNTSEARCH_FUZZINESS', false),
-        'fuzzy' => [
-            'prefix_length' => 2,
-            'max_expansions' => 50,
-            'distance' => 2
-        ],
-        'asYouType' => true,
-        'searchBoolean' => env('TNTSEARCH_BOOLEAN', false),
-        'maxDocs' => env('TNTSEARCH_MAX_DOCS', 500),
     ],
 
 ];

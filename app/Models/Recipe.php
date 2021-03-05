@@ -6,6 +6,7 @@ use App\Models\Traits\HasIngredients;
 use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
+use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -57,7 +58,14 @@ use Spatie\Tags\HasTags;
  */
 final class Recipe extends Model
 {
-    use HasFactory, HasIngredients, HasTags, Ingredient, Journalable, Searchable, Sluggable;
+    use HasFactory;
+    use HasIngredients;
+    use HasTags;
+    use Ingredient;
+    use Journalable;
+    use QueryDsl;
+    use Searchable;
+    use Sluggable;
 
     /**
      * @inheritdoc
@@ -102,12 +110,13 @@ final class Recipe extends Model
      */
     public function toSearchableArray(): array
     {
-        $this->tags;
         return [
-            'id' => $this->id,
             'name' => $this->name,
+            'tags' => $this->tags->pluck('name')->implode(','),
+            'description' => $this->description,
             'source' => $this->source,
-            'tags' => $this->tags->pluck('name'),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 

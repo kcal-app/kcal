@@ -6,6 +6,7 @@ use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
 use App\Support\Number;
+use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
@@ -73,7 +74,13 @@ use Spatie\Tags\HasTags;
  */
 final class Food extends Model
 {
-    use HasFactory, HasTags, Ingredient, Journalable, Searchable, Sluggable;
+    use HasFactory;
+    use HasTags;
+    use Ingredient;
+    use Journalable;
+    use QueryDsl;
+    use Searchable;
+    use Sluggable;
 
     /**
      * @inheritdoc
@@ -128,13 +135,20 @@ final class Food extends Model
      */
     public function toSearchableArray(): array
     {
-        $this->tags;
         return [
-            'id' => $this->id,
             'name' => $this->name,
+            'tags' => $this->tags->pluck('name')->implode(','),
             'detail' => $this->detail,
             'brand' => $this->brand,
-            'tags' => $this->tags->pluck('name'),
+            'source' => $this->source,
+            'notes' => $this->notes,
+            'calories' => $this->calories,
+            'cholesterol' => $this->cholesterol,
+            'sodium' => $this->sodium,
+            'carbohydrates' => $this->carbohydrates,
+            'protein' => $this->protein,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 
