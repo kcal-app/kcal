@@ -26,6 +26,22 @@
                     {{ implode(', ', $recipe->tags->pluck('name')->all()) }}
                 </section>
             @endif
+            @if($recipe->time_total > 0)
+                <section class="flex space-x-4">
+                    <div>
+                        <h1 class="mb-2 font-bold text-lg">Prep time</h1>
+                        <p class="mb-2 text-gray-800">{{ $recipe->time_prep }} minutes</p>
+                    </div>
+                    <div>
+                        <h1 class="mb-2 font-bold text-lg">Active time</h1>
+                        <p class="mb-2 text-gray-800">{{ $recipe->time_active }} minutes</p>
+                    </div>
+                    <div>
+                        <h1 class="mb-2 font-bold text-lg">Total time</h1>
+                        <p class="mb-2 text-gray-800">{{ $recipe->time_total }} minutes</p>
+                    </div>
+                </section>
+            @endif
             @if($recipe->description)
                 <section>
                     <h1 class="mb-2 font-bold text-2xl">Description</h1>
