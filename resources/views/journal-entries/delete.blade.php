@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="title">Delete Entry</x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight">
             Delete {{ $entry->summary }}?
-        </h2>
+        </h1>
     </x-slot>
     <form method="POST" action="{{ route('journal-entries.destroy', $entry) }}">
         @method('delete')

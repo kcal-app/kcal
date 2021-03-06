@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="title">{{ $recipe->name }}</x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto">
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto">
             {{ $recipe->name }}
             <a class="ml-2 text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"
                href="{{ route('recipes.edit', $recipe) }}">
@@ -16,28 +16,28 @@
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                 </svg>
             </a>
-        </h2>
+        </h1>
     </x-slot>
     <div class="flex flex-col-reverse justify-between pb-4 sm:flex-row">
         <div x-data="{showNutrientsSummary: false}">
             @if(!$recipe->tags->isEmpty())
                 <section class="mb-2 text-gray-700 text-sm">
-                    <h3 class="font-extrabold inline">Tags:</h3>
+                    <h1 class="font-extrabold inline">Tags:</h1>
                     {{ implode(', ', $recipe->tags->pluck('name')->all()) }}
                 </section>
             @endif
             @if($recipe->description)
                 <section>
-                    <h3 class="mb-2 font-bold text-2xl">Description</h3>
+                    <h1 class="mb-2 font-bold text-2xl">Description</h1>
                     <p class="mb-2 text-gray-800">{{ $recipe->description }}</p>
                 </section>
             @endif
             <section x-data="{showNutrientsSummary: false}">
-                <h3 class="mb-2 font-bold text-2xl">
+                <h1 class="mb-2 font-bold text-2xl">
                     Ingredients
                     <span class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"
                           x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
-                </h3>
+                </h1>
                 <ul class="space-y-2">
                     @foreach($recipe->ingredientAmounts as $ia)
                         <li>
@@ -104,7 +104,7 @@
         </aside>
     </div>
     <section>
-        <h3 class="mb-2 font-bold text-2xl">Steps</h3>
+        <h1 class="mb-2 font-bold text-2xl">Steps</h1>
         @foreach($recipe->steps as $step)
             <div class="flex flex-row space-x-4 mb-4">
                 <p class="text-3xl text-gray-400 text-center">{{ $step->number }}</p>
@@ -114,7 +114,7 @@
     </section>
     @if($recipe->source)
         <footer class="mb-2 text-gray-500 text-sm">
-            <h3 class="font-extrabold inline">Source:</h3>
+            <h1 class="font-extrabold inline">Source:</h1>
             @if(filter_var($recipe->source, FILTER_VALIDATE_URL))
                 <a href="{{ $recipe->source }}">{{ $recipe->source }}</a>
             @else

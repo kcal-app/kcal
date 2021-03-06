@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="title">Delete {{ $recipe->name }}</x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight">
             Delete {{ $recipe->name }}?
-        </h2>
+        </h1>
     </x-slot>
     <form method="POST" action="{{ route('recipes.destroy', $recipe) }}">
         @method('delete')

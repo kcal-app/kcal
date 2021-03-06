@@ -2,7 +2,7 @@
     {{ $title = ($goal->exists ? 'Edit' : 'Add') . ' Goal' }}
     <x-slot name="title">{{ $title }}</x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h2>
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h1>
     </x-slot>
     <form method="POST" action="{{ ($goal->exists ? route('goals.update', $goal) : route('goals.store')) }}">
         @if ($goal->exists)@method('put')@endif

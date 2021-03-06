@@ -2,7 +2,7 @@
     {{ $title = ($food->exists ? "Edit {$food->name}" : 'Add Food') }}
     <x-slot name="title">{{ $title }}</x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h2>
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h1>
     </x-slot>
     <form method="POST" action="{{ ($food->exists ? route('foods.update', $food) : route('foods.store')) }}">
                         @if ($food->exists)@method('put')@endif

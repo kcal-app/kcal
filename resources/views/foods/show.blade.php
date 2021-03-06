@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="title">{{ $food->name }}</x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto items-center">
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto items-center">
             <div>
                 {{ $food->name }}@if($food->detail), {{ $food->detail }}@endif
                 @if($food->brand)
@@ -21,55 +21,55 @@
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                 </svg>
             </a>
-        </h2>
+        </h1>
     </x-slot>
-    <div class="flex flex-col space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0">
-        <div class="p-1 mb-2 border-2 border-black font-sans md:w-72">
-            <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
-            <div class="flex justify-between font-bold border-b-8 border-black">
-                <div>Serving size</div>
+    <article class="flex flex-col space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0">
+        <section class="p-1 mb-2 border-2 border-black font-sans md:w-72">
+            <h1 class="text-3xl font-extrabold leading-none">Nutrition Facts</h1>
+            <section class="flex justify-between font-bold border-b-8 border-black">
+                <h1>Serving size</h1>
                 <div>
                     {{ $food->servingSizeFormatted }}
                     {{ $food->servingUnitFormatted ?? $food->name }}
                     ({{ $food->serving_weight }}g)
                 </div>
-            </div>
-            <div class="font-bold text-right">Amount per serving</div>
-            <div class="flex justify-between items-end font-extrabold">
-                <div class="text-3xl">Calories</div>
+            </section>
+            <h2 class="font-bold text-right">Amount per serving</h2>
+            <section class="flex justify-between items-end font-extrabold">
+                <h1 class="text-3xl">Calories</h1>
                 <div class="text-4xl">{{ $food->calories }}</div>
-            </div>
+            </section>
             <div class="border-t-4 border-black text-sm">
                 <hr class="border-gray-500"/>
-                <div class="flex justify-between">
-                    <div class="font-bold">Total Fat</div>
+                <section class="flex justify-between">
+                    <h1 class="font-bold">Total Fat</h1>
                     <div>{{ $food->fat }}g</div>
-                </div>
+                </section>
                 <hr class="border-gray-500"/>
-                <div class="flex justify-between">
-                    <div class="font-bold">Cholesterol</div>
+                <section class="flex justify-between">
+                    <h1 class="font-bold">Cholesterol</h1>
                     <div>{{ $food->cholesterol }}mg</div>
-                </div>
+                </section>
                 <hr class="border-gray-500"/>
-                <div class="flex justify-between">
-                    <div class="font-bold">Sodium</div>
+                <section class="flex justify-between">
+                    <h1 class="font-bold">Sodium</h1>
                     <div>{{ $food->sodium }}mg</div>
-                </div>
+                </section>
                 <hr class="border-gray-500"/>
-                <div class="flex justify-between">
-                    <div class="font-bold">Total Carbohydrate</div>
+                <section class="flex justify-between">
+                    <h1 class="font-bold">Total Carbohydrate</h1>
                     <div>{{ $food->carbohydrates }}g</div>
-                </div>
+                </section>
                 <hr class="border-gray-500"/>
-                <div class="flex justify-between">
-                    <div class="font-bold">Protein</div>
+                <section class="flex justify-between">
+                    <h1 class="font-bold">Protein</h1>
                     <div>{{ $food->protein }}g</div>
-                </div>
+                </section>
             </div>
-        </div>
-        <div class="flex flex-col space-y-2">
+        </section>
+        <section class="flex flex-col space-y-2">
             @if(!$food->tags->isEmpty())
-                <h3 class="font-bold text-2xl">Tags</h3>
+                <h1 class="font-bold text-2xl">Tags</h1>
                 <div class="flex flex-wrap">
                     @foreach ($food->tags as $tag)
                         <span class="m-1 bg-gray-200 rounded-full px-2 leading-loose">{{ $tag->name }}</span>
@@ -77,11 +77,11 @@
                 </div>
             @endif
             @if($food->description)
-                <h3 class="font-bold text-2xl">Description</h3>
-                <div class="text-gray-800">{{ $food->description }}</div>
+                <h1 class="font-bold text-2xl">Description</h1>
+                <p class="text-gray-800">{{ $food->description }}</p>
             @endif
                 @if(!$food->ingredientAmountRelationships->isEmpty())
-                    <h3 class="font-bold text-2xl">Recipes</h3>
+                    <h1 class="font-bold text-2xl">Recipes</h1>
                     <ul class="list-disc list-inside ml-3 space-y-1">
                         @foreach ($food->ingredientAmountRelationships as $ia)
                             <li> <a class="text-gray-500 hover:text-gray-700"
@@ -90,15 +90,15 @@
                     </ul>
                 @endif
             @if($food->source)
-                <h3 class="font-bold text-2xl">Source</h3>
-                <div>
+                <h1 class="font-bold text-2xl">Source</h1>
+                <p>
                     @if(filter_var($food->source, FILTER_VALIDATE_URL))
                         <a class="text-gray-500 hover:text-gray-700" href="{{ $food->source }}">{{ $food->source }}</a>
                     @else
                         {{ $food->source }}
                     @endif
-                </div>
+                </p>
             @endif
-        </div>
-    </div>
+        </section>
+    </article>
 </x-app-layout>

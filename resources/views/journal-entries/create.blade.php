@@ -2,7 +2,7 @@
     <x-slot name="title">Add Entries</x-slot>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Add Entries</h2>
+            <h1 class="font-semibold text-xl text-gray-800 leading-tight">Add Entries</h1>
             <a href="{{ route('journal-entries.create.from-nutrients', ['date' => $default_date->format('Y-m-d')]) }}" class="inline-flex items-center rounded-md font-semibold text-white p-2 bg-green-500 tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-green-600 disabled:opacity-25 transition ease-in-out duration-150">
                 Add by Nutrients
             </a>
