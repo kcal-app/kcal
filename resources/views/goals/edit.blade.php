@@ -1,5 +1,5 @@
 <x-app-layout>
-    {{ $title = ($goal->exists ? 'Edit' : 'Add') . ' Goal' }}
+    @php($title = ($goal->exists ? 'Edit' : 'Add') . ' Goal')
     <x-slot name="title">{{ $title }}</x-slot>
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h1>
