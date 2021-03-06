@@ -24,47 +24,44 @@
 
         @isset($styles) {{ $styles }} @endisset
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    <body class="font-sans antialiased min-h-screen bg-gray-100">
+        @include('layouts.navigation')
 
-            <!-- Page Heading -->
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
+        <!-- Page Heading -->
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main>
+            @if(session()->has('message'))
+                <div class="bg-green-200 p-2 mb-2">
+                    {{ session()->get('message') }}
                 </div>
-            </header>
-
-            <!-- Page Content -->
-            <main>
-                @if(session()->has('message'))
-                    <div class="bg-green-200 p-2 mb-2">
-                        {{ session()->get('message') }}
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="flex flex-col">
-                        <div class="font-extrabold bg-red-200 p-2 text-lg">Errors!</div>
-                        @foreach ($errors->all() as $error)
-                            <div class="bg-red-200 p-2">
-                                {{ $error }}
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-
-                <div class="py-6">
-                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 bg-white border-b border-gray-200">
-                                {{ $slot }}
-                            </div>
+            @endif
+            @if ($errors->any())
+                <div class="flex flex-col">
+                    <div class="font-extrabold bg-red-200 p-2 text-lg">Errors!</div>
+                    @foreach ($errors->all() as $error)
+                        <div class="bg-red-200 p-2">
+                            {{ $error }}
                         </div>
+                    @endforeach
+                </div>
+            @endif
+
+            <div class="py-6">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <article class="p-6 bg-white border-b border-gray-200">
+                            {{ $slot }}
+                        </article>
                     </div>
                 </div>
-            </main>
-        </div>
-
-        @stack('scripts')
+            </div>
+    </main>
+    @stack('scripts')
     </body>
 </html>
