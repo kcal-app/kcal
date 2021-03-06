@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Recipes</x-slot>
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">Recipes</h2>
@@ -11,54 +12,54 @@
         </div>
     </x-slot>
     <x-search-view :route="route('api:v1:recipes.index')" :tags="$tags">
-                        <x-slot name="results">
-                            <template x-for="recipe in results" :key="recipe">
-                                <div class="p-1 border-2 border-black font-sans">
-                                    <div class="text-2xl font-extrabold">
-                                        <a x-bind:href="recipe.showUrl"
-                                           class="hover:text-gray-600" x-text="recipe.name"></a>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <div class="leading-snug" x-text="`${recipe.servings} servings`"></div>
-                                    </div>
-                                    <div class="flex justify-between items-end font-extrabold" x-show="recipe.serving_weight">
-                                        <div>Serving weight</div>
-                                        <div x-text="`${recipe.serving_weight}g`"></div>
-                                    </div>
-                                    <div class="font-bold text-right border-t-8 border-black">Amount per serving</div>
-                                    <div class="flex justify-between items-end font-extrabold">
-                                        <div class="text-xl">Calories</div>
-                                        <div class="text-xl" x-text="`${recipe.caloriesPerServing}`"></div>
-                                    </div>
-                                    <div class="border-t-4 border-black text-sm">
-                                        <hr class="border-gray-500"/>
-                                        <div class="flex justify-between">
-                                            <div class="font-bold">Total Fat</div>
-                                            <div x-text="`${recipe.fatPerServing}g`"></div>
-                                        </div>
-                                        <hr class="border-gray-500"/>
-                                        <div class="flex justify-between">
-                                            <div class="font-bold">Cholesterol</div>
-                                            <div x-text="`${recipe.cholesterolPerServing}mg`"></div>
-                                        </div>
-                                        <hr class="border-gray-500"/>
-                                        <div class="flex justify-between">
-                                            <div class="font-bold">Sodium</div>
-                                            <div x-text="`${recipe.sodiumPerServing}mg`"></div>
-                                        </div>
-                                        <hr class="border-gray-500"/>
-                                        <div class="flex justify-between">
-                                            <div class="font-bold">Total Carbohydrate</div>
-                                            <div x-text="`${recipe.carbohydratesPerServing}g`"></div>
-                                        </div>
-                                        <hr class="border-gray-500"/>
-                                        <div class="flex justify-between">
-                                            <div class="font-bold">Protein</div>
-                                            <div x-text="`${recipe.proteinPerServing}g`"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                        </x-slot>
-</x-search-view>
+        <x-slot name="results">
+            <template x-for="recipe in results" :key="recipe">
+                <div class="p-1 border-2 border-black font-sans">
+                    <div class="text-2xl font-extrabold">
+                        <a x-bind:href="recipe.showUrl"
+                           class="hover:text-gray-600" x-text="recipe.name"></a>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="leading-snug" x-text="`${recipe.servings} servings`"></div>
+                    </div>
+                    <div class="flex justify-between items-end font-extrabold" x-show="recipe.serving_weight">
+                        <div>Serving weight</div>
+                        <div x-text="`${recipe.serving_weight}g`"></div>
+                    </div>
+                    <div class="font-bold text-right border-t-8 border-black">Amount per serving</div>
+                    <div class="flex justify-between items-end font-extrabold">
+                        <div class="text-xl">Calories</div>
+                        <div class="text-xl" x-text="`${recipe.caloriesPerServing}`"></div>
+                    </div>
+                    <div class="border-t-4 border-black text-sm">
+                        <hr class="border-gray-500"/>
+                        <div class="flex justify-between">
+                            <div class="font-bold">Total Fat</div>
+                            <div x-text="`${recipe.fatPerServing}g`"></div>
+                        </div>
+                        <hr class="border-gray-500"/>
+                        <div class="flex justify-between">
+                            <div class="font-bold">Cholesterol</div>
+                            <div x-text="`${recipe.cholesterolPerServing}mg`"></div>
+                        </div>
+                        <hr class="border-gray-500"/>
+                        <div class="flex justify-between">
+                            <div class="font-bold">Sodium</div>
+                            <div x-text="`${recipe.sodiumPerServing}mg`"></div>
+                        </div>
+                        <hr class="border-gray-500"/>
+                        <div class="flex justify-between">
+                            <div class="font-bold">Total Carbohydrate</div>
+                            <div x-text="`${recipe.carbohydratesPerServing}g`"></div>
+                        </div>
+                        <hr class="border-gray-500"/>
+                        <div class="flex justify-between">
+                            <div class="font-bold">Protein</div>
+                            <div x-text="`${recipe.proteinPerServing}g`"></div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </x-slot>
+    </x-search-view>
 </x-app-layout>

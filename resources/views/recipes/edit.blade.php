@@ -1,112 +1,112 @@
 <x-app-layout>
+    {{ $title = ($recipe->exists ? "Edit {$recipe->name}" : 'Add Recipe') }}
+    <x-slot name="title">{{ $title }}</x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ ($recipe->exists ? "Edit {$recipe->name}" : 'Add Recipe') }}
-        </h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h2>
     </x-slot>
     <form method="POST" action="{{ ($recipe->exists ? route('recipes.update', $recipe) : route('recipes.store')) }}">
-                    @if ($recipe->exists)@method('put')@endif
-                    @csrf
-                        <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
-                            <!-- Name -->
-                            <div class="flex-auto">
-                                <x-inputs.label for="name" value="Name" />
+        @if ($recipe->exists)@method('put')@endif
+        @csrf
+        <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+            <!-- Name -->
+            <div class="flex-auto">
+                <x-inputs.label for="name" value="Name" />
 
-                                <x-inputs.input name="name"
-                                                type="text"
-                                                class="block mt-1 w-full"
-                                                :value="old('name', $recipe->name)"
-                                                required />
-                            </div>
+                <x-inputs.input name="name"
+                                type="text"
+                                class="block mt-1 w-full"
+                                :value="old('name', $recipe->name)"
+                                required />
+            </div>
 
-                            <!-- Servings -->
-                            <div class="flex-auto">
-                                <x-inputs.label for="servings" value="Servings" />
+            <!-- Servings -->
+            <div class="flex-auto">
+                <x-inputs.label for="servings" value="Servings" />
 
-                                <x-inputs.input name="servings"
-                                                type="number"
-                                                class="block mt-1 w-full"
-                                                :value="old('servings', $recipe->servings)"
-                                                required />
-                            </div>
+                <x-inputs.input name="servings"
+                                type="number"
+                                class="block mt-1 w-full"
+                                :value="old('servings', $recipe->servings)"
+                                required />
+            </div>
 
-                            <!-- Weight -->
-                            <div class="flex-auto">
-                                <x-inputs.label for="weight" value="Total weight (g)" />
+            <!-- Weight -->
+            <div class="flex-auto">
+                <x-inputs.label for="weight" value="Total weight (g)" />
 
-                                <x-inputs.input name="weight"
-                                                type="number"
-                                                step="any"
-                                                class="block mt-1 w-full"
-                                                :value="old('weight', $recipe->weight)" />
-                            </div>
-                        </div>
-                        <div class="flex flex-col space-y-4 mt-4">
-                            <!-- Source -->
-                            <div class="flex-auto">
-                                <x-inputs.label for="source" value="Source" />
+                <x-inputs.input name="weight"
+                                type="number"
+                                step="any"
+                                class="block mt-1 w-full"
+                                :value="old('weight', $recipe->weight)" />
+            </div>
+        </div>
+        <div class="flex flex-col space-y-4 mt-4">
+            <!-- Source -->
+            <div class="flex-auto">
+                <x-inputs.label for="source" value="Source" />
 
-                                <x-inputs.input name="source"
-                                                type="text"
-                                                class="block mt-1 w-full"
-                                                :value="old('source', $recipe->source)" />
-                            </div>
+                <x-inputs.input name="source"
+                                type="text"
+                                class="block mt-1 w-full"
+                                :value="old('source', $recipe->source)" />
+            </div>
 
-                            <!-- Description -->
-                            <div>
-                                <x-inputs.label for="description" value="Description" />
+            <!-- Description -->
+            <div>
+                <x-inputs.label for="description" value="Description" />
 
-                                <x-inputs.textarea name="description"
-                                                   class="block mt-1 w-full"
-                                                   :value="old('description', $recipe->description)" />
-                            </div>
+                <x-inputs.textarea name="description"
+                                   class="block mt-1 w-full"
+                                   :value="old('description', $recipe->description)" />
+            </div>
 
-                            <!-- Tags -->
-                            <x-tagger :defaultTags="$recipe_tags"/>
-                        </div>
+            <!-- Tags -->
+            <x-tagger :defaultTags="$recipe_tags"/>
+        </div>
 
-                        <!-- Ingredients -->
-                        <h3 class="mt-6 mb-2 font-extrabold text-lg">Ingredients</h3>
-                        <div x-data class="ingredients space-y-4">
-                            @forelse($ingredients as $ingredient)
-                                @include('recipes.partials.ingredient-input', $ingredient)
-                            @empty
-                                @include('recipes.partials.ingredient-input')
-                            @endforelse
-                            <div class="entry-template hidden">
-                                @include('recipes.partials.ingredient-input')
-                            </div>
-                            <x-inputs.icon-button type="button" color="green" x-on:click="addEntryNode($el);">
-                                <svg class="h-10 w-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                                </svg>
-                            </x-inputs.icon-button>
-                        </div>
+        <!-- Ingredients -->
+        <h3 class="mt-6 mb-2 font-extrabold text-lg">Ingredients</h3>
+        <div x-data class="ingredients space-y-4">
+            @forelse($ingredients as $ingredient)
+                @include('recipes.partials.ingredient-input', $ingredient)
+            @empty
+                @include('recipes.partials.ingredient-input')
+            @endforelse
+            <div class="entry-template hidden">
+                @include('recipes.partials.ingredient-input')
+            </div>
+            <x-inputs.icon-button type="button" color="green" x-on:click="addEntryNode($el);">
+                <svg class="h-10 w-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                </svg>
+            </x-inputs.icon-button>
+        </div>
 
-                        <!-- Steps -->
-                        <h3 class="mt-6 mb-2 font-extrabold text-lg">Steps</h3>
-                        <div x-data class="steps">
-                            @forelse($steps as $step)
-                                @include('recipes.partials.step-input', $step)
-                            @empty
-                                @include('recipes.partials.step-input')
-                            @endforelse
-                            <div class="entry-template hidden">
-                                @include('recipes.partials.step-input')
-                            </div>
-                            <x-inputs.icon-button type="button" color="green" x-on:click="addEntryNode($el);">
-                                <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                                </svg>
-                            </x-inputs.icon-button>
-                        </div>
+        <!-- Steps -->
+        <h3 class="mt-6 mb-2 font-extrabold text-lg">Steps</h3>
+        <div x-data class="steps">
+            @forelse($steps as $step)
+                @include('recipes.partials.step-input', $step)
+            @empty
+                @include('recipes.partials.step-input')
+            @endforelse
+            <div class="entry-template hidden">
+                @include('recipes.partials.step-input')
+            </div>
+            <x-inputs.icon-button type="button" color="green" x-on:click="addEntryNode($el);">
+                <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                </svg>
+            </x-inputs.icon-button>
+        </div>
 
-                        <div x-data class="flex items-center justify-end mt-4">
-                            <x-inputs.button x-on:click="removeTemplates();" class="ml-3">
-                                {{ ($recipe->exists ? 'Save' : 'Add') }}
-                            </x-inputs.button>
-                        </div>
-            </form>
+        <div x-data class="flex items-center justify-end mt-4">
+            <x-inputs.button x-on:click="removeTemplates();" class="ml-3">
+                {{ ($recipe->exists ? 'Save' : 'Add') }}
+            </x-inputs.button>
+        </div>
+    </form>
 
     @once
         @push('scripts')
