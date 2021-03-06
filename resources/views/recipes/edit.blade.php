@@ -18,7 +18,8 @@
                                 :value="old('name', $recipe->name)"
                                 required />
             </div>
-
+        </div>
+        <div class="flex flex-col space-y-4 mt-4 md:flex-row md:space-x-4 md:space-y-0">
             <!-- Servings -->
             <div class="flex-auto">
                 <x-inputs.label for="servings" value="Servings" />
@@ -39,6 +40,30 @@
                                 step="any"
                                 class="block mt-1 w-full"
                                 :value="old('weight', $recipe->weight)" />
+            </div>
+
+            <!-- Prep Time -->
+            <div class="flex-auto">
+                <x-inputs.label for="time_prep" value="Prep time (minutes)" />
+
+                <x-inputs.input name="time_prep"
+                                type="number"
+                                step="1"
+                                min="0"
+                                class="block mt-1 w-full"
+                                :value="old('name', $recipe->time_prep)"/>
+            </div>
+
+            <!-- Active Time -->
+            <div class="flex-auto">
+                <x-inputs.label for="time_active" value="Active time (minutes)" />
+
+                <x-inputs.input name="time_active"
+                                type="number"
+                                step="1"
+                                min="0"
+                                class="block mt-1 w-full"
+                                :value="old('servings', $recipe->time_active)"/>
             </div>
         </div>
         <div class="flex flex-col space-y-4 mt-4">

@@ -152,11 +152,13 @@ class RecipeController extends Controller
     public function update(Request $request, Recipe $recipe): RedirectResponse
     {
         $input = $request->validate([
-            'name' => 'required|string',
-            'description' => 'nullable|string',
-            'source' => 'nullable|string',
-            'servings' => 'required|numeric',
-            'weight' => 'nullable|numeric',
+            'name' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
+            'servings' => ['required', 'numeric'],
+            'time_prep' => ['nullable', 'numeric'],
+            'time_active' => ['nullable', 'numeric'],
+            'weight' => ['nullable', 'numeric'],
+            'source' => ['nullable', 'string'],
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
             'ingredients.unit' => ['required', 'array'],
@@ -184,9 +186,11 @@ class RecipeController extends Controller
         $recipe->fill([
             'name' => Str::lower($input['name']),
             'description' => $input['description'],
-            'source' => $input['source'],
             'servings' => (int) $input['servings'],
             'weight' => $input['weight'],
+            'time_prep' => (int) $input['time_prep'],
+            'time_active' => (int) $input['time_active'],
+            'source' => $input['source'],
         ]);
 
         try {

@@ -73,6 +73,8 @@ final class Recipe extends Model
     protected $fillable = [
         'name',
         'description',
+        'time_prep',
+        'time_active',
         'source',
         'servings',
         'weight',
@@ -83,6 +85,8 @@ final class Recipe extends Model
      */
     protected $casts = [
         'servings' => 'int',
+        'time_prep' => 'int',
+        'time_active' => 'int',
         'weight' => 'float',
     ];
 
@@ -103,6 +107,7 @@ final class Recipe extends Model
      */
     protected $appends = [
         'serving_weight',
+        'time_total',
     ];
 
     /**
@@ -118,6 +123,10 @@ final class Recipe extends Model
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+    }
+
+    public function getTimeTotalAttribute(): int {
+        return $this->time_prep + $this->time_active;
     }
 
     /**

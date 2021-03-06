@@ -18,6 +18,8 @@ class CreateRecipesTable extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->longText('description')->nullable();
+            $table->integer('time_prep')->nullable();
+            $table->integer('time_active')->nullable();
             $table->string('source')->nullable();
             $table->unsignedInteger('servings');
             $table->unsignedFloat('weight')->nullable();
