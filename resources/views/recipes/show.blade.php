@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">{{ $recipe->name }}</x-slot>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto">
             {{ $recipe->name }}
@@ -20,44 +21,44 @@
     <div class="flex flex-col-reverse justify-between pb-4 sm:flex-row">
         <div x-data="{showNutrientsSummary: false}">
             @if(!$recipe->tags->isEmpty())
-                <div class="mb-2 text-gray-700 text-sm">
-                    <span class="font-extrabold">Tags:</span>
+                <section class="mb-2 text-gray-700 text-sm">
+                    <h3 class="font-extrabold inline">Tags:</h3>
                     {{ implode(', ', $recipe->tags->pluck('name')->all()) }}
-                </div>
+                </section>
             @endif
             @if($recipe->description)
-                <h3 class="mb-2 font-bold text-2xl">Description</h3>
-                <div class="mb-2 text-gray-800">{{ $recipe->description }}</div>
+                <section>
+                    <h3 class="mb-2 font-bold text-2xl">Description</h3>
+                    <p class="mb-2 text-gray-800">{{ $recipe->description }}</p>
+                </section>
             @endif
-            <h3 class="mb-2 font-bold text-2xl">
-                Ingredients
-                <span class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"
-                      x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
-            </h3>
-            <div class="space-y-2">
-                @foreach($recipe->ingredientAmounts as $ia)
-                    <div>
-                        <div class="flex flex-row space-x-2">
-                            <div>{{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}</div>
-                            @if($ia->unitFormatted)<div>{{ $ia->unitFormatted }}</div>@endif
-                            <div>
-                                @if($ia->ingredient->type === \App\Models\Recipe::class)
-                                    <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                       href="{{ route('recipes.show', $ia->ingredient) }}">
-                                        {{ $ia->ingredient->name }}
-                                    </a>
-                                @else
-                                    {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
-                                @endif
-                            </div>
-                            @if($ia->detail)<div class="text-gray-500">{{ $ia->detail }}</div>@endif
-                        </div>
-                        <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $ia->nutrients_summary }}</div>
-                    </div>
-                @endforeach
-            </div>
+            <section x-data="{showNutrientsSummary: false}">
+                <h3 class="mb-2 font-bold text-2xl">
+                    Ingredients
+                    <span class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"
+                          x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
+                </h3>
+                <ul class="space-y-2">
+                    @foreach($recipe->ingredientAmounts as $ia)
+                        <li>
+                            {{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}
+                            @if($ia->unitFormatted){{ $ia->unitFormatted }}@endif
+                            @if($ia->ingredient->type === \App\Models\Recipe::class)
+                                <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                   href="{{ route('recipes.show', $ia->ingredient) }}">
+                                    {{ $ia->ingredient->name }}
+                                </a>
+                            @else
+                                {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
+                            @endif
+                            @if($ia->detail)<span class="text-gray-500">{{ $ia->detail }}</span>@endif
+                            <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $ia->nutrients_summary }}</div>
+                        </li>
+                    @endforeach
+                </ul>
+            </section>
         </div>
-        <div>
+        <aside>
             <div class="p-1 border-2 border-black font-sans sm:ml-4 md:w-72">
                 <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
                 <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
@@ -100,23 +101,25 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </aside>
     </div>
-    <h3 class="mb-2 font-bold text-2xl">Steps</h3>
-    @foreach($recipe->steps as $step)
-        <div class="flex flex-row space-x-4 mb-4">
-            <div class="text-3xl text-gray-400 text-center">{{ $step->number }}</div>
-            <div class="text-2xl">{{ $step->step }}</div>
-        </div>
-    @endforeach
+    <section>
+        <h3 class="mb-2 font-bold text-2xl">Steps</h3>
+        @foreach($recipe->steps as $step)
+            <div class="flex flex-row space-x-4 mb-4">
+                <p class="text-3xl text-gray-400 text-center">{{ $step->number }}</p>
+                <p class="text-2xl">{{ $step->step }}</p>
+            </div>
+        @endforeach
+    </section>
     @if($recipe->source)
-        <div class="mb-2 text-gray-500 text-sm">
-            <span class="font-extrabold">Source:</span>
+        <footer class="mb-2 text-gray-500 text-sm">
+            <h3 class="font-extrabold inline">Source:</h3>
             @if(filter_var($recipe->source, FILTER_VALIDATE_URL))
                 <a href="{{ $recipe->source }}">{{ $recipe->source }}</a>
             @else
                 {{ $recipe->source }}
             @endif
-        </div>
+        </footer>
     @endif
 </x-app-layout>

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ $title }} - {{ config('app.name', 'Laravel') }}</title>
 
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
@@ -52,16 +52,14 @@
                 </div>
             @endif
 
-            <div class="py-6">
-                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <article class="p-6 bg-white border-b border-gray-200">
-                            {{ $slot }}
-                        </article>
-                    </div>
+            <div class="pt-6 max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <article class="p-6 border-b border-gray-200">
+                        {{ $slot }}
+                    </article>
                 </div>
             </div>
-    </main>
+        </main>
     @stack('scripts')
     </body>
 </html>
