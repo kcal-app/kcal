@@ -31,12 +31,7 @@
             </a>
         </div>
     </x-slot>
-
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="space-y-4">
+    <div class="space-y-4">
                         @forelse($goals['present'] as $goal)
                             <div class="flex space-x-2 items-center">
                                 <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"
@@ -58,8 +53,4 @@
                             <div>No goals set.</div>
                         @endforelse
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </x-app-layout>

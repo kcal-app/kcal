@@ -4,12 +4,7 @@
             Delete {{ $food->name }}?
         </h2>
     </x-slot>
-
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{ route('foods.destroy', $food) }}">
+    <form method="POST" action="{{ route('foods.destroy', $food) }}">
                         @method('delete')
                         @csrf
                         <div class="pb-3">
@@ -51,8 +46,4 @@
                         <a class="ml-3 text-gray-500 hover:text-gray-700" href="{{ route('foods.show', $food) }}">
                             No, do not delete</a>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
 </x-app-layout>

@@ -17,114 +17,106 @@
             </a>
         </h2>
     </x-slot>
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex flex-col-reverse justify-between pb-4 sm:flex-row">
-                        <div x-data="{showNutrientsSummary: false}">
-                            @if(!$recipe->tags->isEmpty())
-                                <div class="mb-2 text-gray-700 text-sm">
-                                    <span class="font-extrabold">Tags:</span>
-                                    {{ implode(', ', $recipe->tags->pluck('name')->all()) }}
-                                </div>
-                            @endif
-                            @if($recipe->description)
-                                <h3 class="mb-2 font-bold text-2xl">Description</h3>
-                                <div class="mb-2 text-gray-800">{{ $recipe->description }}</div>
-                            @endif
-                            <h3 class="mb-2 font-bold text-2xl">
-                                Ingredients
-                                <span class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"
-                                      x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
-                            </h3>
-                            <div class="space-y-2">
-                                @foreach($recipe->ingredientAmounts as $ia)
-                                    <div>
-                                        <div class="flex flex-row space-x-2">
-                                            <div>{{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}</div>
-                                            @if($ia->unitFormatted)<div>{{ $ia->unitFormatted }}</div>@endif
-                                            <div>
-                                                @if($ia->ingredient->type === \App\Models\Recipe::class)
-                                                    <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                                       href="{{ route('recipes.show', $ia->ingredient) }}">
-                                                        {{ $ia->ingredient->name }}
-                                                    </a>
-                                                @else
-                                                    {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
-                                                @endif
-                                            </div>
-                                            @if($ia->detail)<div class="text-gray-500">{{ $ia->detail }}</div>@endif
-                                        </div>
-                                        <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $ia->nutrients_summary }}</div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div>
-                            <div class="p-1 border-2 border-black font-sans md:w-72">
-                                <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
-                                <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
-                                @if($recipe->serving_weight)
-                                    <div class="flex justify-between items-end font-extrabold">
-                                        <div>Serving weight</div>
-                                        <div>{{ $recipe->serving_weight }}g</div>
-                                    </div>
+    <div class="flex flex-col-reverse justify-between pb-4 sm:flex-row">
+        <div x-data="{showNutrientsSummary: false}">
+            @if(!$recipe->tags->isEmpty())
+                <div class="mb-2 text-gray-700 text-sm">
+                    <span class="font-extrabold">Tags:</span>
+                    {{ implode(', ', $recipe->tags->pluck('name')->all()) }}
+                </div>
+            @endif
+            @if($recipe->description)
+                <h3 class="mb-2 font-bold text-2xl">Description</h3>
+                <div class="mb-2 text-gray-800">{{ $recipe->description }}</div>
+            @endif
+            <h3 class="mb-2 font-bold text-2xl">
+                Ingredients
+                <span class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"
+                      x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
+            </h3>
+            <div class="space-y-2">
+                @foreach($recipe->ingredientAmounts as $ia)
+                    <div>
+                        <div class="flex flex-row space-x-2">
+                            <div>{{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}</div>
+                            @if($ia->unitFormatted)<div>{{ $ia->unitFormatted }}</div>@endif
+                            <div>
+                                @if($ia->ingredient->type === \App\Models\Recipe::class)
+                                    <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                       href="{{ route('recipes.show', $ia->ingredient) }}">
+                                        {{ $ia->ingredient->name }}
+                                    </a>
+                                @else
+                                    {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
                                 @endif
-                                <div class="font-bold text-right border-t-8 border-black">Amount per serving</div>
-                                <div class="flex justify-between items-end font-extrabold">
-                                    <div class="text-3xl">Calories</div>
-                                    <div class="text-4xl">{{ $recipe->caloriesPerServing() }}</div>
-                                </div>
-                                <div class="border-t-4 border-black text-sm">
-                                    <hr class="border-gray-500"/>
-                                    <div class="flex justify-between">
-                                        <div class="font-bold">Total Fat</div>
-                                        <div>{{ $recipe->fatPerServing() }}g</div>
-                                    </div>
-                                    <hr class="border-gray-500"/>
-                                    <div class="flex justify-between">
-                                        <div class="font-bold">Cholesterol</div>
-                                        <div>{{ $recipe->cholesterolPerServing() }}mg</div>
-                                    </div>
-                                    <hr class="border-gray-500"/>
-                                    <div class="flex justify-between">
-                                        <div class="font-bold">Sodium</div>
-                                        <div>{{ $recipe->sodiumPerServing() }}mg</div>
-                                    </div>
-                                    <hr class="border-gray-500"/>
-                                    <div class="flex justify-between">
-                                        <div class="font-bold">Total Carbohydrate</div>
-                                        <div>{{ $recipe->carbohydratesPerServing() }}g</div>
-                                    </div>
-                                    <hr class="border-gray-500"/>
-                                    <div class="flex justify-between">
-                                        <div class="font-bold">Protein</div>
-                                        <div>{{ $recipe->proteinPerServing() }}g</div>
-                                    </div>
-                                </div>
                             </div>
+                            @if($ia->detail)<div class="text-gray-500">{{ $ia->detail }}</div>@endif
                         </div>
+                        <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $ia->nutrients_summary }}</div>
                     </div>
-                    <h3 class="mb-2 font-bold text-2xl">Steps</h3>
-                    @foreach($recipe->steps as $step)
-                        <div class="flex flex-row space-x-4 mb-4">
-                            <div class="text-3xl text-gray-400 text-center">{{ $step->number }}</div>
-                            <div class="text-2xl">{{ $step->step }}</div>
-                        </div>
-                    @endforeach
-                    @if($recipe->source)
-                        <div class="mb-2 text-gray-500 text-sm">
-                            <span class="font-extrabold">Source:</span>
-                            @if(filter_var($recipe->source, FILTER_VALIDATE_URL))
-                                <a href="{{ $recipe->source }}">{{ $recipe->source }}</a>
-                            @else
-                                {{ $recipe->source }}
-                            @endif
-                        </div>
-                    @endif
+                @endforeach
+            </div>
+        </div>
+        <div>
+            <div class="p-1 border-2 border-black font-sans sm:ml-4 md:w-72">
+                <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
+                <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
+                @if($recipe->serving_weight)
+                    <div class="flex justify-between items-end font-extrabold">
+                        <div>Serving weight</div>
+                        <div>{{ $recipe->serving_weight }}g</div>
+                    </div>
+                @endif
+                <div class="font-bold text-right border-t-8 border-black">Amount per serving</div>
+                <div class="flex justify-between items-end font-extrabold">
+                    <div class="text-3xl">Calories</div>
+                    <div class="text-4xl">{{ $recipe->caloriesPerServing() }}</div>
+                </div>
+                <div class="border-t-4 border-black text-sm">
+                    <hr class="border-gray-500"/>
+                    <div class="flex justify-between">
+                        <div class="font-bold">Total Fat</div>
+                        <div>{{ $recipe->fatPerServing() }}g</div>
+                    </div>
+                    <hr class="border-gray-500"/>
+                    <div class="flex justify-between">
+                        <div class="font-bold">Cholesterol</div>
+                        <div>{{ $recipe->cholesterolPerServing() }}mg</div>
+                    </div>
+                    <hr class="border-gray-500"/>
+                    <div class="flex justify-between">
+                        <div class="font-bold">Sodium</div>
+                        <div>{{ $recipe->sodiumPerServing() }}mg</div>
+                    </div>
+                    <hr class="border-gray-500"/>
+                    <div class="flex justify-between">
+                        <div class="font-bold">Total Carbohydrate</div>
+                        <div>{{ $recipe->carbohydratesPerServing() }}g</div>
+                    </div>
+                    <hr class="border-gray-500"/>
+                    <div class="flex justify-between">
+                        <div class="font-bold">Protein</div>
+                        <div>{{ $recipe->proteinPerServing() }}g</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <h3 class="mb-2 font-bold text-2xl">Steps</h3>
+    @foreach($recipe->steps as $step)
+        <div class="flex flex-row space-x-4 mb-4">
+            <div class="text-3xl text-gray-400 text-center">{{ $step->number }}</div>
+            <div class="text-2xl">{{ $step->step }}</div>
+        </div>
+    @endforeach
+    @if($recipe->source)
+        <div class="mb-2 text-gray-500 text-sm">
+            <span class="font-extrabold">Source:</span>
+            @if(filter_var($recipe->source, FILTER_VALIDATE_URL))
+                <a href="{{ $recipe->source }}">{{ $recipe->source }}</a>
+            @else
+                {{ $recipe->source }}
+            @endif
+        </div>
+    @endif
 </x-app-layout>

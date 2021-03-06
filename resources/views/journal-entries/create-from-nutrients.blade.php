@@ -7,12 +7,7 @@
             </a>
         </div>
     </x-slot>
-
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{ route('journal-entries.store.from-nutrients') }}">
+    <form method="POST" action="{{ route('journal-entries.store.from-nutrients') }}">
                     @csrf
                         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full mb-4">
                             <!-- Date -->
@@ -72,8 +67,4 @@
                             <x-inputs.button class="ml-3">Add Entry</x-inputs.button>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
 </x-app-layout>
