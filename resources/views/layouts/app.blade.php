@@ -18,11 +18,10 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        @stack('styles')
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-
-        @isset($styles) {{ $styles }} @endisset
     </head>
     <body class="font-sans antialiased min-h-screen bg-gray-100">
         @include('layouts.navigation')

@@ -18,4 +18,8 @@ mix
         require('postcss-import'),
         require('tailwindcss'),
         require('autoprefixer'),
+    ])
+    .postCss('resources/css/recipes/edit.css', 'public/css/recipes', [
+        require('postcss-import'),
+        require('autoprefixer'),
     ]);
