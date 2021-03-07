@@ -20,6 +20,11 @@
     </x-slot>
     <div class="flex flex-col-reverse justify-between pb-4 sm:flex-row">
         <div x-data="{showNutrientsSummary: false}">
+            @if($recipe->description_html)
+                <section class="mb-2 prose prose-lg md:prose-xl">
+                    {!! $recipe->description_html !!}
+                </section>
+            @endif
             @if(!$recipe->tags->isEmpty())
                 <section class="mb-2 text-gray-700 text-sm">
                     <h1 class="font-extrabold inline">Tags:</h1>
@@ -40,12 +45,6 @@
                         <h1 class="mb-2 font-bold text-lg">Total time</h1>
                         <p class="mb-2 text-gray-800">{{ $recipe->time_total }} minutes</p>
                     </div>
-                </section>
-            @endif
-            @if($recipe->description)
-                <section>
-                    <h1 class="mb-2 font-bold text-2xl">Description</h1>
-                    <p class="mb-2 text-gray-800">{{ $recipe->description }}</p>
                 </section>
             @endif
             <section x-data="{showNutrientsSummary: false}">
@@ -121,12 +120,13 @@
     </div>
     <section>
         <h1 class="mb-2 font-bold text-2xl">Steps</h1>
-        @foreach($recipe->steps as $step)
-            <div class="flex flex-row space-x-4 mb-4">
-                <p class="text-3xl text-gray-400 text-center">{{ $step->number }}</p>
-                <p class="text-2xl">{{ $step->step }}</p>
-            </div>
-        @endforeach
+        <div class="prose prose-xl md:prose-2xl">
+            <ol>
+                @foreach($recipe->steps as $step)
+                    <li>{{ $step->step }}</li>
+                @endforeach
+            </ol>
+        </div>
     </section>
     @if($recipe->source)
         <footer class="mb-2 text-gray-500 text-sm">
