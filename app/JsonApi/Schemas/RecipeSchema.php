@@ -28,7 +28,7 @@ class RecipeSchema extends SchemaProvider
         return [
             'slug' => $resource->slug,
             'name' => $resource->name,
-            'description' => $resource->description,
+            'description' => $resource->description_html,
             'time_prep' => $resource->time_prep,
             'time_active' => $resource->time_active,
             'time_total' => $resource->time_total,

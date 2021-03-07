@@ -6,6 +6,7 @@ use App\Models\Traits\HasIngredients;
 use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
+use DBlackborough\Quill\Render;
 use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -55,6 +56,13 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTags($tags, ?string $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTagsOfAnyType($tags)
  * @mixin \Eloquent
+ * @property int|null $time_prep
+ * @property int|null $time_active
+ * @property-read int $time_total
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimeActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimePrep($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
+ * @property-read string $description_html
  */
 final class Recipe extends Model
 {
@@ -106,6 +114,7 @@ final class Recipe extends Model
      * @inheritdoc
      */
     protected $appends = [
+        'description_html',
         'serving_weight',
         'time_total',
     ];
@@ -118,13 +127,33 @@ final class Recipe extends Model
         return [
             'name' => $this->name,
             'tags' => $this->tags->pluck('name')->toArray(),
-            'description' => $this->description,
+            'description' => $this->description_html,
             'source' => $this->source,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
     }
 
+    /**
+     * Get description as an HTML string.
+     */
+    public function getDescriptionHtmlAttribute(): ?string {
+        $description = $this->description;
+        if (!empty($description)) {
+            try {
+                $quill = new Render($this->description);
+                $description = $quill->render();
+            } catch (\Exception $e) {
+                // TODO: Log this or something.
+                $description = null;
+            }
+        }
+        return $description;
+    }
+
+    /**
+     * Get total recipe time.
+     */
     public function getTimeTotalAttribute(): int {
         return $this->time_prep + $this->time_active;
     }
