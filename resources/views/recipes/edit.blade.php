@@ -67,6 +67,17 @@
             </div>
         </div>
         <div class="flex flex-col space-y-4 mt-4">
+            <!-- Description -->
+            <div>
+                <x-inputs.label for="description" value="Description" />
+
+                <x-inputs.input name="description"
+                                type="hidden"
+                                :value="old('description', $recipe->description)" />
+
+                <div class="quill-editor"></div>
+            </div>
+
             <!-- Source -->
             <div class="flex-auto">
                 <x-inputs.label for="source" value="Source" />
@@ -75,15 +86,6 @@
                                 type="text"
                                 class="block mt-1 w-full"
                                 :value="old('source', $recipe->source)" />
-            </div>
-
-            <!-- Description -->
-            <div>
-                <x-inputs.label for="description" value="Description" />
-
-                <x-inputs.textarea name="description"
-                                   class="block mt-1 w-full"
-                                   :value="old('description', $recipe->description)" />
             </div>
 
             <!-- Tags -->
@@ -127,16 +129,32 @@
         </div>
 
         <div x-data class="flex items-center justify-end mt-4">
-            <x-inputs.button x-on:click="removeTemplates();" class="ml-3">
+            <x-inputs.button x-on:click="prepareForm();" class="ml-3">
                 {{ ($recipe->exists ? 'Save' : 'Add') }}
             </x-inputs.button>
         </div>
     </form>
 
     @once
+        @push('styles')
+            <link rel="stylesheet" href="{{ asset('css/recipes/edit.css') }}">
+        @endpush
+    @endonce
+
+    @once
         @push('scripts')
             <script src="{{ asset('js/recipes/edit.js') }}"></script>
             <script type="text/javascript">
+                const description = new Quill('.quill-editor', {
+                    modules: {
+                        toolbar: true
+                    },
+                    theme: 'snow'
+                });
+                try {
+                    description.setContents(JSON.parse(document.querySelector('input[name="description"]').value));
+                } catch (e) {}
+
                 new Draggable.Sortable(document.querySelector('.ingredients'), {
                     draggable: '.ingredient',
                     handle: '.draggable-handle',
@@ -171,10 +189,14 @@
                 }
 
                 /**
-                 * Removes any hidden templates before form submit.
+                 * Prepare form values for submit.
                  */
-                let removeTemplates = () => {
+                let prepareForm = () => {
+                    // Remove any hidden templates before form submit.
                     document.querySelectorAll(':scope .entry-template').forEach(e => e.remove());
+
+                    // Add description value to hidden field.
+                    document.querySelector('input[name="description"]').value = JSON.stringify(description.getContents());
                 }
             </script>
         @endpush
