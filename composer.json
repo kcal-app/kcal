@@ -10,7 +10,6 @@
         "babenkoivan/elastic-scout-driver-plus": "^2.0",
         "cloudcreativity/laravel-json-api": "^3.2",
         "cviebrock/eloquent-sluggable": "^8.0",
-        "deanblackborough/php-quill-renderer": "^4.00",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
