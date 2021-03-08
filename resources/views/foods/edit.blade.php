@@ -46,13 +46,6 @@
 
                             <div class="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                                 <!-- Serving size -->
-                                @php
-                                if (!empty($food->serving_size)) {
-                                  $old_value = \App\Support\Number::fractionStringFromFloat($food->serving_size);
-                                } else {
-                                  $old_value = null;
-                                }
-                                @endphp
                                 <div>
                                     <x-inputs.label for="serving_size" value="Serving size"/>
 
@@ -61,7 +54,7 @@
                                                     type="text"
                                                     name="serving_size"
                                                     size="10"
-                                                    :value="old('serving_size', $old_value)"
+                                                    :value="old('serving_size', $food->serving_size_formatted)"
                                                     required/>
                                 </div>
 

@@ -156,8 +156,12 @@ final class Food extends Model
     /**
      * Get the serving size as a formatted string (e.g. 0.5 = 1/2).
      */
-    public function getServingSizeFormattedAttribute(): string {
-        return Number::fractionStringFromFloat($this->serving_size);
+    public function getServingSizeFormattedAttribute(): ?string {
+        $result = null;
+        if (!empty($this->serving_size)) {
+            $result = Number::fractionStringFromFloat($this->serving_size);
+        }
+        return $result;
     }
 
     /**
