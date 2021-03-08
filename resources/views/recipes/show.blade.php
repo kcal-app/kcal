@@ -18,27 +18,27 @@
             </a>
         </h1>
     </x-slot>
-    <div class="flex flex-col-reverse justify-between pb-4 sm:flex-row">
+    <div class="flex flex-col justify-between pb-4 md:flex-row md:space-x-4">
         <div x-data="{showNutrientsSummary: false}">
-            @if($recipe->description)
-                <section class="mb-2 prose prose-lg md:prose-xl">
-                    {!! $recipe->description !!}
+            @if($recipe->time_total > 0)
+                <section class="flex justify-between mb-2 p-2 bg-gray-100 rounded">
+                    <div>
+                        <h1 class="mb-1 font-bold">Prep time</h1>
+                        <p class="text-gray-800 text-sm">{{ $recipe->time_prep }} minutes</p>
+                    </div>
+                    <div>
+                        <h1 class="mb-1 font-bold">Active time</h1>
+                        <p class="text-gray-800 text-sm">{{ $recipe->time_active }} minutes</p>
+                    </div>
+                    <div>
+                        <h1 class="mb-1 font-bold">Total time</h1>
+                        <p class="text-gray-800 text-sm">{{ $recipe->time_total }} minutes</p>
+                    </div>
                 </section>
             @endif
-            @if($recipe->time_total > 0)
-                <section class="flex space-x-4">
-                    <div>
-                        <h1 class="mb-2 font-bold text-lg">Prep time</h1>
-                        <p class="mb-2 text-gray-800">{{ $recipe->time_prep }} minutes</p>
-                    </div>
-                    <div>
-                        <h1 class="mb-2 font-bold text-lg">Active time</h1>
-                        <p class="mb-2 text-gray-800">{{ $recipe->time_active }} minutes</p>
-                    </div>
-                    <div>
-                        <h1 class="mb-2 font-bold text-lg">Total time</h1>
-                        <p class="mb-2 text-gray-800">{{ $recipe->time_total }} minutes</p>
-                    </div>
+            @if($recipe->description)
+                <section class="mb-2 prose prose-lg">
+                    {!! $recipe->description !!}
                 </section>
             @endif
             <section x-data="{showNutrientsSummary: false}">
@@ -47,28 +47,42 @@
                     <span class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"
                           x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
                 </h1>
-                <ul class="space-y-2">
-                    @foreach($recipe->ingredientAmounts as $ia)
-                        <li>
-                            {{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}
-                            @if($ia->unitFormatted){{ $ia->unitFormatted }}@endif
-                            @if($ia->ingredient->type === \App\Models\Recipe::class)
-                                <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                   href="{{ route('recipes.show', $ia->ingredient) }}">
-                                    {{ $ia->ingredient->name }}
-                                </a>
-                            @else
-                                {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
-                            @endif
-                            @if($ia->detail)<span class="text-gray-500">{{ $ia->detail }}</span>@endif
-                            <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $ia->nutrients_summary }}</div>
-                        </li>
-                    @endforeach
-                </ul>
+                <div class="prose prose-lg">
+                    <ul class="space-y-2">
+                        @foreach($recipe->ingredientAmounts as $ia)
+                            <li>
+                                <span>
+                                    {{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}
+                                    @if($ia->unitFormatted){{ $ia->unitFormatted }}@endif
+                                    @if($ia->ingredient->type === \App\Models\Recipe::class)
+                                        <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                           href="{{ route('recipes.show', $ia->ingredient) }}">
+                                            {{ $ia->ingredient->name }}
+                                        </a>
+                                    @else
+                                        {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
+                                    @endif
+                                    @if($ia->detail)<span class="text-gray-500">{{ $ia->detail }}</span>@endif
+                                    <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $ia->nutrients_summary }}</div>
+                                </span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </section>
+            <section>
+                <h1 class="mb-2 font-bold text-2xl">Steps</h1>
+                <div class="prose prose-lg">
+                    <ol>
+                        @foreach($recipe->steps as $step)
+                            <li>{{ $step->step }}</li>
+                        @endforeach
+                    </ol>
+                </div>
             </section>
         </div>
-        <aside>
-            <div class="p-1 border-2 border-black font-sans sm:ml-4 md:w-72">
+        <aside class="flex flex-col space-y-4 md:w-1/2 lg:w-1/3">
+            <div class="p-1 border-2 border-black font-sans w-72">
                 <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
                 <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
                 @if($recipe->serving_weight)
@@ -110,32 +124,27 @@
                     </div>
                 </div>
             </div>
+            @if($recipe->source)
+                <section>
+                    <h1 class="mb-2 font-bold text-2xl">Source</h1>
+                    @if(filter_var($recipe->source, FILTER_VALIDATE_URL))
+                        <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                           href="{{ $recipe->source }}">{{ $recipe->source }}</a>
+                    @else
+                        {{ $recipe->source }}
+                    @endif
+                </section>
+            @endif
+            @if(!$recipe->tags->isEmpty())
+                <section>
+                    <h1 class="mb-2 font-bold text-2xl">Tags</h1>
+                    <div class="flex flex-wrap">
+                        @foreach($recipe->tags as $tag)
+                            <span class="m-1 bg-gray-200 rounded-full px-2 leading-loose cursor-default">{{ $tag->name }}</span>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
         </aside>
     </div>
-    <section>
-        <h1 class="mb-2 font-bold text-2xl">Steps</h1>
-        <div class="prose prose-xl md:prose-2xl">
-            <ol>
-                @foreach($recipe->steps as $step)
-                    <li>{{ $step->step }}</li>
-                @endforeach
-            </ol>
-        </div>
-    </section>
-    @if($recipe->source)
-        <footer class="mb-2 text-gray-500 text-sm">
-            <h1 class="font-extrabold inline">Source:</h1>
-            @if(filter_var($recipe->source, FILTER_VALIDATE_URL))
-                <a href="{{ $recipe->source }}">{{ $recipe->source }}</a>
-            @else
-                {{ $recipe->source }}
-            @endif
-        </footer>
-    @endif
-    @if(!$recipe->tags->isEmpty())
-        <section class="mb-2 text-gray-500 text-sm">
-            <h1 class="font-extrabold inline">Tags:</h1>
-            {{ implode(', ', $recipe->tags->pluck('name')->all()) }}
-        </section>
-    @endif
 </x-app-layout>
