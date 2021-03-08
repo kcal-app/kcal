@@ -20,15 +20,9 @@
     </x-slot>
     <div class="flex flex-col-reverse justify-between pb-4 sm:flex-row">
         <div x-data="{showNutrientsSummary: false}">
-            @if($recipe->description_html)
+            @if($recipe->description)
                 <section class="mb-2 prose prose-lg md:prose-xl">
-                    {!! $recipe->description_html !!}
-                </section>
-            @endif
-            @if(!$recipe->tags->isEmpty())
-                <section class="mb-2 text-gray-700 text-sm">
-                    <h1 class="font-extrabold inline">Tags:</h1>
-                    {{ implode(', ', $recipe->tags->pluck('name')->all()) }}
+                    {!! $recipe->description !!}
                 </section>
             @endif
             @if($recipe->time_total > 0)
@@ -137,5 +131,11 @@
                 {{ $recipe->source }}
             @endif
         </footer>
+    @endif
+    @if(!$recipe->tags->isEmpty())
+        <section class="mb-2 text-gray-500 text-sm">
+            <h1 class="font-extrabold inline">Tags:</h1>
+            {{ implode(', ', $recipe->tags->pluck('name')->all()) }}
+        </section>
     @endif
 </x-app-layout>

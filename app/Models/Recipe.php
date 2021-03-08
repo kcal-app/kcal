@@ -62,7 +62,8 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimeActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimePrep($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
- * @property-read string $description_html
+ * @property string|null $description_delta
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereDescriptionDelta($value)
  */
 final class Recipe extends Model
 {
@@ -81,6 +82,7 @@ final class Recipe extends Model
     protected $fillable = [
         'name',
         'description',
+        'description_delta',
         'time_prep',
         'time_active',
         'source',
@@ -114,7 +116,6 @@ final class Recipe extends Model
      * @inheritdoc
      */
     protected $appends = [
-        'description_html',
         'serving_weight',
         'time_total',
     ];
@@ -127,28 +128,11 @@ final class Recipe extends Model
         return [
             'name' => $this->name,
             'tags' => $this->tags->pluck('name')->toArray(),
-            'description' => $this->description_html,
+            'description' => $this->description,
             'source' => $this->source,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
-    }
-
-    /**
-     * Get description as an HTML string.
-     */
-    public function getDescriptionHtmlAttribute(): ?string {
-        $description = $this->description;
-        if (!empty($description)) {
-            try {
-                $quill = new Render($this->description);
-                $description = $quill->render();
-            } catch (\Exception $e) {
-                // TODO: Log this or something.
-                $description = null;
-            }
-        }
-        return $description;
     }
 
     /**

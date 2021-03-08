@@ -76,6 +76,10 @@
                                 :value="old('description', $recipe->description)" />
 
                 <div class="quill-editor"></div>
+
+                <x-inputs.input name="description_delta"
+                                type="hidden"
+                                :value="old('description_delta', $recipe->description_delta)" />
             </div>
 
             <!-- Source -->
@@ -152,7 +156,7 @@
                     theme: 'snow'
                 });
                 try {
-                    description.setContents(JSON.parse(document.querySelector('input[name="description"]').value));
+                    description.setContents(JSON.parse(document.querySelector('input[name="description_delta"]').value));
                 } catch (e) {}
 
                 new Draggable.Sortable(document.querySelector('.ingredients'), {
@@ -195,8 +199,11 @@
                     // Remove any hidden templates before form submit.
                     document.querySelectorAll(':scope .entry-template').forEach(e => e.remove());
 
-                    // Add description value to hidden field.
-                    document.querySelector('input[name="description"]').value = JSON.stringify(description.getContents());
+                    // Add description values to hidden fields.
+                    document.querySelector('input[name="description_delta"]').value = JSON.stringify(description.getContents());
+                    document.querySelector('input[name="description"]').value = description.root.innerHTML
+                        // Remove extraneous spaces from rendered result.
+                        .replaceAll('<p><br></p>', '');
                 }
             </script>
         @endpush

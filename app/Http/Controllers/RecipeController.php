@@ -154,6 +154,7 @@ class RecipeController extends Controller
         $input = $request->validate([
             'name' => ['required', 'string'],
             'description' => ['nullable', 'string'],
+            'description_delta' => ['nullable', 'string'],
             'servings' => ['required', 'numeric'],
             'time_prep' => ['nullable', 'numeric'],
             'time_active' => ['nullable', 'numeric'],
@@ -186,6 +187,7 @@ class RecipeController extends Controller
         $recipe->fill([
             'name' => Str::lower($input['name']),
             'description' => $input['description'],
+            'description_delta' => $input['description_delta'],
             'servings' => (int) $input['servings'],
             'weight' => $input['weight'],
             'time_prep' => (int) $input['time_prep'],
