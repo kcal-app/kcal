@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da6d8202b7a5074a138e4b6fd87e687e",
+    "content-hash": "7ceaed365c3962d66d301ae612a52e9f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -710,71 +710,6 @@
                 "source": "https://github.com/cviebrock/eloquent-sluggable/tree/8.0.5"
             },
             "time": "2021-02-28T20:03:09+00:00"
-        },
-        {
-            "name": "deanblackborough/php-quill-renderer",
-            "version": "v4.00.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/deanblackborough/php-quill-renderer.git",
-                "reference": "bcaa78799b3c29a41eeff1469c64018c37769349"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/deanblackborough/php-quill-renderer/zipball/bcaa78799b3c29a41eeff1469c64018c37769349",
-                "reference": "bcaa78799b3c29a41eeff1469c64018c37769349",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": "^7.4|^8"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^v2.4.3",
-                "phpunit/phpunit": "^9"
-            },
-            "suggest": {
-                "php": "^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "DBlackborough\\Quill\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dean Blackborough",
-                    "email": "dean@g3d-development.com"
-                }
-            ],
-            "description": "Render quill insert deltas to HTML, Markdown and GitHub flavoured Markdown",
-            "homepage": "http://www.transmute-coffee.com/php-quill-renderer.php",
-            "keywords": [
-                "delta",
-                "html",
-                "markdown",
-                "parse",
-                "php",
-                "quill",
-                "quilljs",
-                "renderer"
-            ],
-            "support": {
-                "issues": "https://github.com/deanblackborough/php-quill-renderer/issues",
-                "source": "https://github.com/deanblackborough/php-quill-renderer/tree/v4.00.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/deanblackborough",
-                    "type": "github"
-                }
-            ],
-            "time": "2021-02-16T13:57:01+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
