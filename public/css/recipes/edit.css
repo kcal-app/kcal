@@ -1342,3 +1342,10 @@
 .ql-container.ql-snow {
   border: 1px solid #ccc;
 }
+.ql-editor {
+    font-size: 1.125rem;
+}
+.ql-editor p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

@@ -1,2 +1,11 @@
 @import 'quill/dist/quill.core.css';
 @import 'quill/dist/quill.snow.css';
+
+.ql-editor {
+    font-size: 1.125rem;
+}
+
+.ql-editor p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

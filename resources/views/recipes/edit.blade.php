@@ -75,7 +75,7 @@
                                 type="hidden"
                                 :value="old('description', $recipe->description)" />
 
-                <div class="quill-editor"></div>
+                <div class="quill-editor text-lg"></div>
 
                 <x-inputs.input name="description_delta"
                                 type="hidden"
@@ -149,9 +149,25 @@
         @push('scripts')
             <script src="{{ asset('js/recipes/edit.js') }}"></script>
             <script type="text/javascript">
+
+                // Enforce inline (style-base) alignment.
+                const AlignStyle = Quill.import('attributors/style/align');
+                Quill.register(AlignStyle, true);
+
+                // Activate Quill editor.
                 const description = new Quill('.quill-editor', {
                     modules: {
-                        toolbar: true
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, 4, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            [{ 'script': 'sub'}, { 'script': 'super' }],
+                            [{ 'indent': '-1'}, { 'indent': '+1' }],
+                            ['blockquote', 'code-block'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'align': [] }],
+                            ['clean']
+                        ]
                     },
                     theme: 'snow'
                 });
@@ -159,6 +175,7 @@
                     description.setContents(JSON.parse(document.querySelector('input[name="description_delta"]').value));
                 } catch (e) {}
 
+                // Activate ingredient draggables.
                 new Draggable.Sortable(document.querySelector('.ingredients'), {
                     draggable: '.ingredient',
                     handle: '.draggable-handle',
@@ -168,6 +185,7 @@
                     },
                 })
 
+                // Activate step draggables.
                 new Draggable.Sortable(document.querySelector('.steps'), {
                     draggable: '.step',
                     handle: '.draggable-handle',

@@ -28129,65 +28129,6 @@ let BackgroundStyle = new _color__WEBPACK_IMPORTED_MODULE_1__["ColorAttributor"]
 
 /***/ }),
 
-/***/ "./node_modules/quill/formats/blockquote.js":
-/*!**************************************************!*\
-  !*** ./node_modules/quill/formats/blockquote.js ***!
-  \**************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blots_block__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../blots/block */ "./node_modules/quill/blots/block.js");
-
-
-
-class Blockquote extends _blots_block__WEBPACK_IMPORTED_MODULE_0__["default"] {}
-Blockquote.blotName = 'blockquote';
-Blockquote.tagName = 'blockquote';
-
-
-/* harmony default export */ __webpack_exports__["default"] = (Blockquote);
-
-
-/***/ }),
-
-/***/ "./node_modules/quill/formats/bold.js":
-/*!********************************************!*\
-  !*** ./node_modules/quill/formats/bold.js ***!
-  \********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blots_inline__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../blots/inline */ "./node_modules/quill/blots/inline.js");
-
-
-class Bold extends _blots_inline__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  static create() {
-    return super.create();
-  }
-
-  static formats() {
-    return true;
-  }
-
-  optimize(context) {
-    super.optimize(context);
-    if (this.domNode.tagName !== this.statics.tagName[0]) {
-      this.replaceWith(this.statics.blotName);
-    }
-  }
-}
-Bold.blotName = 'bold';
-Bold.tagName = ['STRONG', 'B'];
-
-/* harmony default export */ __webpack_exports__["default"] = (Bold);
-
-
-/***/ }),
-
 /***/ "./node_modules/quill/formats/code.js":
 /*!********************************************!*\
   !*** ./node_modules/quill/formats/code.js ***!
@@ -28432,54 +28373,6 @@ let FontStyle = new FontStyleAttributor('font', 'font-family', config);
 
 /***/ }),
 
-/***/ "./node_modules/quill/formats/header.js":
-/*!**********************************************!*\
-  !*** ./node_modules/quill/formats/header.js ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blots_block__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../blots/block */ "./node_modules/quill/blots/block.js");
-
-
-
-class Header extends _blots_block__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  static formats(domNode) {
-    return this.tagName.indexOf(domNode.tagName) + 1;
-  }
-}
-Header.blotName = 'header';
-Header.tagName = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'];
-
-
-/* harmony default export */ __webpack_exports__["default"] = (Header);
-
-
-/***/ }),
-
-/***/ "./node_modules/quill/formats/italic.js":
-/*!**********************************************!*\
-  !*** ./node_modules/quill/formats/italic.js ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _bold__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bold */ "./node_modules/quill/formats/bold.js");
-
-
-class Italic extends _bold__WEBPACK_IMPORTED_MODULE_0__["default"] { }
-Italic.blotName = 'italic';
-Italic.tagName = ['EM', 'I'];
-
-/* harmony default export */ __webpack_exports__["default"] = (Italic);
-
-
-/***/ }),
-
 /***/ "./node_modules/quill/formats/link.js":
 /*!********************************************!*\
   !*** ./node_modules/quill/formats/link.js ***!
@@ -28531,155 +28424,6 @@ function sanitize(url, protocols) {
   let protocol = anchor.href.slice(0, anchor.href.indexOf(':'));
   return protocols.indexOf(protocol) > -1;
 }
-
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/quill/formats/list.js":
-/*!********************************************!*\
-  !*** ./node_modules/quill/formats/list.js ***!
-  \********************************************/
-/*! exports provided: ListItem, default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListItem", function() { return ListItem; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return List; });
-/* harmony import */ var parchment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! parchment */ "./node_modules/parchment/dist/parchment.js");
-/* harmony import */ var parchment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(parchment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _blots_block__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../blots/block */ "./node_modules/quill/blots/block.js");
-/* harmony import */ var _blots_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../blots/container */ "./node_modules/quill/blots/container.js");
-
-
-
-
-
-class ListItem extends _blots_block__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  static formats(domNode) {
-    return domNode.tagName === this.tagName ? undefined : super.formats(domNode);
-  }
-
-  format(name, value) {
-    if (name === List.blotName && !value) {
-      this.replaceWith(parchment__WEBPACK_IMPORTED_MODULE_0___default.a.create(this.statics.scope));
-    } else {
-      super.format(name, value);
-    }
-  }
-
-  remove() {
-    if (this.prev == null && this.next == null) {
-      this.parent.remove();
-    } else {
-      super.remove();
-    }
-  }
-
-  replaceWith(name, value) {
-    this.parent.isolate(this.offset(this.parent), this.length());
-    if (name === this.parent.statics.blotName) {
-      this.parent.replaceWith(name, value);
-      return this;
-    } else {
-      this.parent.unwrap();
-      return super.replaceWith(name, value);
-    }
-  }
-}
-ListItem.blotName = 'list-item';
-ListItem.tagName = 'LI';
-
-
-class List extends _blots_container__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  static create(value) {
-    let tagName = value === 'ordered' ? 'OL' : 'UL';
-    let node = super.create(tagName);
-    if (value === 'checked' || value === 'unchecked') {
-      node.setAttribute('data-checked', value === 'checked');
-    }
-    return node;
-  }
-
-  static formats(domNode) {
-    if (domNode.tagName === 'OL') return 'ordered';
-    if (domNode.tagName === 'UL') {
-      if (domNode.hasAttribute('data-checked')) {
-        return domNode.getAttribute('data-checked') === 'true' ? 'checked' : 'unchecked';
-      } else {
-        return 'bullet';
-      }
-    }
-    return undefined;
-  }
-
-  constructor(domNode) {
-    super(domNode);
-    const listEventHandler = (e) => {
-      if (e.target.parentNode !== domNode) return;
-      let format = this.statics.formats(domNode);
-      let blot = parchment__WEBPACK_IMPORTED_MODULE_0___default.a.find(e.target);
-      if (format === 'checked') {
-        blot.format('list', 'unchecked');
-      } else if(format === 'unchecked') {
-        blot.format('list', 'checked');
-      }
-    }
-
-    domNode.addEventListener('touchstart', listEventHandler);
-    domNode.addEventListener('mousedown', listEventHandler);
-  }
-
-  format(name, value) {
-    if (this.children.length > 0) {
-      this.children.tail.format(name, value);
-    }
-  }
-
-  formats() {
-    // We don't inherit from FormatBlot
-    return { [this.statics.blotName]: this.statics.formats(this.domNode) };
-  }
-
-  insertBefore(blot, ref) {
-    if (blot instanceof ListItem) {
-      super.insertBefore(blot, ref);
-    } else {
-      let index = ref == null ? this.length() : ref.offset(this);
-      let after = this.split(index);
-      after.parent.insertBefore(blot, after);
-    }
-  }
-
-  optimize(context) {
-    super.optimize(context);
-    let next = this.next;
-    if (next != null && next.prev === this &&
-        next.statics.blotName === this.statics.blotName &&
-        next.domNode.tagName === this.domNode.tagName &&
-        next.domNode.getAttribute('data-checked') === this.domNode.getAttribute('data-checked')) {
-      next.moveChildren(this);
-      next.remove();
-    }
-  }
-
-  replace(target) {
-    if (target.statics.blotName !== this.statics.blotName) {
-      let item = parchment__WEBPACK_IMPORTED_MODULE_0___default.a.create(this.statics.defaultChild);
-      target.moveChildren(item);
-      this.appendChild(item);
-    }
-    super.replace(target);
-  }
-}
-List.blotName = 'list';
-List.scope = parchment__WEBPACK_IMPORTED_MODULE_0___default.a.Scope.BLOCK_BLOT;
-List.tagName = ['OL', 'UL'];
-List.defaultChild = 'list-item';
-List.allowedChildren = [ListItem];
 
 
 
@@ -31691,30 +31435,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var quill_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! quill/core */ "./node_modules/quill/core.js");
 /* harmony import */ var quill_modules_toolbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! quill/modules/toolbar */ "./node_modules/quill/modules/toolbar.js");
 /* harmony import */ var quill_themes_snow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! quill/themes/snow */ "./node_modules/quill/themes/snow.js");
-/* harmony import */ var quill_formats_blockquote__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! quill/formats/blockquote */ "./node_modules/quill/formats/blockquote.js");
-/* harmony import */ var quill_formats_bold__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! quill/formats/bold */ "./node_modules/quill/formats/bold.js");
-/* harmony import */ var quill_formats_italic__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! quill/formats/italic */ "./node_modules/quill/formats/italic.js");
-/* harmony import */ var quill_formats_link__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! quill/formats/link */ "./node_modules/quill/formats/link.js");
-/* harmony import */ var quill_formats_list__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! quill/formats/list */ "./node_modules/quill/formats/list.js");
-/* harmony import */ var quill_formats_header__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! quill/formats/header */ "./node_modules/quill/formats/header.js");
-
-
-
-
-
-
 
 
 
 quill_core__WEBPACK_IMPORTED_MODULE_0__["default"].register({
   'modules/toolbar': quill_modules_toolbar__WEBPACK_IMPORTED_MODULE_1__["default"],
-  'themes/snow': quill_themes_snow__WEBPACK_IMPORTED_MODULE_2__["default"],
-  'formats/blockquote': quill_formats_blockquote__WEBPACK_IMPORTED_MODULE_3__["default"],
-  'formats/bold': quill_formats_bold__WEBPACK_IMPORTED_MODULE_4__["default"],
-  'formats/italic': quill_formats_italic__WEBPACK_IMPORTED_MODULE_5__["default"],
-  'formats/link': quill_formats_link__WEBPACK_IMPORTED_MODULE_6__["default"],
-  'formats/list': quill_formats_list__WEBPACK_IMPORTED_MODULE_7__["default"],
-  'formats/header': quill_formats_header__WEBPACK_IMPORTED_MODULE_8__["default"]
+  'themes/snow': quill_themes_snow__WEBPACK_IMPORTED_MODULE_2__["default"]
 });
 /* harmony default export */ __webpack_exports__["default"] = (quill_core__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
