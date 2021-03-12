@@ -273,10 +273,17 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe): RedirectResponse
     {
-        // Remove the recipe from any recipes.
-        foreach ($recipe->ingredientAmountRelationships as $ia) {
+        // Remove recipe ingredients.
+        foreach ($recipe->ingredientAmounts as $ia) {
             $ia->delete();
         }
+
+        // Remove the recipe from any recipes.
+        foreach ($recipe->ingredientAmountRelationships as $iar) {
+            $iar->delete();
+        }
+
+        // Remove the recipe.
         $recipe->delete();
         return redirect(route('recipes.index'))
             ->with('message', "Recipe {$recipe->name} deleted!");
