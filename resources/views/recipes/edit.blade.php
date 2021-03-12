@@ -4,7 +4,7 @@
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h1>
     </x-slot>
-    <form method="POST" action="{{ ($recipe->exists ? route('recipes.update', $recipe) : route('recipes.store')) }}">
+    <form method="POST" enctype="multipart/form-data" action="{{ ($recipe->exists ? route('recipes.update', $recipe) : route('recipes.store')) }}">
         @if ($recipe->exists)@method('put')@endif
         @csrf
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
@@ -67,6 +67,33 @@
             </div>
         </div>
         <div class="flex flex-col space-y-4 mt-4">
+            <!-- Image -->
+            <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+                @if($recipe->hasMedia())
+                    <div>
+                        <div class="block font-medium text-sm text-gray-700 mb-1">Current image</div>
+                        <a href="{{ $recipe->getFirstMedia()->getFullUrl() }}" target="_blank">
+                            {{ $recipe->getFirstMedia()('preview') }}
+                        </a>
+                        <fieldset class="flex space-x-2 mt-1 items-center">
+                            <x-inputs.label for="remove_image" class="text-red-800" value="Remove this image" />
+                            <x-inputs.input type="checkbox" name="remove_image" value="1" />
+                        </fieldset>
+                    </div>
+                @endif
+                <div>
+                    @if($recipe->hasMedia())
+                        <x-inputs.label for="image" value="Replace image" />
+                    @else
+                        <x-inputs.label for="image" value="Add image" />
+                    @endif
+
+                    <x-inputs.file name="image"
+                                   class="block mt-1 w-full"
+                                   accept="image/png, image/jpeg"/>
+                </div>
+            </div>
+
             <!-- Description -->
             <div>
                 <x-inputs.label for="description" value="Description" />
@@ -83,7 +110,7 @@
             </div>
 
             <!-- Source -->
-            <div class="flex-auto">
+            <div>
                 <x-inputs.label for="source" value="Source" />
 
                 <x-inputs.input name="source"
