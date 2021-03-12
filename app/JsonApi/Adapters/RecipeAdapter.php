@@ -63,6 +63,14 @@ class RecipeAdapter extends AbstractAdapter
     }
 
     /**
+     * Media relationships.
+     */
+    protected function media(): MorphHasMany
+    {
+        return $this->morphMany($this->hasMany('media'));
+    }
+
+    /**
      * Step relationships.
      */
     protected function steps(): HasMany
