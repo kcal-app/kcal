@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
 
 /**
@@ -64,12 +67,13 @@ use Spatie\Tags\HasTags;
  * @property string|null $description_delta
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereDescriptionDelta($value)
  */
-final class Recipe extends Model
+final class Recipe extends Model implements HasMedia
 {
     use HasFactory;
     use HasIngredients;
     use HasTags;
     use Ingredient;
+    use InteractsWithMedia;
     use Journalable;
     use QueryDsl;
     use Searchable;
@@ -187,6 +191,21 @@ final class Recipe extends Model
         else {
             return parent::__call($method, $parameters);
         }
+    }
+
+    /**
+     * Defines conversions for the Recipe image.
+     *
+     * @throws \Spatie\Image\Exceptions\InvalidManipulation
+     *
+     * @see https://spatie.be/docs/laravel-medialibrary/v9/converting-images/defining-conversions
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('preview')
+            ->width(368)
+            ->height(232)
+            ->sharpen(10);
     }
 
 }

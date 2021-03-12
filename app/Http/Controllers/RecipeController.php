@@ -155,6 +155,8 @@ class RecipeController extends Controller
             'name' => ['required', 'string'],
             'description' => ['nullable', 'string'],
             'description_delta' => ['nullable', 'string'],
+            'image' => ['nullable', 'file', 'mimes:jpg,png,gif'],
+            'remove_image' => ['nullable', 'boolean'],
             'servings' => ['required', 'numeric'],
             'time_prep' => ['nullable', 'numeric'],
             'time_active' => ['nullable', 'numeric'],
@@ -254,6 +256,21 @@ class RecipeController extends Controller
         // Sync tags.
         if ($tags = $request->get('tags')) {
             $recipe->syncTags(explode(',', $tags));
+        }
+
+        // Handle recipe image.
+        if (!empty($input['image'])) {
+            /** @var \Illuminate\Http\UploadedFile $file */
+            $file = $input['image'];
+            $recipe->clearMediaCollection();
+            $recipe
+                ->addMediaFromRequest('image')
+                ->usingName($recipe->name)
+                ->usingFileName("{$recipe->slug}.{$file->extension()}")
+                ->toMediaCollection();
+        }
+        elseif (isset($input['remove_image']) && (bool) $input['remove_image']) {
+            $recipe->clearMediaCollection();
         }
 
         session()->flash('message', "Recipe {$recipe->name} updated!");
