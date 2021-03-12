@@ -69,6 +69,14 @@ class RecipeSchema extends SchemaProvider
                     return $resource->ingredientAmounts;
                 },
             ],
+            'media' => [
+                self::SHOW_SELF => true,
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA => isset($includeRelationships['media']),
+                self::DATA => function () use ($resource) {
+                    return $resource->media;
+                },
+            ],
             'steps' => [
                 self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
