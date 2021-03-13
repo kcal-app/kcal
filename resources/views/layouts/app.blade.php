@@ -53,7 +53,7 @@
 
             <div class="{{ !isset($feature_image) ? 'pt-6 ' : '' }}max-w-7xl mx-auto sm:px-6 lg:px-8">
                 @isset($feature_image)
-                    <div class="h-64 bg-cover bg-no-repeat bg-center bg-clip-border lg:h-96" style="background-image: url('{{ $feature_image }}')"></div>
+                    <div class="h-32 bg-cover bg-no-repeat bg-center bg-clip-border sm:h-48 md:h-64 lg:h-96" style="background-image: url('{{ $feature_image }}')"></div>
                 @endisset
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <article class="p-6 border-b border-gray-200">
