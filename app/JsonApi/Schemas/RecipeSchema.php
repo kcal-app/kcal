@@ -30,7 +30,7 @@ class RecipeSchema extends SchemaProvider
             'name' => $resource->name,
             'description' => $resource->description,
             'time_prep' => $resource->time_prep,
-            'time_active' => $resource->time_active,
+            'time_cook' => $resource->time_cook,
             'time_total' => $resource->time_total,
             'source' => $resource->source,
             'servings' => $resource->servings,

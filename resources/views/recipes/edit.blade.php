@@ -51,19 +51,19 @@
                                 step="1"
                                 min="0"
                                 class="block mt-1 w-full"
-                                :value="old('name', $recipe->time_prep)"/>
+                                :value="old('time_prep', $recipe->time_prep)"/>
             </div>
 
-            <!-- Active Time -->
+            <!-- Cooke Time -->
             <div class="flex-auto">
-                <x-inputs.label for="time_active" value="Active time (minutes)" />
+                <x-inputs.label for="time_cook" value="Cook time (minutes)" />
 
-                <x-inputs.input name="time_active"
+                <x-inputs.input name="time_cook"
                                 type="number"
                                 step="1"
                                 min="0"
                                 class="block mt-1 w-full"
-                                :value="old('servings', $recipe->time_active)"/>
+                                :value="old('time_cook', $recipe->time_cook)"/>
             </div>
         </div>
         <div class="flex flex-col space-y-4 mt-4">

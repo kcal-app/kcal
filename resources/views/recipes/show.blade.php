@@ -22,7 +22,7 @@
         </h1>
     </x-slot>
     <div class="flex flex-col justify-between pb-4 md:flex-row md:space-x-4">
-        <div x-data="{showNutrientsSummary: false}">
+        <div class="flex-1" x-data="{showNutrientsSummary: false}">
             @if($recipe->time_total > 0)
                 <section class="flex justify-between mb-2 p-2 bg-gray-100 rounded">
                     <div>
@@ -30,8 +30,8 @@
                         <p class="text-gray-800 text-sm">{{ $recipe->time_prep }} minutes</p>
                     </div>
                     <div>
-                        <h1 class="mb-1 font-bold">Active time</h1>
-                        <p class="text-gray-800 text-sm">{{ $recipe->time_active }} minutes</p>
+                        <h1 class="mb-1 font-bold">Cook time</h1>
+                        <p class="text-gray-800 text-sm">{{ $recipe->time_cook }} minutes</p>
                     </div>
                     <div>
                         <h1 class="mb-1 font-bold">Total time</h1>

@@ -167,7 +167,7 @@ class RecipeController extends Controller
             'remove_image' => ['nullable', 'boolean'],
             'servings' => ['required', 'numeric'],
             'time_prep' => ['nullable', 'numeric'],
-            'time_active' => ['nullable', 'numeric'],
+            'time_cook' => ['nullable', 'numeric'],
             'weight' => ['nullable', 'numeric'],
             'source' => ['nullable', 'string'],
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
@@ -201,7 +201,7 @@ class RecipeController extends Controller
             'servings' => (int) $input['servings'],
             'weight' => $input['weight'],
             'time_prep' => (int) $input['time_prep'],
-            'time_active' => (int) $input['time_active'],
+            'time_cook' => (int) $input['time_cook'],
             'source' => $input['source'],
         ]);
 

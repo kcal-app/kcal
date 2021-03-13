@@ -20,7 +20,7 @@ class CreateRecipesTable extends Migration
             $table->longText('description')->nullable();
             $table->longText('description_delta')->nullable();
             $table->integer('time_prep')->nullable();
-            $table->integer('time_active')->nullable();
+            $table->integer('time_cook')->nullable();
             $table->string('source')->nullable();
             $table->unsignedInteger('servings');
             $table->unsignedFloat('weight')->nullable();

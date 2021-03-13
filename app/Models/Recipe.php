@@ -60,7 +60,7 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withAnyTagsOfAnyType($tags)
  * @mixin \Eloquent
  * @property int|null $time_prep
- * @property int|null $time_active
+ * @property int|null $time_cook
  * @property-read int $time_total
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimeActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimePrep($value)
@@ -90,7 +90,7 @@ final class Recipe extends Model implements HasMedia
         'description',
         'description_delta',
         'time_prep',
-        'time_active',
+        'time_cook',
         'source',
         'servings',
         'weight',
@@ -102,7 +102,7 @@ final class Recipe extends Model implements HasMedia
     protected $casts = [
         'servings' => 'int',
         'time_prep' => 'int',
-        'time_active' => 'int',
+        'time_cook' => 'int',
         'weight' => 'float',
     ];
 
@@ -145,7 +145,7 @@ final class Recipe extends Model implements HasMedia
      * Get total recipe time.
      */
     public function getTimeTotalAttribute(): int {
-        return $this->time_prep + $this->time_active;
+        return $this->time_prep + $this->time_cook;
     }
 
     /**
