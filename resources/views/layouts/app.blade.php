@@ -35,7 +35,7 @@
 
         <!-- Page Content -->
         @isset($bg_image)
-            <main class="bg-cover bg-no-repeat bg-top bg-fixed bg-clip-border" style="background-image: url('{{ $bg_image }}')">
+            <main class="bg-contain bg-no-repeat bg-top bg-clip-border sm:bg-cover sm:bg-fixed" style="background-image: url('{{ $bg_image }}')">
         @else
             <main>
         @endisset
@@ -55,8 +55,8 @@
                 </div>
             @endif
 
-            <div class="{{ isset($bg_image) ? 'pt-64 md:pt-32' : 'pt-6' }} max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white {{ isset($bg_image) ? 'bg-opacity-95' : '' }} overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="{{ isset($bg_image) ? 'pt-32' : 'pt-6' }} max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white {{ isset($bg_image) ? 'sm:bg-opacity-95' : '' }} overflow-hidden shadow-sm sm:rounded-lg">
                     <article class="p-6 border-b border-gray-200">
                         {{ $slot }}
                     </article>
