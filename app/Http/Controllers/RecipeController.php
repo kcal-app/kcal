@@ -262,8 +262,12 @@ class RecipeController extends Controller
         }
 
         // Sync tags.
-        if ($tags = $request->get('tags')) {
+        $tags = $request->get('tags');
+        if (!empty($tags)) {
             $recipe->syncTags(explode(',', $tags));
+        }
+        elseif ($recipe->tags->isNotEmpty()) {
+            $recipe->detachTags($recipe->tags);
         }
 
         // Handle recipe image.
