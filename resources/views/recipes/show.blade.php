@@ -1,5 +1,8 @@
 <x-app-layout>
     <x-slot name="title">{{ $recipe->name }}</x-slot>
+    @if(!empty($bg_image))
+        <x-slot name="bg_image">{{ $bg_image }}</x-slot>
+    @endisset
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto">
             {{ $recipe->name }}
