@@ -61,15 +61,15 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe): View
     {
-        // Set background image if media has been added.
-        $bg_image = NULL;
+        // Set feature image if media has been added.
+        $feature_image = NULL;
         if ($recipe->hasMedia() && $recipe->getFirstMedia()->hasGeneratedConversion('header')) {
-            $bg_image = $recipe->getFirstMediaUrl('default', 'header');
+            $feature_image = $recipe->getFirstMediaUrl('default', 'header');
         }
 
         return view('recipes.show')
             ->with('recipe', $recipe)
-            ->with('bg_image', $bg_image);
+            ->with('feature_image', $feature_image);
     }
 
     /**

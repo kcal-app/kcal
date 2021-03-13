@@ -34,11 +34,7 @@
         </header>
 
         <!-- Page Content -->
-        @isset($bg_image)
-            <main class="bg-contain bg-no-repeat bg-top bg-clip-border md:bg-cover md:bg-fixed" style="background-image: url('{{ $bg_image }}')">
-        @else
-            <main>
-        @endisset
+        <main>
             @if(session()->has('message'))
                 <div class="bg-green-200 p-2 mb-2">
                     {{ session()->get('message') }}
@@ -55,8 +51,11 @@
                 </div>
             @endif
 
-            <div class="{{ isset($bg_image) ? 'pt-32' : 'pt-6' }} max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white {{ isset($bg_image) ? 'md:bg-opacity-95' : '' }} overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="{{ !isset($feature_image) ? 'pt-6 ' : '' }}max-w-7xl mx-auto sm:px-6 lg:px-8">
+                @isset($feature_image)
+                    <div class="h-64 bg-cover bg-no-repeat bg-center bg-clip-border lg:h-96" style="background-image: url('{{ $feature_image }}')"></div>
+                @endisset
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <article class="p-6 border-b border-gray-200">
                         {{ $slot }}
                     </article>
