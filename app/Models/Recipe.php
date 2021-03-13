@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -66,6 +67,8 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @property string|null $description_delta
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereDescriptionDelta($value)
+ * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|Media[] $media
+ * @property-read int|null $media_count
  */
 final class Recipe extends Model implements HasMedia
 {
@@ -205,7 +208,13 @@ final class Recipe extends Model implements HasMedia
         $this->addMediaConversion('preview')
             ->width(368)
             ->height(232)
-            ->sharpen(10);
+            ->sharpen(10)
+            ->optimize();
+
+        $this->addMediaConversion('header')
+            ->fit(Manipulations::FIT_CROP, 1600, 900)
+            ->sharpen(10)
+            ->optimize();
     }
 
 }
