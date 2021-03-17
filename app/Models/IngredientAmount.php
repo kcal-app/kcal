@@ -103,7 +103,7 @@ final class IngredientAmount extends Model
         $summary = [];
         foreach (Nutrients::all() as $nutrient) {
             $amount = round($this->{$nutrient['value']}(), 2);
-            $summary[] = "{$nutrient['label']}: {$amount}";
+            $summary[] = "{$nutrient['label']}: {$amount}{$nutrient['unit']}";
         }
         return implode(', ', $summary);
     }
