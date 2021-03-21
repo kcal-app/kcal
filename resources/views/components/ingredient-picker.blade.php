@@ -22,11 +22,7 @@
             <div class="absolute border-2 border-gray-500 border-b-0 bg-white"
                  x-spread="ingredient">
                 <template x-for="result in results" :key="result.id">
-                    <div class="p-1 border-b-2 border-gray-500 hover:bg-yellow-300 cursor-pointer"
-                         x-bind:data-id="result.id"
-                         x-bind:data-type="result.type"
-                         x-bind:data-name="result.name"
-                         x-bind:data-detail="result.detail">
+                    <div class="p-1 border-b-2 border-gray-500 hover:bg-yellow-300 cursor-pointer" x-bind:data-id="result.id">
                         <div class="pointer-events-none">
                             <div>
                                 <span class="font-bold" x-text="result.name"></span><span class="text-gray-600" x-text="', ' + result.detail" x-show="result.detail"></span>
@@ -87,9 +83,14 @@
                         ['@click']($event) {
                             let selected = $event.target;
                             if (selected.dataset.id) {
-                                this.$refs.ingredients.value = selected.dataset.id;
-                                this.$refs.ingredients_type.value = selected.dataset.type;
-                                this.$refs.ingredients_name.value = selected.dataset.name + (selected.dataset.detail ? `, ${selected.dataset.detail}` : '');
+                                const ingredient = this.results.find(result => result.id === Number(selected.dataset.id));
+                                this.$el.dispatchEvent(new CustomEvent('ingredient-picked', {
+                                    detail: { ingredient: ingredient },
+                                    bubbles: true
+                                }));
+                                this.$refs.ingredients.value = ingredient.id;
+                                this.$refs.ingredients_type.value = ingredient.type;
+                                this.$refs.ingredients_name.value = ingredient.name + (ingredient.detail ? `, ${ingredient.detail}` : '');
                                 this.searching = false;
                                 this.results = [];
                             }

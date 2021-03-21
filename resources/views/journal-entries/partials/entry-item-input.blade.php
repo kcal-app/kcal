@@ -1,13 +1,11 @@
-<div x-data class="flex items-center space-x-2">
+<div x-data class="entry-item flex items-center space-x-2">
     <div class="flex flex-col space-y-4 w-full">
+        <!-- Ingredient -->
         <div class="w-full">
-            <!-- Ingredient -->
-            <div class="w-full">
-                <x-inputs.label for="ingredients[id][]" value="Food or Recipe" class="md:hidden"/>
-                <x-ingredient-picker :default-id="$id ?? null"
-                                     :default-type="$type ?? null"
-                                     :default-name="$name ?? null" />
-            </div>
+            <x-inputs.label for="ingredients[id][]" value="Food or Recipe" class="md:hidden"/>
+            <x-ingredient-picker :default-id="$id ?? null"
+                                 :default-type="$type ?? null"
+                                 :default-name="$name ?? null" />
         </div>
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
             <!-- Date -->
@@ -68,3 +66,31 @@
         </x-inputs.icon-button>
     </div>
 </div>
+
+@once
+    @push('scripts')
+        <script type="text/javascript">
+            /**
+             * Sets default serving amount and unit on ingredient select.
+             */
+            window.addEventListener('ingredient-picked', (e) => {
+                const entryItem = e.target.closest('.entry-item');
+                const ingredient = e.detail.ingredient;
+                let servingSize, servingUnit;
+                if (ingredient.type === 'App\\Models\\Recipe') {
+                    servingSize = 1;
+                    servingUnit = 'serving';
+                } else if (ingredient.type === 'App\\Models\\Food') {
+                    servingUnit = ingredient.serving_unit ?? 'serving'
+                    if (servingUnit === 'serving') {
+                        servingSize = 1;
+                    } else {
+                        servingSize = ingredient.serving_size_formatted
+                    }
+                }
+                entryItem.querySelector(':scope input[name="ingredients[amount][]"]').value = servingSize;
+                entryItem.querySelector(':scope select[name="ingredients[unit][]"]').value = servingUnit;
+            });
+        </script>
+    @endpush
+@endonce
