@@ -1,101 +1,16 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ({
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
 /***/ "./node_modules/alpine-magic-helpers/dist/index.js":
 /*!*********************************************************!*\
   !*** ./node_modules/alpine-magic-helpers/dist/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(process) {(function (global, factory) {
+/* provided dependency */ var process = __webpack_require__(/*! process/browser */ "./node_modules/process/browser.js");
+(function (global, factory) {
      true ? module.exports = factory() :
-    undefined;
+    0;
 }(this, (function () { 'use strict';
 
     var checkForAlpine = function checkForAlpine() {
@@ -119,9 +34,24 @@
 
         return {
           get: function get(target, key) {
+            var _observedComponent$__;
+
             if (target[key] !== null && typeof target[key] === 'object') {
               var path = scope ? scope + "." + key : key;
               return new Proxy(target[key], handler(path));
+            } // We bind the scope only if the observed component is ready.
+            // Most of the time, the unwrapped data is enough
+
+
+            if (typeof target[key] === 'function' && observedComponent.__x) {
+              return target[key].bind(observedComponent.__x.$data);
+            } // If scope is null, we are at root level so when target[key] is not defined
+            // we try to look for observedComponent.__x.$data[key] to check if a magic
+            // helper/property exists
+
+
+            if (scope === null && !target[key] && observedComponent != null && (_observedComponent$__ = observedComponent.__x) != null && _observedComponent$__.$data[key]) {
+              return observedComponent.__x.$data[key];
             }
 
             return target[key];
@@ -177,12 +107,18 @@
       return object;
     }; // Returns component data if Alpine has made it available, otherwise computes it with saferEval()
 
-    var componentData = function componentData(component) {
-      if (component.__x) {
-        return component.__x.getUnobservedData();
+    var componentData = function componentData(component, properties) {
+      var data = component.__x ? component.__x.getUnobservedData() : saferEval(component.getAttribute('x-data'), component);
+
+      if (properties) {
+        properties = Array.isArray(properties) ? properties : [properties];
+        return properties.reduce(function (object, key) {
+          object[key] = data[key];
+          return object;
+        }, {});
       }
 
-      return saferEval(component.getAttribute('x-data'), component);
+      return data;
     };
 
     function isValidVersion(required, current) {
@@ -209,6 +145,48 @@
 
 
       return new Function(['$data'].concat(Object.keys(additionalHelperVariables)), "var __alpine_result; with($data) { __alpine_result = " + expression + " }; return __alpine_result").apply(void 0, [dataContext].concat(Object.values(additionalHelperVariables)));
+    } // Returns a dummy proxy that supports multiple levels of nesting and always prints/returns an empty string.
+
+
+    function getNoopProxy() {
+      var handler = {
+        get: function get(target, key) {
+          return new Proxy(function () {
+            return '';
+          }, handler);
+        }
+      };
+      return new Proxy(function () {
+        return '';
+      }, handler);
+    } // Continuously check the observed component until it's ready.
+    // It returns an object that always spits out an empty string while waiting (See getNoopProxy).
+
+    function waitUntilReady(componentBeingObserved, component, callback) {
+      if (!componentBeingObserved.__x) {
+        window.requestAnimationFrame(function () {
+          return component.__x.updateElements(component);
+        });
+        return getNoopProxy();
+      }
+
+      return callback();
+    }
+    function parseHtmlAttribute(_ref) {
+      var name = _ref.name,
+          value = _ref.value;
+      var xAttrRE = /^x-([a-zA-Z-]*)\b/;
+      var typeMatch = name.match(xAttrRE);
+      var valueMatch = name.match(/:([a-zA-Z0-9\-:]+)/);
+      var modifiers = name.match(/\.[^.\]]+(?=[^\]]*$)/g) || [];
+      return {
+        type: typeMatch ? typeMatch[1] : null,
+        value: valueMatch ? valueMatch[1] : null,
+        modifiers: modifiers.map(function (i) {
+          return i.replace('.', '');
+        }),
+        expression: value
+      };
     }
 
     var AlpineComponentMagicMethod = {
@@ -217,14 +195,20 @@
         Alpine.addMagicProperty('parent', function ($el) {
           if (typeof $el.$parent !== 'undefined') return $el.$parent;
           var parentComponent = $el.parentNode.closest('[x-data]');
-          if (!parentComponent) throw new Error('Parent component not found');
-          $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep);
-          updateOnMutation(parentComponent, function () {
-            $el.$parent = syncWithObservedComponent(parentComponent.__x.getUnobservedData(), parentComponent, objectSetDeep);
+          if (!parentComponent) throw new Error('Parent component not found'); // If the parent component is not ready, we return a dummy proxy
+          // that always prints out an empty string and we check again on the next frame
+          // We are de facto deferring the value for a few ms but final users
+          // shouldn't notice the delay
 
-            $el.__x.updateElements($el);
+          return waitUntilReady(parentComponent, $el, function () {
+            $el.$parent = syncWithObservedComponent(componentData(parentComponent), parentComponent, objectSetDeep);
+            updateOnMutation(parentComponent, function () {
+              $el.$parent = syncWithObservedComponent(parentComponent.__x.getUnobservedData(), parentComponent, objectSetDeep);
+
+              $el.__x.updateElements($el);
+            });
+            return $el.$parent;
           });
-          return $el.$parent;
         });
         Alpine.addMagicProperty('component', function ($el) {
           return function (componentName) {
@@ -232,14 +216,20 @@
 
             if (typeof this[componentName] !== 'undefined') return this[componentName];
             var componentBeingObserved = document.querySelector("[x-data][x-id=\"" + componentName + "\"], [x-data]#" + componentName);
-            if (!componentBeingObserved) throw new Error('Component not found');
-            this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep);
-            updateOnMutation(componentBeingObserved, function () {
-              _this[componentName] = syncWithObservedComponent(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved, objectSetDeep);
+            if (!componentBeingObserved) throw new Error('Component not found'); // If the observed component is not ready, we return a dummy proxy
+            // that always prints out an empty string and we check again on the next frame
+            // We are de facto deferring the value for a few ms but final users
+            // shouldn't notice the delay
 
-              $el.__x.updateElements($el);
+            return waitUntilReady(componentBeingObserved, $el, function () {
+              _this[componentName] = syncWithObservedComponent(componentData(componentBeingObserved), componentBeingObserved, objectSetDeep);
+              updateOnMutation(componentBeingObserved, function () {
+                _this[componentName] = syncWithObservedComponent(componentBeingObserved.__x.getUnobservedData(), componentBeingObserved, objectSetDeep);
+
+                $el.__x.updateElements($el);
+              });
+              return _this[componentName];
             });
-            return this[componentName];
           };
         });
       }
@@ -1650,6 +1640,16 @@
     };
 
     /**
+     * Determines whether the payload is an error thrown by Axios
+     *
+     * @param {*} payload The value to test
+     * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
+     */
+    var isAxiosError = function isAxiosError(payload) {
+      return (typeof payload === 'object') && (payload.isAxiosError === true);
+    };
+
+    /**
      * Create an instance of Axios
      *
      * @param {Object} defaultConfig The default config for the instance
@@ -1689,6 +1689,9 @@
       return Promise.all(promises);
     };
     axios.spread = spread;
+
+    // Expose isAxiosError
+    axios.isAxiosError = isAxiosError;
 
     var axios_1 = axios;
 
@@ -1844,6 +1847,34 @@
       alpine$3(callback);
     };
 
+    var AlpineRefreshMagicMethod = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.addMagicProperty('refresh', function ($el) {
+          if (!$el.__x) {
+            return function () {};
+          }
+
+          return function (component) {
+            if (component === void 0) {
+              component = $el;
+            }
+
+            return component.__x.updateElements(component);
+          };
+        });
+      }
+    };
+
+    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineRefreshMagicMethod.start();
+      alpine$4(callback);
+    };
+
     var Config = /*#__PURE__*/function () {
       function Config() {
         var _this = this;
@@ -1926,31 +1957,25 @@
       }
     };
 
-    var alpine$4 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineScreenMagicMethod.start();
-      alpine$4(callback);
+      alpine$5(callback);
     };
 
-    function createCommonjsModule(fn, basedir, module) {
-    	return module = {
-    		path: basedir,
-    		exports: {},
-    		require: function (path, base) {
-    			return commonjsRequire();
-    		}
-    	}, fn(module, module.exports), module.exports;
+    var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof __webpack_require__.g !== 'undefined' ? __webpack_require__.g : typeof self !== 'undefined' ? self : {};
+
+    function createCommonjsModule(fn) {
+      var module = { exports: {} };
+    	return fn(module, module.exports), module.exports;
     }
 
-    function commonjsRequire () {
-    	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
-    }
+    /* smoothscroll v0.4.4 - 2019 - Dustan Kasten, Jeremias Menichelli - MIT License */
 
     var smoothscroll = createCommonjsModule(function (module, exports) {
-    /* smoothscroll v0.4.4 - 2019 - Dustan Kasten, Jeremias Menichelli - MIT License */
     (function () {
 
       // polyfill
@@ -2437,13 +2462,13 @@
       }
     };
 
-    var alpine$5 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineScrollMagicMethod.start();
-      alpine$5(callback);
+      alpine$6(callback);
     };
 
     var AlpineTruncateMagicMethod = {
@@ -2495,13 +2520,686 @@
       }
     };
 
-    var alpine$6 = window.deferLoadingAlpine || function (alpine) {
+    var alpine$7 = window.deferLoadingAlpine || function (alpine) {
       return alpine();
     };
 
     window.deferLoadingAlpine = function (callback) {
       AlpineTruncateMagicMethod.start();
-      alpine$6(callback);
+      alpine$7(callback);
+    };
+
+    var deepDiff = createCommonjsModule(function (module, exports) {
+    (function(root, factory) { // eslint-disable-line no-extra-semi
+      var deepDiff = factory(root);
+      // eslint-disable-next-line no-undef
+      {
+          // Node.js or ReactNative
+          module.exports = deepDiff;
+      }
+    }(commonjsGlobal, function(root) {
+      var validKinds = ['N', 'E', 'A', 'D'];
+
+      // nodejs compatible on server side and in the browser.
+      function inherits(ctor, superCtor) {
+        ctor.super_ = superCtor;
+        ctor.prototype = Object.create(superCtor.prototype, {
+          constructor: {
+            value: ctor,
+            enumerable: false,
+            writable: true,
+            configurable: true
+          }
+        });
+      }
+
+      function Diff(kind, path) {
+        Object.defineProperty(this, 'kind', {
+          value: kind,
+          enumerable: true
+        });
+        if (path && path.length) {
+          Object.defineProperty(this, 'path', {
+            value: path,
+            enumerable: true
+          });
+        }
+      }
+
+      function DiffEdit(path, origin, value) {
+        DiffEdit.super_.call(this, 'E', path);
+        Object.defineProperty(this, 'lhs', {
+          value: origin,
+          enumerable: true
+        });
+        Object.defineProperty(this, 'rhs', {
+          value: value,
+          enumerable: true
+        });
+      }
+      inherits(DiffEdit, Diff);
+
+      function DiffNew(path, value) {
+        DiffNew.super_.call(this, 'N', path);
+        Object.defineProperty(this, 'rhs', {
+          value: value,
+          enumerable: true
+        });
+      }
+      inherits(DiffNew, Diff);
+
+      function DiffDeleted(path, value) {
+        DiffDeleted.super_.call(this, 'D', path);
+        Object.defineProperty(this, 'lhs', {
+          value: value,
+          enumerable: true
+        });
+      }
+      inherits(DiffDeleted, Diff);
+
+      function DiffArray(path, index, item) {
+        DiffArray.super_.call(this, 'A', path);
+        Object.defineProperty(this, 'index', {
+          value: index,
+          enumerable: true
+        });
+        Object.defineProperty(this, 'item', {
+          value: item,
+          enumerable: true
+        });
+      }
+      inherits(DiffArray, Diff);
+
+      function arrayRemove(arr, from, to) {
+        var rest = arr.slice((to || from) + 1 || arr.length);
+        arr.length = from < 0 ? arr.length + from : from;
+        arr.push.apply(arr, rest);
+        return arr;
+      }
+
+      function realTypeOf(subject) {
+        var type = typeof subject;
+        if (type !== 'object') {
+          return type;
+        }
+
+        if (subject === Math) {
+          return 'math';
+        } else if (subject === null) {
+          return 'null';
+        } else if (Array.isArray(subject)) {
+          return 'array';
+        } else if (Object.prototype.toString.call(subject) === '[object Date]') {
+          return 'date';
+        } else if (typeof subject.toString === 'function' && /^\/.*\//.test(subject.toString())) {
+          return 'regexp';
+        }
+        return 'object';
+      }
+
+      // http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+      function hashThisString(string) {
+        var hash = 0;
+        if (string.length === 0) { return hash; }
+        for (var i = 0; i < string.length; i++) {
+          var char = string.charCodeAt(i);
+          hash = ((hash << 5) - hash) + char;
+          hash = hash & hash; // Convert to 32bit integer
+        }
+        return hash;
+      }
+
+      // Gets a hash of the given object in an array order-independent fashion
+      // also object key order independent (easier since they can be alphabetized)
+      function getOrderIndependentHash(object) {
+        var accum = 0;
+        var type = realTypeOf(object);
+
+        if (type === 'array') {
+          object.forEach(function (item) {
+            // Addition is commutative so this is order indep
+            accum += getOrderIndependentHash(item);
+          });
+
+          var arrayString = '[type: array, hash: ' + accum + ']';
+          return accum + hashThisString(arrayString);
+        }
+
+        if (type === 'object') {
+          for (var key in object) {
+            if (object.hasOwnProperty(key)) {
+              var keyValueString = '[ type: object, key: ' + key + ', value hash: ' + getOrderIndependentHash(object[key]) + ']';
+              accum += hashThisString(keyValueString);
+            }
+          }
+
+          return accum;
+        }
+
+        // Non object, non array...should be good?
+        var stringToHash = '[ type: ' + type + ' ; value: ' + object + ']';
+        return accum + hashThisString(stringToHash);
+      }
+
+      function deepDiff(lhs, rhs, changes, prefilter, path, key, stack, orderIndependent) {
+        changes = changes || [];
+        path = path || [];
+        stack = stack || [];
+        var currentPath = path.slice(0);
+        if (typeof key !== 'undefined' && key !== null) {
+          if (prefilter) {
+            if (typeof (prefilter) === 'function' && prefilter(currentPath, key)) {
+              return;
+            } else if (typeof (prefilter) === 'object') {
+              if (prefilter.prefilter && prefilter.prefilter(currentPath, key)) {
+                return;
+              }
+              if (prefilter.normalize) {
+                var alt = prefilter.normalize(currentPath, key, lhs, rhs);
+                if (alt) {
+                  lhs = alt[0];
+                  rhs = alt[1];
+                }
+              }
+            }
+          }
+          currentPath.push(key);
+        }
+
+        // Use string comparison for regexes
+        if (realTypeOf(lhs) === 'regexp' && realTypeOf(rhs) === 'regexp') {
+          lhs = lhs.toString();
+          rhs = rhs.toString();
+        }
+
+        var ltype = typeof lhs;
+        var rtype = typeof rhs;
+        var i, j, k, other;
+
+        var ldefined = ltype !== 'undefined' ||
+          (stack && (stack.length > 0) && stack[stack.length - 1].lhs &&
+            Object.getOwnPropertyDescriptor(stack[stack.length - 1].lhs, key));
+        var rdefined = rtype !== 'undefined' ||
+          (stack && (stack.length > 0) && stack[stack.length - 1].rhs &&
+            Object.getOwnPropertyDescriptor(stack[stack.length - 1].rhs, key));
+
+        if (!ldefined && rdefined) {
+          changes.push(new DiffNew(currentPath, rhs));
+        } else if (!rdefined && ldefined) {
+          changes.push(new DiffDeleted(currentPath, lhs));
+        } else if (realTypeOf(lhs) !== realTypeOf(rhs)) {
+          changes.push(new DiffEdit(currentPath, lhs, rhs));
+        } else if (realTypeOf(lhs) === 'date' && (lhs - rhs) !== 0) {
+          changes.push(new DiffEdit(currentPath, lhs, rhs));
+        } else if (ltype === 'object' && lhs !== null && rhs !== null) {
+          for (i = stack.length - 1; i > -1; --i) {
+            if (stack[i].lhs === lhs) {
+              other = true;
+              break;
+            }
+          }
+          if (!other) {
+            stack.push({ lhs: lhs, rhs: rhs });
+            if (Array.isArray(lhs)) {
+              // If order doesn't matter, we need to sort our arrays
+              if (orderIndependent) {
+                lhs.sort(function (a, b) {
+                  return getOrderIndependentHash(a) - getOrderIndependentHash(b);
+                });
+
+                rhs.sort(function (a, b) {
+                  return getOrderIndependentHash(a) - getOrderIndependentHash(b);
+                });
+              }
+              i = rhs.length - 1;
+              j = lhs.length - 1;
+              while (i > j) {
+                changes.push(new DiffArray(currentPath, i, new DiffNew(undefined, rhs[i--])));
+              }
+              while (j > i) {
+                changes.push(new DiffArray(currentPath, j, new DiffDeleted(undefined, lhs[j--])));
+              }
+              for (; i >= 0; --i) {
+                deepDiff(lhs[i], rhs[i], changes, prefilter, currentPath, i, stack, orderIndependent);
+              }
+            } else {
+              var akeys = Object.keys(lhs);
+              var pkeys = Object.keys(rhs);
+              for (i = 0; i < akeys.length; ++i) {
+                k = akeys[i];
+                other = pkeys.indexOf(k);
+                if (other >= 0) {
+                  deepDiff(lhs[k], rhs[k], changes, prefilter, currentPath, k, stack, orderIndependent);
+                  pkeys[other] = null;
+                } else {
+                  deepDiff(lhs[k], undefined, changes, prefilter, currentPath, k, stack, orderIndependent);
+                }
+              }
+              for (i = 0; i < pkeys.length; ++i) {
+                k = pkeys[i];
+                if (k) {
+                  deepDiff(undefined, rhs[k], changes, prefilter, currentPath, k, stack, orderIndependent);
+                }
+              }
+            }
+            stack.length = stack.length - 1;
+          } else if (lhs !== rhs) {
+            // lhs is contains a cycle at this element and it differs from rhs
+            changes.push(new DiffEdit(currentPath, lhs, rhs));
+          }
+        } else if (lhs !== rhs) {
+          if (!(ltype === 'number' && isNaN(lhs) && isNaN(rhs))) {
+            changes.push(new DiffEdit(currentPath, lhs, rhs));
+          }
+        }
+      }
+
+      function observableDiff(lhs, rhs, observer, prefilter, orderIndependent) {
+        var changes = [];
+        deepDiff(lhs, rhs, changes, prefilter, null, null, null, orderIndependent);
+        if (observer) {
+          for (var i = 0; i < changes.length; ++i) {
+            observer(changes[i]);
+          }
+        }
+        return changes;
+      }
+
+      function orderIndependentDeepDiff(lhs, rhs, changes, prefilter, path, key, stack) {
+        return deepDiff(lhs, rhs, changes, prefilter, path, key, stack, true);
+      }
+
+      function accumulateDiff(lhs, rhs, prefilter, accum) {
+        var observer = (accum) ?
+          function (difference) {
+            if (difference) {
+              accum.push(difference);
+            }
+          } : undefined;
+        var changes = observableDiff(lhs, rhs, observer, prefilter);
+        return (accum) ? accum : (changes.length) ? changes : undefined;
+      }
+
+      function accumulateOrderIndependentDiff(lhs, rhs, prefilter, accum) {
+        var observer = (accum) ?
+          function (difference) {
+            if (difference) {
+              accum.push(difference);
+            }
+          } : undefined;
+        var changes = observableDiff(lhs, rhs, observer, prefilter, true);
+        return (accum) ? accum : (changes.length) ? changes : undefined;
+      }
+
+      function applyArrayChange(arr, index, change) {
+        if (change.path && change.path.length) {
+          var it = arr[index],
+            i, u = change.path.length - 1;
+          for (i = 0; i < u; i++) {
+            it = it[change.path[i]];
+          }
+          switch (change.kind) {
+            case 'A':
+              applyArrayChange(it[change.path[i]], change.index, change.item);
+              break;
+            case 'D':
+              delete it[change.path[i]];
+              break;
+            case 'E':
+            case 'N':
+              it[change.path[i]] = change.rhs;
+              break;
+          }
+        } else {
+          switch (change.kind) {
+            case 'A':
+              applyArrayChange(arr[index], change.index, change.item);
+              break;
+            case 'D':
+              arr = arrayRemove(arr, index);
+              break;
+            case 'E':
+            case 'N':
+              arr[index] = change.rhs;
+              break;
+          }
+        }
+        return arr;
+      }
+
+      function applyChange(target, source, change) {
+        if (typeof change === 'undefined' && source && ~validKinds.indexOf(source.kind)) {
+          change = source;
+        }
+        if (target && change && change.kind) {
+          var it = target,
+            i = -1,
+            last = change.path ? change.path.length - 1 : 0;
+          while (++i < last) {
+            if (typeof it[change.path[i]] === 'undefined') {
+              it[change.path[i]] = (typeof change.path[i + 1] !== 'undefined' && typeof change.path[i + 1] === 'number') ? [] : {};
+            }
+            it = it[change.path[i]];
+          }
+          switch (change.kind) {
+            case 'A':
+              if (change.path && typeof it[change.path[i]] === 'undefined') {
+                it[change.path[i]] = [];
+              }
+              applyArrayChange(change.path ? it[change.path[i]] : it, change.index, change.item);
+              break;
+            case 'D':
+              delete it[change.path[i]];
+              break;
+            case 'E':
+            case 'N':
+              it[change.path[i]] = change.rhs;
+              break;
+          }
+        }
+      }
+
+      function revertArrayChange(arr, index, change) {
+        if (change.path && change.path.length) {
+          // the structure of the object at the index has changed...
+          var it = arr[index],
+            i, u = change.path.length - 1;
+          for (i = 0; i < u; i++) {
+            it = it[change.path[i]];
+          }
+          switch (change.kind) {
+            case 'A':
+              revertArrayChange(it[change.path[i]], change.index, change.item);
+              break;
+            case 'D':
+              it[change.path[i]] = change.lhs;
+              break;
+            case 'E':
+              it[change.path[i]] = change.lhs;
+              break;
+            case 'N':
+              delete it[change.path[i]];
+              break;
+          }
+        } else {
+          // the array item is different...
+          switch (change.kind) {
+            case 'A':
+              revertArrayChange(arr[index], change.index, change.item);
+              break;
+            case 'D':
+              arr[index] = change.lhs;
+              break;
+            case 'E':
+              arr[index] = change.lhs;
+              break;
+            case 'N':
+              arr = arrayRemove(arr, index);
+              break;
+          }
+        }
+        return arr;
+      }
+
+      function revertChange(target, source, change) {
+        if (target && source && change && change.kind) {
+          var it = target,
+            i, u;
+          u = change.path.length - 1;
+          for (i = 0; i < u; i++) {
+            if (typeof it[change.path[i]] === 'undefined') {
+              it[change.path[i]] = {};
+            }
+            it = it[change.path[i]];
+          }
+          switch (change.kind) {
+            case 'A':
+              // Array was modified...
+              // it will be an array...
+              revertArrayChange(it[change.path[i]], change.index, change.item);
+              break;
+            case 'D':
+              // Item was deleted...
+              it[change.path[i]] = change.lhs;
+              break;
+            case 'E':
+              // Item was edited...
+              it[change.path[i]] = change.lhs;
+              break;
+            case 'N':
+              // Item is new...
+              delete it[change.path[i]];
+              break;
+          }
+        }
+      }
+
+      function applyDiff(target, source, filter) {
+        if (target && source) {
+          var onChange = function (change) {
+            if (!filter || filter(target, source, change)) {
+              applyChange(target, source, change);
+            }
+          };
+          observableDiff(target, source, onChange);
+        }
+      }
+
+      Object.defineProperties(accumulateDiff, {
+
+        diff: {
+          value: accumulateDiff,
+          enumerable: true
+        },
+        orderIndependentDiff: {
+          value: accumulateOrderIndependentDiff,
+          enumerable: true
+        },
+        observableDiff: {
+          value: observableDiff,
+          enumerable: true
+        },
+        orderIndependentObservableDiff: {
+          value: orderIndependentDeepDiff,
+          enumerable: true
+        },
+        orderIndepHash: {
+          value: getOrderIndependentHash,
+          enumerable: true
+        },
+        applyDiff: {
+          value: applyDiff,
+          enumerable: true
+        },
+        applyChange: {
+          value: applyChange,
+          enumerable: true
+        },
+        revertChange: {
+          value: revertChange,
+          enumerable: true
+        },
+        isConflict: {
+          value: function () {
+            return typeof $conflict !== 'undefined';
+          },
+          enumerable: true
+        }
+      });
+
+      // hackish...
+      accumulateDiff.DeepDiff = accumulateDiff;
+      // ...but works with:
+      // import DeepDiff from 'deep-diff'
+      // import { DeepDiff } from 'deep-diff'
+      // const DeepDiff = require('deep-diff');
+      // const { DeepDiff } = require('deep-diff');
+
+      if (root) {
+        root.DeepDiff = accumulateDiff;
+      }
+
+      return accumulateDiff;
+    }));
+    });
+
+    var history = new WeakMap();
+    var AlpineUndoMagicMethod = {
+      start: function start() {
+        var _this = this;
+
+        checkForAlpine();
+        Alpine.addMagicProperty('track', function ($el) {
+          return function (propertiesToWatch) {
+            var _propertiesToWatch;
+
+            propertiesToWatch = (_propertiesToWatch = propertiesToWatch) != null ? _propertiesToWatch : Object.keys(componentData($el));
+            propertiesToWatch = Array.isArray(propertiesToWatch) ? propertiesToWatch : [propertiesToWatch];
+            var initialState = JSON.stringify(componentData($el, propertiesToWatch));
+            updateOnMutation($el, function () {
+              history.has($el.__x) || _this.store($el.__x, {
+                props: propertiesToWatch,
+                previous: initialState
+              });
+              var fresh = componentData($el, history.get($el.__x).props);
+              var previous = JSON.parse(history.get($el.__x).previous);
+              var changes = deepDiff.DeepDiff.diff(previous, fresh, true);
+
+              if (changes && changes.length) {
+                changes = changes.filter(function (change) {
+                  return history.get($el.__x).props.some(function (prop) {
+                    return change.path.join('.').startsWith(prop);
+                  });
+                });
+                history.get($el.__x).previous = JSON.stringify(fresh);
+                history.get($el.__x).changes.push(changes);
+
+                $el.__x.updateElements($el);
+              }
+            });
+          };
+        });
+        Alpine.addMagicProperty('undo', function ($el, $clone) {
+          return function () {
+            if ($el !== $clone) {
+              $el = _this.syncClone($el, $clone);
+            }
+
+            var changes = history.get($el.__x).changes.pop();
+            var previous = JSON.parse(history.get($el.__x).previous);
+            changes && changes.forEach(function (change) {
+              deepDiff.DeepDiff.revertChange(previous, componentData($el, history.get($el.__x).props), change);
+            }); // This could probably be extracted to a utility method like updateComponentProperties()
+
+            if (Object.keys(previous).length) {
+              var newData = {};
+              Object.entries(previous).forEach(function (item) {
+                newData[item[0]] = item[1];
+              });
+              $el.__x.$data = Object.assign($el.__x.$data, newData);
+            }
+
+            history.get($el.__x).previous = JSON.stringify(componentData($el, history.get($el.__x).props));
+          };
+        });
+        Alpine.addMagicProperty('history', function ($el, $clone) {
+          if (!$clone.__x) return [];
+
+          if ($el !== $clone) {
+            $el = _this.syncClone($el, $clone);
+          }
+
+          return history.has($el.__x) ? history.get($el.__x) : [];
+        });
+      },
+      store: function store(key, state) {
+        history.set(key, Object.assign({
+          changes: [],
+
+          get length() {
+            return this.changes.length;
+          }
+
+        }, state));
+        return history.get(key);
+      },
+      syncClone: function syncClone($el, $clone) {
+        this.store($clone.__x, {
+          props: history.get($el.__x).props,
+          previous: history.get($el.__x).previous,
+          changes: history.get($el.__x).changes
+        });
+        return $clone;
+      }
+    };
+
+    var alpine$8 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      alpine$8(callback);
+      AlpineUndoMagicMethod.start();
+    };
+
+    var DIRECTIVE = 'x-unsafe-html';
+
+    var nodeScriptClone = function nodeScriptClone(node) {
+      var script = document.createElement('script');
+      script.text = node.innerHTML;
+
+      for (var i = 0; i < node.attributes.length; i++) {
+        var attr = node.attributes[i];
+        script.setAttribute(attr.name, attr.value);
+      }
+
+      return script;
+    };
+
+    var nodeScriptReplace = function nodeScriptReplace(node) {
+      if (node.tagName && node.tagName.toLowerCase() === 'script') {
+        node.parentNode.replaceChild(nodeScriptClone(node), node);
+      } else {
+        for (var i = 0; i < node.childNodes.length; i++) {
+          nodeScriptReplace(node.childNodes[i]);
+        }
+      }
+
+      return node;
+    };
+
+    var AlpineUnsafeHTMLCustomDirective = {
+      start: function start() {
+        checkForAlpine();
+        Alpine.onBeforeComponentInitialized(function (component) {
+          var legacyResolveBoundAttributes = component.resolveBoundAttributes;
+
+          component.resolveBoundAttributes = function (el, initialUpdate, extraVars) {
+            if (initialUpdate === void 0) {
+              initialUpdate = false;
+            }
+
+            var attrs = Array.from(el.attributes).filter(function (attr) {
+              return attr.name === DIRECTIVE;
+            }).map(parseHtmlAttribute);
+            attrs.forEach(function (_ref) {
+              var expression = _ref.expression;
+              el.innerHTML = component.evaluateReturnExpression(el, expression, extraVars);
+              nodeScriptReplace(el);
+            });
+            return legacyResolveBoundAttributes.bind(component)(el, initialUpdate, extraVars);
+          };
+        });
+      }
+    };
+
+    var alpine$9 = window.deferLoadingAlpine || function (alpine) {
+      return alpine();
+    };
+
+    window.deferLoadingAlpine = function (callback) {
+      AlpineUnsafeHTMLCustomDirective.start();
+      alpine$9(callback);
     };
 
     var index = {
@@ -2509,16 +3207,18 @@
       AlpineFetchMagicMethod: AlpineFetchMagicMethod,
       AlpineIntervalMagicMethod: AlpineIntervalMagicMethod,
       AlpineRangeMagicMethod: AlpineRangeMagicMethod,
+      AlpineRefreshMagicMethod: AlpineRefreshMagicMethod,
       AlpineScreenMagicMethod: AlpineScreenMagicMethod,
       AlpineScrollMagicMethod: AlpineScrollMagicMethod,
-      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod
+      AlpineTruncateMagicMethod: AlpineTruncateMagicMethod,
+      AlpineUndoMagicMethod: AlpineUndoMagicMethod,
+      AlpineUnsafeHTMLCustomDirective: AlpineUnsafeHTMLCustomDirective
     };
 
     return index;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -2526,12 +3226,11 @@
 /*!**********************************************!*\
   !*** ./node_modules/alpinejs/dist/alpine.js ***!
   \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module) {
 
 (function (global, factory) {
    true ? module.exports = factory() :
-  undefined;
+  0;
 }(this, (function () { 'use strict';
 
   function _defineProperty(obj, key, value) {
@@ -2607,7 +3306,7 @@
     if (el.tagName.toLowerCase() !== 'template') {
       console.warn(`Alpine: [${directive}] directive should only be added to <template> tags. See https://github.com/alpinejs/alpine#${directive}`);
     } else if (el.content.childElementCount !== 1) {
-      console.warn(`Alpine: <template> tag with [${directive}] encountered with multiple element roots. Make sure <template> only has a single child element.`);
+      console.warn(`Alpine: <template> tag with [${directive}] encountered with an unexpected number of root elements. Make sure <template> has a single root element. `);
     }
   }
   function kebabCase(subject) {
@@ -2645,6 +3344,10 @@
     console.warn(`Alpine Error: "${error}"\n\nExpression: "${expression}"\nElement:`, el);
 
     if (!isTesting()) {
+      Object.assign(error, {
+        el,
+        expression
+      });
       throw error;
     }
   };
@@ -3104,7 +3807,7 @@
     let forIteratorRE = /,([^,\}\]]*)(?:,([^,\}\]]*))?$/;
     let stripParensRE = /^\(|\)$/g;
     let forAliasRE = /([\s\S]*?)\s+(?:in|of)\s+([\s\S]*)/;
-    let inMatch = expression.match(forAliasRE);
+    let inMatch = String(expression).match(forAliasRE);
     if (!inMatch) return;
     let res = {};
     res.items = inMatch[2].trim();
@@ -3150,7 +3853,7 @@
 
     let items = component.evaluateReturnExpression(el, iteratorNames.items, extraVars); // This adds support for the `i in n` syntax.
 
-    if (isNumeric(items) && items > 0) {
+    if (isNumeric(items) && items >= 0) {
       items = Array.from(Array(items).keys(), i => i + 1);
     }
 
@@ -3201,7 +3904,7 @@
     if (attrName === 'value') {
       if (Alpine.ignoreFocusedForValueBinding && document.activeElement.isSameNode(el)) return; // If nested model key is undefined, set the default value to empty string.
 
-      if (value === undefined && expression.match(/\./)) {
+      if (value === undefined && String(expression).match(/\./)) {
         value = '';
       }
 
@@ -3284,7 +3987,7 @@
 
   function handleTextDirective(el, output, expression) {
     // If nested model key is undefined, set the default value to empty string.
-    if (output === undefined && expression.match(/\./)) {
+    if (output === undefined && String(expression).match(/\./)) {
       output = '';
     }
 
@@ -3389,8 +4092,12 @@
       event = camelCase(event);
     }
 
+    let handler, listenerTarget;
+
     if (modifiers.includes('away')) {
-      let handler = e => {
+      listenerTarget = document;
+
+      handler = e => {
         // Don't do anything if the click came from the element or within it.
         if (el.contains(e.target)) return; // Don't do anything if this element isn't currently visible.
 
@@ -3402,14 +4109,11 @@
         if (modifiers.includes('once')) {
           document.removeEventListener(event, handler, options);
         }
-      }; // Listen for this event at the root level.
-
-
-      document.addEventListener(event, handler, options);
+      };
     } else {
-      let listenerTarget = modifiers.includes('window') ? window : modifiers.includes('document') ? document : el;
+      listenerTarget = modifiers.includes('window') ? window : modifiers.includes('document') ? document : el;
 
-      let handler = e => {
+      handler = e => {
         // Remove this global event handler if the element that declared it
         // has been removed. It's now stale.
         if (listenerTarget === window || listenerTarget === document) {
@@ -3443,15 +4147,15 @@
           });
         }
       };
-
-      if (modifiers.includes('debounce')) {
-        let nextModifier = modifiers[modifiers.indexOf('debounce') + 1] || 'invalid-wait';
-        let wait = isNumeric(nextModifier.split('ms')[0]) ? Number(nextModifier.split('ms')[0]) : 250;
-        handler = debounce(handler, wait);
-      }
-
-      listenerTarget.addEventListener(event, handler, options);
     }
+
+    if (modifiers.includes('debounce')) {
+      let nextModifier = modifiers[modifiers.indexOf('debounce') + 1] || 'invalid-wait';
+      let wait = isNumeric(nextModifier.split('ms')[0]) ? Number(nextModifier.split('ms')[0]) : 250;
+      handler = debounce(handler, wait);
+    }
+
+    listenerTarget.addEventListener(event, handler, options);
   }
 
   function runListenerHandler(component, expression, e, extraVars) {
@@ -4035,9 +4739,11 @@
         initReturnedCallback = this.evaluateReturnExpression(this.$el, initExpression);
         this.pauseReactivity = false;
       } // Register all our listeners and set all our attribute bindings.
+      // If we're cloning a component, the third parameter ensures no duplicate
+      // event listeners are registered (the mutation observer will take care of them)
 
 
-      this.initializeElements(this.$el); // Use mutation observer to detect new elements being added within this component at run-time.
+      this.initializeElements(this.$el, () => {}, componentForClone ? false : true); // Use mutation observer to detect new elements being added within this component at run-time.
       // Alpine's just so darn flexible amirite?
 
       this.listenForNewElementsToInitialize();
@@ -4126,13 +4832,13 @@
       });
     }
 
-    initializeElements(rootEl, extraVars = () => {}) {
+    initializeElements(rootEl, extraVars = () => {}, shouldRegisterListeners = true) {
       this.walkAndSkipNestedComponents(rootEl, el => {
         // Don't touch spawns from for loop
         if (el.__x_for_key !== undefined) return false; // Don't touch spawns from if directives
 
         if (el.__x_inserted_me !== undefined) return false;
-        this.initializeElement(el, extraVars);
+        this.initializeElement(el, extraVars, shouldRegisterListeners);
       }, el => {
         el.__x = new Component(el);
       });
@@ -4140,14 +4846,14 @@
       this.executeAndClearNextTickStack(rootEl);
     }
 
-    initializeElement(el, extraVars) {
+    initializeElement(el, extraVars, shouldRegisterListeners = true) {
       // To support class attribute merging, we have to know what the element's
       // original class attribute looked like for reference.
       if (el.hasAttribute('class') && getXAttrs(el, this).length > 0) {
         el.__x_original_classes = convertClassStringToArray(el.getAttribute('class'));
       }
 
-      this.registerListeners(el, extraVars);
+      shouldRegisterListeners && this.registerListeners(el, extraVars);
       this.resolveBoundAttributes(el, true, extraVars);
     }
 
@@ -4364,7 +5070,7 @@
   }
 
   const Alpine = {
-    version: "2.8.0",
+    version: "2.8.1",
     pauseMutationObserver: false,
     magicProperties: {},
     onComponentInitializeds: [],
@@ -4478,8 +5184,7 @@
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
   \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = __webpack_require__(/*! ./lib/axios */ "./node_modules/axios/lib/axios.js");
 
@@ -4489,8 +5194,7 @@ module.exports = __webpack_require__(/*! ./lib/axios */ "./node_modules/axios/li
 /*!************************************************!*\
   !*** ./node_modules/axios/lib/adapters/xhr.js ***!
   \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -4680,8 +5384,7 @@ module.exports = function xhrAdapter(config) {
 /*!*****************************************!*\
   !*** ./node_modules/axios/lib/axios.js ***!
   \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -4748,8 +5451,7 @@ module.exports.default = axios;
 /*!*************************************************!*\
   !*** ./node_modules/axios/lib/cancel/Cancel.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -4779,8 +5481,7 @@ module.exports = Cancel;
 /*!******************************************************!*\
   !*** ./node_modules/axios/lib/cancel/CancelToken.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -4848,8 +5549,7 @@ module.exports = CancelToken;
 /*!***************************************************!*\
   !*** ./node_modules/axios/lib/cancel/isCancel.js ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -4865,8 +5565,7 @@ module.exports = function isCancel(value) {
 /*!**********************************************!*\
   !*** ./node_modules/axios/lib/core/Axios.js ***!
   \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -4972,8 +5671,7 @@ module.exports = Axios;
 /*!***********************************************************!*\
   !*** ./node_modules/axios/lib/core/InterceptorManager.js ***!
   \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5036,8 +5734,7 @@ module.exports = InterceptorManager;
 /*!******************************************************!*\
   !*** ./node_modules/axios/lib/core/buildFullPath.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5068,8 +5765,7 @@ module.exports = function buildFullPath(baseURL, requestedURL) {
 /*!****************************************************!*\
   !*** ./node_modules/axios/lib/core/createError.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5098,8 +5794,7 @@ module.exports = function createError(message, config, code, request, response) 
 /*!********************************************************!*\
   !*** ./node_modules/axios/lib/core/dispatchRequest.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5189,8 +5884,7 @@ module.exports = function dispatchRequest(config) {
 /*!*****************************************************!*\
   !*** ./node_modules/axios/lib/core/enhanceError.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -5243,8 +5937,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 /*!****************************************************!*\
   !*** ./node_modules/axios/lib/core/mergeConfig.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5342,8 +6035,7 @@ module.exports = function mergeConfig(config1, config2) {
 /*!***********************************************!*\
   !*** ./node_modules/axios/lib/core/settle.js ***!
   \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5379,8 +6071,7 @@ module.exports = function settle(resolve, reject, response) {
 /*!******************************************************!*\
   !*** ./node_modules/axios/lib/core/transformData.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5411,11 +6102,11 @@ module.exports = function transformData(data, headers, fns) {
 /*!********************************************!*\
   !*** ./node_modules/axios/lib/defaults.js ***!
   \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
+/* provided dependency */ var process = __webpack_require__(/*! process/browser */ "./node_modules/process/browser.js");
+
 
 var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.js");
 var normalizeHeaderName = __webpack_require__(/*! ./helpers/normalizeHeaderName */ "./node_modules/axios/lib/helpers/normalizeHeaderName.js");
@@ -5514,7 +6205,6 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -5522,8 +6212,7 @@ module.exports = defaults;
 /*!************************************************!*\
   !*** ./node_modules/axios/lib/helpers/bind.js ***!
   \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -5545,8 +6234,7 @@ module.exports = function bind(fn, thisArg) {
 /*!****************************************************!*\
   !*** ./node_modules/axios/lib/helpers/buildURL.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5627,8 +6315,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 /*!*******************************************************!*\
   !*** ./node_modules/axios/lib/helpers/combineURLs.js ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -5653,8 +6340,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 /*!***************************************************!*\
   !*** ./node_modules/axios/lib/helpers/cookies.js ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5718,8 +6404,7 @@ module.exports = (
 /*!*********************************************************!*\
   !*** ./node_modules/axios/lib/helpers/isAbsoluteURL.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -5744,8 +6429,7 @@ module.exports = function isAbsoluteURL(url) {
 /*!********************************************************!*\
   !*** ./node_modules/axios/lib/helpers/isAxiosError.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -5767,8 +6451,7 @@ module.exports = function isAxiosError(payload) {
 /*!***********************************************************!*\
   !*** ./node_modules/axios/lib/helpers/isURLSameOrigin.js ***!
   \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5847,8 +6530,7 @@ module.exports = (
 /*!***************************************************************!*\
   !*** ./node_modules/axios/lib/helpers/normalizeHeaderName.js ***!
   \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5871,8 +6553,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 /*!********************************************************!*\
   !*** ./node_modules/axios/lib/helpers/parseHeaders.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -5936,8 +6617,7 @@ module.exports = function parseHeaders(headers) {
 /*!**************************************************!*\
   !*** ./node_modules/axios/lib/helpers/spread.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -5975,8 +6655,7 @@ module.exports = function spread(callback) {
 /*!*****************************************!*\
   !*** ./node_modules/axios/lib/utils.js ***!
   \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -6334,14 +7013,59 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./resources/js/app.js":
+/*!*****************************!*\
+  !*** ./resources/js/app.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+__webpack_require__(/*! alpine-magic-helpers */ "./node_modules/alpine-magic-helpers/dist/index.js");
+
+__webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/alpine.js");
+
+/***/ }),
+
+/***/ "./resources/js/bootstrap.js":
+/*!***********************************!*\
+  !*** ./resources/js/bootstrap.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/**
+ * We'll load the axios HTTP library which allows us to easily issue requests
+ * to our Laravel back-end. This library automatically handles sending the
+ * CSRF token as a header based on the value of the "XSRF" token cookie.
+ */
+
+window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allows your team to easily build robust real-time web applications.
+ */
+// import Echo from 'laravel-echo';
+// window.Pusher = require('pusher-js');
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: process.env.MIX_PUSHER_APP_KEY,
+//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     forceTLS: true
+// });
+
+/***/ }),
+
 /***/ "./node_modules/lodash/lodash.js":
 /*!***************************************!*\
   !*** ./node_modules/lodash/lodash.js ***!
   \***************************************/
-/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
+/* module decorator */ module = __webpack_require__.nmd(module);
+var __WEBPACK_AMD_DEFINE_RESULT__;/**
  * @license
  * Lodash <https://lodash.com/>
  * Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
@@ -6355,14 +7079,15 @@ module.exports = {
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.20';
+  var VERSION = '4.17.21';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
 
   /** Error message constants. */
   var CORE_ERROR_TEXT = 'Unsupported core-js use. Try https://npms.io/search?q=ponyfill.',
-      FUNC_ERROR_TEXT = 'Expected a function';
+      FUNC_ERROR_TEXT = 'Expected a function',
+      INVALID_TEMPL_VAR_ERROR_TEXT = 'Invalid `variable` option passed into `_.template`';
 
   /** Used to stand-in for `undefined` hash values. */
   var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -6495,10 +7220,11 @@ module.exports = {
   var reRegExpChar = /[\\^$.*+?()[\]{}|]/g,
       reHasRegExpChar = RegExp(reRegExpChar.source);
 
-  /** Used to match leading and trailing whitespace. */
-  var reTrim = /^\s+|\s+$/g,
-      reTrimStart = /^\s+/,
-      reTrimEnd = /\s+$/;
+  /** Used to match leading whitespace. */
+  var reTrimStart = /^\s+/;
+
+  /** Used to match a single whitespace character. */
+  var reWhitespace = /\s/;
 
   /** Used to match wrap detail comments. */
   var reWrapComment = /\{(?:\n\/\* \[wrapped with .+\] \*\/)?\n?/,
@@ -6507,6 +7233,18 @@ module.exports = {
 
   /** Used to match words composed of alphanumeric characters. */
   var reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
+
+  /**
+   * Used to validate the `validate` option in `_.template` variable.
+   *
+   * Forbids characters which could potentially change the meaning of the function argument definition:
+   * - "()," (modification of function parameters)
+   * - "=" (default value)
+   * - "[]{}" (destructuring of function parameters)
+   * - "/" (beginning of a comment)
+   * - whitespace
+   */
+  var reForbiddenIdentifierChars = /[()=,{}\[\]\/\s]/;
 
   /** Used to match backslashes in property paths. */
   var reEscapeChar = /\\(\\)?/g;
@@ -6756,7 +7494,7 @@ module.exports = {
       freeParseInt = parseInt;
 
   /** Detect free variable `global` from Node.js. */
-  var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+  var freeGlobal = typeof __webpack_require__.g == 'object' && __webpack_require__.g && __webpack_require__.g.Object === Object && __webpack_require__.g;
 
   /** Detect free variable `self`. */
   var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -6768,7 +7506,7 @@ module.exports = {
   var freeExports =  true && exports && !exports.nodeType && exports;
 
   /** Detect free variable `module`. */
-  var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
+  var freeModule = freeExports && "object" == 'object' && module && !module.nodeType && module;
 
   /** Detect the popular CommonJS extension `module.exports`. */
   var moduleExports = freeModule && freeModule.exports === freeExports;
@@ -7337,6 +8075,19 @@ module.exports = {
   }
 
   /**
+   * The base implementation of `_.trim`.
+   *
+   * @private
+   * @param {string} string The string to trim.
+   * @returns {string} Returns the trimmed string.
+   */
+  function baseTrim(string) {
+    return string
+      ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+      : string;
+  }
+
+  /**
    * The base implementation of `_.unary` without support for storing metadata.
    *
    * @private
@@ -7667,6 +8418,21 @@ module.exports = {
     return hasUnicode(string)
       ? unicodeToArray(string)
       : asciiToArray(string);
+  }
+
+  /**
+   * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+   * character of `string`.
+   *
+   * @private
+   * @param {string} string The string to inspect.
+   * @returns {number} Returns the index of the last non-whitespace character.
+   */
+  function trimmedEndIndex(string) {
+    var index = string.length;
+
+    while (index-- && reWhitespace.test(string.charAt(index))) {}
+    return index;
   }
 
   /**
@@ -18837,7 +19603,7 @@ module.exports = {
       if (typeof value != 'string') {
         return value === 0 ? value : +value;
       }
-      value = value.replace(reTrim, '');
+      value = baseTrim(value);
       var isBinary = reIsBinary.test(value);
       return (isBinary || reIsOctal.test(value))
         ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
@@ -21209,6 +21975,12 @@ module.exports = {
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
       }
+      // Throw an error if a forbidden character was found in `variable`, to prevent
+      // potential command injection attacks.
+      else if (reForbiddenIdentifierChars.test(variable)) {
+        throw new Error(INVALID_TEMPL_VAR_ERROR_TEXT);
+      }
+
       // Cleanup code by stripping empty strings.
       source = (isEvaluating ? source.replace(reEmptyStringLeading, '') : source)
         .replace(reEmptyStringMiddle, '$1')
@@ -21322,7 +22094,7 @@ module.exports = {
     function trim(string, chars, guard) {
       string = toString(string);
       if (string && (guard || chars === undefined)) {
-        return string.replace(reTrim, '');
+        return baseTrim(string);
       }
       if (!string || !(chars = baseToString(chars))) {
         return string;
@@ -21357,7 +22129,7 @@ module.exports = {
     function trimEnd(string, chars, guard) {
       string = toString(string);
       if (string && (guard || chars === undefined)) {
-        return string.replace(reTrimEnd, '');
+        return string.slice(0, trimmedEndIndex(string) + 1);
       }
       if (!string || !(chars = baseToString(chars))) {
         return string;
@@ -23489,13 +24261,38 @@ module.exports = {
     !(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
       return _;
     }).call(exports, __webpack_require__, exports, module),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
   }
   // Check for `exports` after `define` in case a build optimizer adds it.
   else {}
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./resources/css/app.css":
+/*!*******************************!*\
+  !*** ./resources/css/app.css ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./resources/css/recipes/edit.css":
+/*!****************************************!*\
+  !*** ./resources/css/recipes/edit.css ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
 
 /***/ }),
 
@@ -23503,8 +24300,7 @@ module.exports = {
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
   \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 // shim for using process in browser
 var process = module.exports = {};
@@ -23692,153 +24488,171 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 
-/***/ }),
-
-/***/ "./node_modules/webpack/buildin/global.js":
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ "./node_modules/webpack/buildin/module.js":
-/*!***********************************!*\
-  !*** (webpack)/buildin/module.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function(module) {
-	if (!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-
-/***/ }),
-
-/***/ "./resources/css/app.css":
-/*!*******************************!*\
-  !*** ./resources/css/app.css ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ "./resources/css/recipes/edit.css":
-/*!****************************************!*\
-  !*** ./resources/css/recipes/edit.css ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ "./resources/js/app.js":
-/*!*****************************!*\
-  !*** ./resources/js/app.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
-__webpack_require__(/*! alpine-magic-helpers */ "./node_modules/alpine-magic-helpers/dist/index.js");
-
-__webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/alpine.js");
-
-/***/ }),
-
-/***/ "./resources/js/bootstrap.js":
-/*!***********************************!*\
-  !*** ./resources/js/bootstrap.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
-window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-// import Echo from 'laravel-echo';
-// window.Pusher = require('pusher-js');
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
-// });
-
-/***/ }),
-
-/***/ 0:
-/*!********************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/css/app.css ./resources/css/recipes/edit.css ***!
-  \********************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! /Users/wellc/PhpstormProjects/pfnj/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /Users/wellc/PhpstormProjects/pfnj/resources/css/app.css */"./resources/css/app.css");
-module.exports = __webpack_require__(/*! /Users/wellc/PhpstormProjects/pfnj/resources/css/recipes/edit.css */"./resources/css/recipes/edit.css");
-
-
 /***/ })
 
-/******/ });
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			id: moduleId,
+/******/ 			loaded: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					result = fn();
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/node module decorator */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nmd = (module) => {
+/******/ 			module.paths = [];
+/******/ 			if (!module.children) module.children = [];
+/******/ 			return module;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"/js/app": 0,
+/******/ 			"css/recipes/edit": 0,
+/******/ 			"css/app": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			for(moduleId in moreModules) {
+/******/ 				if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 					__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 				}
+/******/ 			}
+/******/ 			if(runtime) runtime(__webpack_require__);
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 			}
+/******/ 			__webpack_require__.O();
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["css/recipes/edit","css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/recipes/edit","css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/recipes/edit","css/app"], () => (__webpack_require__("./resources/css/recipes/edit.css")))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	
+/******/ })()
+;
