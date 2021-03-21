@@ -62,9 +62,14 @@
                     searching: false,
                     results: [],
                     search: {
+                        /**
+                         * Executes a search from the input.
+                         *
+                         * @param {object} $event Input event triggering the search.
+                         */
                         ['@input.debounce.400ms']($event) {
                             if ($event.target.value !== '') {
-                                fetch('{{ route('ingredient-picker.search') }}?term=' + $event.target.value)
+                                fetch(`{{ route('ingredient-picker.search') }}?term=${$event.target.value}`)
                                     .then(response => response.json())
                                     .then(data => {
                                         this.results = data;
@@ -75,22 +80,39 @@
                                 this.searching = false;
                             }
                         },
+
+                        /**
+                         * Cancels a search on focus out.
+                         */
                         ['@focusout.debounce.200ms']() {
                             this.searching = false;
                         }
                     },
                     ingredient: {
+                        /**
+                         * Handles a "picked" ingredient.
+                         *
+                         * @param {object} $event Click event for the pick.
+                         */
                         ['@click']($event) {
                             let selected = $event.target;
                             if (selected.dataset.id) {
                                 const ingredient = this.results.find(result => result.id === Number(selected.dataset.id));
+
+                                // Dispatch an event indicating which ingredient
+                                // the was picked.
                                 this.$el.dispatchEvent(new CustomEvent('ingredient-picked', {
                                     detail: { ingredient: ingredient },
                                     bubbles: true
                                 }));
+
+                                // Set the relevant field values for the picked
+                                // ingredient.
                                 this.$refs.ingredients.value = ingredient.id;
                                 this.$refs.ingredients_type.value = ingredient.type;
                                 this.$refs.ingredients_name.value = ingredient.name + (ingredient.detail ? `, ${ingredient.detail}` : '');
+
+                                // Clear search results.
                                 this.searching = false;
                                 this.results = [];
                             }

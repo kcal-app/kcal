@@ -77,11 +77,17 @@
                 const entryItem = e.target.closest('.entry-item');
                 const ingredient = e.detail.ingredient;
                 let servingSize, servingUnit;
+
+                // Always set recipes to a default of 1 serving.
                 if (ingredient.type === 'App\\Models\\Recipe') {
                     servingSize = 1;
                     servingUnit = 'serving';
                 } else if (ingredient.type === 'App\\Models\\Food') {
                     servingUnit = ingredient.serving_unit ?? 'serving'
+
+                    // Any food with a unit of "serving" (or no unit) defaults
+                    // to 1 serving. This accounts for food with configurations
+                    // like "2 scoops" using a custom serving unit.
                     if (servingUnit === 'serving') {
                         servingSize = 1;
                     } else {
