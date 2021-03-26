@@ -42,6 +42,8 @@ class ArrayFormat
      *
      * @return array
      *   The flipped array.
+     *
+     * @todo Return Collection instead of array.
      */
     public static function flipTwoDimensionalKeys(array $array): array {
         $flipped = [];

@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeSeparator whereWeight($value)
  * @mixin \Eloquent
  */
-class RecipeSeparator extends Model
+final class RecipeSeparator extends Model
 {
     /**
      * @inheritdoc

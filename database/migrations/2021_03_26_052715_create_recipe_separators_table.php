@@ -19,7 +19,7 @@ class CreateRecipeSeparatorsTable extends Migration
             $table->foreignIdFor(Recipe::class)->index()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('container')->index();
             $table->unsignedInteger('weight')->index();
-            $table->longText('text');
+            $table->longText('text')->nullable();
             $table->timestamps();
         });
     }
