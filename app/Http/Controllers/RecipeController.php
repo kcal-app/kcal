@@ -88,6 +88,7 @@ class RecipeController extends Controller
                     continue;
                 }
                 $ingredients[] = [
+                    'type' => 'ingredient',
                     'key' => $old['key'][$key],
                     'weight' => $old['weight'][$key],
                     'amount' => $old['amount'][$key],
@@ -102,6 +103,7 @@ class RecipeController extends Controller
         else {
             foreach ($recipe->ingredientAmounts as $key => $ingredientAmount) {
                 $ingredients[] = [
+                    'type' => 'ingredient',
                     'key' => $key,
                     'weight' => $ingredientAmount->weight,
                     'amount' => $ingredientAmount->amount_formatted,
@@ -110,6 +112,31 @@ class RecipeController extends Controller
                     'ingredient_type' => $ingredientAmount->ingredient_type,
                     'ingredient_name' => $ingredientAmount->ingredient->name,
                     'detail' => $ingredientAmount->detail,
+                ];
+            }
+        }
+
+        $separators = [];
+        if ($old = old('separators')) {
+            foreach ($old['key'] as $index => $key) {
+                if (empty($key)) {
+                    continue;
+                }
+                $separators[] = [
+                    'type' => 'separator',
+                    'key' => $old['key'][$index],
+                    'weight' => $old['weight'][$index],
+                    'text' => $old['text'][$index],
+                ];
+            }
+        }
+        else {
+            foreach ($recipe->ingredientSeparators as $key => $ingredientSeparator) {
+                $ingredients[] = [
+                    'type' => 'separator',
+                    'key' => $key,
+                    'weight' => $ingredientSeparator->weight,
+                    'text' => $ingredientSeparator->text,
                 ];
             }
         }
@@ -144,7 +171,7 @@ class RecipeController extends Controller
         return view('recipes.edit')
             ->with('recipe', $recipe)
             ->with('recipe_tags', $recipe_tags)
-            ->with('ingredients', $ingredients)
+            ->with('ingredients_list', new Collection([...$ingredients, ...$separators]))
             ->with('steps', $steps)
             ->with('ingredients_units', Nutrients::$units);
     }

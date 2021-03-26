@@ -126,8 +126,12 @@
         <!-- Ingredients -->
         <h3 class="mt-6 mb-2 font-extrabold text-lg">Ingredients</h3>
         <div x-data class="ingredients space-y-4">
-            @forelse($ingredients as $ingredient)
-                @include('recipes.partials.ingredient-input', $ingredient)
+            @forelse($ingredients_list->sortBy('weight') as $item)
+                @if($item['type'] === 'ingredient')
+                    @include('recipes.partials.ingredient-input', $item)
+                @elseif($item['type'] === 'separator')
+                    @include('recipes.partials.separator-input', $item)
+                @endif
             @empty
                 @include('recipes.partials.ingredient-input')
             @endforelse
