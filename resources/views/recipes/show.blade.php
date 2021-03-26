@@ -52,23 +52,34 @@
                 </h1>
                 <div class="prose prose-lg">
                     <ul class="space-y-2">
-                        @foreach($recipe->ingredientAmounts as $ia)
-                            <li>
-                                <span>
-                                    {{ \App\Support\Number::fractionStringFromFloat($ia->amount) }}
-                                    @if($ia->unitFormatted){{ $ia->unitFormatted }}@endif
-                                    @if($ia->ingredient->type === \App\Models\Recipe::class)
-                                        <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                           href="{{ route('recipes.show', $ia->ingredient) }}">
-                                            {{ $ia->ingredient->name }}
-                                        </a>
-                                    @else
-                                        {{ $ia->ingredient->name }}@if($ia->ingredient->detail), {{ $ia->ingredient->detail }}@endif
-                                    @endif
-                                    @if($ia->detail)<span class="text-gray-500">{{ $ia->detail }}</span>@endif
-                                    <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $ia->nutrients_summary }}</div>
-                                </span>
-                            </li>
+                        @foreach($recipe->ingredientsList->sortBy('weight') as $item)
+                            @if($item::class === \App\Models\IngredientAmount::class)
+                                <li>
+                                    <span>
+                                        {{ \App\Support\Number::fractionStringFromFloat($item->amount) }}
+                                        @if($item->unitFormatted){{ $item->unitFormatted }}@endif
+                                        @if($item->ingredient->type === \App\Models\Recipe::class)
+                                            <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                               href="{{ route('recipes.show', $item->ingredient) }}">
+                                                {{ $item->ingredient->name }}
+                                            </a>
+                                        @else
+                                            {{ $item->ingredient->name }}@if($item->ingredient->detail), {{ $item->ingredient->detail }}@endif
+                                        @endif
+                                        @if($item->detail)<span class="text-gray-500">{{ $item->detail }}</span>@endif
+                                        <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $item->nutrients_summary }}</div>
+                                    </span>
+                                </li>
+                            @elseif($item::class === \App\Models\RecipeSeparator::class)
+                                </ul></div>
+                                @if($item->text)
+                                    <h2 class="mt-3 font-bold">{{ $item->text }}</h2>
+                                @else
+                                    <hr class="mt-3 lg:w-1/2" />
+                                @endif
+                                <div class="prose prose-lg">
+                                <ul class="space-y-2">
+                            @endif
                         @endforeach
                     </ul>
                 </div>

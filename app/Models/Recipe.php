@@ -10,6 +10,7 @@ use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
@@ -73,6 +74,7 @@ use Spatie\Tags\HasTags;
  * @property-read int|null $ingredient_separators_count
  * @method static \Database\Factories\RecipeFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimeCook($value)
+ * @property-read Collection $ingredients_list
  */
 final class Recipe extends Model implements HasMedia
 {
@@ -160,6 +162,16 @@ final class Recipe extends Model implements HasMedia
             return null;
         }
         return round($this->weight / $this->servings, 2);
+    }
+
+    /**
+     * Get the ingredients list (ingredient amounts and separators).
+     */
+    public function getIngredientsListAttribute(): Collection {
+        return new Collection([
+            ...$this->ingredientAmounts,
+            ...$this->ingredientSeparators,
+        ]);
     }
 
     /**
