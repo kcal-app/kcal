@@ -1,5 +1,6 @@
-<div class="ingredient">
-    <x-inputs.input type="hidden" name="ingredients[original_key][]" :value="$original_key ?? null" />
+<div class="ingredient draggable">
+    <x-inputs.input type="hidden" name="ingredients[key][]" :value="$key ?? null" />
+    <x-inputs.input type="hidden" name="ingredients[weight][]" :value="$weight ?? null" />
     <div class="flex items-center space-x-2">
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
             <div class="draggable-handle self-center text-gray-500 bg-gray-100 w-full md:w-auto p-2 cursor-move">

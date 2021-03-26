@@ -202,9 +202,9 @@
                     description.setContents(JSON.parse(document.querySelector('input[name="description_delta"]').value));
                 } catch (e) {}
 
-                // Activate ingredient draggables.
-                new Draggable.Sortable(document.querySelector('.ingredients'), {
-                    draggable: '.ingredient',
+                // Activate ingredient sortable.
+                const ingredientsSortable = new Draggable.Sortable(document.querySelector('.ingredients'), {
+                    draggable: '.draggable',
                     handle: '.draggable-handle',
                     mirror: {
                         appendTo: '.ingredients',
@@ -212,9 +212,18 @@
                     },
                 })
 
+                // Recalculate weight (order) of all ingredients.
+                ingredientsSortable.on('drag:stopped', (e) => {
+                    Array.from(e.sourceContainer.children)
+                        .filter(el => el.classList.contains('ingredient'))
+                        .forEach((el, index) => {
+                            el.querySelector('input[name="ingredients[weight][]"]').value = index;
+                        });
+                })
+
                 // Activate step draggables.
                 new Draggable.Sortable(document.querySelector('.steps'), {
-                    draggable: '.step',
+                    draggable: '.draggable',
                     handle: '.draggable-handle',
                     mirror: {
                         appendTo: '.steps',
@@ -230,8 +239,14 @@
                  */
                 let addEntryNode = ($el) => {
                     // Create clone of template entry.
-                    let template = $el.querySelector(':scope .entry-template');
-                    let newEntry = template.cloneNode(true).firstElementChild;
+                    const template = $el.querySelector(':scope .entry-template');
+                    const newEntry = template.cloneNode(true).firstElementChild;
+
+                    // Set weight based on previous sibling.
+                    const lastWeight = template.previousElementSibling.querySelector('input[name="ingredients[weight][]"]');
+                    if (lastWeight && lastWeight.value) {
+                        newEntry.querySelector('input[name="ingredients[weight][]"]').value = Number.parseInt(lastWeight.value) + 1;
+                    }
 
                     // Insert new entry before add button.
                     $el.insertBefore(newEntry, template);

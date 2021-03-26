@@ -1,5 +1,5 @@
-<div class="step">
-    <x-inputs.input type="hidden" name="steps[original_key][]" :value="$original_key ?? null" />
+<div class="step draggable">
+    <x-inputs.input type="hidden" name="steps[key][]" :value="$key ?? null" />
     <div class="flex flex-row mb-4 space-x-4">
         <div class="draggable-handle self-center text-gray-500 bg-gray-100 p-2 cursor-move">
             <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

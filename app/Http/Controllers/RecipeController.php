@@ -88,7 +88,8 @@ class RecipeController extends Controller
                     continue;
                 }
                 $ingredients[] = [
-                    'original_key' => $old['original_key'][$key],
+                    'key' => $old['key'][$key],
+                    'weight' => $old['weight'][$key],
                     'amount' => $old['amount'][$key],
                     'unit' => $old['unit'][$key],
                     'ingredient_id' => $ingredient_id,
@@ -101,7 +102,8 @@ class RecipeController extends Controller
         else {
             foreach ($recipe->ingredientAmounts as $key => $ingredientAmount) {
                 $ingredients[] = [
-                    'original_key' => $key,
+                    'key' => $key,
+                    'weight' => $ingredientAmount->weight,
                     'amount' => $ingredientAmount->amount_formatted,
                     'unit' => $ingredientAmount->unit,
                     'ingredient_id' => $ingredientAmount->ingredient_id,
@@ -119,7 +121,7 @@ class RecipeController extends Controller
                     continue;
                 }
                 $steps[] = [
-                    'original_key' => $old['original_key'][$key],
+                    'key' => $old['key'][$key],
                     'step_default' => $step,
                 ];
             }
@@ -127,7 +129,7 @@ class RecipeController extends Controller
         else {
             foreach ($recipe->steps as $key => $step) {
                 $steps[] = [
-                    'original_key' => $key,
+                    'key' => $key,
                     'step_default' => $step->step,
                 ];
             }
@@ -175,15 +177,18 @@ class RecipeController extends Controller
             'ingredients.unit' => ['required', 'array'],
             'ingredients.unit.*' => ['required_with:ingredients.id.*'],
             'ingredients.detail' => ['required', 'array'],
-            'ingredients.detail.*' => 'nullable|string',
+            'ingredients.detail.*' => ['nullable', 'string'],
             'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
             'ingredients.type' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.type.*' => ['required_with:ingredients.id.*', 'nullable', new UsesIngredientTrait()],
-            'ingredients.original_key' => 'nullable|array',
+            'ingredients.key' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.key.*' => ['nullable', 'int'],
+            'ingredients.weight' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.weight.*' => ['required', 'int'],
             'steps.step' => ['required', 'array', new ArrayNotEmpty],
-            'steps.step.*' => 'nullable|string',
-            'steps.original_key' => 'nullable|array',
+            'steps.step.*' => ['nullable', 'string'],
+            'steps.key' => ['nullable', 'array'],
         ]);
 
         // Validate that no ingredients are recursive.
@@ -210,17 +215,16 @@ class RecipeController extends Controller
                 $recipe->saveOrFail();
 
                 // Delete any removed ingredients.
-                $removed = array_diff($recipe->ingredientAmounts->keys()->all(), $input['ingredients']['original_key']);
+                $removed = array_diff($recipe->ingredientAmounts->keys()->all(), $input['ingredients']['key']);
                 foreach ($removed as $removed_key) {
                     $recipe->ingredientAmounts[$removed_key]->delete();
                 }
 
                 // Add/update current ingredients.
                 $ingredient_amounts = [];
-                $weight = 0;
                 foreach (array_filter($input['ingredients']['id']) as $key => $ingredient_id) {
-                    if (!is_null($input['ingredients']['original_key'][$key])) {
-                        $ingredient_amounts[$key] = $recipe->ingredientAmounts[$input['ingredients']['original_key'][$key]];
+                    if (!is_null($input['ingredients']['key'][$key])) {
+                        $ingredient_amounts[$key] = $recipe->ingredientAmounts[$input['ingredients']['key'][$key]];
                     }
                     else {
                         $ingredient_amounts[$key] = new IngredientAmount();
@@ -229,7 +233,7 @@ class RecipeController extends Controller
                         'amount' => Number::floatFromString($input['ingredients']['amount'][$key]),
                         'unit' => $input['ingredients']['unit'][$key],
                         'detail' => $input['ingredients']['detail'][$key],
-                        'weight' => $weight++,
+                        'weight' => (int) $input['ingredients']['weight'][$key],
                     ]);
                     $ingredient_amounts[$key]->ingredient()
                         ->associate($input['ingredients']['type'][$key]::where('id', $ingredient_id)->first());
@@ -240,14 +244,14 @@ class RecipeController extends Controller
                 $number = 1;
 
                 // Delete any removed steps.
-                $removed = array_diff($recipe->steps->keys()->all(), $input['steps']['original_key']);
+                $removed = array_diff($recipe->steps->keys()->all(), $input['steps']['key']);
                 foreach ($removed as $removed_key) {
                     $recipe->steps[$removed_key]->delete();
                 }
 
                 foreach (array_filter($input['steps']['step']) as $key => $step) {
-                    if (!is_null($input['steps']['original_key'][$key])) {
-                        $steps[$key] = $recipe->steps[$input['steps']['original_key'][$key]];
+                    if (!is_null($input['steps']['key'][$key])) {
+                        $steps[$key] = $recipe->steps[$input['steps']['key'][$key]];
                     }
                     else {
                         $steps[$key] = new RecipeStep();
