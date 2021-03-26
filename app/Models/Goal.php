@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Support\Nutrients;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -37,8 +36,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 final class Goal extends Model
 {
-    use HasFactory;
-
     /**
      * Supported options for thr frequency attribute.
      */

@@ -10,6 +10,7 @@ use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
@@ -69,6 +70,11 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereDescriptionDelta($value)
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|Media[] $media
  * @property-read int|null $media_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecipeSeparator[] $ingredientSeparators
+ * @property-read int|null $ingredient_separators_count
+ * @method static \Database\Factories\RecipeFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimeCook($value)
+ * @property-read Collection $ingredients_list
  */
 final class Recipe extends Model implements HasMedia
 {
@@ -159,10 +165,33 @@ final class Recipe extends Model implements HasMedia
     }
 
     /**
+     * Get the ingredients list (ingredient amounts and separators).
+     */
+    public function getIngredientsListAttribute(): Collection {
+        return new Collection([
+            ...$this->ingredientAmounts,
+            ...$this->ingredientSeparators,
+        ]);
+    }
+
+    /**
      * Get the steps for this Recipe.
      */
     public function steps(): HasMany {
         return $this->hasMany(RecipeStep::class)->orderBy('number');
+    }
+
+    /**
+     * Get "separators" for the ingredients.
+     *
+     * Separators are used to adding headings or simple separations to the
+     * ingredients _list_ for a recipe. Their position is defined by weights
+     * compatible with ingredient weights.
+     */
+    public function ingredientSeparators(): HasMany {
+        return $this->hasMany(RecipeSeparator::class)
+            ->where('container', 'ingredients')
+            ->orderBy('weight');
     }
 
     /**

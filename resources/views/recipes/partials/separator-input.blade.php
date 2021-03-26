@@ -1,6 +1,6 @@
-<div class="ingredient draggable">
-    <x-inputs.input type="hidden" name="ingredients[key][]" :value="$key ?? null" />
-    <x-inputs.input type="hidden" name="ingredients[weight][]" :value="$weight ?? null" />
+<div class="separator draggable">
+    <x-inputs.input type="hidden" name="separators[key][]" :value="$key ?? null" />
+    <x-inputs.input type="hidden" name="separators[weight][]" :value="$weight ?? null" />
     <div class="flex items-center space-x-2">
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
             <div class="draggable-handle self-center text-gray-500 bg-gray-100 w-full md:w-auto p-2 cursor-move">
@@ -8,28 +8,13 @@
                     <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
                 </svg>
             </div>
-            <div class="w-full">
-                <x-ingredient-picker :default-id="$ingredient_id ?? null"
-                                     :default-type="$ingredient_type ?? null"
-                                     :default-name="$ingredient_name ?? null" />
-            </div>
-            <x-inputs.input name="ingredients[amount][]"
+            <x-inputs.label for="source" value="Separator text" class="hidden" />
+
+            <x-inputs.input name="separators[text][]"
                             type="text"
-                            size="5"
-                            placeholder="Amount"
-                            class="block"
-                            :value="$amount ?? null" />
-            <x-inputs.select name="ingredients[unit][]"
-                             class="block"
-                             :options="$ingredients_units"
-                             :selectedValue="$unit ?? null">
-                <option value="" selected>Unit</option>
-            </x-inputs.select>
-            <x-inputs.input name="ingredients[detail][]"
-                            type="text"
-                            class="block"
-                            placeholder="Detail (diced, chopped, etc.)"
-                            :value="$detail ?? null" />
+                            placeholder="Separator text (optional)"
+                            class="block w-full"
+                            :value="$text ?? null" />
         </div>
         <div class="flex-none">
             <x-inputs.icon-button type="button"

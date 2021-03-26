@@ -43,6 +43,7 @@ use Illuminate\Support\Pluralizer;
  * @mixin \Eloquent
  * @property-read string|null $unit_formatted
  * @property-read string $nutrients_summary
+ * @method static \Database\Factories\IngredientAmountFactory factory(...$parameters)
  */
 final class IngredientAmount extends Model
 {

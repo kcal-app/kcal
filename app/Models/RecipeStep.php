@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeStep whereStep($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeStep whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Database\Factories\RecipeStepFactory factory(...$parameters)
  */
 final class RecipeStep extends Model
 {
@@ -40,7 +41,7 @@ final class RecipeStep extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * @inheritdoc
      */
     protected $casts = [
         'number' => 'int',
