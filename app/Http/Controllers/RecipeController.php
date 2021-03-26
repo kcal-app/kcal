@@ -84,9 +84,6 @@ class RecipeController extends Controller
         $ingredients = [];
         if ($old = old('ingredients')) {
             foreach ($old['id'] as $key => $ingredient_id) {
-                if (empty($ingredient_id)) {
-                    continue;
-                }
                 $ingredients[] = [
                     'type' => 'ingredient',
                     'key' => $old['key'][$key],
@@ -119,9 +116,6 @@ class RecipeController extends Controller
         $separators = [];
         if ($old = old('separators')) {
             foreach ($old['key'] as $index => $key) {
-                if (empty($key)) {
-                    continue;
-                }
                 $separators[] = [
                     'type' => 'separator',
                     'key' => $old['key'][$index],
@@ -132,7 +126,7 @@ class RecipeController extends Controller
         }
         else {
             foreach ($recipe->ingredientSeparators as $key => $ingredientSeparator) {
-                $ingredients[] = [
+                $separators[] = [
                     'type' => 'separator',
                     'key' => $key,
                     'weight' => $ingredientSeparator->weight,
@@ -247,9 +241,7 @@ class RecipeController extends Controller
             DB::transaction(function () use ($recipe, $input) {
                 $recipe->saveOrFail();
                 $this->updateIngredients($recipe, $input);
-                if (isset($input['separators'])) {
-                    $this->updateIngredientSeparators($recipe, $input);
-                }
+                $this->updateIngredientSeparators($recipe, $input);
                 $this->updateSteps($recipe, $input);
             });
         } catch (\Exception $e) {
@@ -360,13 +352,21 @@ class RecipeController extends Controller
      * @throws \Exception
      */
     private function updateIngredientSeparators(Recipe $recipe, array $input): void {
+        // Take no action of remove all separators
+        if (!isset($input['separators']) || empty($input['separators'])) {
+            if ($recipe->ingredientSeparators->isNotEmpty()) {
+                $recipe->ingredientSeparators()->delete();
+            }
+            return;
+        }
+
         // Delete any removed separators.
         $removed = array_diff($recipe->ingredientSeparators->keys()->all(), $input['separators']['key']);
         foreach ($removed as $removed_key) {
             $recipe->ingredientSeparators[$removed_key]->delete();
         }
 
-        // Add/update current ingredients.
+        // Add/update current separators.
         $ingredient_separators = [];
         foreach ($input['separators']['key'] as $index => $key) {
             if (!is_null($key)) {
