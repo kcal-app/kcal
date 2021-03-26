@@ -69,6 +69,10 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereDescriptionDelta($value)
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|Media[] $media
  * @property-read int|null $media_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecipeSeparator[] $ingredientSeparators
+ * @property-read int|null $ingredient_separators_count
+ * @method static \Database\Factories\RecipeFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimeCook($value)
  */
 final class Recipe extends Model implements HasMedia
 {
@@ -163,6 +167,19 @@ final class Recipe extends Model implements HasMedia
      */
     public function steps(): HasMany {
         return $this->hasMany(RecipeStep::class)->orderBy('number');
+    }
+
+    /**
+     * Get "separators" for the ingredients.
+     *
+     * Separators are used to adding headings or simple separations to the
+     * ingredients _list_ for a recipe. Their position is defined by weights
+     * compatible with ingredient weights.
+     */
+    public function ingredientSeparators(): HasMany {
+        return $this->hasMany(RecipeSeparator::class)
+            ->where('container', 'ingredients')
+            ->orderBy('weight');
     }
 
     /**

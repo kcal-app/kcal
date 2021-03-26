@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Auth;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Goal[] $goals
  * @property-read int|null $goals_count
+ * @method static \Database\Factories\UserFactory factory(...$parameters)
  */
 final class User extends Authenticatable
 {

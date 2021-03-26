@@ -48,6 +48,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IngredientAmount[] $ingredients
  * @property-read int|null $ingredients_count
+ * @method static \Database\Factories\JournalEntryFactory factory(...$parameters)
  */
 final class JournalEntry extends Model
 {

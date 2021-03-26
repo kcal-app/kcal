@@ -72,6 +72,7 @@ use Spatie\Tags\HasTags;
  * @method static \Illuminate\Database\Eloquent\Builder|Food withAnyTagsOfAnyType($tags)
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|Food withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
+ * @method static \Database\Factories\FoodFactory factory(...$parameters)
  */
 final class Food extends Model
 {
