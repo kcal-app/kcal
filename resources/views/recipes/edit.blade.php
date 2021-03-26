@@ -4,7 +4,7 @@
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h1>
     </x-slot>
-    <form method="POST" enctype="multipart/form-data" action="{{ ($recipe->exists ? route('recipes.update', $recipe) : route('recipes.store')) }}">
+    <form x-data method="POST" enctype="multipart/form-data" action="{{ ($recipe->exists ? route('recipes.update', $recipe) : route('recipes.store')) }}">
         @if ($recipe->exists)@method('put')@endif
         @csrf
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
@@ -131,14 +131,20 @@
             @empty
                 @include('recipes.partials.ingredient-input')
             @endforelse
-            <div class="entry-template hidden">
-                @include('recipes.partials.ingredient-input')
+            <div class="templates hidden">
+                <div class="ingredient-template">
+                    @include('recipes.partials.ingredient-input')
+                </div>
+                <div class="separator-template">
+                    @include('recipes.partials.separator-input')
+                </div>
             </div>
-            <x-inputs.icon-button type="button" color="green" x-on:click="addEntryNode($el);">
-                <svg class="h-10 w-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                </svg>
-            </x-inputs.icon-button>
+            <x-inputs.button type="button" color="green" x-on:click="addNodeFromTemplate($el, 'ingredient');">
+                Add Ingredient
+            </x-inputs.button>
+            <x-inputs.button type="button" color="blue" x-on:click="addNodeFromTemplate($el, 'separator');">
+                Add Separator
+            </x-inputs.button>
         </div>
 
         <!-- Steps -->
@@ -149,18 +155,18 @@
             @empty
                 @include('recipes.partials.step-input')
             @endforelse
-            <div class="entry-template hidden">
-                @include('recipes.partials.step-input')
+            <div class="templates hidden">
+                <div class="step-template">
+                    @include('recipes.partials.step-input')
+                </div>
             </div>
-            <x-inputs.icon-button type="button" color="green" x-on:click="addEntryNode($el);">
-                <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                </svg>
-            </x-inputs.icon-button>
+            <x-inputs.button type="button" color="green" x-on:click="addNodeFromTemplate($el, 'step');">
+                Add Step
+            </x-inputs.button>
         </div>
 
-        <div x-data class="flex items-center justify-end mt-4">
-            <x-inputs.button x-on:click="prepareForm();" class="ml-3">
+        <div class="flex items-center justify-end mt-4">
+            <x-inputs.button x-on:click="prepareForm($el);" class="ml-3">
                 {{ ($recipe->exists ? 'Save' : 'Add') }}
             </x-inputs.button>
         </div>
@@ -215,9 +221,9 @@
                 // Recalculate weight (order) of all ingredients.
                 ingredientsSortable.on('drag:stopped', (e) => {
                     Array.from(e.sourceContainer.children)
-                        .filter(el => el.classList.contains('ingredient'))
+                        .filter(el => el.classList.contains('draggable'))
                         .forEach((el, index) => {
-                            el.querySelector('input[name="ingredients[weight][]"]').value = index;
+                            el.querySelector('input[name$="[weight][]"]').value = index;
                         });
                 })
 
@@ -233,35 +239,39 @@
             </script>
             <script type="text/javascript">
                 /**
-                 * Adds a set of entry form fields from the template.
+                 * Adds a node to ingredients or steps based on a template.
                  *
-                 * @param {object} $el Entry lines parent element.
+                 * @param {object} $el Parent element.
+                 * @param {string} type Template type -- "ingredient", "separator", or "step".
                  */
-                let addEntryNode = ($el) => {
-                    // Create clone of template entry.
-                    const template = $el.querySelector(':scope .entry-template');
-                    const newEntry = template.cloneNode(true).firstElementChild;
+                let addNodeFromTemplate = ($el, type) => {
+                    // Create clone of relevant template.
+                    const templates = $el.querySelector(`:scope .templates`);
+                    const template = templates.querySelector(`:scope .${type}-template`);
+                    const newNode = template.cloneNode(true).firstElementChild;
 
                     // Set weight based on previous sibling.
-                    const lastWeight = template.previousElementSibling.querySelector('input[name="ingredients[weight][]"]');
+                    const lastWeight = templates.previousElementSibling.querySelector('input[name$="[weight][]"]');
                     if (lastWeight && lastWeight.value) {
-                        newEntry.querySelector('input[name="ingredients[weight][]"]').value = Number.parseInt(lastWeight.value) + 1;
+                        newNode.querySelector('input[name$="[weight][]"]').value = Number.parseInt(lastWeight.value) + 1;
                     }
 
-                    // Insert new entry before add button.
-                    $el.insertBefore(newEntry, template);
+                    // Insert new node before templates.
+                    $el.insertBefore(newNode, templates);
                 }
 
                 /**
                  * Prepare form values for submit.
+                 *
+                 * @param {object} $el Form element.
                  */
-                let prepareForm = () => {
+                let prepareForm = ($el) => {
                     // Remove any hidden templates before form submit.
-                    document.querySelectorAll(':scope .entry-template').forEach(e => e.remove());
+                    $el.querySelectorAll(':scope .templates').forEach(e => e.remove());
 
                     // Add description values to hidden fields.
-                    document.querySelector('input[name="description_delta"]').value = JSON.stringify(description.getContents());
-                    document.querySelector('input[name="description"]').value = description.root.innerHTML
+                    $el.querySelector('input[name="description_delta"]').value = JSON.stringify(description.getContents());
+                    $el.querySelector('input[name="description"]').value = description.root.innerHTML
                         // Remove extraneous spaces from rendered result.
                         .replaceAll('<p><br></p>', '');
                 }
