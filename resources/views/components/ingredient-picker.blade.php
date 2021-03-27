@@ -11,10 +11,12 @@
                             x-ref="ingredients_type"/>
             <x-inputs.input type="text"
                             name="ingredients[name][]"
+                            class="w-full"
                             value="{{ $defaultName ?? '' }}"
                             placeholder="Search..."
                             autocomplete="off"
-                            class="w-full"
+                            autocapitalize="none"
+                            inputmode="search"
                             x-ref="ingredients_name"
                             x-spread="search" />
         </div>

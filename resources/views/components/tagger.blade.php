@@ -7,14 +7,15 @@
                             x-model="tags"/>
             <x-inputs.label for="tag_picker" value="Tags"/>
             <div class="flex flex-row items-center">
-                <x-inputs.input
-                    type="text"
-                    name="tag_picker"
-                    class="mr-2"
-                    x-model="searchTerm"
-                    x-ref="searchTerm"
-                    @input="search($event.target.value)"
-                    placeholder="Enter some tags..." />
+                <x-inputs.input name="tag_picker"
+                                type="text"
+                                class="mr-2"
+                                autocapitalize="none"
+                                inputmode="search"
+                                placeholder="Enter some tags..."
+                                x-model="searchTerm"
+                                x-ref="searchTerm"
+                                @input="search($event.target.value)" />
                 <div x-show="open">
                     <div class="absolute z-40 left-0 mt-2">
                         <div class="py-1 text-sm bg-white rounded shadow-lg border border-gray-300">

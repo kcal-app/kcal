@@ -116,6 +116,7 @@
                 <x-inputs.input name="source"
                                 type="text"
                                 class="block mt-1 w-full"
+                                inputmode="url"
                                 :value="old('source', $recipe->source)" />
             </div>
 

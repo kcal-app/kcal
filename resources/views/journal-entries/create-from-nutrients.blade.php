@@ -54,11 +54,10 @@
                     <x-inputs.label for="{{ $nutrient['value'] }}"
                                     :value="ucfirst($nutrient['value']) . ($nutrient['unit'] ? ' (' . $nutrient['unit'] . ')' : '')"/>
 
-                    <x-inputs.input id="{{ $nutrient['value'] }}"
-                                    class="block w-full"
+                    <x-inputs.input name="{{ $nutrient['value'] }}"
                                     type="number"
                                     step="any"
-                                    name="{{ $nutrient['value'] }}"
+                                    class="block w-full"
                                     :value="old($nutrient['value'])"/>
                 </div>
             @endforeach

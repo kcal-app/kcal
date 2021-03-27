@@ -28,6 +28,7 @@
             <x-inputs.input name="ingredients[detail][]"
                             type="text"
                             class="block"
+                            autocapitalize="none"
                             placeholder="Detail (diced, chopped, etc.)"
                             :value="$detail ?? null" />
         </div>

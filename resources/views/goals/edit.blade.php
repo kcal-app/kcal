@@ -37,7 +37,7 @@
                     </x-inputs.select>
                 </div>
 
-                <!-- Name -->
+                <!-- Trackable -->
                 <div class="flex-auto">
                     <x-inputs.label for="name" value="Trackable" />
                     <x-inputs.select name="name"

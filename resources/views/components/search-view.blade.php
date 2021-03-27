@@ -1,11 +1,13 @@
 <div x-data="searchView()" x-init="loadMore()">
     <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
         <nav class="md:w-1/4">
-            <x-inputs.input type="text"
-                            name="search"
-                            placeholder="Search..."
-                            autocomplete="off"
+            <x-inputs.input name="search"
+                            type="text"
                             class="w-full mb-4"
+                            autocomplete="off"
+                            autocapitalize="none"
+                            inputmode="search"
+                            placeholder="Search..."
                             @input.debounce.400ms="search($event)" />
             <details open>
                 <summary>Filters</summary>

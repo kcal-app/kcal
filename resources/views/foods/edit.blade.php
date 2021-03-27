@@ -13,10 +13,10 @@
                                 <div class="flex-auto">
                                     <x-inputs.label for="name" value="Name"/>
 
-                                    <x-inputs.input id="name"
-                                                    class="block mt-1 w-full"
+                                    <x-inputs.input name="name"
                                                     type="text"
-                                                    name="name"
+                                                    class="block mt-1 w-full"
+                                                    autocapitalize="none"
                                                     :value="old('name', $food->name)"
                                                     required/>
                                 </div>
@@ -25,10 +25,10 @@
                                 <div class="flex-auto">
                                     <x-inputs.label for="detail" value="Detail"/>
 
-                                    <x-inputs.input id="detail"
-                                                    class="block mt-1 w-full"
+                                    <x-inputs.input name="detail"
                                                     type="text"
-                                                    name="detail"
+                                                    class="block mt-1 w-full"
+                                                    autocapitalize="none"
                                                     :value="old('detail', $food->detail)"/>
                                 </div>
 
@@ -36,10 +36,9 @@
                                 <div class="flex-auto">
                                     <x-inputs.label for="brand" value="Brand"/>
 
-                                    <x-inputs.input id="brand"
-                                                    class="block mt-1 w-full"
+                                    <x-inputs.input name="brand"
                                                     type="text"
-                                                    name="brand"
+                                                    class="block mt-1 w-full"
                                                     :value="old('brand', $food->brand)"/>
                                 </div>
                             </div>
@@ -49,10 +48,9 @@
                                 <div>
                                     <x-inputs.label for="serving_size" value="Serving size"/>
 
-                                    <x-inputs.input id="serving_size"
-                                                    class="block mt-1 w-full"
+                                    <x-inputs.input name="serving_size"
                                                     type="text"
-                                                    name="serving_size"
+                                                    class="block mt-1 w-full"
                                                     size="10"
                                                     :value="old('serving_size', $food->serving_size_formatted)"
                                                     required/>
@@ -75,9 +73,10 @@
                                     <x-inputs.label for="serving_unit_name" value="Serving unit name"/>
 
                                     <x-inputs.input name="serving_unit_name"
-                                                    placeholder="e.g. clove, egg"
-                                                    class="block mt-1 w-full"
                                                     type="text"
+                                                    autocapitalize="none"
+                                                    class="block mt-1 w-full"
+                                                    placeholder="e.g. clove, egg"
                                                     size="10"
                                                     :value="old('serving_unit_name', $food->serving_unit_name)"/>
                                 </div>
@@ -86,11 +85,10 @@
                                 <div>
                                     <x-inputs.label for="serving_weight" value="Serving weight (g)"/>
 
-                                    <x-inputs.input id="serving_weight"
-                                                    class="block mt-1 w-full"
+                                    <x-inputs.input name="serving_weight"
                                                     type="number"
                                                     step="any"
-                                                    name="serving_weight"
+                                                    class="block mt-1 w-full"
                                                     size="10"
                                                     :value="old('serving_weight', $food->serving_weight)"
                                                     required/>
@@ -106,8 +104,8 @@
 
                                             <x-inputs.input name="{{ $nutrient['value'] }}"
                                                             type="number"
-                                                            class="block w-full mt-1 md:w-5/6"
                                                             step="any"
+                                                            class="block w-full mt-1 md:w-5/6"
                                                             :value="old($nutrient['value'], $food->{$nutrient['value']})"/>
                                         </div>
                                 @endforeach
@@ -123,6 +121,7 @@
                                 <x-inputs.input name="source"
                                                 type="text"
                                                 class="block mt-1 w-full"
+                                                inputmode="url"
                                                 :value="old('source', $food->source)" />
                             </div>
 
