@@ -203,7 +203,7 @@ class RecipeController extends Controller
             'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
             'ingredients.type' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.type.*' => ['required_with:ingredients.id.*', 'nullable', new UsesIngredientTrait()],
-            'ingredients.key' => ['required', 'array', new ArrayNotEmpty],
+            'ingredients.key' => ['nullable', 'array'],
             'ingredients.key.*' => ['nullable', 'int'],
             'ingredients.weight' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.weight.*' => ['required', 'int'],
