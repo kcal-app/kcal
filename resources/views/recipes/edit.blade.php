@@ -133,7 +133,7 @@
                     @include('recipes.partials.separator-input', $item)
                 @endif
             @empty
-                @include('recipes.partials.ingredient-input')
+                @include('recipes.partials.ingredient-input', ['weight' => 0])
             @endforelse
             <div class="templates hidden">
                 <div class="ingredient-template">
@@ -255,10 +255,17 @@
                     const newNode = template.cloneNode(true).firstElementChild;
 
                     // Set weight based on previous sibling.
-                    const lastWeight = templates.previousElementSibling.querySelector('input[name$="[weight][]"]');
-                    if (lastWeight && lastWeight.value) {
-                        newNode.querySelector('input[name$="[weight][]"]').value = Number.parseInt(lastWeight.value) + 1;
+                    const weightField = newNode.querySelector('input[name$="[weight][]"]');
+                    if (templates.previousElementSibling) {
+                        const lastWeight = templates.previousElementSibling.querySelector('input[name$="[weight][]"]');
+                        if (lastWeight && lastWeight.value) {
+                            weightField.value = Number.parseInt(lastWeight.value) + 1;
+                        }
                     }
+                    else {
+                        weightField.value = 0;
+                    }
+
 
                     // Insert new node before templates.
                     $el.insertBefore(newNode, templates);
