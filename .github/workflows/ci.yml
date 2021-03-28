@@ -7,18 +7,16 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
-          extensions: exif
+          coverage: xdebug
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: composer install --no-progress --no-interaction
+      - name: Generate app key
+        run: |
+          php -r "file_exists('.env') || copy('.env.example', '.env');"
+          php artisan key:generate
       - name: Run tests
-        uses: php-actions/phpunit@v2
-        with:
-          php_extensions: xdebug
-          configuration: phpunit.xml
-          args: --coverage-clover build/logs/clover.xml
-        env:
-          XDEBUG_MODE: coverage
+        run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
       - name: Upload coverage results to Coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
