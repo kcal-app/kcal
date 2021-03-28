@@ -1,0 +1,22 @@
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v5
+      - name: Run tests
+        uses: php-actions/phpunit@v2
+        with:
+          php_extensions: xdebug
+          configuration: phpunit.xml
+          args: --coverage-clover build/logs/clover.xml
+        env:
+          XDEBUG_MODE: coverage
+      - name: Upload coverage results to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          composer global require php-coveralls/php-coveralls
+          php-coveralls --coverage_clover=build/logs/clover.xml -v
