@@ -71,12 +71,6 @@ class Nutrients
 
     /**
      * Calculate a nutrient multiplier for a Food.
-     *
-     * @param \App\Models\Food $food
-     * @param float $amount
-     * @param string|null $fromUnit
-     *
-     * @return float
      */
     public static function calculateFoodNutrientMultiplier(
         Food $food,
@@ -93,6 +87,7 @@ class Nutrients
             return $amount / $food->serving_weight;
         }
 
+        // @todo Determine if `empty($food->serving_unit)` case makes sense.
         if (
             empty($fromUnit)
             || empty($food->serving_unit)
@@ -130,13 +125,6 @@ class Nutrients
 
     /**
      * Calculate a nutrient amount for a recipe.
-     *
-     * @param \App\Models\Recipe $recipe
-     * @param string $nutrient
-     * @param float $amount
-     * @param string $fromUnit
-     *
-     * @return float
      */
     public static function calculateRecipeNutrientAmount(
         Recipe $recipe,
