@@ -9,7 +9,8 @@ jobs:
           php-version: '8.0'
           extensions: exif
       - uses: actions/checkout@v2
-      - uses: php-actions/composer@v5
+      - name: Install dependencies
+        run: composer install --no-progress --no-interaction
       - name: Run tests
         uses: php-actions/phpunit@v2
         with:
