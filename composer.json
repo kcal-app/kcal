@@ -1,7 +1,7 @@
 {
-    "name": "pfnj/pfnj",
+    "name": "kcalapp/kcal",
     "type": "project",
-    "description": "Personal Food Nutrition Journal",
+    "description": "kcal – the personal food nutrition journal",
     "license": "MPL-2.0",
     "require": {
         "php": "^8.0",
