@@ -30,6 +30,7 @@
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "nunomaduro/larastan": "^0.6.13",
+        "php-coveralls/php-coveralls": "^2.4",
         "phpunit/phpunit": "^9.3.3"
     },
     "config": {
