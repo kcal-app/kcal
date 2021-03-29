@@ -8,6 +8,16 @@ jobs:
         with:
           php-version: '8.0'
           coverage: xdebug
+      - name: Configure sysctl limits for Elasticsearch
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+      - name: Run Elasticsearch
+        uses: elastic/elastic-github-actions/elasticsearch@master
+        with:
+          stack-version: '7.12.0'
       - uses: actions/checkout@v2
       - name: Get composer cache directory
         id: composer-cache
