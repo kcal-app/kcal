@@ -75,7 +75,7 @@ class GoalController extends Controller
         $attributes = $request->validate([
             'from' => ['nullable', 'date'],
             'to' => ['nullable', 'date'],
-            'frequency' => ['nullable', 'string'],
+            'frequency' => ['required', 'string'],
             'name' => ['required', 'string'],
             'goal' => ['required', 'numeric'],
         ]);

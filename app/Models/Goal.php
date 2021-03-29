@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Support\Nutrients;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -33,9 +34,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Database\Factories\GoalFactory factory(...$parameters)
  */
 final class Goal extends Model
 {
+    use HasFactory;
+
     /**
      * Supported options for thr frequency attribute.
      */
