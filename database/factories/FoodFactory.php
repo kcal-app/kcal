@@ -33,6 +33,7 @@ class FoodFactory extends Factory
             'sodium' => $this->faker->randomFloat(2, 0, 500),
             'carbohydrates' => $this->faker->randomFloat(2, 0, 20),
             'protein' => $this->faker->randomFloat(2, 0, 20),
+            'tags' => $this->faker->words,
         ];
     }
 

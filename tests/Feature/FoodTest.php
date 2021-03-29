@@ -11,13 +11,13 @@ class FoodTest extends LoggedInTestCase
 {
     use RefreshDatabase;
 
-    public function testCanLoadFoodIndex()
+    public function testCanLoadFoodIndex(): void
     {
         $response = $this->get('/foods');
         $response->assertOk();
     }
 
-    public function testCanAddFood()
+    public function testCanAddFood(): void
     {
         $create_url = action([FoodController::class, 'create']);
         $response = $this->get($create_url);
@@ -31,7 +31,24 @@ class FoodTest extends LoggedInTestCase
         $response->assertSee("Food {$food->name} updated!");
     }
 
-    public function testCanViewFood()
+    public function testCanAddFoodWithoutNutrients(): void
+    {
+        /** @var \App\Models\Food $food */
+        $food = Food::factory()->make([
+            'calories' => NULL,
+            'fat' => NULL,
+            'cholesterol' => NULL,
+            'sodium' => NULL,
+            'carbohydrates' => NULL,
+            'protein' => NULL,
+        ]);
+        $store_url = action([FoodController::class, 'store']);
+        $response = $this->followingRedirects()->post($store_url, $food->toArray());
+        $response->assertOk();
+        $response->assertSee("Food {$food->name} updated!");
+    }
+
+    public function testCanViewFood(): void
     {
         /** @var \App\Models\Food $food */
         $food = Food::factory()->create();
@@ -41,7 +58,7 @@ class FoodTest extends LoggedInTestCase
         $response->assertSee($food->name);
     }
 
-    public function testCanEditFood()
+    public function testCanEditFood(): void
     {
         /** @var \App\Models\Food $food */
         $food = Food::factory()->create();
@@ -50,14 +67,14 @@ class FoodTest extends LoggedInTestCase
         $response->assertOk();
 
         /** @var \App\Models\Food $new_food */
-        $new_food = Food::factory()->make();
+        $new_food = Food::factory()->make(['tags' => []]);
         $put_url = action([FoodController::class, 'update'], ['food' => $food]);
         $response = $this->followingRedirects()->put($put_url, $new_food->toArray());
         $response->assertOk();
         $response->assertSee("Food {$new_food->name} updated!");
     }
 
-    public function testCanDeleteFood()
+    public function testCanDeleteFood(): void
     {
         /** @var \App\Models\Food $food */
         $food = Food::factory()->create();
