@@ -32,7 +32,7 @@ class GoalFactory extends Factory
             'frequency' => $this->faker->randomElement(Goal::$frequencyOptions)['value'],
             'name' => $this->faker->randomElement(Goal::getNameOptions())['value'],
             'goal' => $this->faker->numberBetween(0, 2000),
-            'user' => $user,
+            'user_id' => $user->id,
         ];
     }
 }

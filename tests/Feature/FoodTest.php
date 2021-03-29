@@ -13,7 +13,8 @@ class FoodTest extends LoggedInTestCase
 
     public function testCanLoadFoodIndex(): void
     {
-        $response = $this->get('/foods');
+        $index_url = action([FoodController::class, 'index']);
+        $response = $this->get($index_url);
         $response->assertOk();
     }
 

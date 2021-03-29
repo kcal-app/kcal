@@ -2,7 +2,7 @@
     <x-slot name="title">Delete Goal</x-slot>
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight">
-            Delete {{ $goal->goal }} goal?
+            Delete {{ $goal->summary }} goal?
         </h1>
     </x-slot>
     <form method="POST" action="{{ route('goals.destroy', $goal) }}">
