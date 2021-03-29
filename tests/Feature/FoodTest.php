@@ -19,9 +19,14 @@ class FoodTest extends LoggedInTestCase
 
     public function testCanAddFood()
     {
+        $create_url = action([FoodController::class, 'create']);
+        $response = $this->get($create_url);
+        $response->assertOk();
+
         /** @var \App\Models\Food $food */
         $food = Food::factory()->make();
-        $response = $this->followingRedirects()->post('/foods', $food->toArray());
+        $store_url = action([FoodController::class, 'store']);
+        $response = $this->followingRedirects()->post($store_url, $food->toArray());
         $response->assertOk();
         $response->assertSee("Food {$food->name} updated!");
     }
