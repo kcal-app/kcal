@@ -21,6 +21,9 @@ class IngredientAmountFactory extends Factory
      */
     public function definition(): array
     {
+        // @todo Remove these hard-corded create statements.
+        // See: https://laravel.com/docs/8.x/database-testing#factory-relationships
+
         /** @var \App\Models\Recipe $recipe */
         $recipe = Recipe::factory()->create();
 

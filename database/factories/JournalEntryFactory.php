@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\JournalEntry;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class JournalEntryFactory extends Factory
@@ -18,10 +17,7 @@ class JournalEntryFactory extends Factory
      */
     public function definition(): array
     {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->create();
         return [
-            'user_id' => $user->id,
             'date' => $this->faker->dateTimeThisMonth,
             'summary' => $this->faker->realText(50),
             'calories' => $this->faker->randomFloat(2, 0, 500),
@@ -34,15 +30,4 @@ class JournalEntryFactory extends Factory
         ];
     }
 
-    /**
-     * Define a specific user.
-     */
-    public function user(User $user): static
-    {
-        return $this->state(function (array $attributes) use ($user) {
-            return [
-                'user_id' => $user->id,
-            ];
-        });
-    }
 }

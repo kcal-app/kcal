@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Http\Controllers\GoalController;
 use App\Models\Goal;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GoalControllerTest extends HttpControllerTestCase
@@ -33,6 +34,14 @@ class GoalControllerTest extends HttpControllerTestCase
     public function routeKey(): string
     {
         return 'goal';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function createInstance(): Model
+    {
+        return $this->factory()->for($this->user)->create();
     }
 
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Tests\LoggedInTestCase;
 
 abstract class HttpControllerTestCase extends LoggedInTestCase
@@ -22,6 +23,13 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
      * Get the route key used for the model to be tested.
      */
     abstract public function routeKey(): string;
+
+    /**
+     * Create an instance of the model being tested.
+     */
+    protected function createInstance(): Model {
+        return $this->factory()->create();
+    }
 
     public function testCanLoadIndex(): void
     {
@@ -45,7 +53,7 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
 
     public function testCanViewInstance(): void
     {
-        $instance = $this->factory()->create();
+        $instance = $this->createInstance();
         $view_url = action([$this->class(), 'show'], [$this->routeKey() => $instance]);
         $response = $this->get($view_url);
         $response->assertOk();
@@ -54,7 +62,7 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
 
     public function testCanEditInstance(): void
     {
-        $instance = $this->factory()->create();
+        $instance = $this->createInstance();
         $edit_url = action([$this->class(), 'edit'], [$this->routeKey() => $instance]);
         $response = $this->get($edit_url);
         $response->assertOk();
@@ -69,7 +77,7 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
 
     public function testCanDeleteInstance(): void
     {
-        $instance = $this->factory()->create();
+        $instance = $this->createInstance();
         $delete_url = action([$this->class(), 'delete'], [$this->routeKey() => $instance]);
         $response = $this->get($delete_url);
         $response->assertOk();
