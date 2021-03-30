@@ -8,21 +8,25 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class RecipeFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $model = Recipe::class;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function definition()
+    public function definition(): array
     {
+        $description = htmlspecialchars($this->faker->realText(500));
         return [
-            //
+            'name' => $this->faker->words($this->faker->numberBetween(1, 5), true),
+            'description' => "<p>{$description}</p>",
+            'description_delta' => '{"ops":[{"insert":"' . $description . '\n"}]}"',
+            'time_prep' => $this->faker->numberBetween(0, 20),
+            'time_cook' => $this->faker->numberBetween(0, 90),
+            'source' => $this->faker->optional()->url,
+            'servings' => $this->faker->numberBetween(1, 10),
+            'weight' => $this->faker->randomFloat(1, 60, 2000),
         ];
     }
 }

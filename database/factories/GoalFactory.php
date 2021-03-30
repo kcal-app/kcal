@@ -9,16 +9,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class GoalFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $model = Goal::class;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function definition()
     {
@@ -34,5 +30,17 @@ class GoalFactory extends Factory
             'goal' => $this->faker->numberBetween(0, 2000),
             'user_id' => $user->id,
         ];
+    }
+
+    /**
+     * Define a specific user.
+     */
+    public function user(User $user): static
+    {
+        return $this->state(function (array $attributes) use ($user) {
+            return [
+                'user_id' => $user->id,
+            ];
+        });
     }
 }
