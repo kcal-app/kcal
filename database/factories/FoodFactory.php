@@ -19,14 +19,14 @@ class FoodFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'detail' => $this->faker->sentence(2),
-            'brand' => $this->faker->word,
-            'source' => $this->faker->url,
-            'notes' => $this->faker->paragraph,
+            'detail' => $this->faker->optional()->sentence(2),
+            'brand' => $this->faker->optional()->word,
+            'source' => $this->faker->optional()->url,
+            'notes' => $this->faker->optional(0.25)->paragraph,
             'serving_size' => $this->faker->randomFloat(2, 1/2, 5),
             'serving_unit' => $this->faker->randomElement(['tsp', 'tbsp', 'cup']),
             'serving_weight' => $this->faker->numberBetween(5, 500),
-            'serving_unit_name' => $this->faker->word,
+            'serving_unit_name' => $this->faker->optional(0.25)->word,
             'calories' => $this->faker->randomFloat(2, 0, 100),
             'fat' => $this->faker->randomFloat(2, 0, 10),
             'cholesterol' => $this->faker->randomFloat(2, 0, 100),
@@ -38,7 +38,7 @@ class FoodFactory extends Factory
     }
 
     /**
-     * Make instance with "tsp" serving unit.
+     * Define a "tsp" serving unit.
      */
     public function tspServingUnit()
     {
@@ -51,7 +51,7 @@ class FoodFactory extends Factory
     }
 
     /**
-     * Make instance with "tbsp" serving unit.
+     * Define a "tbsp" serving unit.
      */
     public function tbspServingUnit()
     {
@@ -64,7 +64,7 @@ class FoodFactory extends Factory
     }
 
     /**
-     * Make instance with "cup" serving unit.
+     * Define a "cup" serving unit.
      */
     public function cupServingUnit()
     {
@@ -77,7 +77,7 @@ class FoodFactory extends Factory
     }
 
     /**
-     * Make instance with no" serving unit.
+     * Define no serving unit.
      */
     public function noServingUnit()
     {

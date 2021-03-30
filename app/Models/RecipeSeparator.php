@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -27,9 +28,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeSeparator whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeSeparator whereWeight($value)
  * @mixin \Eloquent
+ * @method static \Database\Factories\RecipeSeparatorFactory factory(...$parameters)
  */
 final class RecipeSeparator extends Model
 {
+    use HasFactory;
+
     /**
      * @inheritdoc
      */
