@@ -21,32 +21,26 @@ class IngredientAmountFactory extends Factory
      */
     public function definition(): array
     {
-        // @todo Remove these hard-corded create statements.
-        // See: https://laravel.com/docs/8.x/database-testing#factory-relationships
-
-        /** @var \App\Models\Recipe $recipe */
-        $recipe = Recipe::factory()->create();
-
         if ($this->faker->boolean(90)) {
-            /** @var \App\Models\Food $ingredient */
-            $ingredient = Food::factory()->create();
-            $unit = Nutrients::units()->pluck('value')->random(1)->first();
+            $ingredient_factory = Food::factory();
+            $ingredient_type = Food::class;
+            $ingredient_unit = Nutrients::units()->pluck('value')->random(1)->first();
         }
         else {
-            /** @var \App\Models\Recipe $ingredient */
-            $ingredient = Recipe::factory()->create();
-            $unit = 'serving';
+            $ingredient_factory = Recipe::factory();
+            $ingredient_type = Recipe::class;
+            $ingredient_unit = 'serving';
         }
 
         return [
-            'ingredient_id' => $ingredient->id,
-            'ingredient_type' => $ingredient::class,
+            'ingredient_id' => $ingredient_factory,
+            'ingredient_type' => $ingredient_type,
             'amount' => $this->faker->randomFloat(1, 1/3, 5),
-            'unit' => $unit,
+            'unit' => $ingredient_unit,
             'detail' => $this->faker->optional(0.8)->realText(),
-            'weight' => $this->faker->optional(0.8)->numberBetween(0, 50),
-            'parent_id' => $recipe->id,
-            'parent_type' => $recipe::class,
+            'weight' => $this->faker->numberBetween(0, 50),
+            'parent_id' => Recipe::factory(),
+            'parent_type' => Recipe::class,
         ];
     }
 

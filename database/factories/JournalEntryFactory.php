@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\JournalEntry;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class JournalEntryFactory extends Factory
@@ -18,6 +19,7 @@ class JournalEntryFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory(),
             'date' => $this->faker->dateTimeThisMonth,
             'summary' => $this->faker->realText(50),
             'calories' => $this->faker->randomFloat(2, 0, 500),
