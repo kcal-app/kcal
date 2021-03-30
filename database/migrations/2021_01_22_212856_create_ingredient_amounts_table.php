@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Nutrients;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ class CreateIngredientAmountsTable extends Migration
             $table->unsignedInteger('ingredient_id');
             $table->string('ingredient_type');
             $table->unsignedFloat('amount');
-            $table->enum('unit', ['tsp', 'tbsp', 'cup', 'oz', 'gram', 'serving'])->nullable();
+            $table->enum('unit', Nutrients::units()->pluck('value')->toArray())->nullable();
             $table->string('detail')->nullable();
             $table->unsignedInteger('weight');
             $table->unsignedInteger('parent_id')->index();

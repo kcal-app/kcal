@@ -10,14 +10,43 @@ class Nutrients
 {
     public static float $gramsPerOunce = 28.349523125;
 
-    public static array $units = [
-        'cup' => ['value' => 'cup', 'label' => 'cup'],
-        'gram' => ['value' => 'gram', 'label' => 'grams'],
-        'oz' => ['value' => 'oz', 'label' => 'oz'],
-        'serving' => ['value' => 'serving', 'label' => 'servings'],
-        'tbsp' => ['value' => 'tbsp', 'label' => 'tbsp.'],
-        'tsp' => ['value' => 'tsp', 'label' => 'tsp.'],
-    ];
+    /**
+     * Get all supported units and metadata.
+     *
+     * Each entry has two keys:
+     *  - value: Machine name for the unit.
+     *  - label: Human-readable name for the unit.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function units(): Collection {
+        return new Collection([
+            'cup' => [
+                'value' => 'cup',
+                'label' => 'cup'
+            ],
+            'gram' => [
+                'value' => 'gram',
+                'label' => 'gram'
+            ],
+            'oz' => [
+                'value' => 'oz',
+                'label' => 'oz'
+            ],
+            'serving' => [
+                'value' => 'serving',
+                'label' => 'serving'
+            ],
+            'tbsp' => [
+                'value' => 'tbsp',
+                'label' => 'tbsp.'
+            ],
+            'tsp' => [
+                'value' => 'tsp',
+                'label' => 'tsp.'
+            ],
+        ]);
+    }
 
     /**
      * Get all trackable "nutrients" (calories are not technically a nutrient).

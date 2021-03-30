@@ -167,7 +167,7 @@ class RecipeController extends Controller
             ->with('recipe_tags', $recipe_tags)
             ->with('ingredients_list', new Collection([...$ingredients, ...$separators]))
             ->with('steps', $steps)
-            ->with('ingredients_units', Nutrients::$units);
+            ->with('ingredients_units', Nutrients::units()->toArray());
     }
 
     /**
