@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\JournalEntry;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -25,7 +26,7 @@ class CreateJournalEntriesTable extends Migration
             $table->unsignedFloat('sodium')->default(0);
             $table->unsignedFloat('carbohydrates')->default(0);
             $table->unsignedFloat('protein')->default(0);
-            $table->enum('meal', ['breakfast', 'lunch', 'dinner', 'snacks']);
+            $table->enum('meal', JournalEntry::meals()->pluck('value')->toArray());
             $table->timestamps();
         });
     }

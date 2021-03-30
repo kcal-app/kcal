@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\JournalEntry
@@ -88,14 +89,31 @@ final class JournalEntry extends Model
     protected $with = ['user', 'foods:id,name,slug', 'recipes:id,name,slug'];
 
     /**
-     * Valid meal options.
+     * Get all supported meals and metadata.
+     *
+     * Each entry has two keys:
+     *  - value: Machine name for the meal.
+     *  - label: Human-readable name for the meal.
+     *
+     * @return \Illuminate\Support\Collection
      */
-    public static array $meals = [
-        ['value' => 'breakfast', 'label' => 'Breakfast'],
-        ['value' => 'lunch', 'label' => 'Lunch'],
-        ['value' => 'dinner', 'label' => 'Dinner'],
-        ['value' => 'snacks', 'label' => 'Snacks'],
-    ];
+    public static function meals(): Collection {
+        return new Collection([
+            [
+                'value' => 'breakfast',
+                'label' => 'Breakfast'
+            ],
+            [
+                'value' => 'lunch',
+                'label' => 'Lunch'],
+            [
+                'value' => 'dinner',
+                'label' => 'Dinner'],
+            [
+                'value' => 'snacks',
+                'label' => 'Snacks'],
+        ]);
+    }
 
     /**
      * Get the User this entry belongs to.

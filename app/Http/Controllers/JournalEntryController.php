@@ -96,7 +96,7 @@ class JournalEntryController extends Controller
 
         return view('journal-entries.create')
             ->with('ingredients', $ingredients)
-            ->with('meals', JournalEntry::$meals)
+            ->with('meals', JournalEntry::meals()->toArray())
             ->with('units', Nutrients::units()->toArray())
             ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
@@ -108,7 +108,7 @@ class JournalEntryController extends Controller
     {
         $date = $request->date ?? Carbon::now()->toDateString();
         return view('journal-entries.create-from-nutrients')
-            ->with('meals', JournalEntry::$meals)
+            ->with('meals', JournalEntry::meals()->toArray())
             ->with('units', Nutrients::units()->toArray())
             ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
@@ -122,7 +122,12 @@ class JournalEntryController extends Controller
             'ingredients.date' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.date.*' => ['nullable', 'date', 'required_with:ingredients.id.*'],
             'ingredients.meal' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.meal.*' => ['nullable', 'string', 'required_with:ingredients.id.*', new InArray(array_column(JournalEntry::$meals, 'value'))],
+            'ingredients.meal.*' => [
+                'nullable',
+                'string',
+                'required_with:ingredients.id.*',
+                new InArray(JournalEntry::meals()->pluck('value')->toArray())
+            ],
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
             'ingredients.unit' => ['required', 'array'],
@@ -225,7 +230,11 @@ class JournalEntryController extends Controller
     public function storeFromNutrients(Request $request): RedirectResponse {
         $attributes = $request->validate([
             'date' => ['required', 'date'],
-            'meal' => ['required', 'string', new InArray(array_column(JournalEntry::$meals, 'value'))],
+            'meal' => [
+                'required',
+                'string',
+                new InArray(JournalEntry::meals()->pluck('value')->toArray())
+            ],
             'summary' => ['required', 'string'],
             'calories' => ['nullable', 'required_without_all:fat,cholesterol,sodium,carbohydrates,protein', 'numeric'],
             'fat' => ['nullable', 'required_without_all:calories,cholesterol,sodium,carbohydrates,protein', 'numeric'],
