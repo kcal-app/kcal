@@ -248,20 +248,21 @@ class JournalEntryController extends Controller
     /**
      * Confirm removal of the specified resource.
      */
-    public function delete(JournalEntry $journalEntry): View
+    public function delete(JournalEntry $journal_entry): View
     {
-        return view('journal-entries.delete')->with('entry', $journalEntry);
+        return view('journal-entries.delete')
+            ->with('journal_entry', $journal_entry);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(JournalEntry $journalEntry): RedirectResponse
+    public function destroy(JournalEntry $journal_entry): RedirectResponse
     {
-        $journalEntry->delete();
+        $journal_entry->delete();
         session()->flash('message', 'Journal entry deleted!');
         return redirect(route('journal-entries.index', [
-            'date' => $journalEntry->date->toDateString()
+            'date' => $journal_entry->date->toDateString()
         ]));
     }
 }
