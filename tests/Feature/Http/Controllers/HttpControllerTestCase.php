@@ -48,7 +48,6 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
         $response = $this->followingRedirects()->post($store_url, $instance->toArray());
         $response->assertOk();
         $response->assertSessionHasNoErrors();
-        $response->assertViewHas($this->routeKey());
     }
 
     public function testCanViewInstance(): void
@@ -87,9 +86,7 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
         $response = $this->followingRedirects()->delete($destroy_url);
         $response->assertOk();
 
-        $view_url = action([$this->class(), 'show'], [$this->routeKey() => $instance]);
-        $response = $this->get($view_url);
-        $response->assertNotFound();
+        $this->assertNull($instance->fresh());
     }
 
 }

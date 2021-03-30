@@ -39,7 +39,7 @@ Route::get('/ingredient-picker/search', [IngredientPickerController::class, 'sea
 Route::get('/journal-entries/create/from-nutrients', [JournalEntryController::class, 'createFromNutrients'])->middleware(['auth'])->name('journal-entries.create.from-nutrients');
 Route::post('/journal-entries/create/from-nutrients', [JournalEntryController::class, 'storeFromNutrients'])->middleware(['auth'])->name('journal-entries.store.from-nutrients');
 Route::resource('journal-entries', JournalEntryController::class)->middleware(['auth']);
-Route::get('/journal-entries/{journalEntry}/delete', [JournalEntryController::class, 'delete'])->middleware(['auth'])->name('journal-entries.delete');
+Route::get('/journal-entries/{journal_entry}/delete', [JournalEntryController::class, 'delete'])->middleware(['auth'])->name('journal-entries.delete');
 
 // Recipes.
 Route::resource('recipes', RecipeController::class)->middleware(['auth']);
