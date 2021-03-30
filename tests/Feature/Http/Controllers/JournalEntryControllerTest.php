@@ -2,9 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Http\Controllers\GoalController;
 use App\Http\Controllers\JournalEntryController;
-use App\Models\Goal;
 use App\Models\JournalEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
@@ -69,8 +67,7 @@ class JournalEntryControllerTest extends HttpControllerTestCase
         $response->assertOk();
         $instance = $this->factory()->make();
         $store_url = action([$this->class(), 'storeFromNutrients']);
-        $response = $this->followingRedirects()->post($store_url, $instance->toArray());
-        $response->assertOk();
+        $response = $this->post($store_url, $instance->toArray());
         $response->assertSessionHasNoErrors();
     }
 

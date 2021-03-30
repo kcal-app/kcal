@@ -45,8 +45,7 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
         $response->assertOk();
         $instance = $this->factory()->make();
         $store_url = action([$this->class(), 'store']);
-        $response = $this->followingRedirects()->post($store_url, $instance->toArray());
-        $response->assertOk();
+        $response = $this->post($store_url, $instance->toArray());
         $response->assertSessionHasNoErrors();
     }
 
@@ -68,10 +67,8 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
 
         $new_instance = $this->factory()->make();
         $put_url = action([$this->class(), 'update'], [$this->routeKey() => $instance]);
-        $response = $this->followingRedirects()->put($put_url, $new_instance->toArray());
-        $response->assertOk();
+        $response = $this->put($put_url, $new_instance->toArray());
         $response->assertSessionHasNoErrors();
-        $response->assertViewHas($this->routeKey());
     }
 
     public function testCanDeleteInstance(): void
