@@ -97,7 +97,7 @@ class JournalEntryController extends Controller
         return view('journal-entries.create')
             ->with('ingredients', $ingredients)
             ->with('meals', JournalEntry::$meals)
-            ->with('units', Nutrients::$units)
+            ->with('units', Nutrients::units()->toArray())
             ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
 
@@ -109,7 +109,7 @@ class JournalEntryController extends Controller
         $date = $request->date ?? Carbon::now()->toDateString();
         return view('journal-entries.create-from-nutrients')
             ->with('meals', JournalEntry::$meals)
-            ->with('units', Nutrients::$units)
+            ->with('units', Nutrients::units()->toArray())
             ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
 
