@@ -4,8 +4,7 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Http\Controllers\GoalController;
 use App\Models\Goal;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Model;
+use Database\Factories\GoalFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GoalControllerTest extends HttpControllerTestCase
@@ -23,7 +22,7 @@ class GoalControllerTest extends HttpControllerTestCase
     /**
      * @inheritdoc
      */
-    public function factory(): Factory
+    public function factory(): GoalFactory
     {
         return Goal::factory();
     }
@@ -39,7 +38,7 @@ class GoalControllerTest extends HttpControllerTestCase
     /**
      * @inheritdoc
      */
-    protected function createInstance(): Model
+    protected function createInstance(): Goal
     {
         return $this->factory()->for($this->user)->create();
     }

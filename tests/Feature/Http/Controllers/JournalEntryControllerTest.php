@@ -5,8 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Http\Controllers\JournalEntryController;
 use App\Models\IngredientAmount;
 use App\Models\JournalEntry;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Model;
+use Database\Factories\JournalEntryFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -25,7 +24,7 @@ class JournalEntryControllerTest extends HttpControllerTestCase
     /**
      * @inheritdoc
      */
-    public function factory(): Factory
+    public function factory(): JournalEntryFactory
     {
         return JournalEntry::factory();
     }
@@ -41,7 +40,7 @@ class JournalEntryControllerTest extends HttpControllerTestCase
     /**
      * @inheritdoc
      */
-    protected function createInstance(): Model
+    protected function createInstance(): JournalEntry
     {
         return $this->factory()->for($this->user)->create();
     }
@@ -87,10 +86,11 @@ class JournalEntryControllerTest extends HttpControllerTestCase
             'date' => [], 'meal' => [], 'amount' => [], 'unit' => [],
             'id' => [], 'type' => [],
         ];
-        /** @var \App\Models\IngredientAmount[] $ingredient_amounts */
+
         $ingredient_amounts = IngredientAmount::factory()
             ->count(10)
             ->make(['parent_id' => null, 'parent_type' => null]);
+        /** @var \App\Models\IngredientAmount $ingredient_amount */
         foreach ($ingredient_amounts as $ingredient_amount) {
             $ingredients['date'][] = $this->faker->dateTimeThisMonth;
             $ingredients['meal'][] = $this->faker->randomElement(JournalEntry::meals()->pluck('value')->toArray());
