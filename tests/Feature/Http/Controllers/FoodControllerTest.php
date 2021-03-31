@@ -4,7 +4,7 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Http\Controllers\FoodController;
 use App\Models\Food;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Database\Factories\FoodFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FoodControllerTest extends HttpControllerTestCase
@@ -22,7 +22,7 @@ class FoodControllerTest extends HttpControllerTestCase
     /**
      * @inheritdoc
      */
-    public function factory(): Factory
+    public function factory(): FoodFactory
     {
         return Food::factory();
     }
@@ -38,7 +38,7 @@ class FoodControllerTest extends HttpControllerTestCase
     public function testCanAddFoodWithoutNutrients(): void
     {
         /** @var \App\Models\Food $food */
-        $food = Food::factory()->make([
+        $food = $this->factory()->make([
             'calories' => NULL,
             'fat' => NULL,
             'cholesterol' => NULL,

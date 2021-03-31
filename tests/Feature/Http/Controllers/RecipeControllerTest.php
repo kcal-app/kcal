@@ -7,8 +7,8 @@ use App\Models\IngredientAmount;
 use App\Models\Recipe;
 use App\Models\RecipeSeparator;
 use App\Models\RecipeStep;
+use Database\Factories\RecipeFactory;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -27,7 +27,7 @@ class RecipeControllerTest extends HttpControllerTestCase
     /**
      * @inheritdoc
      */
-    public function factory(): Factory
+    public function factory(): RecipeFactory
     {
         return Recipe::factory();
     }
