@@ -71,6 +71,14 @@ class RecipeAdapter extends AbstractAdapter
     }
 
     /**
+     * Ingredient amount relationships.
+     */
+    protected function separators(): HasMany
+    {
+        return $this->hasMany();
+    }
+
+    /**
      * Step relationships.
      */
     protected function steps(): HasMany
