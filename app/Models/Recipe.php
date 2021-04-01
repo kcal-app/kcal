@@ -75,6 +75,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Database\Factories\RecipeFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTimeCook($value)
  * @property-read Collection $ingredients_list
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecipeSeparator[] $separators
+ * @property-read int|null $separators_count
  */
 final class Recipe extends Model implements HasMedia
 {
@@ -182,14 +184,23 @@ final class Recipe extends Model implements HasMedia
     }
 
     /**
-     * Get "separators" for the ingredients.
+     * Get "separators" for the recipe.
      *
-     * Separators are used to adding headings or simple separations to the
+     * Separators are used to add headings or simple separations to the
      * ingredients _list_ for a recipe. Their position is defined by weights
      * compatible with ingredient weights.
+     *
+     * @todo Add support for step separators
+     */
+    public function separators(): HasMany {
+        return $this->hasMany(RecipeSeparator::class);
+    }
+
+    /**
+     * Get ingredient separators.
      */
     public function ingredientSeparators(): HasMany {
-        return $this->hasMany(RecipeSeparator::class)
+        return $this->separators()
             ->where('container', 'ingredients')
             ->orderBy('weight');
     }

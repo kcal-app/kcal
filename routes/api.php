@@ -30,8 +30,12 @@ JsonApi::register('v1')->routes(function ($api) {
     $api->resource('recipes')->relationships(function ($relations) {
         $relations->hasMany('ingredient-amounts')->readOnly();
         $relations->hasMany('media')->readOnly();
+        $relations->hasMany('separators')->readOnly();
         $relations->hasMany('steps')->readOnly();
         $relations->hasMany('tags')->readOnly();
+    })->readOnly();
+    $api->resource('recipe-separators')->relationships(function ($relations) {
+        $relations->hasOne('recipe')->readOnly();
     })->readOnly();
     $api->resource('recipe-steps')->relationships(function ($relations) {
         $relations->hasOne('recipe')->readOnly();

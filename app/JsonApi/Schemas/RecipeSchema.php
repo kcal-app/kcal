@@ -62,7 +62,6 @@ class RecipeSchema extends SchemaProvider
     {
         return [
             'ingredient-amounts' => [
-                self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['ingredient-amounts']),
                 self::DATA => function () use ($resource) {
@@ -70,15 +69,20 @@ class RecipeSchema extends SchemaProvider
                 },
             ],
             'media' => [
-                self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['media']),
                 self::DATA => function () use ($resource) {
                     return $resource->media;
                 },
             ],
+            'separators' => [
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA => isset($includeRelationships['separators']),
+                self::DATA => function () use ($resource) {
+                    return $resource->separators;
+                },
+            ],
             'steps' => [
-                self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['steps']),
                 self::DATA => function () use ($resource) {
@@ -86,7 +90,6 @@ class RecipeSchema extends SchemaProvider
                 },
             ],
             'tags' => [
-                self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['tags']),
                 self::DATA => function () use ($resource) {

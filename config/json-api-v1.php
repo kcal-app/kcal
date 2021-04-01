@@ -71,6 +71,7 @@ return [
         'media' => \Spatie\MediaLibrary\MediaCollections\Models\Media::class,
         'journal-entries' => \App\Models\JournalEntry::class,
         'recipes' => \App\Models\Recipe::class,
+        'recipe-separators' => \App\Models\RecipeSeparator::class,
         'recipe-steps' => \App\Models\RecipeStep::class,
         'tags' => \App\Models\Tag::class,
         'users' => \App\Models\User::class,
