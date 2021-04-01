@@ -19,13 +19,13 @@ JsonApi::register('v1')->routes(function ($api) {
         $relations->hasOne('ingredient')->readOnly();
         $relations->hasOne('parent')->readOnly();
     })->readOnly();
-    $api->resource('media')->relationships(function ($relations) {
-        $relations->hasOne('owner')->readOnly();
-    })->readOnly();
     $api->resource('journal-entries')->relationships(function ($relations) {
         $relations->hasMany('foods')->readOnly();
         $relations->hasMany('recipes')->readOnly();
         $relations->hasOne('user')->readOnly();
+    })->readOnly();
+    $api->resource('media')->relationships(function ($relations) {
+        $relations->hasOne('owner')->readOnly();
     })->readOnly();
     $api->resource('recipes')->relationships(function ($relations) {
         $relations->hasMany('ingredient-amounts')->readOnly();
