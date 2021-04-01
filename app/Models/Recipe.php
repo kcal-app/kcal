@@ -6,6 +6,7 @@ use App\Models\Traits\HasIngredients;
 use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
+use App\Models\Traits\Taggable;
 use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,6 @@ use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Tags\HasTags;
 
 /**
  * App\Models\Recipe
@@ -80,13 +80,13 @@ final class Recipe extends Model implements HasMedia
 {
     use HasFactory;
     use HasIngredients;
-    use HasTags;
     use Ingredient;
     use InteractsWithMedia;
     use Journalable;
     use QueryDsl;
     use Searchable;
     use Sluggable;
+    use Taggable;
 
     /**
      * @inheritdoc

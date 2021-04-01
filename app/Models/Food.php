@@ -5,12 +5,12 @@ namespace App\Models;
 use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
+use App\Models\Traits\Taggable;
 use App\Support\Number;
 use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Spatie\Tags\HasTags;
 
 /**
  * App\Models\Food
@@ -77,12 +77,12 @@ use Spatie\Tags\HasTags;
 final class Food extends Model
 {
     use HasFactory;
-    use HasTags;
     use Ingredient;
     use Journalable;
     use QueryDsl;
     use Searchable;
     use Sluggable;
+    use Taggable;
 
     /**
      * @inheritdoc
@@ -152,6 +152,14 @@ final class Food extends Model
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function getTagClassName(): string
+    {
+        return Tag::class;
     }
 
     /**
