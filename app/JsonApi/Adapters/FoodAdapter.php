@@ -52,10 +52,7 @@ class FoodAdapter extends AbstractAdapter
             });
         }
     }
-
-    /**
-     * Tag relationships.
-     */
+    
     protected function tags(): HasMany
     {
         return $this->hasMany();

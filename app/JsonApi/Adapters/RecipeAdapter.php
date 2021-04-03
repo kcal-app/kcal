@@ -54,41 +54,26 @@ class RecipeAdapter extends AbstractAdapter
         }
     }
 
-    /**
-     * Ingredient amount relationships.
-     */
     protected function ingredientAmounts(): MorphHasMany
     {
         return $this->morphMany($this->hasMany('ingredientAmounts'));
     }
 
-    /**
-     * Media relationships.
-     */
     protected function media(): MorphHasMany
     {
         return $this->morphMany($this->hasMany('media'));
     }
 
-    /**
-     * Ingredient amount relationships.
-     */
     protected function separators(): HasMany
     {
         return $this->hasMany();
     }
 
-    /**
-     * Step relationships.
-     */
     protected function steps(): HasMany
     {
         return $this->hasMany();
     }
 
-    /**
-     * Tag relationships.
-     */
     protected function tags(): HasMany
     {
         return $this->hasMany();

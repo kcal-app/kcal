@@ -42,9 +42,6 @@ class IngredientAmountAdapter extends AbstractAdapter
         $this->filterWithScopes($query, $filters);
     }
 
-    /**
-     * Ingredient relationship.
-     */
     protected function ingredient(): BelongsTo
     {
         return $this->belongsTo();
