@@ -27,6 +27,7 @@ class RecipeFactory extends Factory
             'source' => $this->faker->optional()->url,
             'servings' => $this->faker->numberBetween(1, 10),
             'weight' => $this->faker->randomFloat(1, 60, 2000),
+            'tags' => $this->faker->words,
         ];
     }
 }

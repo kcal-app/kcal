@@ -7,10 +7,11 @@ use App\Models\RecipeSeparator;
 use Database\Factories\RecipeSeparatorFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Feature\JsonApi\Traits\BelongsToRecipe;
 
 class RecipeSeparatorApiTest extends JsonApiTestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, BelongsToRecipe;
 
     /**
      * @inheritdoc
@@ -32,7 +33,8 @@ class RecipeSeparatorApiTest extends JsonApiTestCase
      * @inheritdoc
      */
     protected function createInstances(int $count = 1): Collection {
-        return Recipe::factory()->count(1)->hasSeparators($count)->create();
+        $recipe = Recipe::factory()->create();
+        return $this->factory()->count($count)->for($recipe)->create();
     }
 
 }

@@ -3,14 +3,14 @@
 namespace Tests\Feature\JsonApi;
 
 use App\Models\Goal;
-use App\Models\User;
 use Database\Factories\GoalFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Feature\JsonApi\Traits\BelongsToUser;
 
 class GoalApiTest extends JsonApiTestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, BelongsToUser;
 
     /**
      * @inheritdoc
@@ -32,7 +32,7 @@ class GoalApiTest extends JsonApiTestCase
      * @inheritdoc
      */
     protected function createInstances(int $count = 1): Collection {
-        return User::factory()->count(1)->hasGoals($count)->create();
+        return $this->factory()->count($count)->for($this->user)->create();
     }
 
 }
