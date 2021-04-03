@@ -36,6 +36,7 @@
                 </svg>
             </div>
             <x-inputs.button
+                type="button"
                 class="text-xl mt-4"
                 class="bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900 ring-blue-300"
                 x-show="morePages"

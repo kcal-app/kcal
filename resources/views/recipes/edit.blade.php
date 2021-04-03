@@ -144,11 +144,13 @@
                     @include('recipes.partials.separator-input')
                 </div>
             </div>
-            <x-inputs.button class="bg-green-800 hover:bg-green-700 active:bg-green-900 focus:border-green-900 ring-green-300"
+            <x-inputs.button type="button"
+                             class="bg-green-800 hover:bg-green-700 active:bg-green-900 focus:border-green-900 ring-green-300"
                              x-on:click="addNodeFromTemplate($el, 'ingredient');">
                 Add Ingredient
             </x-inputs.button>
-            <x-inputs.button class="bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900 ring-blue-300"
+            <x-inputs.button type="button"
+                             class="bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900 ring-blue-300"
                              x-on:click="addNodeFromTemplate($el, 'separator');">
                 Add Separator
             </x-inputs.button>
@@ -167,7 +169,8 @@
                     @include('recipes.partials.step-input')
                 </div>
             </div>
-            <x-inputs.button class="bg-green-800 hover:bg-green-700 active:bg-green-900 focus:border-green-900 ring-green-300"
+            <x-inputs.button type="button"
+                             class="bg-green-800 hover:bg-green-700 active:bg-green-900 focus:border-green-900 ring-green-300"
                              x-on:click="addNodeFromTemplate($el, 'step');">
                 Add Step
             </x-inputs.button>
