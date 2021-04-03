@@ -17,11 +17,11 @@
             <div class="journal-entry-template hidden">
                 @include('journal-entries.partials.entry-item-input', ['default_date' => $default_date])
             </div>
-            <x-inputs.icon-button type="button" color="green" class="add-entry-item" x-on:click="addEntryNode($el);">
+            <x-inputs.icon-green class="add-entry-item" x-on:click="addEntryNode($el);">
                 <svg class="h-10 w-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
                 </svg>
-            </x-inputs.icon-button>
+            </x-inputs.icon-green>
             <div class="flex items-center justify-end mt-4 space-x-4">
                 <fieldset class="flex space-x-2">
                     <x-inputs.label for="groupEntries" value="Group entries by day and meal" />
