@@ -28,7 +28,7 @@ class IngredientPickerControllerTest extends LoggedInTestCase
         // @todo Find a better way to ensure indexing.
         $this->artisan('scout:import App\\\Models\\\Food');
         $this->artisan('scout:import App\\\Models\\\Recipe');
-        sleep(2);
+        sleep(5);
     }
 
     private function buildUrl(array $parameters = []): string {
