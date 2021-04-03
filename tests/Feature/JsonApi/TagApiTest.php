@@ -26,4 +26,22 @@ class TagApiTest extends JsonApiTestCase
         return 'tags';
     }
 
+    public function testNameFilter(): void {
+        $names = ['sweet', 'salty', 'spicy'];
+        foreach ($names as $name) {
+            $this->factory()->create(['name' => $name]);
+        }
+
+        foreach ($names as $name) {
+            $partial = substr($name, rand(0, 2), 3);
+            $search_route = route($this->indexRouteName, [
+                'filter' => ['name' => $partial]
+            ]);
+            $response = $this->get($search_route);
+            $response->assertOk();
+            $response->assertJsonCount(1, 'data');
+            $response->assertJsonFragment(['name' => $name]);
+        }
+    }
+
 }
