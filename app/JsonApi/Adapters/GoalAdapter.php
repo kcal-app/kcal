@@ -2,54 +2,49 @@
 
 namespace App\JsonApi\Adapters;
 
-use App\Models\User;
+use App\Models\Goal;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
-use CloudCreativity\LaravelJsonApi\Eloquent\HasMany;
+use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
 
-class UserAdapter extends AbstractAdapter
+class GoalAdapter extends AbstractAdapter
 {
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected $attributes = [];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected $filterScopes = [];
 
     /**
      * {@inheritdoc}
      */
-    protected $defaultSort = ['name'];
+    protected $defaultSort = ['-from', '-to'];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new User(), $paging);
+        parent::__construct(new Goal(), $paging);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
     }
 
-    protected function goals(): HasMany
+    protected function user(): BelongsTo
     {
-        return $this->hasMany();
-    }
-
-    protected function journalEntries(): HasMany
-    {
-        return $this->hasMany();
+        return $this->belongsTo();
     }
 
 }

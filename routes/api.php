@@ -15,6 +15,9 @@ JsonApi::register('v1')->routes(function ($api) {
     $api->resource('foods')->relationships(function ($relations) {
         $relations->hasMany('tags')->readOnly();
     })->readOnly();
+    $api->resource('goals')->relationships(function ($relations) {
+        $relations->hasOne('user')->readOnly();
+    })->readOnly();
     $api->resource('ingredient-amounts')->relationships(function ($relations) {
         $relations->hasOne('ingredient')->readOnly();
         $relations->hasOne('parent')->readOnly();
@@ -42,6 +45,7 @@ JsonApi::register('v1')->routes(function ($api) {
     })->readOnly();
     $api->resource('tags')->readOnly();
     $api->resource('users')->relationships(function ($relations) {
+        $relations->hasMany('goals')->readOnly();
         $relations->hasMany('journal-entries')->readOnly();
     })->readOnly();
 });

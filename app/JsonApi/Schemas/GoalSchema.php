@@ -4,13 +4,13 @@ namespace App\JsonApi\Schemas;
 
 use Neomerx\JsonApi\Schema\SchemaProvider;
 
-class UserSchema extends SchemaProvider
+class GoalSchema extends SchemaProvider
 {
 
     /**
      * {@inheritdoc}
      */
-    protected $resourceType = 'users';
+    protected $resourceType = 'goals';
 
     /**
      * {@inheritdoc}
@@ -26,10 +26,11 @@ class UserSchema extends SchemaProvider
     public function getAttributes($resource): array
     {
         return [
+            'frequency' => $resource->frequency,
+            'from' => $resource->from,
+            'goal' => $resource->goal,
             'name' => $resource->name,
-            'email' => $resource->email,
-            'createdAt' => $resource->created_at,
-            'updatedAt' => $resource->updated_at,
+            'to' => $resource->to,
         ];
     }
 
@@ -39,18 +40,12 @@ class UserSchema extends SchemaProvider
     public function getRelationships($resource, $isPrimary, array $includeRelationships): array
     {
         return [
-            'goals' => [
+            'user' => [
+                self::SHOW_SELF => true,
                 self::SHOW_RELATED => true,
-                self::SHOW_DATA => isset($includeRelationships['goals']),
+                self::SHOW_DATA => isset($includeRelationships['user']),
                 self::DATA => function () use ($resource) {
-                    return $resource->ingredientAmounts;
-                },
-            ],
-            'journal-entries' => [
-                self::SHOW_RELATED => true,
-                self::SHOW_DATA => isset($includeRelationships['journal-entries']),
-                self::DATA => function () use ($resource) {
-                    return $resource->ingredientAmounts;
+                    return $resource->user;
                 },
             ],
         ];
