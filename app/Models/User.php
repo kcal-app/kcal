@@ -75,6 +75,13 @@ final class User extends Authenticatable
     }
 
     /**
+     * Get the User's journal entries.
+     */
+    public function journalEntries(): HasMany {
+        return $this->hasMany(JournalEntry::class);
+    }
+
+    /**
      * Get User's past, present, and future goals.
      *
      * @return \App\Models\Goal[]

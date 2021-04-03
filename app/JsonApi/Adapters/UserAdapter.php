@@ -4,6 +4,7 @@ namespace App\JsonApi\Adapters;
 
 use App\Models\User;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
+use CloudCreativity\LaravelJsonApi\Eloquent\HasMany;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
 
@@ -39,6 +40,14 @@ class UserAdapter extends AbstractAdapter
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
+    }
+
+    /**
+     * Step relationships.
+     */
+    protected function journalEntries(): HasMany
+    {
+        return $this->hasMany();
     }
 
 }
