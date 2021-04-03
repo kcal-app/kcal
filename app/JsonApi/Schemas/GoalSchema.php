@@ -45,7 +45,7 @@ class GoalSchema extends SchemaProvider
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['user']),
                 self::DATA => function () use ($resource) {
-                    return $resource->user;
+                    return $resource->user; // @codeCoverageIgnore
                 },
             ],
         ];

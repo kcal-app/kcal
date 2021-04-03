@@ -73,7 +73,7 @@ class MediumSchema extends SchemaProvider
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['model']),
                 self::DATA => function () use ($resource) {
-                    return $resource->model;
+                    return $resource->model; // @codeCoverageIgnore
                 },
             ]
         ];

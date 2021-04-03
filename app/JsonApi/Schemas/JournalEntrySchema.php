@@ -51,7 +51,7 @@ class JournalEntrySchema extends SchemaProvider
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['user']),
                 self::DATA => function () use ($resource) {
-                    return $resource->user;
+                    return $resource->user; // @codeCoverageIgnore
                 },
             ],
             'foods' => [
@@ -59,7 +59,7 @@ class JournalEntrySchema extends SchemaProvider
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['foods']),
                 self::DATA => function () use ($resource) {
-                    return $resource->foods;
+                    return $resource->foods; // @codeCoverageIgnore
                 },
             ],
             'recipes' => [
@@ -67,7 +67,7 @@ class JournalEntrySchema extends SchemaProvider
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['recipes']),
                 self::DATA => function () use ($resource) {
-                    return $resource->recipes;
+                    return $resource->recipes; // @codeCoverageIgnore
                 },
             ]
         ];

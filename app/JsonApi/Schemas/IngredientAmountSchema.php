@@ -54,7 +54,7 @@ class IngredientAmountSchema extends SchemaProvider
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['ingredient']),
                 self::DATA => function () use ($resource) {
-                    return $resource->ingredient;
+                    return $resource->ingredient; // @codeCoverageIgnore
                 },
             ],
             'parent' => [
@@ -62,7 +62,7 @@ class IngredientAmountSchema extends SchemaProvider
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['parent']),
                 self::DATA => function () use ($resource) {
-                    return $resource->parent;
+                    return $resource->parent; // @codeCoverageIgnore
                 },
             ]
         ];

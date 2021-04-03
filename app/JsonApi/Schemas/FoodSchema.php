@@ -61,7 +61,7 @@ class FoodSchema extends SchemaProvider
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['tags']),
                 self::DATA => function () use ($resource) {
-                    return $resource->tags;
+                    return $resource->tags; // @codeCoverageIgnore
                 },
             ]
         ];
