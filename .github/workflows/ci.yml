@@ -35,8 +35,8 @@ jobs:
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           php artisan key:generate
       - name: Run tests
-        run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+        run: vendor/bin/paratest --coverage-clover build/cov/clover.xml
       - name: Upload coverage results to Coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
+        run: vendor/bin/php-coveralls --coverage_clover=build/cov/clover.xml -v
