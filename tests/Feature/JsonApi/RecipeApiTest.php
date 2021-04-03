@@ -37,6 +37,16 @@ class RecipeApiTest extends JsonApiTestCase
         $this->getRelatedData($record, 'ingredient-amounts');
     }
 
+    public function testCanGetRelatedMedia(): void {
+        $record = $this->factory()->createOneWithMedia();
+        $this->getRelatedData($record, 'media');
+    }
+
+    public function testCanIncludeRelatedMedia(): void {
+        $record = $this->factory()->createOneWithMedia();
+        $this->getRelatedData($record, 'media');
+    }
+
     public function testCanGetRelatedSeparators(): void {
         $record = $this->factory()->hasSeparators(2)->create();
         $this->getRelatedData($record, 'separators', 'recipe-separators');

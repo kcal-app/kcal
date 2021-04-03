@@ -43,14 +43,14 @@ class UserSchema extends SchemaProvider
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['goals']),
                 self::DATA => function () use ($resource) {
-                    return $resource->ingredientAmounts; // @codeCoverageIgnore
+                    return $resource->goals; // @codeCoverageIgnore
                 },
             ],
             'journal-entries' => [
                 self::SHOW_RELATED => true,
                 self::SHOW_DATA => isset($includeRelationships['journal-entries']),
                 self::DATA => function () use ($resource) {
-                    return $resource->ingredientAmounts; // @codeCoverageIgnore
+                    return $resource->journalEntries; // @codeCoverageIgnore
                 },
             ],
         ];
