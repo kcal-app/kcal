@@ -3,12 +3,11 @@
 namespace App\JsonApi\Adapters;
 
 use App\Models\IngredientAmount;
-use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
 
-class IngredientAmountAdapter extends AbstractAdapter
+class IngredientAmountAdapter extends AdapterBase
 {
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\JsonApi\Adapters;
 
-use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
@@ -16,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @package App\JsonApi\Adapters
  */
-class MediumAdapter extends AbstractAdapter
+class MediumAdapter extends AdapterBase
 {
 
     /**

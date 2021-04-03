@@ -3,11 +3,10 @@
 namespace App\JsonApi\Adapters;
 
 use App\Models\Tag;
-use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
 
-class TagAdapter extends AbstractAdapter
+class TagAdapter extends AdapterBase
 {
 
     /**

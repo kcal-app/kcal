@@ -3,13 +3,12 @@
 namespace App\JsonApi\Adapters;
 
 use App\Models\Recipe;
-use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\HasMany;
 use CloudCreativity\LaravelJsonApi\Eloquent\MorphHasMany;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
 
-class RecipeAdapter extends AbstractAdapter
+class RecipeAdapter extends AdapterBase
 {
 
     /**

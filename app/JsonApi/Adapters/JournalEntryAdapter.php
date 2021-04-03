@@ -3,13 +3,12 @@
 namespace App\JsonApi\Adapters;
 
 use App\Models\JournalEntry;
-use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Eloquent\MorphHasMany;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
 
-class JournalEntryAdapter extends AbstractAdapter
+class JournalEntryAdapter extends AdapterBase
 {
 
     /**

@@ -3,12 +3,11 @@
 namespace App\JsonApi\Adapters;
 
 use App\Models\Food;
-use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\HasMany;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
 
-class FoodAdapter extends AbstractAdapter
+class FoodAdapter extends AdapterBase
 {
 
     /**
@@ -52,7 +51,7 @@ class FoodAdapter extends AbstractAdapter
             });
         }
     }
-    
+
     protected function tags(): HasMany
     {
         return $this->hasMany();
