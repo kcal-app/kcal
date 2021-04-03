@@ -32,4 +32,20 @@ class UserSchema extends SchemaProvider
             'updatedAt' => $resource->updated_at,
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRelationships($resource, $isPrimary, array $includeRelationships): array
+    {
+        return [
+            'journal-entries' => [
+                self::SHOW_RELATED => true,
+                self::SHOW_DATA => isset($includeRelationships['journal-entries']),
+                self::DATA => function () use ($resource) {
+                    return $resource->ingredientAmounts;
+                },
+            ],
+        ];
+    }
 }

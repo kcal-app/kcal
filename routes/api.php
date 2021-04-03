@@ -41,7 +41,7 @@ JsonApi::register('v1')->routes(function ($api) {
         $relations->hasOne('recipe')->readOnly();
     })->readOnly();
     $api->resource('tags')->readOnly();
-//    $api->resource('users')->relationships(function ($relations) {
-//        $relations->hasMany('journal-entries')->readOnly();
-//    })->readOnly();
+    $api->resource('users')->relationships(function ($relations) {
+        $relations->hasMany('journal-entries')->readOnly();
+    })->readOnly();
 });
