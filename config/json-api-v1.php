@@ -67,6 +67,7 @@ return [
     */
     'resources' => [
         'foods' => \App\Models\Food::class,
+        'goals' => \App\Models\Goal::class,
         'ingredient-amounts' => \App\Models\IngredientAmount::class,
         'media' => \Spatie\MediaLibrary\MediaCollections\Models\Media::class,
         'journal-entries' => \App\Models\JournalEntry::class,
