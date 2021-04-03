@@ -3,12 +3,11 @@
 namespace App\JsonApi\Adapters;
 
 use App\Models\RecipeSeparator;
-use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
 
-class RecipeSeparatorAdapter extends AbstractAdapter
+class RecipeSeparatorAdapter extends AdapterBase
 {
 
     /**
