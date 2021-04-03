@@ -26,7 +26,7 @@ class RecipeApiTest extends JsonApiTestCase
         return 'recipes';
     }
 
-    public function testSearchFilter(): void {
+    public function testCanUseSearchFilter(): void {
         $attributes = [
             'name' => 'Chocolate Chip Cookies',
             'description' => 'Buttery, delicious cookies.',

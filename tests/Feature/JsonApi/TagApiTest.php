@@ -26,7 +26,7 @@ class TagApiTest extends JsonApiTestCase
         return 'tags';
     }
 
-    public function testNameFilter(): void {
+    public function testCanUseNameFilter(): void {
         $names = ['sweet', 'salty', 'spicy'];
         foreach ($names as $name) {
             $this->factory()->create(['name' => $name]);

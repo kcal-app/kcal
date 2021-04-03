@@ -26,7 +26,7 @@ class FoodApiTest extends JsonApiTestCase
         return 'foods';
     }
 
-    public function testSearchFilter(): void {
+    public function testCanUseSearchFilter(): void {
         $attributes = [
             'name' => 'Popcorn',
             'detail' => 'buttered',
