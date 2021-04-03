@@ -42,9 +42,6 @@ class RecipeStepAdapter extends AbstractAdapter
         $this->filterWithScopes($query, $filters);
     }
 
-    /**
-     * Recipe relationship.
-     */
     protected function recipe(): BelongsTo
     {
         return $this->belongsTo();

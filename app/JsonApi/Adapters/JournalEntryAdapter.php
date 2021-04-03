@@ -43,25 +43,16 @@ class JournalEntryAdapter extends AbstractAdapter
         $this->filterWithScopes($query, $filters);
     }
 
-    /**
-     * User relationship.
-     */
     protected function user(): BelongsTo
     {
         return $this->belongsTo();
     }
 
-    /**
-     * Food relationships.
-     */
     protected function foods(): MorphHasMany
     {
         return $this->morphMany($this->hasMany('foods'));
     }
 
-    /**
-     * Recipe relationships.
-     */
     protected function recipes(): MorphHasMany
     {
         return $this->morphMany($this->hasMany('recipes'));
