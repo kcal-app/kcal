@@ -34,7 +34,7 @@ class TagApiTest extends JsonApiTestCase
 
         foreach ($names as $name) {
             $partial = substr($name, rand(0, 2), 3);
-            $search_route = route($this->indexRouteName, [
+            $search_route = route("$this->routeBase.index", [
                 'filter' => ['name' => $partial]
             ]);
             $response = $this->get($search_route);

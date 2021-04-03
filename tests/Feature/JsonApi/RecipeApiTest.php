@@ -5,10 +5,11 @@ namespace Tests\Feature\JsonApi;
 use App\Models\Recipe;
 use Database\Factories\RecipeFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Feature\JsonApi\Traits\HasTags;
 
 class RecipeApiTest extends JsonApiTestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, HasTags;
 
     /**
      * @inheritdoc
@@ -26,6 +27,36 @@ class RecipeApiTest extends JsonApiTestCase
         return 'recipes';
     }
 
+    public function testCanGetRelatedIngredientAmounts(): void {
+        $record = $this->factory()->hasIngredientAmounts(2)->create();
+        $this->getRelatedData($record, 'ingredient-amounts');
+    }
+
+    public function testCanIncludeRelatedIngredientAmounts(): void {
+        $record = $this->factory()->hasIngredientAmounts(2)->create();
+        $this->getRelatedData($record, 'ingredient-amounts');
+    }
+
+    public function testCanGetRelatedSeparators(): void {
+        $record = $this->factory()->hasSeparators(2)->create();
+        $this->getRelatedData($record, 'separators', 'recipe-separators');
+    }
+
+    public function testCanIncludeRelatedSeparators(): void {
+        $record = $this->factory()->hasSeparators(2)->create();
+        $this->getRelatedData($record, 'separators', 'recipe-separators');
+    }
+
+    public function testCanGetRelatedSteps(): void {
+        $record = $this->factory()->hasSteps(2)->create();
+        $this->getRelatedData($record, 'steps', 'recipe-steps');
+    }
+
+    public function testCanIncludeRelatedSteps(): void {
+        $record = $this->factory()->hasSteps(2)->create();
+        $this->getRelatedData($record, 'steps', 'recipe-steps');
+    }
+
     public function testCanUseSearchFilter(): void {
         $attributes = [
             'name' => 'Chocolate Chip Cookies',
@@ -41,7 +72,7 @@ class RecipeApiTest extends JsonApiTestCase
 
         foreach ($attributes as $attribute => $value) {
             $partial = substr($value, rand(0, 5), 5);
-            $search_route = route($this->indexRouteName, [
+            $search_route = route("$this->routeBase.index", [
                 'filter' => ['search' => $partial]
             ]);
             $response = $this->get($search_route);
