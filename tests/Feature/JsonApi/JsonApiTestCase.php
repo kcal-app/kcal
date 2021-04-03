@@ -10,9 +10,9 @@ abstract class JsonApiTestCase extends LoggedInTestCase
 {
 
     /**
-     * Route prefix for queries.
+     * API index route name.
      */
-    private string $routePrefix;
+    protected string $indexRouteName;
 
     /**
      * Get the factory of the model to be tested.
@@ -27,7 +27,8 @@ abstract class JsonApiTestCase extends LoggedInTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->routePrefix = config('json-api-v1.url.name');
+        $route_prefix = config('json-api-v1.url.name');
+        $this->indexRouteName = "{$route_prefix}{$this->resourceName()}.index";
     }
 
     /**
@@ -40,7 +41,7 @@ abstract class JsonApiTestCase extends LoggedInTestCase
     public function testCanGetIndex(): void
     {
         $this->createInstances(10);
-        $index_url = route("{$this->routePrefix}{$this->resourceName()}.index");
+        $index_url = route($this->indexRouteName);
         $response = $this->get($index_url);
         $response->assertOk();
         $response->assertJson(['data' => true]);
