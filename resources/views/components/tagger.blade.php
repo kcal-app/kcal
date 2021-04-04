@@ -6,13 +6,13 @@
                             value=""
                             x-model="tags"/>
             <x-inputs.label for="tag_picker" value="Tags"/>
-            <div class="flex flex-row items-center">
+            <div class="flex flex-row flex-wrap items-center">
                 <x-inputs.input name="tag_picker"
                                 type="text"
-                                class="mr-2"
+                                class="mr-2 mb-2"
                                 autocapitalize="none"
                                 inputmode="search"
-                                placeholder="Enter some tags..."
+                                placeholder="Start typing..."
                                 x-model="searchTerm"
                                 x-ref="searchTerm"
                                 @input="search($event.target.value)" />
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <template x-for="(tag, index) in tags">
-                    <div class="bg-indigo-100 inline-flex items-center text-sm rounded mr-1">
+                    <div class="m-1 px-2 bg-gray-200 rounded-full leading-loose inline-flex items-center text-sm">
                         <span class="ml-2 mr-1 leading-relaxed truncate max-w-xs" x-text="tag"></span>
                         <button @click.prevent="removeTag(index)" class="w-6 h-8 inline-block align-middle text-gray-500 hover:text-gray-600 focus:outline-none">
                             <svg class="w-6 h-6 fill-current mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
