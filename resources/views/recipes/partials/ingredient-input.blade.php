@@ -23,6 +23,7 @@
                              class="block"
                              :options="$units_supported ?? []"
                              :selectedValue="$unit ?? null">
+                <option value="" selected>Unit</option>
             </x-inputs.select>
             <x-inputs.input name="ingredients[detail][]"
                             type="text"
