@@ -73,6 +73,7 @@ use Laravel\Scout\Searchable;
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|Food withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @method static \Database\Factories\FoodFactory factory(...$parameters)
+ * @property-read \Illuminate\Support\Collection $units_supported
  */
 final class Food extends Model
 {
@@ -129,7 +130,8 @@ final class Food extends Model
      */
     protected $appends = [
         'serving_size_formatted',
-        'serving_unit_formatted'
+        'serving_unit_formatted',
+        'units_supported',
     ];
 
     /**

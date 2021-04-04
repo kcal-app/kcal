@@ -82,7 +82,7 @@ class JournalEntryController extends Controller
                 ) {
                     continue;
                 }
-                $ingredients[] = [
+                $ingredients[$key] = [
                     'date' => $old['date'][$key],
                     'meal' => $old['meal'][$key],
                     'amount' => $amount,
@@ -91,6 +91,18 @@ class JournalEntryController extends Controller
                     'type' => $old['type'][$key],
                     'name' => $old['name'][$key],
                 ];
+
+                // Add supported units for the ingredient.
+                $ingredient = NULL;
+                if ($ingredients[$key]['type'] === Food::class) {
+                    $ingredient = Food::whereId($ingredients[$key]['id'])->first();
+                }
+                elseif ($ingredients[$key]['type'] === Recipe::class) {
+                    $ingredient = Recipe::whereId($ingredients[$key]['id'])->first();
+                }
+                if ($ingredient) {
+                    $ingredients[$key]['units'] = $ingredient->units_supported;
+                }
             }
         }
 

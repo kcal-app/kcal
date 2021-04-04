@@ -16,6 +16,7 @@ class Nutrients
      * Each entry has two keys:
      *  - value: Machine name for the unit.
      *  - label: Human-readable name for the unit.
+     *  - type: Unit type -- matching types can be converted.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -23,27 +24,33 @@ class Nutrients
         return new Collection([
             'cup' => [
                 'value' => 'cup',
-                'label' => 'cup'
+                'label' => 'cup',
+                'type' => 'volume',
             ],
             'gram' => [
                 'value' => 'gram',
-                'label' => 'gram'
+                'label' => 'gram',
+                'type' => 'weight',
             ],
             'oz' => [
                 'value' => 'oz',
-                'label' => 'oz'
+                'label' => 'oz',
+                'type' => 'weight',
             ],
             'serving' => [
                 'value' => 'serving',
-                'label' => 'serving'
+                'label' => 'serving',
+                'type' => 'division',
             ],
             'tbsp' => [
                 'value' => 'tbsp',
-                'label' => 'tbsp.'
+                'label' => 'tbsp.',
+                'type' => 'volume',
             ],
             'tsp' => [
                 'value' => 'tsp',
-                'label' => 'tsp.'
+                'label' => 'tsp.',
+                'type' => 'volume',
             ],
         ]);
     }

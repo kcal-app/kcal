@@ -38,6 +38,8 @@ use Illuminate\Support\Facades\Auth;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Goal[] $goals
  * @property-read int|null $goals_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalEntry[] $journalEntries
+ * @property-read int|null $journal_entries_count
  */
 final class User extends Authenticatable
 {

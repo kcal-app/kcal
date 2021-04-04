@@ -43,6 +43,7 @@ class FoodSchema extends SchemaProvider
             'servingUnit' => $resource->serving_unit,
             'servingUnitFormatted' => $resource->serving_unit_formatted,
             'servingWeight' => $resource->serving_weight,
+            'unitsSupported' => $resource->units_supported->pluck('value'),
             'createdAt' => $resource->created_at,
             'updatedAt' => $resource->updated_at,
             'showUrl' => route('foods.show', $resource),

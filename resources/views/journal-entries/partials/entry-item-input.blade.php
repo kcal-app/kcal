@@ -46,7 +46,7 @@
                 <x-inputs.label for="ingredients[unit][]" value="Unit" class="md:hidden"/>
                 <x-inputs.select name="ingredients[unit][]"
                                  class="block w-full"
-                                 :options="$units"
+                                 :options="$units ?? []"
                                  :selectedValue="$unit ?? null">
                     <option value="">-- Unit --</option>
                 </x-inputs.select>
@@ -74,7 +74,20 @@
             window.addEventListener('ingredient-picked', (e) => {
                 const entryItem = e.target.closest('.entry-item');
                 const ingredient = e.detail.ingredient;
-                let servingSize, servingUnit;
+                let servingSize, servingUnit
+
+                // Restrict unit select list values to supported units.
+                const unitsSelectList = entryItem.querySelector(':scope select[name="ingredients[unit][]"]');
+                for (const [key, option] in unitsSelectList.options) {
+                    unitsSelectList.remove(key);
+                }
+                for (const key in ingredient.units_supported) {
+                    const unit = ingredient.units_supported[key];
+                    const option = document.createElement('option');
+                    option.value = unit.value;
+                    option.text = unit.label;
+                    unitsSelectList.add(option);
+                }
 
                 // Always set recipes to a default of 1 serving.
                 if (ingredient.type === 'App\\Models\\Recipe') {

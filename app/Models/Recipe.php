@@ -77,6 +77,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read Collection $ingredients_list
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecipeSeparator[] $separators
  * @property-read int|null $separators_count
+ * @property-read Collection $units_supported
  */
 final class Recipe extends Model implements HasMedia
 {
@@ -132,6 +133,7 @@ final class Recipe extends Model implements HasMedia
     protected $appends = [
         'serving_weight',
         'time_total',
+        'units_supported'
     ];
 
     /**

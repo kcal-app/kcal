@@ -3,8 +3,10 @@
 namespace App\Models\Traits;
 
 use App\Models\IngredientAmount;
-use Illuminate\Database\Eloquent\Collection;
+use App\Support\Nutrients;
+use Illuminate\Database\Eloquent\Collection as DatabaseCollection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\Tags\Tag;
 
@@ -40,7 +42,7 @@ trait Ingredient
      *
      * @see \Spatie\Tags\HasTags
      */
-    public static function getTagTotals(string $locale = null): Collection {
+    public static function getTagTotals(string $locale = null): DatabaseCollection {
         $locale = $locale ?? app()->getLocale();
         return Tag::query()->join('taggables', 'taggables.tag_id', '=', 'id')
             ->select(['id', 'name', DB::raw('count(*) as total')])
@@ -48,5 +50,21 @@ trait Ingredient
             ->groupBy('id')
             ->orderBy("name->{$locale}")
             ->get();
+    }
+
+    /**
+     * Get a collection of units supported by this ingredient.
+     */
+    public function getUnitsSupportedAttribute(): Collection {
+        $units = Nutrients::units();
+        $supported = $units->where('value', 'serving');
+        if (!empty($this->serving_unit)) {
+            $type = $units->where('value', $this->serving_unit)->pluck('type')->first();
+            $supported = $supported->merge($units->where('type', $type));
+        }
+        if (!empty($this->serving_weight)) {
+            $supported = $supported->merge($units->where('type', 'weight'));
+        }
+        return $supported->sortBy('label');
     }
 }
