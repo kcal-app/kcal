@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Food;
 use App\Models\IngredientAmount;
 use App\Models\Recipe;
 use App\Models\RecipeSeparator;
@@ -84,7 +85,7 @@ class RecipeController extends Controller
         $ingredients = [];
         if ($old = old('ingredients')) {
             foreach ($old['id'] as $key => $ingredient_id) {
-                $ingredients[] = [
+                $ingredients[$key] = [
                     'type' => 'ingredient',
                     'key' => $old['key'][$key],
                     'weight' => $old['weight'][$key],
@@ -96,6 +97,18 @@ class RecipeController extends Controller
                     'detail' => $old['detail'][$key],
                 ];
             }
+
+            // Add supported units for the ingredient.
+            $ingredient = NULL;
+            if ($ingredients[$key]['ingredient_type'] === Food::class) {
+                $ingredient = Food::whereId($ingredients[$key]['ingredient_id'])->first();
+            }
+            elseif ($ingredients[$key]['ingredient_type'] === Recipe::class) {
+                $ingredient = Recipe::whereId($ingredients[$key]['ingredient_id'])->first();
+            }
+            if ($ingredient) {
+                $ingredients[$key]['units_supported'] = $ingredient->units_supported;
+            }
         }
         else {
             foreach ($recipe->ingredientAmounts as $key => $ingredientAmount) {
@@ -105,6 +118,7 @@ class RecipeController extends Controller
                     'weight' => $ingredientAmount->weight,
                     'amount' => $ingredientAmount->amount_formatted,
                     'unit' => $ingredientAmount->unit,
+                    'units_supported' => $ingredientAmount->ingredient->units_supported,
                     'ingredient_id' => $ingredientAmount->ingredient_id,
                     'ingredient_type' => $ingredientAmount->ingredient_type,
                     'ingredient_name' => $ingredientAmount->ingredient->name,
@@ -167,7 +181,7 @@ class RecipeController extends Controller
             ->with('recipe_tags', $recipe_tags)
             ->with('ingredients_list', new Collection([...$ingredients, ...$separators]))
             ->with('steps', $steps)
-            ->with('ingredients_units', Nutrients::units()->toArray());
+            ->with('units_supported', Nutrients::units()->toArray());
     }
 
     /**

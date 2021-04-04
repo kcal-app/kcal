@@ -21,9 +21,8 @@
                             :value="$amount ?? null" />
             <x-inputs.select name="ingredients[unit][]"
                              class="block"
-                             :options="$ingredients_units"
+                             :options="$units_supported ?? []"
                              :selectedValue="$unit ?? null">
-                <option value="" selected>Unit</option>
             </x-inputs.select>
             <x-inputs.input name="ingredients[detail][]"
                             type="text"
@@ -41,3 +40,29 @@
         </div>
     </div>
 </div>
+
+@once
+    @push('scripts')
+        <script type="text/javascript">
+            /**
+             * Sets default serving amount and unit on ingredient select.
+             */
+            window.addEventListener('ingredient-picked', (e) => {
+                const entryItem = e.target.closest('.ingredient');
+                const ingredient = e.detail.ingredient;
+                // Restrict unit select list values to supported units.
+                const unitsSelectList = entryItem.querySelector(':scope select[name="ingredients[unit][]"]');
+                for (const [key, option] in unitsSelectList.options) {
+                    unitsSelectList.remove(key);
+                }
+                for (const key in ingredient.units_supported) {
+                    const unit = ingredient.units_supported[key];
+                    const option = document.createElement('option');
+                    option.value = unit.value;
+                    option.text = unit.label;
+                    unitsSelectList.add(option);
+                }
+            });
+        </script>
+    @endpush
+@endonce
