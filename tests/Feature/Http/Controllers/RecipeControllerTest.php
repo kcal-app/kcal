@@ -115,13 +115,19 @@ class RecipeControllerTest extends HttpControllerTestCase
         // Remove the first amount value to force a form error.
         $data['ingredients']['amount'][0] = NULL;
 
+        $edit_url = action([$this->class(), 'edit'], [$this->routeKey() => $instance]);
         $put_url = action([$this->class(), 'update'], [$this->routeKey() => $instance]);
-        $response = $this->put($put_url, $data);
-        $response->assertRedirect();
+        $response = $this->from($edit_url)->put($put_url, $data);
+        $response->assertRedirect($edit_url);
         $response->assertSessionHasErrors();
         $response->assertSessionHasInput('ingredients', $data['ingredients']);
         $response->assertSessionHasInput('steps', $data['steps']);
         $response->assertSessionHasInput('separators', $data['separators']);
+
+        $this->followingRedirects()
+            ->from($edit_url)
+            ->put($put_url, $data);
+        $this->assertEquals($edit_url, url()->current());
     }
 
     /**

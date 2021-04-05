@@ -102,11 +102,17 @@ class JournalEntryControllerTest extends HttpControllerTestCase
         // Set first amount to an invalid string.
         $data['ingredients']['amount'][0] = 'abcd';
 
+        $create_url = action([$this->class(), 'create']);
         $store_url = action([$this->class(), 'store']);
-        $response = $this->post($store_url, $data);
-        $response->assertRedirect();
+        $response = $this->from($create_url)->post($store_url, $data);
+        $response->assertRedirect($create_url);
         $response->assertSessionHasErrors();
         $response->assertSessionHasInput('ingredients', $data['ingredients']);
+
+        $this->followingRedirects()
+            ->from($create_url)
+            ->post($store_url, $data);
+        $this->assertEquals($create_url, url()->current());
     }
 
     /**
@@ -124,8 +130,9 @@ class JournalEntryControllerTest extends HttpControllerTestCase
             ->make(['parent_id' => null, 'parent_type' => null]);
         /** @var \App\Models\IngredientAmount $ingredient_amount */
         foreach ($ingredient_amounts as $ingredient_amount) {
-            $ingredients['date'][] = $this->faker->dateTimeThisMonth;
+            $ingredients['date'][] = $this->faker->dateTimeThisMonth->format('Y-m-d');
             $ingredients['meal'][] = $this->faker->randomElement(JournalEntry::meals()->pluck('value')->toArray());
+            $ingredients['name'][] = $ingredient_amount->ingredient->name;
             $ingredients['amount'][] = $ingredient_amount->amount;
             $ingredients['unit'][] = $ingredient_amount->unit;
             $ingredients['id'][] = $ingredient_amount->ingredient->id;
