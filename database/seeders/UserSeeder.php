@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
@@ -15,8 +16,8 @@ class UserSeeder extends Seeder
     {
         User::factory()->create([
             'name' => 'Admin',
-            'email' => 'admin@admin.admin',
-            'password' => '$2y$10$Y6AOmxZHpL3ZVCvwhcG1ZOctibIPgOYZyzIuaEqvmaJuZ4Xs.odxu', // Same as email.
+            'email' => 'admin@kcal.test',
+            'password' => Hash::make('admin@kcal.test'),
             'remember_token' => Str::random(10),
         ]);
     }

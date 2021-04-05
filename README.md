@@ -46,5 +46,11 @@
         vendor/bin/sail artisan migrate
         vendor/bin/sail artisan elastic:migrate
 
+1. (On first run) Create the initial user.
+
+        vendor/bin/sail artisan db:seed --class UserSeeder
+
+    The default username and password is `admin@kcal.test`.
+
 Once the application finishing starting, navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080)
 (or [http://kcal.test:8080](http://kcal.test:8080) if configured).
