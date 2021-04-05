@@ -101,9 +101,7 @@ class FoodController extends Controller
             }
         }
 
-        $food->fill($attributes)->save();
-
-        // Sync tags.
+        // Sync tags before save (to ensure indexing).
         $tags = $request->get('tags');
         if (!empty($tags)) {
             $food->syncTags(explode(',', $tags));
@@ -111,6 +109,8 @@ class FoodController extends Controller
         elseif ($food->tags->isNotEmpty()) {
             $food->detachTags($food->tags);
         }
+
+        $food->fill($attributes)->save();
 
         session()->flash('message', "Food {$food->name} updated!");
         return redirect()->route('foods.show', $food);

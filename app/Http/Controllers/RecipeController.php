@@ -252,7 +252,16 @@ class RecipeController extends Controller
         ]);
 
         try {
-            DB::transaction(function () use ($recipe, $input) {
+            DB::transaction(function () use ($input, $recipe, $request) {
+                // Sync tags before save (to ensure indexing).
+                $tags = $request->get('tags');
+                if (!empty($tags)) {
+                    $recipe->syncTags(explode(',', $tags));
+                }
+                elseif ($recipe->tags->isNotEmpty()) {
+                    $recipe->detachTags($recipe->tags);
+                }
+
                 $recipe->saveOrFail();
                 $this->updateIngredients($recipe, $input);
                 $this->updateIngredientSeparators($recipe, $input);
@@ -261,15 +270,6 @@ class RecipeController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()->withErrors($e->getMessage());
-        }
-
-        // Sync tags.
-        $tags = $request->get('tags');
-        if (!empty($tags)) {
-            $recipe->syncTags(explode(',', $tags));
-        }
-        elseif ($recipe->tags->isNotEmpty()) {
-            $recipe->detachTags($recipe->tags);
         }
 
         // Handle recipe image.
