@@ -32,7 +32,7 @@ jobs:
         run: composer install --no-progress --no-interaction
       - name: Generate app key
         run: |
-          php -r "file_exists('.env') || copy('.env.example', '.env');"
+          php -r "file_exists('.env') || copy('.env.ci.example', '.env');"
           php artisan key:generate
       - name: Run tests
         run: vendor/bin/paratest --coverage-clover build/logs/clover.xml
