@@ -16,7 +16,6 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@admin.admin',
-            'email_verified_at' => now(),
             'password' => '$2y$10$Y6AOmxZHpL3ZVCvwhcG1ZOctibIPgOYZyzIuaEqvmaJuZ4Xs.odxu', // Same as email.
             'remember_token' => Str::random(10),
         ]);
