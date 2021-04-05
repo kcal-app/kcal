@@ -11,6 +11,8 @@ use Database\Factories\RecipeFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class RecipeControllerTest extends HttpControllerTestCase
 {
@@ -49,7 +51,8 @@ class RecipeControllerTest extends HttpControllerTestCase
             ->hasIngredientAmounts(10)
             ->hasSteps(6)
             ->hasIngredientSeparators(2)
-            ->create();
+            ->hasTags(5)
+            ->createOneWithMedia();
     }
 
     public function testCanAddInstance(): void
@@ -63,11 +66,12 @@ class RecipeControllerTest extends HttpControllerTestCase
             ->count(10)
             ->make(['parent_id' => null, 'parent_type' => null]);
 
-        $data = [
+        $data = $this->factory()->makeOne()->toArray() + [
             'ingredients' => $this->createFormDataFromIngredientAmounts($ingredient_amounts),
             'steps' => $this->createFormDataFromRecipeSteps(RecipeStep::factory()->count(6)->make()),
             'separators' => $this->createFormDataFromRecipeSeparators(RecipeSeparator::factory()->count(2)->make()),
-        ] + $this->factory()->makeOne()->toArray();
+            'image' => UploadedFile::fake()->image('recipe.jpg', 1600, 900),
+        ];
 
         $store_url = action([$this->class(), 'store']);
         $response = $this->post($store_url, $data);
@@ -81,15 +85,43 @@ class RecipeControllerTest extends HttpControllerTestCase
         $response = $this->get($edit_url);
         $response->assertOk();
 
-        $data = [
+        // Remove one of each item.
+        $instance->ingredientAmounts[1]->delete();
+        $instance->steps[1]->delete();
+        $instance->separators[1]->delete();
+        $instance->refresh();
+
+        $data = $this->factory()->makeOne()->toArray() + [
             'ingredients' => $this->createFormDataFromIngredientAmounts($instance->ingredientAmounts),
             'steps' => $this->createFormDataFromRecipeSteps($instance->steps),
             'separators' => $this->createFormDataFromRecipeSeparators($instance->ingredientSeparators),
-        ] + $this->factory()->makeOne()->toArray();
+            'image' => UploadedFile::fake()->image('recipe.jpg', 1600, 900),
+        ];
 
         $put_url = action([$this->class(), 'update'], [$this->routeKey() => $instance]);
         $response = $this->put($put_url, $data);
         $response->assertSessionHasNoErrors();
+    }
+
+    public function testSessionKeepsOldInput(): void {
+        $instance = $this->createInstance();
+
+        $data = [
+            'ingredients' => $this->createFormDataFromIngredientAmounts($instance->ingredientAmounts),
+            'steps' => $this->createFormDataFromRecipeSteps($instance->steps),
+            'separators' => $this->createFormDataFromRecipeSeparators($instance->ingredientSeparators),
+        ] + $instance->toArray();
+
+        // Remove the first amount value to force a form error.
+        $data['ingredients']['amount'][0] = NULL;
+
+        $put_url = action([$this->class(), 'update'], [$this->routeKey() => $instance]);
+        $response = $this->put($put_url, $data);
+        $response->assertRedirect();
+        $response->assertSessionHasErrors();
+        $response->assertSessionHasInput('ingredients', $data['ingredients']);
+        $response->assertSessionHasInput('steps', $data['steps']);
+        $response->assertSessionHasInput('separators', $data['separators']);
     }
 
     /**

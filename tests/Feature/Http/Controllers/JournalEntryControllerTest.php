@@ -75,12 +75,44 @@ class JournalEntryControllerTest extends HttpControllerTestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function testCanAddInstanceFromIngredients(): void
+    public function testCanAddInstanceFromIngredientsGrouped(): void
     {
         $create_url = action([$this->class(), 'create']);
         $response = $this->get($create_url);
         $response->assertOk();
 
+        $data = $this->createIngredientsDataArray();
+        $store_url = action([$this->class(), 'store']);
+        $response = $this->post($store_url, $data);
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function testCanAddInstanceFromIngredientsUnGrouped(): void
+    {
+        $data = $this->createIngredientsDataArray();
+        $data['group_entries'] = false;
+        $store_url = action([$this->class(), 'store']);
+        $response = $this->post($store_url, $data);
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function testSessionKeepsOldInput(): void {
+        $data = $this->createIngredientsDataArray();
+
+        // Set first amount to an invalid string.
+        $data['ingredients']['amount'][0] = 'abcd';
+
+        $store_url = action([$this->class(), 'store']);
+        $response = $this->post($store_url, $data);
+        $response->assertRedirect();
+        $response->assertSessionHasErrors();
+        $response->assertSessionHasInput('ingredients', $data['ingredients']);
+    }
+
+    /**
+     * Create a test array for creating an entry from ingredients data.
+     */
+    private function createIngredientsDataArray(): array {
         // Create ingredients based on ingredient amounts.
         $ingredients = [
             'date' => [], 'meal' => [], 'amount' => [], 'unit' => [],
@@ -99,15 +131,7 @@ class JournalEntryControllerTest extends HttpControllerTestCase
             $ingredients['id'][] = $ingredient_amount->ingredient->id;
             $ingredients['type'][] = $ingredient_amount->ingredient->type;
         }
-        $data = ['ingredients' => $ingredients, 'group_entries' => true];
-        $store_url = action([$this->class(), 'store']);
-        $response = $this->post($store_url, $data);
-        $response->assertSessionHasNoErrors();
-
-        $data['group_entries'] = false;
-        $store_url = action([$this->class(), 'store']);
-        $response = $this->post($store_url, $data);
-        $response->assertSessionHasNoErrors();
+        return ['ingredients' => $ingredients, 'group_entries' => true];
     }
 
 }
