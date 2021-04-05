@@ -14,32 +14,33 @@ class AuthenticationTest extends TestCase
     public function testLoginScreenCanRendered()
     {
         $response = $this->get('/login');
-
         $response->assertStatus(200);
     }
 
-    public function testUsersCanAuthenticateUsingLoginScreen()
+    public function testUserCanAuthenticateUsingLoginScreen()
     {
         $user = User::factory()->create();
-
         $response = $this->post('/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
-
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);
     }
 
-    public function testUsersCannotAuthenticateWithInvalidPassword()
+    public function testUserCannotAuthenticateWithInvalidPassword()
     {
         $user = User::factory()->create();
-
         $this->post('/login', [
             'email' => $user->email,
             'password' => 'wrong-password',
         ]);
+        $this->assertGuest();
+    }
 
+    public function testUserCanLogout()
+    {
+        $this->followingRedirects()->post('/logout');
         $this->assertGuest();
     }
 }
