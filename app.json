@@ -37,6 +37,6 @@
         }
     },
     "scripts": {
-        "postdeploy": "php artisan migrate --force && php artisan user:create --email \"kcal@kcal.kcal\" --name \"Admin\" --pass \"kcal\""
+        "postdeploy": "php artisan migrate --force && php artisan user:create \"kcal@kcal.kcal\" Admin kcal"
     }
 }

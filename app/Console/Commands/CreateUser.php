@@ -14,9 +14,9 @@ class CreateUser extends Command
      * @inheritdoc
      */
     protected $signature = 'user:create
-                            {--email : User email address}
-                            {--name : User name}
-                            {--pass : User password}';
+                            {email? : User email address}
+                            {name? : User short name}
+                            {password? : Account password}';
 
     /**
      * @inheritdoc
@@ -36,50 +36,51 @@ class CreateUser extends Command
      */
     public function handle(): int
     {
-        $options = $this->options();
-        if (!$options['email']) {
-            $options['email'] = $this->ask('Enter an email address for the user');
+        $arguments = $this->arguments();
+        if (!$arguments['email']) {
+            $arguments['email'] = $this->ask('Enter an email address for the user');
         }
-        if (!$options['name']) {
-            $options['name'] = $this->ask('Enter a name for the user');
+
+        // Validate email.
+        $validator = Validator::make(['email' => $arguments['email']], [
+            'email' => 'email',
+        ]);
+        if ($validator->fails()) {
+            $this->error("Invalid email address {$arguments['email']}.");
+            return 1;
         }
-        if (!$options['pass']) {
-            $options['pass'] = $this->secret('Enter a password for the user');
+
+        // Check for an existing user.
+        if (User::whereEmail($arguments['email'])->exists()) {
+            $this->error("User with email address {$arguments['email']} already exists.");
+            return 1;
+        }
+
+        if (!$arguments['name']) {
+            $arguments['name'] = $this->ask('Enter a name for the user');
+        }
+        if (!$arguments['password']) {
+            $arguments['password'] = $this->secret('Enter a password for the user');
             $password_confirm = $this->secret('Re-type the password to confirm');
-            if ($options['pass'] !== $password_confirm) {
+            if ($arguments['password'] !== $password_confirm) {
                 $this->error('Passwords did not match.');
                 return 1;
             }
         }
 
-        if (empty($options['email']) || empty($options['name']) || empty($options['pass'])) {
+        if (empty($arguments['email']) || empty($arguments['name']) || empty($arguments['password'])) {
             $this->error('All options (name, email, and password) are required.');
             return 1;
         }
 
-        // Validate email.
-        $validator = Validator::make(['email' => $options['email']], [
-            'email' => 'email',
-        ]);
-        if ($validator->fails()) {
-            $this->error("Invalid email address {$options['email']}.");
-            return 1;
-        }
-
-        // Check for an existing user.
-        if (User::whereEmail($options['email'])->exists()) {
-            $this->error("User with email address {$options['email']} already exists.");
-            return 1;
-        }
-
         User::create([
-            'name' => $options['name'],
-            'email' => $options['email'],
-            'password' => Hash::make($options['pass']),
+            'name' => $arguments['name'],
+            'email' => $arguments['email'],
+            'password' => Hash::make($arguments['password']),
             'remember_token' => Str::random(10),
         ])->save();
 
-        $this->info("User {$options['email']} created!");
+        $this->info("User {$arguments['email']} created!");
 
         return 0;
     }
