@@ -15,7 +15,7 @@ class UserAdd extends Command
     protected $signature = 'user:add
                             {username? : Username}
                             {password? : Password}
-                            {--name : User short name}';
+                            {--name= : User short name}';
 
     /**
      * @inheritdoc
