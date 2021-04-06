@@ -5,7 +5,10 @@
     "license": "MPL-2.0",
     "require": {
         "php": "^8.0",
+        "ext-fileinfo": "*",
         "ext-gd": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
         "babenkoivan/elastic-migrations": "^1.4",
         "babenkoivan/elastic-scout-driver": "^1.3",
         "babenkoivan/elastic-scout-driver-plus": "^2.0",
