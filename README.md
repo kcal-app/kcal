@@ -1,6 +1,6 @@
 # kcal – the personal food nutrition journal
 [![CI Status](https://github.com/kcal-app/kcal/actions/workflows/ci.yml/badge.svg)](https://github.com/kcal-app/kcal/actions/workflows/ci.yml)
-[![Coverage \status](https://coveralls.io/repos/github/kcal-app/kcal/badge.svg)](https://coveralls.io/github/kcal-app/kcal?branch=tests)
+[![Coverage Status](https://coveralls.io/repos/github/kcal-app/kcal/badge.svg)](https://coveralls.io/github/kcal-app/kcal)
 
 ## Development
 
@@ -52,5 +52,5 @@
 
     The default username and password is `admin@kcal.test`.
 
-Once the application finishing starting, navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080)
+Once the application finishes starting, navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080)
 (or [http://kcal.test:8080](http://kcal.test:8080) if configured).
