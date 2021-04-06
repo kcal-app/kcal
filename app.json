@@ -23,10 +23,6 @@
         "heroku-redis"
     ],
     "env": {
-        "APP_KEY": {
-            "description": "Used for the auth system.",
-            "generator": "secret"
-        },
         "APP_TIMEZONE": {
             "description": "Application time zone.",
             "value": "Etc/UTC"

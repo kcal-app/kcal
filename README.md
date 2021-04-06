@@ -2,6 +2,49 @@
 [![CI Status](https://github.com/kcal-app/kcal/actions/workflows/ci.yml/badge.svg)](https://github.com/kcal-app/kcal/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/kcal-app/kcal/badge.svg)](https://coveralls.io/github/kcal-app/kcal)
 
+## Deployment
+
+### Heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+After initial deployment the `APP_KEY` environment variable must be set as Heroku's
+deploy button does not support the necessary format. This can be set one of two
+ways:
+
+### From App Settings
+
+1. Navigate to the deployed app.
+
+1. Click the "More" menu and select "Run console".
+
+1. Enter the following command and click "Run".
+
+        php artisan --no-ansi key:generate --show
+
+1. Copy the output from the command (it should start with `base64:`).
+
+1. Close the console.
+
+1. Navigate to the "Settings" tab, "Config Vars" section.
+
+1. Click "Reveal Config Vars".
+
+1. Enter a new config var with values:
+
+    - KEY: `APP_KEY`
+    - VALUE: *Paste console out copied from Step 4*
+    
+1. Click "Add"
+
+The application will restart after setting the config var and login will work.
+
+### Using Heroku CLI
+
+With the Heroku CLI utility installed and connected to the app, execute:
+
+    heroku config:set APP_KEY=$(php artisan --no-ansi key:generate --show)
+
 ## Search :mag:
 
 The "ingredient" (food or recipe) search for journal entries and recipe ingredients
