@@ -1,0 +1,46 @@
+{
+    "name": "kcal – the personal food nutrition journal",
+    "description": "Self-hostable web app for food and recipe nutrition tracking.",
+    "keywords": [
+        "fitness",
+        "food",
+        "heath",
+        "laravel",
+        "nutrition",
+        "php",
+        "recipes",
+        "self-host"
+    ],
+    "repository": "https://github.com/kcal-app/kcal",
+    "website": "http://demo.kcal.cooking",
+    "buildpacks": [
+        {
+            "url": "heroku/php"
+        }
+    ],
+    "addons": [
+        "heroku-postgresql",
+        "heroku-redis"
+    ],
+    "env": {
+        "APP_KEY": {
+            "description": "Used for the auth system.",
+            "generator": "secret"
+        },
+        "APP_TIMEZONE": {
+            "description": "Application time zone.",
+            "value": "Etc/UTC"
+        },
+        "DB_CONNECTION": {
+            "description": "Database driver.",
+            "value": "pgsql"
+        },
+        "SCOUT_DRIVER": {
+            "description": "Search driver ('algolia', 'elastic', or 'null').",
+            "value": "null"
+        }
+    },
+    "scripts": {
+        "postdeploy": "php artisan migrate"
+    }
+}
