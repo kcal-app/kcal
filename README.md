@@ -18,7 +18,7 @@ For a manual deploy using Heroku CLI, execute the following after initial deploy
 
 #### Search drivers
 
-See the [Search](#search) section for information about supported drivers. Additional
+See the [Search](#search-mag) section for information about supported drivers. Additional
 environment variable configuration is necessary when using any search driver other
 than the default ("null").
 
