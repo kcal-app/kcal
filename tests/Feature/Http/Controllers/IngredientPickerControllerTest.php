@@ -31,17 +31,12 @@ class IngredientPickerControllerTest extends LoggedInTestCase
     public function testCanSearchWithDatabase(): void
     {
         Config::set('scout.driver', 'null');
-
-        $food = ['name' => 'Butter'];
-        Food::factory()->createOne($food);
-        $recipe = ['name' => 'Buttered Toast'];
-        Recipe::factory()->createOne($recipe);
-
+        $this->addButter();
         $response = $this->get($this->buildUrl(['term' => 'butter']));
         $response->assertOk();
         $response->assertJsonCount(2);
-        $response->assertJsonFragment($food);
-        $response->assertJsonFragment($recipe);
+        $response->assertJsonFragment(['name' => 'Butter']);
+        $response->assertJsonFragment(['name' => 'Buttered Toast']);
     }
 
     /**
@@ -66,9 +61,16 @@ class IngredientPickerControllerTest extends LoggedInTestCase
     public function testCanSearchWithElasticSearch(): void
     {
         Config::set('scout.driver', 'elastic');
+        $this->addButter();
         $response = $this->get($this->buildUrl(['term' => 'butter']));
         $response->assertOk();
         $response->assertJson([]);
+    }
+
+    private function addButter(): void
+    {
+        Food::factory()->createOne(['name' => 'Butter']);
+        Recipe::factory()->createOne(['name' => 'Buttered Toast']);
     }
 
 }
