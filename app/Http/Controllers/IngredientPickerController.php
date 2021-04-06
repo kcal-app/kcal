@@ -21,7 +21,7 @@ class IngredientPickerController extends Controller
         $results = new Collection();
         $term = $request->query->get('term');
         if (!empty($term)) {
-            $results = match (env('SCOUT_DRIVER')) {
+            $results = match (config('scout.driver')) {
                 'algolia' => $this->searchWithAlgolia($term),
                 'elastic' => $this->searchWithElasticSearch($term),
                 default => $this->searchWithDatabaseLike($term),

@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         LaravelJsonApi::defaultApi('v1');
 
-        if (env('SCOUT_DRIVER') === 'algolia') {
+        if (config('scout.driver') === 'algolia') {
             Ingredient::bootSearchable();
         }
     }
