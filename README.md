@@ -8,42 +8,19 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-After initial deployment the `APP_KEY` environment variable must be set as Heroku's
-deploy button does not support the necessary format. This can be set one of two
-ways:
-
-#### From App Settings
-
-1. Navigate to the deployed app.
-
-1. Click the "More" menu and select "Run console".
-
-1. Enter the following command and click "Run".
-
-        php artisan --no-ansi key:generate --show
-
-1. Copy the output from the command (it should start with `base64:`).
-
-1. Close the console.
-
-1. Navigate to the "Settings" tab, "Config Vars" section.
-
-1. Click "Reveal Config Vars".
-
-1. Enter a new config var with values:
-
-    - KEY: `APP_KEY`
-    - VALUE: *Paste console out copied from Step 4*
-    
-1. Click "Add"
-
-The application will restart after setting the config var and login will work.
-
 #### Using Heroku CLI
 
-With the Heroku CLI utility installed and connected to the app, execute:
+For a manual deploy using Heroku CLI, execute the following after initial deployment:
 
+    heroku run php artisan migrate
+    heroku run php artisan user:create
     heroku config:set APP_KEY=$(php artisan --no-ansi key:generate --show)
+
+#### Search drivers
+
+See the [Search](#search) section for information about supported drivers. Additional
+environment variable configuration is necessary when using any search driver other
+than the default ("null").
 
 #### Redis Add-on
 

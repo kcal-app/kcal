@@ -117,9 +117,12 @@ return [
     | to a random, 32 character string, otherwise these encrypted strings
     | will not be safe. Please do this before deploying an application!
     |
+    | MD5 is used here to enforce the 32 character string requirement while
+    | allowing flexibility in the actual APP_KEY length.
+    |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => md5(env('APP_KEY')),
 
     'cipher' => 'AES-256-CBC',
 
