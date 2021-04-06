@@ -8,12 +8,14 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+The default username and password for a Heroku deployment is `kcal`/`kcal`.
+
 #### Using Heroku CLI
 
 For a manual deploy using Heroku CLI, execute the following after initial deployment:
 
     heroku run php artisan migrate
-    heroku run php artisan user:create
+    heroku run php artisan user:add
     heroku config:set APP_KEY=$(php artisan --no-ansi key:generate --show)
 
 #### Search drivers

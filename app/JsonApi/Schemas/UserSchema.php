@@ -26,8 +26,8 @@ class UserSchema extends SchemaProvider
     public function getAttributes($resource): array
     {
         return [
+            'username' => $resource->username,
             'name' => $resource->name,
-            'email' => $resource->email,
             'createdAt' => $resource->created_at,
             'updatedAt' => $resource->updated_at,
         ];

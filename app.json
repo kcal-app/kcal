@@ -41,7 +41,7 @@
         }
     },
     "scripts": {
-        "postdeploy": "php artisan migrate --force && php artisan user:create \"kcal@kcal.kcal\" Admin kcal"
+        "postdeploy": "php artisan migrate --force && php artisan user:add kcal kcal --name=Admin"
     },
     "success_url": "/"
 }

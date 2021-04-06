@@ -15,7 +15,7 @@ trait LogsIn
     {
         $this->user = User::factory()->create();
         $this->post('/login', [
-            'email' => $this->user->email,
+            'username' => $this->user->username,
             'password' => 'password',
         ]);
     }
