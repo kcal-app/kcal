@@ -2,6 +2,7 @@
     "name": "kcal – the personal food nutrition journal",
     "description": "Self-hostable web app for food and recipe nutrition tracking.",
     "keywords": [
+        "cooking",
         "fitness",
         "food",
         "heath",
@@ -41,5 +42,6 @@
     },
     "scripts": {
         "postdeploy": "php artisan migrate --force && php artisan user:create \"kcal@kcal.kcal\" Admin kcal"
-    }
+    },
+    "success_url": "/"
 }
