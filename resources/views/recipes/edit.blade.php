@@ -182,6 +182,9 @@
             </x-inputs.button>
         </div>
     </form>
+    @if(config('scout.driver') === 'algolia')
+        <x-search-by-algolia />
+    @endif
 
     @once
         @push('styles')

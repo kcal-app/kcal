@@ -34,7 +34,7 @@
                     <x-slot name="content">
                         <div class="ml-3">
                             <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                            <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                            <div class="font-medium text-sm text-gray-500">{{ Auth::user()->username }}</div>
                         </div>
 
                         <div class="mt-3 space-y-1">
