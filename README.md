@@ -2,9 +2,55 @@
 [![CI Status](https://github.com/kcal-app/kcal/actions/workflows/ci.yml/badge.svg)](https://github.com/kcal-app/kcal/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/kcal-app/kcal/badge.svg)](https://coveralls.io/github/kcal-app/kcal)
 
-## Search
+## Search :mag:
 
+The "ingredient" (food or recipe) search for journal entries and recipe ingredients
+supports three different backends using the `SCOUT_DRIVER` environment variable.
+In all cases, always ensure that the `SCOUT_DRIVER` environment variable is only
+set once in kcal's `.env` file.
 
+Currently, the food and recipe *list* searches do not take advantage of these
+search drivers. Support for those searches will be added if the Laravel JSON:API
+adds support for Scout (see: laravel-json-api/laravel#32).
+
+### Algolia (`algolia`)
+
+1. [Create and/or log in](https://www.algolia.com/users/sign_in) to an Algolia account.
+
+1. Create an application for kcal.
+
+1. Navigate to the application's "API Keys" section.
+
+1. Using the **Application ID** and **Admin API Key** values, update kcal's `.env` file:
+
+        SCOUT_DRIVER=algolia
+        ALGOLIA_APP_ID=<APPLICATION_ID>
+        ALGOLIA_SECRET=<ADMIN_API_KEY>
+
+### ElasticSearch (`elastic`)
+
+1. Determine the host and port for your ElasticSearch service.
+
+1. Update kcal's `.env` file.
+
+        SCOUT_DRIVER=elastic
+        ELASTIC_HOST=<HOST:PORT>
+        ELASTIC_PORT=<PORT>
+
+   Note: The `ELASTIC_PORT` variable is a convenience option specifically for
+   Docker Compose configurations and is not strictly required.
+   
+1. Run Elastic's migrations.
+
+        php artisan elastic:migrate
+
+### Fallback (`null`)
+
+The fallback driver is a simple `WHERE ... LIKE` clause search on a couple of key
+fields. Results will not be ordered by relevance, and some fields will not be
+searched (e.g. the tags fields). Using one of the other options is highly recommended.
+
+Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 
 ## Development
 
