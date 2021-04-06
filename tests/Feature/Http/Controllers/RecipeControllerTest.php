@@ -61,7 +61,6 @@ class RecipeControllerTest extends HttpControllerTestCase
         $response = $this->get($create_url);
         $response->assertOk();
 
-
         $ingredient_amounts = IngredientAmount::factory()
             ->count(10)
             ->make(['parent_id' => null, 'parent_type' => null]);
@@ -105,18 +104,22 @@ class RecipeControllerTest extends HttpControllerTestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function testSessionKeepsOldInput(): void {
+    public function testSessionKeepsOldInputOnAdd(): void {
         $instance = $this->createInstance();
+        $data = $this->createInvalidFormData($instance);
+        $create_url = action([$this->class(), 'create']);
+        $store_url = action([$this->class(), 'store']);
+        $response = $this->from($create_url)->post($store_url, $data);
+        $response->assertRedirect($create_url);
+        $response->assertSessionHasErrors();
+        $response->assertSessionHasInput('ingredients', $data['ingredients']);
+        $response->assertSessionHasInput('steps', $data['steps']);
+        $response->assertSessionHasInput('separators', $data['separators']);
+    }
 
-        $data = [
-            'ingredients' => $this->createFormDataFromIngredientAmounts($instance->ingredientAmounts),
-            'steps' => $this->createFormDataFromRecipeSteps($instance->steps),
-            'separators' => $this->createFormDataFromRecipeSeparators($instance->ingredientSeparators),
-        ] + $instance->toArray();
-
-        // Remove the first amount value to force a form error.
-        $data['ingredients']['amount'][0] = NULL;
-
+    public function testSessionKeepsOldInputOnEdit(): void {
+        $instance = $this->createInstance();
+        $data = $this->createInvalidFormData($instance);
         $edit_url = action([$this->class(), 'edit'], [$this->routeKey() => $instance]);
         $put_url = action([$this->class(), 'update'], [$this->routeKey() => $instance]);
         $response = $this->from($edit_url)->put($put_url, $data);
@@ -130,6 +133,22 @@ class RecipeControllerTest extends HttpControllerTestCase
             ->from($edit_url)
             ->put($put_url, $data);
         $this->assertEquals($edit_url, url()->current());
+    }
+
+    /**
+     * Create invalid form data for testing rejected forms.
+     */
+    private function createInvalidFormData(Recipe $instance): array {
+        $instance = $this->createInstance();
+        $data = [
+                'ingredients' => $this->createFormDataFromIngredientAmounts($instance->ingredientAmounts),
+                'steps' => $this->createFormDataFromRecipeSteps($instance->steps),
+                'separators' => $this->createFormDataFromRecipeSeparators($instance->ingredientSeparators),
+            ] + $instance->toArray();
+
+        // Remove the first amount value to force a form error.
+        $data['ingredients']['amount'][0] = NULL;
+        return $data;
     }
 
     /**
