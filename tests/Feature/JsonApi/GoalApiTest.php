@@ -32,6 +32,8 @@ class GoalApiTest extends JsonApiTestCase
      * @inheritdoc
      */
     protected function createInstances(int $count = 1): Collection {
+        // Remove random goals for accurate count tests.
+        $this->user->goals()->delete();
         return $this->factory()->count($count)->for($this->user)->create();
     }
 

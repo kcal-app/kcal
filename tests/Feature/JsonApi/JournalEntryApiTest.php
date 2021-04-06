@@ -4,6 +4,7 @@ namespace Tests\Feature\JsonApi;
 
 use App\Models\JournalEntry;
 use Database\Factories\JournalEntryFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\JsonApi\Traits\BelongsToUser;
 
@@ -25,6 +26,15 @@ class JournalEntryApiTest extends JsonApiTestCase
     public function resourceName(): string
     {
         return 'journal-entries';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function createInstances(int $count = 1): Collection {
+        // Remove random entries for accurate count tests.
+        $this->user->journalEntries()->delete();
+        return $this->factory()->count($count)->for($this->user)->create();
     }
 
     public function testCanGetRelatedFoods(): void {

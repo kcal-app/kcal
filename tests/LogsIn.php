@@ -13,7 +13,10 @@ trait LogsIn
      */
     public function loginUser(): void
     {
-        $this->user = User::factory()->create();
+        $this->user = User::factory()
+            ->hasGoals(2)
+            ->hasJournalEntries(5)
+            ->create();
         $this->post('/login', [
             'username' => $this->user->username,
             'password' => 'password',
