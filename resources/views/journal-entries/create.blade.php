@@ -24,13 +24,20 @@
             </x-inputs.icon-green>
             <div class="flex items-center justify-end mt-4 space-x-4">
                 <fieldset class="flex space-x-2">
+                    <x-inputs.input name="group_entries" type="checkbox" class="h-5 w-5" value="1" checked />
                     <x-inputs.label for="groupEntries" value="Group entries by day and meal" />
-                    <x-inputs.input type="checkbox" name="group_entries" value="1" checked />
                 </fieldset>
                 <x-inputs.button x-on:click="removeTemplate($el);">Add entries</x-inputs.button>
             </div>
         </div>
     </form>
+    @if(env('SCOUT_DRIVER') === 'algolia')
+        <div class="flex justify-center pt-12 sm:pt-0 sm:justify-start">
+            <a href="https://www.algolia.com/" target="_blank">
+                <img src="{{ asset('images/search-by-algolia-light-background.svg') }}" alt="Search by Algolia">
+            </a>
+        </div>
+    @endif
 
     @once
         @push('scripts')
