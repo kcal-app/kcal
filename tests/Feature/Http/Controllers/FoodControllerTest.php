@@ -35,6 +35,14 @@ class FoodControllerTest extends HttpControllerTestCase
         return 'food';
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function createInstance(): Food
+    {
+        return $this->factory()->hasTags(5)->create();
+    }
+
     public function testCanAddFoodWithoutNutrients(): void
     {
         /** @var \App\Models\Food $food */

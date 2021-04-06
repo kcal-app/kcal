@@ -71,6 +71,7 @@ class RecipeControllerTest extends HttpControllerTestCase
             'steps' => $this->createFormDataFromRecipeSteps(RecipeStep::factory()->count(6)->make()),
             'separators' => $this->createFormDataFromRecipeSeparators(RecipeSeparator::factory()->count(2)->make()),
             'image' => UploadedFile::fake()->image('recipe.jpg', 1600, 900),
+            'tags' => implode(',', $this->faker->words),
         ];
 
         $store_url = action([$this->class(), 'store']);
@@ -96,6 +97,7 @@ class RecipeControllerTest extends HttpControllerTestCase
             'steps' => $this->createFormDataFromRecipeSteps($instance->steps),
             'separators' => $this->createFormDataFromRecipeSeparators($instance->ingredientSeparators),
             'image' => UploadedFile::fake()->image('recipe.jpg', 1600, 900),
+            'tags' => implode(',', $this->faker->words),
         ];
 
         $put_url = action([$this->class(), 'update'], [$this->routeKey() => $instance]);

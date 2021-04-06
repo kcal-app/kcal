@@ -253,8 +253,12 @@ class RecipeController extends Controller
 
         try {
             DB::transaction(function () use ($input, $recipe, $request) {
-                // Sync tags before save (to ensure indexing).
-                $tags = $request->get('tags');
+                $recipe->saveOrFail();
+                $this->updateIngredients($recipe, $input);
+                $this->updateIngredientSeparators($recipe, $input);
+                $this->updateSteps($recipe, $input);
+
+                $tags = $request->get('tags', []);
                 if (!empty($tags)) {
                     $recipe->syncTags(explode(',', $tags));
                 }
@@ -262,10 +266,8 @@ class RecipeController extends Controller
                     $recipe->detachTags($recipe->tags);
                 }
 
-                $recipe->saveOrFail();
-                $this->updateIngredients($recipe, $input);
-                $this->updateIngredientSeparators($recipe, $input);
-                $this->updateSteps($recipe, $input);
+                // Refresh and index updated tags.
+                $recipe->fresh()->searchable();
             });
         } catch (\Exception $e) {
             DB::rollBack();
