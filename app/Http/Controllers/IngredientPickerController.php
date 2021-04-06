@@ -77,6 +77,6 @@ class IngredientPickerController extends Controller
             ->orWhere('recipes.description', 'like', "%{$term}%")
             ->orWhere('recipes.source', 'like', "%{$term}%")
             ->get();
-        return $foods->merge($recipes);
+        return new Collection([...$foods, ...$recipes]);
     }
 }

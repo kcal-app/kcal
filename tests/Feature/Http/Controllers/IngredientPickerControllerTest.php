@@ -3,30 +3,72 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Http\Controllers\IngredientPickerController;
+use App\Models\Food;
+use App\Models\Recipe;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
 use Tests\LoggedInTestCase;
 
 /**
- * Class IngredientPickerControllerTest
- *
- * Most of the functionality of this test is has been removed because it is too
- * unstable, particularly for parallel testing.
- *
- * @todo Find a stable way to test Elasticsearch querying.
- *
- * @package Tests\Feature\Http\Controllers
+ * @todo Improve testing of Algolia and ElasticSearch drivers.
  */
 class IngredientPickerControllerTest extends LoggedInTestCase
 {
     use RefreshDatabase;
 
-    private function buildUrl(array $parameters = []): string {
+    private function buildUrl(array $parameters = []): string
+    {
         return action([IngredientPickerController::class, 'search'], $parameters);
     }
 
-    public function testSearchUrlLoads(): void {
+    public function testSearchUrlLoads(): void
+    {
         $response = $this->get($this->buildUrl());
         $response->assertOk();
+    }
+
+    public function testCanSearchWithDatabase(): void
+    {
+        Config::set('scout.driver', 'null');
+
+        $food = ['name' => 'Butter'];
+        Food::factory()->createOne($food);
+        $recipe = ['name' => 'Buttered Toast'];
+        Recipe::factory()->createOne($recipe);
+
+        $response = $this->get($this->buildUrl(['term' => 'butter']));
+        $response->assertOk();
+        $response->assertJsonCount(2);
+        $response->assertJsonFragment($food);
+        $response->assertJsonFragment($recipe);
+    }
+
+    /**
+     * Essentially only confirms that the Algolia search method is used.
+     */
+    public function testCanSearchWithAlgolia(): void
+    {
+        $this->expectException(ConnectException::class);
+        $this->expectExceptionMessageMatches("/Could not resolve host: \-dsn\.algolia\.net/");
+
+        Config::set('scout.driver', 'algolia');
+        $response = $this->get($this->buildUrl(['term' => 'butter']));
+        $response->assertStatus(500);
+        if ($response->exception) {
+            throw $response->exception;
+        }
+    }
+
+    /**
+     * Essentially only confirms that the ElasticSearch search method is used.
+     */
+    public function testCanSearchWithElasticSearch(): void
+    {
+        Config::set('scout.driver', 'elastic');
+        $response = $this->get($this->buildUrl(['term' => 'butter']));
+        $response->assertOk();
+        $response->assertJson([]);
     }
 
 }
