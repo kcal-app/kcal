@@ -16676,6 +16676,19 @@ namespace  {
             }
              
                 /**
+             * 
+             *
+             * @see \Algolia\ScoutExtended\ScoutExtendedServiceProvider::registerMacros()
+             * @param array $array
+             * @param array|null $transformers
+             * @static 
+             */ 
+            public static function transform($array, $transformers = null)
+            {
+                                return \Illuminate\Database\Eloquent\Builder::transform($array, $transformers);
+            }
+             
+                /**
              * Set the columns to be selected.
              *
              * @param array|mixed $columns

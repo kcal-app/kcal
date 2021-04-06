@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Food;
 use App\Models\Recipe;
+use App\Search\Ingredient;
 use ElasticScoutDriverPlus\Builders\MultiMatchQueryBuilder;
 use ElasticScoutDriverPlus\Builders\TermsQueryBuilder;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,12 +22,20 @@ class IngredientPickerController extends Controller
         $term = $request->query->get('term');
         if (!empty($term)) {
             $results = match (env('SCOUT_DRIVER')) {
+                'algolia' => $this->searchWithAlgolia($term),
                 'elastic' => $this->searchWithElasticSearch($term),
                 default => $this->searchWithDatabaseLike($term),
             };
 
         }
         return response()->json($results->values());
+    }
+
+    /**
+     * Search using an Algolia service.
+     */
+    private function searchWithAlgolia(string $term): Collection {
+        return Ingredient::search($term)->take(10)->get();
     }
 
     /**
