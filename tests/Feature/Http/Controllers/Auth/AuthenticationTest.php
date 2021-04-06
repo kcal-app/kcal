@@ -4,21 +4,25 @@ namespace Tests\Feature\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testLoginScreenCanRendered()
+    public function testLoginScreenCanRendered(): void
     {
         $response = $this->get('/login');
         $response->assertStatus(200);
     }
 
-    public function testUserCanAuthenticateUsingLoginScreen()
+    public function testUserCanAuthenticateUsingLoginScreen(): void
     {
+        /** @var \App\Models\User $user */
         $user = User::factory()->create();
         $response = $this->post('/login', [
             'username' => $user->username,
@@ -28,8 +32,9 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect(RouteServiceProvider::HOME);
     }
 
-    public function testUserCannotAuthenticateWithInvalidPassword()
+    public function testUserCannotAuthenticateWithInvalidPassword(): void
     {
+        /** @var \App\Models\User $user */
         $user = User::factory()->create();
         $this->post('/login', [
             'username' => $user->username,
@@ -38,9 +43,33 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
-    public function testUserCanLogout()
+    public function testUserCanLogout(): void
     {
+        /** @var \App\Models\User $user */
+        $user = User::factory()->create();
+        $this->post('/login', ['username' => $user->username, 'password' => 'password']);
+        $this->assertAuthenticated();
         $this->followingRedirects()->post('/logout');
         $this->assertGuest();
+    }
+
+    public function testExcessiveLoginRequestsAreRateLimited(): void
+    {
+        /** @var \App\Models\User $user */
+        $user = User::factory()->create();
+
+        Event::fake();
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/login', [
+                'username' => $user->username,
+                'password' => 'wrong-password',
+            ]);
+            if ($i < 5) {
+                Event::assertNotDispatched(Lockout::class);
+                continue;
+            }
+            Event::assertDispatched(Lockout::class);
+        }
     }
 }

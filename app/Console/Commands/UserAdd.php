@@ -40,6 +40,11 @@ class UserAdd extends Command
             $arguments['username'] = $this->ask('Enter a username for the user');
         }
 
+        if (empty($arguments['username'])) {
+            $this->error('Username is required.');
+            return 1;
+        }
+
         // Check for an existing user.
         if (User::whereUsername($arguments['username'])->exists()) {
             $this->error("User `{$arguments['username']}` already exists.");
@@ -65,11 +70,6 @@ class UserAdd extends Command
         $options = $this->options();
         if (!$options['name']) {
             $options['name'] = $this->ask('Enter a name for the user (optional)');
-        }
-
-        if (empty($arguments['username']) || empty($arguments['password'])) {
-            $this->error('Username and password must be provided.');
-            return 1;
         }
 
         User::create([
