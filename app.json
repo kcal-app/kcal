@@ -19,8 +19,7 @@
         }
     ],
     "addons": [
-        "heroku-postgresql",
-        "heroku-redis"
+        "heroku-postgresql"
     ],
     "env": {
         "APP_TIMEZONE": {

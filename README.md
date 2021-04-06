@@ -12,7 +12,7 @@ After initial deployment the `APP_KEY` environment variable must be set as Herok
 deploy button does not support the necessary format. This can be set one of two
 ways:
 
-### From App Settings
+#### From App Settings
 
 1. Navigate to the deployed app.
 
@@ -39,11 +39,17 @@ ways:
 
 The application will restart after setting the config var and login will work.
 
-### Using Heroku CLI
+#### Using Heroku CLI
 
 With the Heroku CLI utility installed and connected to the app, execute:
 
     heroku config:set APP_KEY=$(php artisan --no-ansi key:generate --show)
+
+#### Redis Add-on
+
+The [Heroku Redis](https://elements.heroku.com/addons/heroku-redis) add-on can be
+added to the app and will work without any configuration changes. It is left out
+of the default build only because it takes a very long time to provision.
 
 ## Search :mag:
 
