@@ -1,0 +1,9 @@
+above
+across
+below
+in
+inside
+on
+over
+under
+with

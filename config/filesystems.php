@@ -58,6 +58,11 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'wordlists' => [
+            'driver' => 'local',
+            'root' => storage_path('wordlists'),
+        ],
+
     ],
 
     /*
