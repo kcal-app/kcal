@@ -4,7 +4,9 @@ namespace Database\Factories;
 
 use App\Models\Food;
 
+use Database\Support\Words;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 class FoodFactory extends Factory
 {
@@ -20,7 +22,7 @@ class FoodFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
+            'name' => Words::randomWords(Arr::random(['n', 'an'])),
             'detail' => $this->faker->optional()->sentence(2),
             'brand' => $this->faker->optional()->word,
             'source' => $this->faker->optional()->url,
