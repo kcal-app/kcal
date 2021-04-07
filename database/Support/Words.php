@@ -47,10 +47,10 @@ class Words
      *  - p: preposition, and
      *  - v: verb.
      */
-    public static function randomWords(string $format = 'an'): string {
-        $name = [];
+    public static function randomWords(string $format = 'an', $asText = false): array|string {
+        $words = [];
         foreach (str_split($format) as $type) {
-            $name[] = match ($type) {
+            $words[] = match ($type) {
                 'a' => self::adjectives()->random(),
                 'n' => self::nouns()->random(),
                 'p' => self::prepositions()->random(),
@@ -58,7 +58,10 @@ class Words
                 default => NULL
             };
         }
-        return implode(' ', $name);
+        if ($asText) {
+            $words = implode(' ', $words);
+        }
+        return $words;
     }
 
 }

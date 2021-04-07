@@ -22,22 +22,22 @@ class FoodFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => Words::randomWords(Arr::random(['n', 'an'])),
+            'name' => Words::randomWords(Arr::random(['n', 'an']), TRUE),
             'detail' => $this->faker->optional()->sentence(2),
             'brand' => $this->faker->optional()->word,
             'source' => $this->faker->optional()->url,
             'notes' => $this->faker->optional(0.25)->paragraph,
-            'serving_size' => $this->faker->randomFloat(2, 1/2, 5),
+            'serving_size' => $this->faker->numberBetween(1, 3),
             'serving_unit' => $this->faker->randomElement(['tsp', 'tbsp', 'cup']),
             'serving_weight' => $this->faker->numberBetween(5, 500),
             'serving_unit_name' => $this->faker->optional(0.25)->word,
-            'calories' => $this->faker->randomFloat(2, 0, 100),
-            'fat' => $this->faker->randomFloat(2, 0, 10),
-            'cholesterol' => $this->faker->randomFloat(2, 0, 100),
-            'sodium' => $this->faker->randomFloat(2, 0, 500),
-            'carbohydrates' => $this->faker->randomFloat(2, 0, 20),
-            'protein' => $this->faker->randomFloat(2, 0, 20),
-            'tags' => $this->faker->words,
+            'calories' => $this->faker->randomFloat(1, 0, 100),
+            'fat' => $this->faker->randomFloat(1, 0, 10),
+            'cholesterol' => $this->faker->randomFloat(1, 0, 100),
+            'sodium' => $this->faker->randomFloat(1, 0, 500),
+            'carbohydrates' => $this->faker->randomFloat(1, 0, 20),
+            'protein' => $this->faker->randomFloat(1, 0, 20),
+            'tags' => Words::randomWords(Arr::random(['a', 'aa', 'aaa'])),
         ];
     }
 

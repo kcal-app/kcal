@@ -22,12 +22,12 @@ class JournalEntryFactory extends Factory
             'user_id' => User::factory(),
             'date' => $this->faker->dateTimeThisMonth,
             'summary' => $this->faker->realText(50),
-            'calories' => $this->faker->randomFloat(2, 0, 500),
-            'fat' => $this->faker->randomFloat(2, 0, 50),
-            'cholesterol' => $this->faker->randomFloat(2, 0, 2000),
-            'sodium' => $this->faker->randomFloat(2, 0, 2000),
-            'carbohydrates' => $this->faker->randomFloat(2, 0, 100),
-            'protein' => $this->faker->randomFloat(2, 0, 100),
+            'calories' => $this->faker->randomFloat(1, 0, 500),
+            'fat' => $this->faker->randomFloat(1, 0, 50),
+            'cholesterol' => $this->faker->randomFloat(1, 0, 2000),
+            'sodium' => $this->faker->randomFloat(1, 0, 2000),
+            'carbohydrates' => $this->faker->randomFloat(1, 0, 100),
+            'protein' => $this->faker->randomFloat(1, 0, 100),
             'meal' => $this->faker->randomElement(['breakfast', 'lunch', 'dinner', 'snacks']),
         ];
     }

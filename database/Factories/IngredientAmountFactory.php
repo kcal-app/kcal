@@ -6,6 +6,7 @@ use App\Models\Food;
 use App\Models\IngredientAmount;
 use App\Models\Recipe;
 use App\Support\Nutrients;
+use Database\Support\Words;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,7 +38,7 @@ class IngredientAmountFactory extends Factory
             'ingredient_type' => $ingredient_type,
             'amount' => $this->faker->randomFloat(1, 1/3, 5),
             'unit' => $ingredient_unit,
-            'detail' => $this->faker->optional(0.8)->realText(),
+            'detail' => $this->faker->boolean() ?: Words::randomWords('a'),
             'weight' => $this->faker->numberBetween(0, 50),
             'parent_id' => Recipe::factory(),
             'parent_type' => Recipe::class,

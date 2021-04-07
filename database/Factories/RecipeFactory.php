@@ -24,7 +24,7 @@ class RecipeFactory extends Factory
     {
         $description = htmlspecialchars($this->faker->realText(500));
         return [
-            'name' => Words::randomWords(Arr::random(['npan', 'npn', 'anpn'])),
+            'name' => Words::randomWords(Arr::random(['npan', 'npn', 'anpn']), TRUE),
             'description' => "<p>{$description}</p>",
             'description_delta' => '{"ops":[{"insert":"' . $description . '\n"}]}"',
             'time_prep' => $this->faker->numberBetween(0, 20),
@@ -32,7 +32,7 @@ class RecipeFactory extends Factory
             'source' => $this->faker->optional()->url,
             'servings' => $this->faker->numberBetween(1, 10),
             'weight' => $this->faker->randomFloat(1, 60, 2000),
-            'tags' => $this->faker->words,
+            'tags' => Words::randomWords(Arr::random(['a', 'aa', 'aaa'])),
         ];
     }
 
