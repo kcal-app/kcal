@@ -215,6 +215,9 @@ class JournalEntryController extends Controller
             }
             $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null);
             $entries[$entry_key]->summary .= "{$ingredient['amount']} {$unit} {$item->name}";
+            if (isset($item->detail) && !empty($item->detail)) {
+                $entries[$entry_key]->summary .= ", {$item->detail}";
+            }
         }
 
         foreach ($entries as $entry) {
