@@ -20,7 +20,13 @@
             <div>
                 <x-inputs.label for="username" value="Username" />
 
-                <x-inputs.input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus />
+                <x-inputs.input id="username"
+                                class="block mt-1 w-full"
+                                type="text"
+                                name="username"
+                                :value="old('username')"
+                                required
+                                autofocus />
             </div>
 
             <!-- Password -->
@@ -30,7 +36,8 @@
                 <x-inputs.input id="password" class="block mt-1 w-full"
                                 type="password"
                                 name="password"
-                                required autocomplete="current-password" />
+                                required
+                                autocomplete="current-password" />
             </div>
 
             <!-- Remember Me -->
