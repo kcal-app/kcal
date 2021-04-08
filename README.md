@@ -1,6 +1,37 @@
 # kcal – the personal food nutrition journal
+
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 [![CI Status](https://github.com/kcal-app/kcal/actions/workflows/ci.yml/badge.svg)](https://github.com/kcal-app/kcal/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/kcal-app/kcal/badge.svg?branch=main)](https://coveralls.io/github/kcal-app/kcal?branch=main)
+
+Track nutritional information about foods and recipes, set goals, and record a food
+journal to help along the way. Kcal is a *personal* system that focuses on direct
+control of inputs (as opposed to unwieldy user generated datasets) and a minimal, easy
+to use recipe presentation for preparing meals.
+
+**Table of Contents**
+
+- [Demo](#demo)
+- [Screenshots](#screenshots)
+- [Deployment](#deployment)
+    - [Heroku](#heroku)
+- [Configuration](#configuration)
+    - [Search](#search-mag)
+- [Development](#development)
+
+## Demo
+
+A [demo of kcal](http://demo.kcal.cooking) is available on Heroku. Login credentials are:
+
+- Username: `kcal`
+- Password: `kcal`
+
+The demo instance resets every hour, on the hour.
+
+## Screenshots
+
+![Baby Buddy mobile view](screenshot-mobile.png)
+![Baby Buddy desktop view](screenshot.png)
 
 ## Deployment
 
@@ -18,6 +49,10 @@ For a manual deploy using Heroku CLI, execute the following after initial deploy
     heroku run php artisan user:add
     heroku config:set APP_KEY=$(php artisan --no-ansi key:generate --show)
 
+#### Media storage
+
+:warning: Storage (for recipe photos) is not supported on Heroku *yet*. :warning:
+
 #### Search drivers
 
 See the [Search](#search-mag) section for information about supported drivers. Additional
@@ -30,7 +65,9 @@ The [Heroku Redis](https://elements.heroku.com/addons/heroku-redis) add-on can b
 added to the app and will work without any configuration changes. It is left out
 of the default build only because it takes a very long time to provision.
 
-## Search :mag:
+## Configuration
+
+### Search :mag:
 
 The "ingredient" (food or recipe) search for journal entries and recipe ingredients
 supports three different backends using the `SCOUT_DRIVER` environment variable.
@@ -124,11 +161,11 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
         vendor/bin/sail artisan migrate
         vendor/bin/sail artisan elastic:migrate
 
-1. (On first run) Create the initial user.
+1. (On first run) Seed the database.
 
-        vendor/bin/sail artisan db:seed --class UserSeeder
+        vendor/bin/sail artisan db:seed
 
-    The default username and password is `admin@kcal.test`.
+    The default username and password is `kcal` / `kcal`.
 
 Once the application finishes starting, navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080)
 (or [http://kcal.test:8080](http://kcal.test:8080) if configured).
