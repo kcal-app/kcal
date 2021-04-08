@@ -63,6 +63,7 @@ class Nutrients
      *  - label: Human-readable name for the entry.
      *  - unit: Unit of measure for the entry.
      *  - weight: Sort weight for presentation.
+     *  - rdi: US FDA's recommended daily intake for adults (https://www.fda.gov/media/99059/download).
      */
     public static function all(): Collection {
         return new Collection([
@@ -71,36 +72,42 @@ class Nutrients
                 'label' => 'calories',
                 'unit' => null,
                 'weight' => 0,
+                'rdi' => 2000,
             ],
             'carbohydrates' => [
                 'value' => 'carbohydrates',
                 'label' => 'carbohydrates',
                 'unit' => 'g',
                 'weight' => 40,
+                'rdi' => 275,
             ],
             'cholesterol' => [
                 'value' => 'cholesterol',
                 'label' => 'cholesterol',
                 'unit' => 'mg',
                 'weight' => 20,
+                'rdi' => 300,
             ],
             'fat' => [
                 'value' => 'fat',
                 'label' => 'fat',
                 'unit' => 'g',
                 'weight' => 10,
+                'rdi' => 78,
             ],
             'protein' => [
                 'value' => 'protein',
                 'label' => 'protein',
                 'unit' => 'g',
                 'weight' => 50,
+                'rdi' => 50,
             ],
             'sodium' => [
                 'value' => 'sodium',
                 'label' => 'sodium',
                 'unit' => 'mg',
                 'weight' => 30,
+                'rdi' => 2300,
             ],
         ]);
     }

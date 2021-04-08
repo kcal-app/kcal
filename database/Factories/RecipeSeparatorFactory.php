@@ -19,8 +19,8 @@ class RecipeSeparatorFactory extends Factory
     {
         return [
             'container' => 'ingredients',
-            'weight' => $this->faker->numberBetween(0, 100),
-            'text' => $this->faker->optional()->realText(20),
+            'weight' => $this->faker->numberBetween(0, 20),
+            'text' => $this->faker->optional()->words(rand(1, 3), TRUE),
         ];
     }
 }

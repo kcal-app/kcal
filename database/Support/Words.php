@@ -26,8 +26,8 @@ class Words
             }
 
             $words = new Collection();
-            $storage = Storage::disk('wordlists');
-            foreach ($storage->files($method) as $file) {
+            $storage = Storage::disk('seeder');
+            foreach ($storage->files("wordlists/{$method}") as $file) {
                 $contents = array_filter(explode("\n", $storage->get($file)));
                 $words->push(...$contents);
             }
@@ -47,7 +47,7 @@ class Words
      *  - p: preposition, and
      *  - v: verb.
      */
-    public static function randomWords(string $format = 'an', $asText = false): array|string {
+    public static function randomWords(string $format = 'an', $asArray = false): array|string {
         $words = [];
         foreach (str_split($format) as $type) {
             $words[] = match ($type) {
@@ -58,10 +58,10 @@ class Words
                 default => NULL
             };
         }
-        if ($asText) {
-            $words = implode(' ', $words);
+        if ($asArray) {
+            return $words;
         }
-        return $words;
+        return implode(' ', $words);
     }
 
 }

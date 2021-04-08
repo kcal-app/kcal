@@ -58,9 +58,9 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
-        'wordlists' => [
+        'seeder' => [
             'driver' => 'local',
-            'root' => storage_path('wordlists'),
+            'root' => storage_path('seeder'),
         ],
 
     ],

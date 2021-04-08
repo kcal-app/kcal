@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\RecipeStep;
+use Database\Support\Words;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RecipeStepFactory extends Factory
@@ -17,9 +18,10 @@ class RecipeStepFactory extends Factory
      */
     public function definition(): array
     {
+        $word_combos = ['v', 'vn', 'van', 'vnpan', 'vanpn'];
         return [
             'number' => $this->faker->numberBetween(1, 50),
-            'step' => $this->faker->realText(500),
+            'step' => Words::randomWords($this->faker->randomElement($word_combos)),
         ];
     }
 }

@@ -4,11 +4,16 @@ namespace Database\Seeders;
 
 use App\Models\Food;
 use App\Models\Goal;
+use App\Models\IngredientAmount;
 use App\Models\JournalEntry;
 use App\Models\Recipe;
 use App\Models\User;
+use App\Support\Nutrients;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -24,16 +29,52 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'remember_token' => Str::random(10),
         ]);
-        // @todo Make this more fine tuned for different macros.
-        Goal::factory()->for($user)->count(5)->create();
-        Food::factory()->count(100)->create();
-        // @todo Create with media.
-        Recipe::factory()
-            ->hasIngredientAmounts(rand(2, 20))
+
+        $goals = [];
+        foreach (Nutrients::all() as $nutrient) {
+            $goals[] = [
+                'frequency' => 'daily',
+                'name' => $nutrient['value'],
+                'goal' => $nutrient['rdi'],
+            ];
+        }
+        Goal::factory()->for($user)->createMany($goals);
+
+        $foods = Food::factory()->count(100)->create();
+        $recipes = Recipe::factory()
             ->hasSteps(rand(5, 20))
-            ->hasIngredientSeparators(rand(0, 5))
-            ->count(50)
+            ->count(25)
             ->create();
-        JournalEntry::factory()->for($user)->count(100)->create();
+
+        $storage = Storage::disk('seeder');
+        $photos = new Collection($storage->files('photos'));
+        /** @var \App\Models\Recipe $recipe */
+        foreach ($recipes as $recipe) {
+            $ingredients = [];
+            for ($i = 0; $i < rand(1, 20); $i++) {
+                $ingredients[] = IngredientAmount::factory()
+                    ->for($recipe, 'parent')
+                    ->for($foods->random(), 'ingredient')
+                    ->create([
+                        'weight' => $i,
+                    ]);
+            }
+            $recipe->ingredientAmounts()->saveMany($ingredients);
+
+            $recipe->addMediaFromStream($storage->get($photos->pop()))
+                ->usingName($recipe->name)
+                ->usingFileName("{$recipe->slug}.jpg")
+                ->preservingOriginal()
+                ->toMediaCollection();
+        }
+
+        for ($i = 0; $i <= 31; $i++) {
+            JournalEntry::factory()
+                ->for($user)
+                ->count(rand(5, 12))
+                ->create(['date' => Carbon::now()->sub('day', $i)]);
+        }
+
+
     }
 }

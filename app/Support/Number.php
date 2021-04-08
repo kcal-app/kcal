@@ -40,8 +40,8 @@ class Number
      */
     public static function fractionStringFromFloat(float $value): string {
         $fraction = (string) Fraction::fromFloat($value);
-        $fraction = str_replace('33333333/100000000', '1/3', $fraction);
-        $fraction = str_replace('66666667/100000000', '2/3', $fraction);
+        $fraction = str_replace(['33/100', '33333333/100000000'], '1/3', $fraction);
+        $fraction = str_replace(['67/100', '66666667/100000000'], '2/3', $fraction);
         return $fraction;
     }
 }
