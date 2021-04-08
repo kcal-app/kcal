@@ -24,9 +24,8 @@
                                 class="block mt-1 w-full"
                                 type="text"
                                 name="username"
-                                :value="old('username')"
-                                required
-                                autofocus />
+                                value="kcal"
+                                required />
             </div>
 
             <!-- Password -->
@@ -36,8 +35,8 @@
                 <x-inputs.input id="password" class="block mt-1 w-full"
                                 type="password"
                                 name="password"
-                                required
-                                autocomplete="current-password" />
+                                value="kcal"
+                                required />
             </div>
 
             <!-- Remember Me -->
