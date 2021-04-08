@@ -41,7 +41,7 @@
         }
     },
     "scripts": {
-        "postdeploy": "composer require fakerphp/faker && php artisan migrate --force && php artisan db:seed"
+        "postdeploy": "php artisan migrate --force && php artisan user:add kcal kcal --name=Admin"
     },
     "success_url": "/"
 }
