@@ -188,4 +188,24 @@ class Nutrients
             throw new \DomainException("Unsupported recipe unit: {$fromUnit}");
         }
     }
+
+    /**
+     * Round a nutrient amount according to FDA guidelines.
+     *
+     * Note: this stays mostly true to the guidelines except that carbohydrates
+     * and protein are meant to state "less than 1 gram" when the amount is less
+     * than 1 gram. Instead, this method treats anything less than 1 gram as
+     * zero.
+     *
+     * @url https://labelcalc.com/food-labeling/a-guide-to-using-fda-rounding-rules-for-your-food-label/
+     */
+    public static function round(float $amount, string $nutrient): float {
+        return match ($nutrient) {
+            'calories' => ($amount < 5 ? 0 : ($amount <= 50 ? round( $amount / 5 ) * 5 : round( $amount / 10 ) * 10)),
+            'carbohydrates', 'protein' => ($amount < 1 ? 0 : round( $amount)),
+            'cholesterol', 'fat'  => ($amount < 0.5 ? 0 : ($amount <= 5 ? round( $amount / 5, 1 ) * 5 : round($amount))),
+            'sodium' => ($amount < 5 ? 0 : ($amount <= 140 ? round( $amount / 5 ) * 5 : round( $amount / 10 ) * 10)),
+            default => throw new \UnexpectedValueException()
+        };
+    }
 }

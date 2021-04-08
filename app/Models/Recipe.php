@@ -7,6 +7,7 @@ use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
 use App\Models\Traits\Taggable;
+use App\Support\Nutrients;
 use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -165,7 +166,7 @@ final class Recipe extends Model implements HasMedia
         if (empty($this->weight)) {
             return null;
         }
-        return round($this->weight / $this->servings, 2);
+        return round($this->weight / $this->servings);
     }
 
     /**
@@ -209,13 +210,6 @@ final class Recipe extends Model implements HasMedia
 
     /**
      * Add nutrient calculations handling to overloading.
-     *
-     * @param string $method
-     * @param array $parameters
-     *
-     * @return mixed
-     *
-     * @noinspection PhpMissingParamTypeInspection
      */
     public function __call($method, $parameters): mixed {
         if (in_array($method, $this->nutrientTotalMethods)) {
@@ -223,15 +217,7 @@ final class Recipe extends Model implements HasMedia
         }
         elseif (in_array($method, $this->nutrientPerServingMethods)) {
             $sum = $this->sumNutrient(substr($method, 0, -10)) / $this->servings;
-
-            // Per-serving calculations are rounded, though actual food label
-            // rounding standards are more complex.
-            if ($sum > 1) {
-                return round($sum);
-            }
-            else {
-                return round($sum, 2);
-            }
+            return Nutrients::round($sum, substr($method, 0, -10));
         }
         else {
             return parent::__call($method, $parameters);

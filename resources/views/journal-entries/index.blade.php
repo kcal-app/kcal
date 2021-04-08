@@ -104,7 +104,7 @@
                         </div>
                         <span class="text-sm text-gray-500">
                         @foreach(\App\Support\Nutrients::all()->sortBy('weight') as $nutrient)
-                                {{ round($entries->where('meal', $meal)->sum($nutrient['value']), 2) }}{{ $nutrient['unit'] }}
+                                {{ \App\Support\Nutrients::round($entries->where('meal', $meal)->sum($nutrient['value']), $nutrient['value']) }}{{ $nutrient['unit'] }}
                                 {{ $nutrient['value'] }}@if(!$loop->last), @endif
                             @endforeach
                     </span>
@@ -124,7 +124,7 @@
                                 <div>
                                     <span class="font-bold">nutrients:</span>
                                     @foreach(\App\Support\Nutrients::all()->sortBy('weight') as $nutrient)
-                                        {{ round($entry->{$nutrient['value']}, 2) }}{{ $nutrient['unit'] }}
+                                        {{ \App\Support\Nutrients::round($entry->{$nutrient['value']}, $nutrient['value']) }}{{ $nutrient['unit'] }}
                                         {{ $nutrient['value'] }}@if(!$loop->last), @endif
                                     @endforeach
                                 </div>
