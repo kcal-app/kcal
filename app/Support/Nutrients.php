@@ -198,14 +198,47 @@ class Nutrients
      * zero.
      *
      * @url https://labelcalc.com/food-labeling/a-guide-to-using-fda-rounding-rules-for-your-food-label/
+     *
+     * @throws \InvalidArgumentException
      */
     public static function round(float $amount, string $nutrient): float {
         return match ($nutrient) {
-            'calories' => ($amount < 5 ? 0 : ($amount <= 50 ? round( $amount / 5 ) * 5 : round( $amount / 10 ) * 10)),
-            'carbohydrates', 'protein' => ($amount < 1 ? 0 : round( $amount)),
-            'cholesterol', 'fat'  => ($amount < 0.5 ? 0 : ($amount <= 5 ? round( $amount / 5, 1 ) * 5 : round($amount))),
-            'sodium' => ($amount < 5 ? 0 : ($amount <= 140 ? round( $amount / 5 ) * 5 : round( $amount / 10 ) * 10)),
-            default => throw new \UnexpectedValueException()
+
+            /*
+             * Calories:
+             *  - Less than 5 goes to zero.
+             *  - Between 5 and 50 rounds to nearest number divisible by 5.
+             *  - Greater than 50 rounds to nearest number divisible by 10.
+             */
+            'calories' => ($amount < 5 ? 0 : ($amount <= 50 ? round($amount / 5 ) * 5 : round($amount / 10 ) * 10)),
+
+            /*
+             * Carbohydrates and protein:
+             *  - Less than 1 goes to zero.
+             *  - Greater than 1 rounds to nearest whole.
+             */
+            'carbohydrates', 'protein' => ($amount < 1 ? 0 : round($amount)),
+
+            /*
+             * Cholesterol and fat:
+             *  - Less than 0.5 goes to zero.
+             *  - Between 0.5 and 5 rounds to nearest half.
+             *  - Greater than 5 rounds to nearest whole.
+             */
+            'cholesterol', 'fat'  => ($amount < 0.5 ? 0 : ($amount <= 5 ? round($amount / 5, 1 ) * 5 : round($amount))),
+
+            /*
+             * Sodium:
+             *  - Less than 5 goes to zero.
+             *  - Between 5 and 140 rounds to nearest number divisible by 5.
+             *  - Greater than 140 rounds to nearest number divisible by 10.
+             */
+            'sodium' => ($amount < 5 ? 0 : ($amount <= 140 ? round($amount / 5 ) * 5 : round($amount / 10 ) * 10)),
+
+            /*
+             * Anything else excepts!
+             */
+            default => throw new \InvalidArgumentException("Unrecognized nutrient {$nutrient}.")
         };
     }
 }
