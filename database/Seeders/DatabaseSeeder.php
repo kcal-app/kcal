@@ -11,9 +11,7 @@ use App\Models\User;
 use App\Support\Nutrients;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -46,8 +44,6 @@ class DatabaseSeeder extends Seeder
             ->count(25)
             ->create();
 
-        $storage = Storage::disk('seeder');
-        $photos = new Collection($storage->files('photos'));
         /** @var \App\Models\Recipe $recipe */
         foreach ($recipes as $recipe) {
             $ingredients = [];
@@ -60,12 +56,6 @@ class DatabaseSeeder extends Seeder
                     ]);
             }
             $recipe->ingredientAmounts()->saveMany($ingredients);
-
-            $recipe->addMediaFromStream($storage->get($photos->pop()))
-                ->usingName($recipe->name)
-                ->usingFileName("{$recipe->slug}.jpg")
-                ->preservingOriginal()
-                ->toMediaCollection();
         }
 
         for ($i = 0; $i <= 31; $i++) {
