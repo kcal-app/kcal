@@ -1,7 +1,7 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-  kcal.test:
+  app:
     build:
       context: ./vendor/laravel/sail/runtimes/8.0
       dockerfile: Dockerfile
@@ -18,10 +18,10 @@ services:
     networks:
       - sail
     depends_on:
-      - mysql
+      - db
       - redis
       - elasticsearch
-  mysql:
+  db:
     image: 'mysql:8.0'
     ports:
       - '${DB_PORT:-3306}:3306'
@@ -35,6 +35,18 @@ services:
       - 'mysql-data:/var/lib/mysql'
     networks:
       - sail
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'
+    networks:
+      - sail
+    depends_on:
+      - db
   elasticsearch:
     image: 'elasticsearch:7.12.0'
     environment:
