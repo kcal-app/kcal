@@ -20,6 +20,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Pluralizer;
+use Illuminate\Support\Str;
 
 class JournalEntryController extends Controller
 {
@@ -156,75 +158,56 @@ class JournalEntryController extends Controller
         /** @var \App\Models\JournalEntry[] $entries */
         $entries = [];
         $entry_key = 0;
+        $group_entries = isset($input['group_entries']) && (bool) $input['group_entries'];
         // TODO: Improve efficiency. Potential for lots of queries here...
         foreach ($ingredients as $ingredient) {
             // Set entry key (combined date and meal or individual entries).
-            if (isset($input['group_entries']) && (bool) $input['group_entries']) {
+            if ($group_entries) {
                 $entry_key = "{$ingredient['date']}{$ingredient['meal']}";
             }
             else {
                 $entry_key++;
             }
 
-            // Prepare entry values.
+            // Get an existing entry (when grouping) or create a new one.
             $entries[$entry_key] = $entries[$entry_key] ?? JournalEntry::make([
                 'date' => $ingredient['date'],
                 'meal' => $ingredient['meal'],
             ])->user()->associate(Auth::user());
+            $entry = &$entries[$entry_key];
 
             // Calculate amounts based on ingredient type.
+            $item = NULL;
+            $amount = Number::floatFromString($ingredient['amount']);
             if ($ingredient['type'] == Food::class) {
                 $item = Food::whereId($ingredient['id'])->first();
-                $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier(
-                    $item,
-                    Number::floatFromString($ingredient['amount']),
-                    $ingredient['unit']
-                );
+                $nutrient_multiplier = Nutrients::calculateFoodNutrientMultiplier($item, $amount, $ingredient['unit']);
                 foreach (Nutrients::all()->pluck('value') as $nutrient) {
-                    $entries[$entry_key]->{$nutrient} += $item->{$nutrient} * $nutrient_multiplier;
+                    $entry->{$nutrient} += $item->{$nutrient} * $nutrient_multiplier;
                 }
-                $entries[$entry_key]->foods->add($item);
+                $entry->foods->add($item);
             }
             elseif ($ingredient['type'] == Recipe::class) {
                 $item = Recipe::whereId($ingredient['id'])->first();
                 foreach (Nutrients::all()->pluck('value') as $nutrient) {
-                    $entries[$entry_key]->{$nutrient} += Nutrients::calculateRecipeNutrientAmount(
-                        $item,
-                        $nutrient,
-                        Number::floatFromString($ingredient['amount']),
-                        $ingredient['unit']
-                    );
+                    $entry->{$nutrient} += Nutrients::calculateRecipeNutrientAmount($item, $nutrient, $amount, $ingredient['unit']);
                 }
-                $entries[$entry_key]->recipes->add($item);
-            }
-            else {
-                return back()->withInput()->withErrors("Invalid ingredient type {$ingredient['type']}.");
+                $entry->recipes->add($item);
             }
 
-            // Set entry summary.
-            $unit = $ingredient['unit'];
-            if ($item instanceof Food) {
-                if ($unit === 'serving') {
-                    if (empty($item->serving_unit) && empty($item->serving_unit_name)) {
-                        $unit = null;
-                    }
-                    elseif (!empty($item->serving_unit_name)) {
-                        $unit = $item->serving_unit_formatted;
-                    }
-                }
+            // Add to summary.
+            if (!empty($entry->summary)) {
+                $entry->summary .= '; ';
             }
-            $entries[$entry_key]->summary .= (!empty($entries[$entry_key]->summary) ? ', ' : null);
-            $entries[$entry_key]->summary .= "{$ingredient['amount']} {$unit} {$item->name}";
-            if (isset($item->detail) && !empty($item->detail)) {
-                $entries[$entry_key]->summary .= ", {$item->detail}";
-            }
+            $entry->summary .= $this->createIngredientSummary($ingredient, $item, $amount);
         }
 
-        foreach ($entries as $entry) {
-            $entry->save();
-            $entry->user->save();
-            $entry->foods()->saveMany($entry->foods);
-            $entry->recipes()->saveMany($entry->recipes);
+        // Save all new entries.
+        foreach ($entries as $new_entry) {
+            $new_entry->save();
+            $new_entry->user->save();
+            $new_entry->foods()->saveMany($new_entry->foods);
+            $new_entry->recipes()->saveMany($new_entry->recipes);
         }
 
         $count = count($entries);
@@ -237,6 +220,65 @@ class JournalEntryController extends Controller
             $parameters['date'] = reset($unique_dates);
         }
         return redirect()->route('journal-entries.index', $parameters);
+    }
+
+    /**
+     * Attempt to create a coherent summary for an entry ingredient.
+     */
+    private function createIngredientSummary(array $ingredient, Food|Recipe $item, float $amount): string {
+        $name = $item->name;
+        $unit = $ingredient['unit'];
+
+        // Determine unit with special handling for custom Food units.
+        if ($item instanceof Food) {
+            if ($unit === 'serving') {
+                $no_serving_unit = empty($item->serving_unit) && empty($item->serving_unit_name);
+
+                // If there is no serving unit or the serving unit name is
+                // exactly the same as the item name don't use a serving
+                // unit and pluralize the _item_ name.
+                if ($no_serving_unit || $item->serving_unit_name === $name) {
+                    $unit = null;
+                    $name = Pluralizer::plural($name, $amount);
+                }
+
+                // If the serving unit name is already _part_ of the item
+                // name, just keep the defined unit (e.g. name: "tortilla
+                // chips" and serving name "chips").
+                elseif (Str::contains($name, $item->serving_unit_name)) {
+                    $unit = 'serving';
+                }
+
+                // If a serving unit name is set, use the formatted serving
+                // unit name as a base.
+                elseif (!empty($item->serving_unit_name)) {
+                    $unit = $item->serving_unit_formatted;
+                }
+            }
+        }
+
+        // Pluralize unit with supplied plurals or Pluralizer.
+        if (Nutrients::units()->has($unit)) {
+            $value = 'label';
+            if ($amount > 1) {
+                $value = 'plural';
+            }
+            $unit = Nutrients::units()->get($unit)[$value];
+        }
+        else {
+            $unit = Pluralizer::plural($unit, $amount);
+        }
+
+        // Add amount, unit, and name to summary.
+        $amount = Number::fractionStringFromFloat($amount);
+        $summary = "{$amount} {$unit} {$name}";
+
+        // Add detail if available.
+        if (isset($item->detail) && !empty($item->detail)) {
+            $summary .= ", {$item->detail}";
+        }
+
+        return $summary;
     }
 
     /**

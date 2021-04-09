@@ -38,7 +38,8 @@
                                 size="5"
                                 class="block w-full"
                                 placeholder="Amount"
-                                :value="$amount ?? null" />
+                                :value="$amount ?? null"
+                                required />
             </div>
 
             <!-- Unit -->

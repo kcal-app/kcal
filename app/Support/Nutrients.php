@@ -16,6 +16,7 @@ class Nutrients
      * Each entry has two keys:
      *  - value: Machine name for the unit.
      *  - label: Human-readable name for the unit.
+     *  - plural: Human-readable plural form of the unit name.
      *  - type: Unit type -- matching types can be converted.
      *
      * @return \Illuminate\Support\Collection
@@ -25,31 +26,37 @@ class Nutrients
             'cup' => [
                 'value' => 'cup',
                 'label' => 'cup',
+                'plural' => 'cups',
                 'type' => 'volume',
             ],
             'gram' => [
                 'value' => 'gram',
                 'label' => 'gram',
+                'plural' => 'grams',
                 'type' => 'weight',
             ],
             'oz' => [
                 'value' => 'oz',
                 'label' => 'oz',
+                'plural' => 'oz',
                 'type' => 'weight',
             ],
             'serving' => [
                 'value' => 'serving',
                 'label' => 'serving',
+                'plural' => 'servings',
                 'type' => 'division',
             ],
             'tbsp' => [
                 'value' => 'tbsp',
                 'label' => 'tbsp.',
+                'plural' => 'tbsp.',
                 'type' => 'volume',
             ],
             'tsp' => [
                 'value' => 'tsp',
                 'label' => 'tsp.',
+                'plural' => 'tsp.',
                 'type' => 'volume',
             ],
         ]);
