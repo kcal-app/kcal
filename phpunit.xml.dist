@@ -30,8 +30,5 @@
         <!-- @todo Figure out how to do MySQL parallel testing inside Sail. -->
         <server name="DB_CONNECTION" value="sqlite"/>
         <server name="DB_DATABASE" value=":memory:"/>
-
-        <!-- Configuration below assumes tests are running from Sail. -->
-        <server name="ELASTIC_HOST" value="elasticsearch:9200"/>
     </php>
 </phpunit>
