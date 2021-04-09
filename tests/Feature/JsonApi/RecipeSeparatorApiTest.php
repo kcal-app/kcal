@@ -6,12 +6,11 @@ use App\Models\Recipe;
 use App\Models\RecipeSeparator;
 use Database\Factories\RecipeSeparatorFactory;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\JsonApi\Traits\BelongsToRecipe;
 
 class RecipeSeparatorApiTest extends JsonApiTestCase
 {
-    use RefreshDatabase, BelongsToRecipe;
+    use BelongsToRecipe;
 
     /**
      * @inheritdoc

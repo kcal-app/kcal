@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit\Rules;
 
 use App\Rules\StringIsDecimalOrFraction;

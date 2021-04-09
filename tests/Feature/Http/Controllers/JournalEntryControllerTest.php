@@ -6,12 +6,11 @@ use App\Http\Controllers\JournalEntryController;
 use App\Models\IngredientAmount;
 use App\Models\JournalEntry;
 use Database\Factories\JournalEntryFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
 class JournalEntryControllerTest extends HttpControllerTestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     /**
      * @inheritdoc

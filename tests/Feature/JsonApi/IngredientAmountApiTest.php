@@ -7,11 +7,9 @@ use App\Models\IngredientAmount;
 use App\Models\JournalEntry;
 use App\Models\Recipe;
 use Database\Factories\IngredientAmountFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class IngredientAmountApiTest extends JsonApiTestCase
 {
-    use RefreshDatabase;
 
     /**
      * @inheritdoc

@@ -5,11 +5,9 @@ namespace Tests\Feature\Http\Controllers;
 use App\Http\Controllers\FoodController;
 use App\Models\Food;
 use Database\Factories\FoodFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FoodControllerTest extends HttpControllerTestCase
 {
-    use RefreshDatabase;
 
     /**
      * @inheritdoc

@@ -5,12 +5,12 @@ namespace Tests\Feature\JsonApi;
 use App\Models\Goal;
 use Database\Factories\GoalFactory;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use Tests\Feature\JsonApi\Traits\BelongsToUser;
 
 class GoalApiTest extends JsonApiTestCase
 {
-    use RefreshDatabase, BelongsToUser;
+    use BelongsToUser;
 
     /**
      * @inheritdoc

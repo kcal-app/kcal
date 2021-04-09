@@ -9,14 +9,12 @@ use App\Models\RecipeSeparator;
 use App\Models\RecipeStep;
 use Database\Factories\RecipeFactory;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 
 class RecipeControllerTest extends HttpControllerTestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     /**
      * @inheritdoc

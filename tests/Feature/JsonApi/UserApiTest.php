@@ -4,11 +4,9 @@ namespace Tests\Feature\JsonApi;
 
 use App\Models\User;
 use Database\Factories\UserFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserApiTest extends JsonApiTestCase
 {
-    use RefreshDatabase;
 
     /**
      * @inheritdoc
