@@ -24,7 +24,7 @@
             </x-inputs.icon-green>
             <div class="flex items-center justify-end mt-4 space-x-4">
                 <fieldset class="flex space-x-2">
-                    <x-inputs.input name="group_entries" type="checkbox" class="h-5 w-5" value="1" checked />
+                    <x-inputs.input name="group_entries" type="checkbox" class="h-5 w-5" value="1" />
                     <x-inputs.label for="groupEntries" value="Group entries by day and meal" />
                 </fieldset>
                 <x-inputs.button x-on:click="removeTemplate($el);">Add entries</x-inputs.button>
