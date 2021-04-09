@@ -18,6 +18,7 @@ to use recipe presentation for preparing meals.
 - [Configuration](#configuration)
     - [Search](#search-mag)
 - [Development](#development)
+    - [Testing](#testing)
 
 ## Demo
 
@@ -127,6 +128,8 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker compose](https://docs.docker.com/compose/install/)
 
+#### Steps
+
 1. Clone the repository.
 
         git clone https://github.com/kcal-app/kcal.git
@@ -169,3 +172,34 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 
 Once the application finishes starting, navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080)
 (or [http://kcal.test:8080](http://kcal.test:8080) if configured).
+
+### Testing
+
+Ensure that Sail is running (primarily to provide ElasticSearch):
+
+    vendor/bin/sail up -d
+
+Execute tests.
+
+    vendor/bin/sail artisan test --parallel
+
+#### Caveats
+
+In order to support parallel testing, tests are run using sqlite (even though Sail
+provides MySQL). To test with MySQL make a copy of `phpunit.xml.dist` as `phpunit.dist`
+and change:
+
+```
+<server name="DB_CONNECTION" value="sqlite"/>
+<server name="DB_DATABASE" value=":memory:"/>
+```
+
+to 
+
+```
+<server name="DB_CONNECTION" value="mysql"/>
+<server name="DB_HOST" value="db"/>
+```
+
+Now running `vendor/bin/sail artisan test` will run tests with MySQL **but** tests
+cannot be run in parallel.
