@@ -270,7 +270,7 @@ class JournalEntryController extends Controller
         }
 
         // Add amount, unit, and name to summary.
-        $amount = Number::fractionStringFromFloat($amount);
+        $amount = Number::rationalStringFromFloat($amount);
         $summary = "{$amount} {$unit} {$name}";
 
         // Add detail if available.

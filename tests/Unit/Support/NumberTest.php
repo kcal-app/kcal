@@ -24,15 +24,15 @@ class NumberTest extends TestCase
     }
 
     /**
-     * Test (fraction) string to float conversion.
+     * Test (rational) string to float conversion.
      *
      * @dataProvider fractionStringFloatsProvider
      *
-     * @see \App\Support\Number::fractionStringFromFloat()
+     * @see \App\Support\Number::rationalStringFromFloat()
      */
     public function testFractionStringFromFloat(string $expectedString, float $float): void
     {
-        $result = Number::fractionStringFromFloat($float);
+        $result = Number::rationalStringFromFloat($float);
         $this->assertIsString($result);
         $this->assertEquals($expectedString, $result);
     }
@@ -62,9 +62,9 @@ class NumberTest extends TestCase
      */
     public function fractionStringFloatsProvider(): array {
         return [
-            ['0', 0.0], ['1/8', 1/8], ['1/4', 1/4], ['1/2', 1/2],
-            ['3/4', 3/4], ['1', 1.0], ['1 1/4', 1.25],
-            ['1 1/2', 1.5], ['2 1/2', 2.5], ['2 3/4', 2.75],
+            ['0', 0.0], ['1/8', 1/8], ['1/4', 1/4], ['1/3', 1/3], ['1/2', 1/2],
+            ['2/3', 2/3], ['3/4', 3/4], ['1', 1.0], ['1 1/4', 1.25], ['1 1/3', 1 + 1/3],
+            ['1 1/2', 1.5], ['1 2/3', 1 + 2/3], ['2 1/2', 2.5], ['2 3/4', 2.75],
         ];
     }
 }
