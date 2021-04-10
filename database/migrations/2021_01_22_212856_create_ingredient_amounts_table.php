@@ -18,7 +18,7 @@ class CreateIngredientAmountsTable extends Migration
             $table->id();
             $table->unsignedInteger('ingredient_id');
             $table->string('ingredient_type');
-            $table->unsignedFloat('amount');
+            $table->decimal('amount', 10, 8)->unsigned();
             $table->enum('unit', Nutrients::units()->pluck('value')->toArray())->nullable();
             $table->string('detail')->nullable();
             $table->unsignedInteger('weight');
