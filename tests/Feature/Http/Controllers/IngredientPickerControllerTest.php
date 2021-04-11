@@ -6,7 +6,6 @@ use App\Http\Controllers\IngredientPickerController;
 use App\Models\Food;
 use App\Models\Recipe;
 use GuzzleHttp\Exception\ConnectException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Tests\LoggedInTestCase;
 
@@ -15,7 +14,6 @@ use Tests\LoggedInTestCase;
  */
 class IngredientPickerControllerTest extends LoggedInTestCase
 {
-    use RefreshDatabase;
 
     private function buildUrl(array $parameters = []): string
     {

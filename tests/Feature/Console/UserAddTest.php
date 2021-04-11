@@ -3,12 +3,10 @@
 namespace Tests\Feature\Console;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UserAddTest extends TestCase
 {
-    use RefreshDatabase;
 
     public function testCanAddUserInteractively(): void
     {

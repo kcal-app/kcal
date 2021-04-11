@@ -33,10 +33,11 @@ class IngredientAmountFactory extends Factory
             $ingredient_unit = 'serving';
         }
 
+        $amounts = [1/8, 1/4, 1/3, 1/2, 2/3, 3/4, 1, 1 + 1/4, 1 + 1/3, 1 + 1/2, 1 + 2/3, 1 + 3/4, 2, 2 + 1/2, 3];
         return [
             'ingredient_id' => $ingredient_factory,
             'ingredient_type' => $ingredient_type,
-            'amount' => $this->faker->randomElement([1/8, 1/4, 1/2, 3/4, 1, 1.25, 1.5, 1.75, 2, 2.5, 3]),
+            'amount' => $this->faker->randomElement($amounts),
             'unit' => $ingredient_unit,
             'detail' => $this->faker->boolean() ? Words::randomWords('a') : null,
             'weight' => $this->faker->numberBetween(0, 50),

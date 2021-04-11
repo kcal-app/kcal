@@ -5,11 +5,9 @@ namespace Tests\Feature\JsonApi;
 use App\Models\Recipe;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MediumApiTest extends JsonApiTestCase
 {
-    use RefreshDatabase;
 
     /**
      * @inheritdoc

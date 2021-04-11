@@ -6,25 +6,12 @@
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto">
             {{ $recipe->name }}
-            <a class="ml-2 text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"
-               href="{{ route('recipes.edit', $recipe) }}">
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                </svg>
-            </a>
-            <a class="h-6 w-6 text-red-500 hover:text-red-700 hover:border-red-300 float-right text-sm"
-               href="{{ route('recipes.delete', $recipe) }}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
-            </a>
         </h1>
     </x-slot>
     <div class="flex flex-col justify-between pb-4 md:flex-row md:space-x-4">
         <div class="flex-1" x-data="{showNutrientsSummary: false}">
             @if($recipe->time_total > 0)
-                <section class="flex justify-between mb-2 p-2 bg-gray-100 rounded">
+                <section class="flex justify-between mb-2 p-2 bg-gray-100 rounded max-w-3xl">
                     <div>
                         <h1 class="mb-1 font-bold">Prep time</h1>
                         <p class="text-gray-800 text-sm">{{ $recipe->time_prep }} minutes</p>
@@ -56,7 +43,7 @@
                             @if($item::class === \App\Models\IngredientAmount::class)
                                 <li>
                                     <span>
-                                        {{ \App\Support\Number::fractionStringFromFloat($item->amount) }}
+                                        {{ \App\Support\Number::rationalStringFromFloat($item->amount) }}
                                         @if($item->unitFormatted){{ $item->unitFormatted }}@endif
                                         @if($item->ingredient->type === \App\Models\Recipe::class)
                                             <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -94,8 +81,20 @@
                     </ol>
                 </div>
             </section>
+            <footer>
+                @if(!$recipe->tags->isEmpty())
+                    <section>
+                        <h1 class="mb-2 font-bold text-2xl">Tags</h1>
+                        <div class="flex flex-wrap">
+                            @foreach($recipe->tags as $tag)
+                                <span class="m-1 bg-gray-200 rounded-full px-2 leading-loose cursor-default">{{ $tag->name }}</span>
+                            @endforeach
+                        </div>
+                    </section>
+                @endif
+            </footer>
         </div>
-        <aside class="flex flex-col space-y-4 md:w-1/2 lg:w-1/3">
+        <aside class="flex flex-col space-y-4 mt-8 sm:mt-0">
             <div class="p-1 border-2 border-black font-sans w-72">
                 <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
                 <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
@@ -149,16 +148,15 @@
                     @endif
                 </section>
             @endif
-            @if(!$recipe->tags->isEmpty())
-                <section>
-                    <h1 class="mb-2 font-bold text-2xl">Tags</h1>
-                    <div class="flex flex-wrap">
-                        @foreach($recipe->tags as $tag)
-                            <span class="m-1 bg-gray-200 rounded-full px-2 leading-loose cursor-default">{{ $tag->name }}</span>
-                        @endforeach
-                    </div>
-                </section>
-            @endif
+            <hr />
+            <section class="flex flex-col space-y-2">
+                <x-button-link.base href="{{ route('recipes.edit', $recipe) }}">
+                    Edit Recipe
+                </x-button-link.base>
+                <x-button-link.red href="{{ route('recipes.delete', $recipe) }}">
+                    Delete Recipe
+                </x-button-link.red>
+            </section>
         </aside>
     </div>
 </x-app-layout>

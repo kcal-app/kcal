@@ -13,7 +13,16 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="text-base text-gray-500">{{ $date->format('D, j M Y') }}</div>
+                    <div class="text-base text-gray-500">
+                        <form x-data method="GET" action="{{ route('journal-entries.index') }}">
+                            <x-inputs.input name="date"
+                                            type="date"
+                                            class="border-0 shadow-none p-0 text-center"
+                                            :value="$date->toDateString()"
+                                            x-on:change="$el.submit();"
+                                            required />
+                        </form>
+                    </div>
                     <div>
                         <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
                            href="{{ route(Route::current()->getName(), ['date' => $date->copy()->addDay(1)->toDateString()]) }}">
@@ -24,12 +33,9 @@
                     </div>
                 </div>
             </h1>
-            <a href="{{ route('journal-entries.create', ['date' => $date->format('Y-m-d')]) }}" class="inline-flex items-center rounded-md font-semibold text-white p-2 bg-green-500 tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-green-600 disabled:opacity-25 transition ease-in-out duration-150">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                New Entry
-            </a>
+            <x-button-link.green href="{{ route('journal-entries.create', ['date' => $date->format('Y-m-d')]) }}" class="text-sm">
+                Add Entry
+            </x-button-link.green>
         </div>
     </x-slot>
     <div class="flex align-top flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
@@ -104,7 +110,7 @@
                         </div>
                         <span class="text-sm text-gray-500">
                         @foreach(\App\Support\Nutrients::all()->sortBy('weight') as $nutrient)
-                                {{ round($entries->where('meal', $meal)->sum($nutrient['value']), 2) }}{{ $nutrient['unit'] }}
+                                {{ \App\Support\Nutrients::round($entries->where('meal', $meal)->sum($nutrient['value']), $nutrient['value']) }}{{ $nutrient['unit'] }}
                                 {{ $nutrient['value'] }}@if(!$loop->last), @endif
                             @endforeach
                     </span>
@@ -124,7 +130,7 @@
                                 <div>
                                     <span class="font-bold">nutrients:</span>
                                     @foreach(\App\Support\Nutrients::all()->sortBy('weight') as $nutrient)
-                                        {{ round($entry->{$nutrient['value']}, 2) }}{{ $nutrient['unit'] }}
+                                        {{ \App\Support\Nutrients::round($entry->{$nutrient['value']}, $nutrient['value']) }}{{ $nutrient['unit'] }}
                                         {{ $nutrient['value'] }}@if(!$loop->last), @endif
                                     @endforeach
                                 </div>

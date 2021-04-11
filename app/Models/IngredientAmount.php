@@ -92,7 +92,7 @@ final class IngredientAmount extends Model
      * Get the amount as a formatted string (e.g. 0.5 = 1/2).
      */
     public function getAmountFormattedAttribute(): string {
-        return Number::fractionStringFromFloat($this->amount);
+        return Number::rationalStringFromFloat($this->amount);
     }
 
     /**
@@ -103,7 +103,7 @@ final class IngredientAmount extends Model
     public function getNutrientsSummaryAttribute(): string {
         $summary = [];
         foreach (Nutrients::all() as $nutrient) {
-            $amount = round($this->{$nutrient['value']}(), 2);
+            $amount = Nutrients::round($this->{$nutrient['value']}(), $nutrient['value']);
             $summary[] = "{$nutrient['label']}: {$amount}{$nutrient['unit']}";
         }
         return implode(', ', $summary);

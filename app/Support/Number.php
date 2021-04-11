@@ -7,10 +7,10 @@ use Phospr\Fraction;
 class Number
 {
     /**
-     * Get a float value from a decimal or fraction string.
+     * Get a float value from a decimal or rational string.
      *
      * @param string $value
-     *   Value in decimal or string format.
+     *   Decimal or rational string.
      * @return float
      *   Float representation of the value.
      *
@@ -27,21 +27,38 @@ class Number
     }
 
     /**
-     * Get a string faction representation of a float.
+     * Get a string rational representation of a float.
      *
-     * @todo Handle repeating values like 1/3, 2/3, etc. better.
-     *
-     * @see https://rosettacode.org/wiki/Convert_decimal_number_to_rational#PHP
+     * Special handling is used for common cases 1/3 and 2/3 to ensure the
+     * expected rationals. Other less common rationals (e.g. n/7 or n/9) will
+     * not be well handled here.
      *
      * @param float $value
-     *   Value to convert to string fraction.
+     *   Value to convert to rational string.
      * @return string
-     *   String fraction.
+     *   Rational string.
+     *
+     * @todo Learn maths.
      */
-    public static function fractionStringFromFloat(float $value): string {
-        $fraction = (string) Fraction::fromFloat($value);
-        $fraction = str_replace(['33/100', '33333333/100000000'], '1/3', $fraction);
-        $fraction = str_replace(['67/100', '66666667/100000000'], '2/3', $fraction);
-        return $fraction;
+    public static function rationalStringFromFloat(float $value): string {
+        $decimal = Fraction::fromFloat(($value - floor($value)));
+        if ($decimal->isSameValueAs(Fraction::fromFloat(1/3))) {
+            $string = '1/3';
+            $whole = floor($value);
+            if ($whole > 0) {
+                $string = "{$whole} {$string}";
+            }
+        }
+        elseif ($decimal->isSameValueAs(Fraction::fromFloat(2/3))) {
+            $string = '2/3';
+            $whole = floor($value);
+            if ($whole > 0) {
+                $string = "{$whole} {$string}";
+            }
+        }
+        else {
+            $string = (string) Fraction::fromFloat($value);
+        }
+        return $string;
     }
 }

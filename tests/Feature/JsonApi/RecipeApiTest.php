@@ -4,12 +4,11 @@ namespace Tests\Feature\JsonApi;
 
 use App\Models\Recipe;
 use Database\Factories\RecipeFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\JsonApi\Traits\HasTags;
 
 class RecipeApiTest extends JsonApiTestCase
 {
-    use RefreshDatabase, HasTags;
+    use HasTags;
 
     /**
      * @inheritdoc

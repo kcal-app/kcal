@@ -170,7 +170,7 @@ final class Food extends Model
     public function getServingSizeFormattedAttribute(): ?string {
         $result = null;
         if (!empty($this->serving_size)) {
-            $result = Number::fractionStringFromFloat($this->serving_size);
+            $result = Number::rationalStringFromFloat($this->serving_size);
         }
         return $result;
     }

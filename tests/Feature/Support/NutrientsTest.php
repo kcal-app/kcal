@@ -4,12 +4,10 @@ namespace Tests\Feature\Support;
 
 use App\Models\Food;
 use App\Support\Nutrients;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class NutrientsTest extends TestCase
 {
-    use RefreshDatabase;
 
     /**
      * Test invalid Food nutrient multiplier calculation.
