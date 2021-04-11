@@ -33,12 +33,9 @@
                     </div>
                 </div>
             </h1>
-            <a href="{{ route('journal-entries.create', ['date' => $date->format('Y-m-d')]) }}" class="inline-flex items-center rounded-md font-semibold text-white p-2 bg-green-500 tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-green-600 disabled:opacity-25 transition ease-in-out duration-150">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                New Entry
-            </a>
+            <x-button-link.green href="{{ route('journal-entries.create', ['date' => $date->format('Y-m-d')]) }}" class="text-sm">
+                Add Entry
+            </x-button-link.green>
         </div>
     </x-slot>
     <div class="flex align-top flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
