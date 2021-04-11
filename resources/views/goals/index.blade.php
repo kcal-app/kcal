@@ -13,7 +13,16 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="text-base text-gray-500">{{ $date->format('D, j M Y') }}</div>
+                    <div class="text-base text-gray-500">
+                        <form x-data method="GET" action="{{ route('goals.index') }}">
+                            <x-inputs.input name="date"
+                                            type="date"
+                                            class="border-0 shadow-none p-0 text-center"
+                                            :value="$date->toDateString()"
+                                            x-on:change="$el.submit();"
+                                            required />
+                        </form>
+                    </div>
                     <div>
                         <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
                            href="{{ route(Route::current()->getName(), ['date' => $date->copy()->addDay(1)->toDateString()]) }}">
