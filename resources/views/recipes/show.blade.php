@@ -94,8 +94,8 @@
                 @endif
             </footer>
         </div>
-        <aside class="flex flex-col space-y-4 mt-8 sm:mt-0">
-            <div class="p-1 border-2 border-black font-sans w-72">
+        <aside class="flex flex-col space-y-4 mt-8 md:mt-0 sm:max-w-xs">
+            <div class="p-1 border-2 border-black font-sans md:w-72">
                 <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
                 <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
                 @if($recipe->serving_weight)
