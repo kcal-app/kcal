@@ -55,7 +55,7 @@
                 @endif
             </section>
         </div>
-        <aside class="flex flex-col space-y-4 mt-8 sm:mt-0">
+        <aside class="flex flex-col space-y-4 mt-8 sm:mt-0 sm:max-w-xs">
             <section class="p-1 mb-2 border-2 border-black font-sans md:w-72">
                 <h1 class="text-3xl font-extrabold leading-none">Nutrition Facts</h1>
                 <section class="flex justify-between font-bold border-b-8 border-black">
