@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateRecipeRequest;
 use App\Models\Food;
 use App\Models\IngredientAmount;
 use App\Models\Recipe;
 use App\Models\RecipeSeparator;
 use App\Models\RecipeStep;
-use App\Rules\ArrayNotEmpty;
-use App\Rules\StringIsDecimalOrFraction;
-use App\Rules\UsesIngredientTrait;
 use App\Support\Number;
 use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -44,12 +41,9 @@ class RecipeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
      * @throws \Throwable
      */
-    public function store(Request $request): RedirectResponse
+    public function store(UpdateRecipeRequest $request): RedirectResponse
     {
         return $this->update($request, new Recipe());
     }
@@ -187,50 +181,11 @@ class RecipeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Recipe $recipe
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     *
      * @throws \Throwable
      */
-    public function update(Request $request, Recipe $recipe): RedirectResponse
+    public function update(UpdateRecipeRequest $request, Recipe $recipe): RedirectResponse
     {
-        $input = $request->validate([
-            'name' => ['required', 'string'],
-            'description' => ['nullable', 'string'],
-            'description_delta' => ['nullable', 'string'],
-            'image' => ['nullable', 'file', 'mimes:jpg,png,gif'],
-            'remove_image' => ['nullable', 'boolean'],
-            'servings' => ['required', 'numeric'],
-            'time_prep' => ['nullable', 'numeric'],
-            'time_cook' => ['nullable', 'numeric'],
-            'weight' => ['nullable', 'numeric'],
-            'source' => ['nullable', 'string'],
-            'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
-            'ingredients.unit' => ['required', 'array'],
-            'ingredients.unit.*' => ['required_with:ingredients.id.*'],
-            'ingredients.detail' => ['required', 'array'],
-            'ingredients.detail.*' => ['nullable', 'string'],
-            'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
-            'ingredients.type' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.type.*' => ['required_with:ingredients.id.*', 'nullable', new UsesIngredientTrait()],
-            'ingredients.key' => ['nullable', 'array'],
-            'ingredients.key.*' => ['nullable', 'int'],
-            'ingredients.weight' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.weight.*' => ['required', 'int'],
-            'separators.key' => ['nullable', 'array'],
-            'separators.key.*' => ['nullable', 'int'],
-            'separators.weight' => ['nullable', 'array'],
-            'separators.weight.*' => ['required', 'int'],
-            'separators.text' => ['nullable', 'array'],
-            'separators.text.*' => ['nullable', 'string'],
-            'steps.step' => ['required', 'array', new ArrayNotEmpty],
-            'steps.step.*' => ['nullable', 'string'],
-            'steps.key' => ['nullable', 'array'],
-        ]);
+        $input = $request->validated();
 
         // Validate that no ingredients are recursive.
         // TODO: refactor as custom validator.
@@ -285,7 +240,7 @@ class RecipeController extends Controller
                 ->usingFileName("{$recipe->slug}.{$file->extension()}")
                 ->toMediaCollection();
         }
-        elseif (isset($input['remove_image']) && (bool) $input['remove_image']) {
+        elseif (isset($input['remove_image']) && $input['remove_image']) {
             $recipe->clearMediaCollection();
         }
 
