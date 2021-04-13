@@ -96,18 +96,18 @@ class RecipeController extends Controller
                     'ingredient_name' => $old['name'][$key],
                     'detail' => $old['detail'][$key],
                 ];
-            }
 
-            // Add supported units for the ingredient.
-            $ingredient = NULL;
-            if ($ingredients[$key]['ingredient_type'] === Food::class) {
-                $ingredient = Food::whereId($ingredients[$key]['ingredient_id'])->first();
-            }
-            elseif ($ingredients[$key]['ingredient_type'] === Recipe::class) {
-                $ingredient = Recipe::whereId($ingredients[$key]['ingredient_id'])->first();
-            }
-            if ($ingredient) {
-                $ingredients[$key]['units_supported'] = $ingredient->units_supported;
+                // Add supported units for the ingredient.
+                $ingredient = NULL;
+                if ($ingredients[$key]['ingredient_type'] === Food::class) {
+                    $ingredient = Food::whereId($ingredients[$key]['ingredient_id'])->first();
+                }
+                elseif ($ingredients[$key]['ingredient_type'] === Recipe::class) {
+                    $ingredient = Recipe::whereId($ingredients[$key]['ingredient_id'])->first();
+                }
+                if ($ingredient) {
+                    $ingredients[$key]['units_supported'] = $ingredient->units_supported;
+                }
             }
         }
         else {
