@@ -8,7 +8,7 @@
             {{ $recipe->name }}
         </h1>
     </x-slot>
-    <div class="flex flex-col justify-between pb-4 md:flex-row md:space-x-4">
+    <div class="flex flex-col-reverse justify-between md:flex-row md:space-x-4">
         <div class="flex-1" x-data="{showNutrientsSummary: false}">
             @if($recipe->time_total > 0)
                 <section class="flex justify-between mb-2 p-2 bg-gray-100 rounded max-w-3xl">
@@ -81,7 +81,7 @@
                     </ol>
                 </div>
             </section>
-            <footer>
+            <footer class="space-y-2">
                 @if(!$recipe->tags->isEmpty())
                     <section>
                         <h1 class="mb-2 font-bold text-2xl">Tags</h1>
@@ -92,9 +92,20 @@
                         </div>
                     </section>
                 @endif
+                @if($recipe->source)
+                    <section>
+                        <h1 class="mb-2 font-bold text-2xl">Source</h1>
+                        @if(filter_var($recipe->source, FILTER_VALIDATE_URL))
+                            <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                               href="{{ $recipe->source }}">{{ $recipe->source }}</a>
+                        @else
+                            {{ $recipe->source }}
+                        @endif
+                    </section>
+                @endif
             </footer>
         </div>
-        <aside class="flex flex-col space-y-4 mt-8 md:mt-0 sm:max-w-xs">
+        <aside class="flex flex-col space-y-4 mb-8 md:mt-0 sm:max-w-xs">
             <div class="p-1 border-2 border-black font-sans md:w-72">
                 <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
                 <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
@@ -137,19 +148,7 @@
                     </div>
                 </div>
             </div>
-            @if($recipe->source)
-                <section>
-                    <h1 class="mb-2 font-bold text-2xl">Source</h1>
-                    @if(filter_var($recipe->source, FILTER_VALIDATE_URL))
-                        <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                           href="{{ $recipe->source }}">{{ $recipe->source }}</a>
-                    @else
-                        {{ $recipe->source }}
-                    @endif
-                </section>
-            @endif
-            <hr />
-            <section class="flex flex-col space-y-2">
+            <section class="flex flex-row space-x-2 justify-around md:flex-col md:space-y-2 md:space-x-0">
                 <x-button-link.base href="{{ route('recipes.edit', $recipe) }}">
                     Edit Recipe
                 </x-button-link.base>
