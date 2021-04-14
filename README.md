@@ -152,12 +152,15 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 
 1. Generate an app key.
 
-        touch .env
         php artisan key:generate
+
+    Verify that the `APP_KEY` variable has been set in `.env`. If has not, run
+    `php artisan key:generate --show` and copy the key and append in to the
+    `APP_KEY=` line manually.
 
 1. Run it! :sailboat:
 
-        vendor/bin/sail up -d
+        vendor/bin/sail up
 
 1. (On first run) Run migrations.
 
