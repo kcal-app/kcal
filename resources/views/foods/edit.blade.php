@@ -18,7 +18,7 @@
                                     class="block mt-1 w-full"
                                     autocapitalize="none"
                                     :value="old('name', $food->name)"
-                                    required/>
+                                    :hasError="$errors->has('name')"/>
                 </div>
 
                 <!-- Detail -->
@@ -53,6 +53,7 @@
                                     class="block mt-1 w-full"
                                     size="10"
                                     :value="old('serving_size', $food->serving_size_formatted)"
+                                    :hasError="$errors->has('serving_size')"
                                     required/>
                 </div>
 
@@ -91,6 +92,7 @@
                                     class="block mt-1 w-full"
                                     size="10"
                                     :value="old('serving_weight', $food->serving_weight)"
+                                    :hasError="$errors->has('serving_weight')"
                                     required/>
                 </div>
             </div>
@@ -106,7 +108,8 @@
                                             type="number"
                                             step="any"
                                             class="block w-full mt-1 md:w-5/6"
-                                            :value="old($nutrient['value'], $food->{$nutrient['value']})"/>
+                                            :value="old($nutrient['value'], $food->{$nutrient['value']})"
+                                            :hasError="$errors->has($nutrient['value'])"/>
                         </div>
                 @endforeach
             </div>
