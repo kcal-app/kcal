@@ -108,7 +108,12 @@
         <aside class="flex flex-col space-y-4 mb-8 md:mt-0 sm:max-w-xs">
             <div class="p-1 border-2 border-black font-sans md:w-72">
                 <div class="text-3xl font-extrabold leading-none">Nutrition Facts</div>
-                <div class="leading-snug">{{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}</div>
+                <div class="leading-snug">
+                    {{ $recipe->servings }} {{ \Illuminate\Support\Str::plural('serving', $recipe->servings ) }}
+                    @if($recipe->volume)
+                        / {{ $recipe->volume_formatted }} {{ \Illuminate\Support\Str::plural('cup', $recipe->volume ) }}
+                    @endif
+                </div>
                 @if($recipe->serving_weight)
                     <div class="flex justify-between items-end font-extrabold">
                         <div>Serving weight</div>
