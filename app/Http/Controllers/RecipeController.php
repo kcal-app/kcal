@@ -201,6 +201,7 @@ class RecipeController extends Controller
             'description_delta' => $input['description_delta'],
             'servings' => (int) $input['servings'],
             'weight' => $input['weight'],
+            'volume' => Number::floatFromString($input['volume']),
             'time_prep' => (int) $input['time_prep'],
             'time_cook' => (int) $input['time_cook'],
             'source' => $input['source'],

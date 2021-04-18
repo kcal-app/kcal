@@ -36,6 +36,8 @@ class RecipeSchema extends SchemaProvider
             'servings' => $resource->servings,
             'weight' => $resource->weight,
             'serving_weight' => $resource->serving_weight,
+            'volume' => $resource->volume,
+            'volumeFormatted' => $resource->volume_formatted,
             'units_supported' => $resource->units_supported->pluck('label'),
             'caloriesPerServing' => $resource->caloriesPerServing(),
             'carbohydratesPerServing' => $resource->carbohydratesPerServing(),
