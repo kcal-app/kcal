@@ -3,6 +3,8 @@
 namespace Tests\Feature\Support;
 
 use App\Models\Food;
+use App\Models\IngredientAmount;
+use App\Models\Recipe;
 use App\Support\Nutrients;
 use Tests\TestCase;
 
@@ -35,14 +37,71 @@ class NutrientsTest extends TestCase
         float $expectedMultiplier
     ): void {
         $this->assertEquals(
-            Nutrients::calculateFoodNutrientMultiplier($food, $amount, $fromUnit),
-            $expectedMultiplier
+            $expectedMultiplier,
+            Nutrients::calculateFoodNutrientMultiplier($food, $amount, $fromUnit)
+        );
+    }
+
+    /**
+     * Test valid Recipe nutrient amount calculation.
+     *
+     * @dataProvider recipesValidRecipeNutrientAmountsProvider
+     */
+    public function testCalculateValidRecipeNutrientAmount(
+        string $nutrient,
+        float $amount,
+        string $fromUnit,
+        float $expectedAmount
+    ): void {
+        /** @var \App\Models\Recipe $recipe */
+        $recipe = Recipe::factory()
+            ->create(['volume' => 2, 'weight' => 400]);
+        /** @var \App\Models\Food $food */
+        $food = Food::factory()->create([
+            'calories' => 20,
+            'carbohydrates' => 20,
+            'cholesterol' => 200,
+            'fat' => 20,
+            'protein' => 20,
+            'sodium' => 200,
+        ]);
+        $ingredient = new IngredientAmount();
+        $ingredient->fill([
+            'amount' => 1,
+            'unit' => 'serving',
+            'weight' => 0,
+        ])->ingredient()->associate($food);
+        $recipe->ingredientAmounts()->save($ingredient);
+
+        $this->assertEquals(
+            $expectedAmount,
+            Nutrients::calculateRecipeNutrientAmount($recipe, $nutrient, $amount, $fromUnit)
         );
     }
 
     /**
      * Data providers.
      */
+
+    /**
+     * Provide example recipe and expected nutrient amounts.
+     */
+    public function recipesValidRecipeNutrientAmountsProvider(): array {
+        return [
+            ['calories', 1, 'cup', 10],
+            ['calories', 2, 'cup', 20],
+            ['carbohydrates', 8, 'tbsp', 5],
+            ['carbohydrates', 16, 'tbsp', 10],
+            ['cholesterol', 48, 'tsp', 100],
+            ['cholesterol', 96, 'tsp', 200],
+            ['fat', 100, 'gram', 5],
+            ['fat', 200, 'gram', 10],
+            ['protein', 100, 'gram', 5],
+            ['protein', 200, 'gram', 10],
+            ['sodium', 2, 'oz', Nutrients::$gramsPerOunce],
+            ['sodium', 4, 'oz', Nutrients::$gramsPerOunce * 2],
+        ];
+    }
 
     /**
      * Provide example foods and expected nutrient multipliers.
