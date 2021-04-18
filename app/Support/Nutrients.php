@@ -175,6 +175,8 @@ class Nutrients
 
     /**
      * Calculate a nutrient amount for a recipe.
+     *
+     * Weight base unit is grams, volume base unit is cups.
      */
     public static function calculateRecipeNutrientAmount(
         Recipe $recipe,
@@ -182,18 +184,19 @@ class Nutrients
         float $amount,
         string $fromUnit
     ): float {
-        if ($fromUnit === 'oz') {
-            return $amount * self::$gramsPerOunce / $recipe->weight * $recipe->{"{$nutrient}Total"}();
-        }
-        elseif ($fromUnit === 'serving') {
+        if ($fromUnit === 'serving') {
+            // Use "per serving" methods directly.
             return $recipe->{"{$nutrient}PerServing"}() * $amount;
         }
-        elseif ($fromUnit === 'gram') {
-            return $amount / $recipe->weight * $recipe->{"{$nutrient}Total"}();
-        }
-        else {
-            throw new \DomainException("Unsupported recipe unit: {$fromUnit}");
-        }
+        $multiplier = match ($fromUnit) {
+            'oz' => $amount * self::$gramsPerOunce / $recipe->weight,
+            'gram' => $amount / $recipe->weight,
+            'tsp' => $amount / 48 / $recipe->volume,
+            'tbsp' => $amount / 16 / $recipe->volume,
+            'cup' => $amount / $recipe->volume,
+            default => throw new \DomainException("Unsupported recipe unit: {$fromUnit}"),
+        };
+        return $multiplier * $recipe->{"{$nutrient}Total"}();
     }
 
     /**
