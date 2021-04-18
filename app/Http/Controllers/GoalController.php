@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateGoalRequest;
 use App\Models\Goal;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -40,7 +41,7 @@ class GoalController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(UpdateGoalRequest $request): RedirectResponse
     {
         return $this->update($request, new Goal());
     }
@@ -70,15 +71,9 @@ class GoalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Goal $goal): RedirectResponse
+    public function update(UpdateGoalRequest $request, Goal $goal): RedirectResponse
     {
-        $attributes = $request->validate([
-            'from' => ['nullable', 'date'],
-            'to' => ['nullable', 'date'],
-            'frequency' => ['required', 'string'],
-            'name' => ['required', 'string'],
-            'goal' => ['required', 'numeric'],
-        ]);
+        $attributes = $request->validated();
         $goal->fill($attributes)->user()->associate(Auth::user());
         $goal->save();
         session()->flash('message', "Goal updated!");

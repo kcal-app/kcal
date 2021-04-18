@@ -6,6 +6,7 @@ use App\Support\Nutrients;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 /**
  * App\Models\Goal
@@ -44,7 +45,10 @@ final class Goal extends Model
      * Supported options for thr frequency attribute.
      */
     public static array $frequencyOptions = [
-        'daily' => ['value' => 'daily', 'label' => 'daily'],
+        'daily' => [
+            'value' => 'daily',
+            'label' => 'daily'
+        ],
     ];
 
     /**
@@ -94,7 +98,7 @@ final class Goal extends Model
         foreach (Nutrients::all() as $nutrient) {
             $options[$nutrient['value']] = [
                 'value' => $nutrient['value'],
-                'label' => $nutrient['label'],
+                'label' => Str::ucfirst($nutrient['label']),
                 'unit' => $nutrient['unit'],
             ];
         }
