@@ -1,5 +1,13 @@
+@php($key = $key ?? null)
+@error("ingredients.amount.{$key}")
+    @php($amount_error = 'border-red-600')
+@enderror
+@error("ingredients.unit.{$key}")
+    @php($unit_error = 'border-red-600')
+@enderror
+
 <div class="ingredient draggable">
-    <x-inputs.input type="hidden" name="ingredients[key][]" :value="$key ?? null" />
+    <x-inputs.input type="hidden" name="ingredients[key][]" :value="$key" />
     <x-inputs.input type="hidden" name="ingredients[weight][]" :value="$weight ?? null" />
     <div class="flex items-center space-x-2">
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 w-full">
@@ -11,16 +19,17 @@
             <div class="w-full">
                 <x-ingredient-picker :default-id="$ingredient_id ?? null"
                                      :default-type="$ingredient_type ?? null"
-                                     :default-name="$ingredient_name ?? null" />
+                                     :default-name="$ingredient_name ?? null"
+                                     :has-error="(isset($amount) || isset($unit)) && empty($ingredient_id)"/>
             </div>
             <x-inputs.input name="ingredients[amount][]"
                             type="text"
                             size="5"
                             placeholder="Amount"
-                            class="block"
+                            class="block {{ $amount_error ?? null }}"
                             :value="$amount ?? null" />
             <x-inputs.select name="ingredients[unit][]"
-                             class="block"
+                             class="block {{ $unit_error ?? null }}"
                              :options="$units_supported ?? []"
                              :selectedValue="$unit ?? null">
                 <option value="" selected>Unit</option>

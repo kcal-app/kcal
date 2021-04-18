@@ -5,7 +5,7 @@ namespace App\Rules;
 use App\Support\Number;
 use Illuminate\Contracts\Validation\Rule;
 
-class StringIsDecimalOrFraction implements Rule
+class StringIsPositiveDecimalOrFraction implements Rule
 {
     /**
      * {@inheritdoc}
@@ -14,7 +14,7 @@ class StringIsDecimalOrFraction implements Rule
     {
         try {
             $result = Number::floatFromString($value);
-            return $result != 0;
+            return $result > 0;
         }
         catch (\InvalidArgumentException $e) {
             // Allow to pass through, method will return false.
@@ -27,6 +27,6 @@ class StringIsDecimalOrFraction implements Rule
      */
     public function message(): string
     {
-        return 'The :attribute must be a decimal or fraction.';
+        return 'The :attribute must be a positive decimal or fraction.';
     }
 }

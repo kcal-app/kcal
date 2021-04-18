@@ -39,7 +39,7 @@ services:
     image: phpmyadmin
     restart: always
     ports:
-      - 8080:80
+      - 8081:80
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'

@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateFoodRequest;
 use App\Models\Food;
-use App\Rules\StringIsDecimalOrFraction;
 use App\Support\Number;
 use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -35,7 +34,7 @@ class FoodController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(UpdateFoodRequest $request): RedirectResponse
     {
         return $this->update($request, new Food());
     }
@@ -72,25 +71,10 @@ class FoodController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Food $food): RedirectResponse
+    public function update(UpdateFoodRequest $request, Food $food): RedirectResponse
     {
-        $attributes = $request->validate([
-            'name' => 'required|string',
-            'detail' => 'nullable|string',
-            'brand' => 'nullable|string',
-            'source' => 'nullable|string',
-            'notes' => 'nullable|string',
-            'serving_size' => ['required', new StringIsDecimalOrFraction],
-            'serving_unit' => 'nullable|string',
-            'serving_unit_name' => 'nullable|string',
-            'serving_weight' => 'required|numeric',
-            'calories' => 'nullable|numeric',
-            'fat' => 'nullable|numeric',
-            'cholesterol' => 'nullable|numeric',
-            'sodium' => 'nullable|numeric',
-            'carbohydrates' => 'nullable|numeric',
-            'protein' => 'nullable|numeric',
-        ]);
+        $attributes = $request->validated();
+
         $attributes['serving_size'] = Number::floatFromString($attributes['serving_size']);
         $attributes['name'] = Str::lower($attributes['name']);
 

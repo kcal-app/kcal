@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Rules;
 
-use App\Rules\StringIsDecimalOrFraction;
+use App\Rules\StringIsPositiveDecimalOrFraction;
 
-class StringIsDecimalOrFractionTest extends RulesTestCase
+class StringIsPositiveDecimalOrFractionTest extends RulesTestCase
 {
 
     /**
@@ -13,7 +13,7 @@ class StringIsDecimalOrFractionTest extends RulesTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->validator->setRules([new StringIsDecimalOrFraction()]);
+        $this->validator->setRules([new StringIsPositiveDecimalOrFraction()]);
     }
 
     /**
@@ -49,16 +49,16 @@ class StringIsDecimalOrFractionTest extends RulesTestCase
     /**
      * Provide valid decimals or fractions
      *
-     * @see \Tests\Unit\Rules\StringIsDecimalOrFractionTest::testStringIsDecimalOrFractionRule()
+     * @see \Tests\Unit\Rules\StringIsPositiveDecimalOrFractionTest::testStringIsDecimalOrFractionRule()
      */
     public function invalidDecimalsAndFractions(): array {
-        return [['0'], [0], ['string']];
+        return [['-1'], [-1], ['0'], [0], ['string']];
     }
 
     /**
      * Provide valid decimals or fractions
      *
-     * @see \Tests\Unit\Rules\StringIsDecimalOrFractionTest::testStringIsDecimalOrFractionRule()
+     * @see \Tests\Unit\Rules\StringIsPositiveDecimalOrFractionTest::testStringIsDecimalOrFractionRule()
      */
     public function validDecimalsAndFractions(): array {
         return [

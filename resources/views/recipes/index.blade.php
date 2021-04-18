@@ -16,7 +16,10 @@
                         <a x-bind:href="recipe.showUrl"
                            class="hover:text-gray-600" x-text="recipe.name"></a>
                     </h1>
-                    <h2 class="leading-snug" x-text="`${recipe.servings} servings`"></h2>
+                    <h2 class="leading-snug">
+                        <span x-text="`${recipe.servings} servings`"></span>
+                        <span x-show="recipe.volume" x-text="` / ${recipe.volumeFormatted} cups`"></span>
+                    </h2>
                     <section class="flex justify-between items-end font-extrabold" x-show="recipe.serving_weight">
                         <h1>Serving weight</h1>
                         <div x-text="`${recipe.serving_weight}g`"></div>

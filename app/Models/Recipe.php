@@ -7,6 +7,7 @@ use App\Models\Traits\Ingredient;
 use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
 use App\Models\Traits\Taggable;
+use App\Support\Number;
 use App\Support\Nutrients;
 use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -79,6 +80,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecipeSeparator[] $separators
  * @property-read int|null $separators_count
  * @property-read Collection $units_supported
+ * @property float|null $volume
+ * @property-read string|null $volume_formatted
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereVolume($value)
  */
 final class Recipe extends Model implements HasMedia
 {
@@ -104,6 +108,7 @@ final class Recipe extends Model implements HasMedia
         'source',
         'servings',
         'weight',
+        'volume',
     ];
 
     /**
@@ -114,6 +119,7 @@ final class Recipe extends Model implements HasMedia
         'time_prep' => 'int',
         'time_cook' => 'int',
         'weight' => 'float',
+        'volume' => 'float',
     ];
 
     /**
@@ -133,6 +139,7 @@ final class Recipe extends Model implements HasMedia
      */
     protected $appends = [
         'serving_weight',
+        'volume_formatted',
         'time_total',
         'units_supported'
     ];
@@ -167,6 +174,17 @@ final class Recipe extends Model implements HasMedia
             return null;
         }
         return round($this->weight / $this->servings);
+    }
+
+    /**
+     * Get the volume as a formatted string (e.g. 0.5 = 1/2).
+     */
+    public function getVolumeFormattedAttribute(): ?string {
+        $result = null;
+        if (!empty($this->volume)) {
+            $result = Number::rationalStringFromFloat($this->volume);
+        }
+        return $result;
     }
 
     /**

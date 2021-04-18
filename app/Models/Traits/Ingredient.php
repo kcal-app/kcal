@@ -65,6 +65,9 @@ trait Ingredient
         if (!empty($this->serving_weight)) {
             $supported = $supported->merge($units->where('type', 'weight'));
         }
+        if (isset($this->volume) && !empty($this->volume)) {
+            $supported = $supported->merge($units->where('type', 'volume'));
+        }
         return $supported->sortBy('label');
     }
 }

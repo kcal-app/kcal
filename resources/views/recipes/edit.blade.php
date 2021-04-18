@@ -33,7 +33,7 @@
 
             <!-- Weight -->
             <div class="flex-auto">
-                <x-inputs.label for="weight" value="Total weight (g)" />
+                <x-inputs.label for="weight" value="Weight (g)" />
 
                 <x-inputs.input name="weight"
                                 type="number"
@@ -42,9 +42,19 @@
                                 :value="old('weight', $recipe->weight)" />
             </div>
 
+            <!-- Volume -->
+            <div class="flex-auto">
+                <x-inputs.label for="volume" value="Volume (cups)" />
+
+                <x-inputs.input name="volume"
+                                type="text"
+                                class="block mt-1 w-full"
+                                :value="old('volume', $recipe->volume_formatted)" />
+            </div>
+
             <!-- Prep Time -->
             <div class="flex-auto">
-                <x-inputs.label for="time_prep" value="Prep time (minutes)" />
+                <x-inputs.label for="time_prep" value="Prep time (min.)" />
 
                 <x-inputs.input name="time_prep"
                                 type="number"
@@ -56,7 +66,7 @@
 
             <!-- Cooke Time -->
             <div class="flex-auto">
-                <x-inputs.label for="time_cook" value="Cook time (minutes)" />
+                <x-inputs.label for="time_cook" value="Cook time (min.)" />
 
                 <x-inputs.input name="time_cook"
                                 type="number"

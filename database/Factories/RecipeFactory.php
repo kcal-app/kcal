@@ -23,6 +23,7 @@ class RecipeFactory extends Factory
     public function definition(): array
     {
         $description = htmlspecialchars($this->faker->realText(500));
+        $volumes = [1/4, 1/3, 1/2, 2/3, 3/4, 1, 1 + 1/2, 1 + 3/4, 2, 2 + 1/2, 3, 3 + 1/2, 4, 5];
         return [
             'name' => Words::randomWords(Arr::random(['npan', 'npn', 'anpn'])),
             'description' => "<p>{$description}</p>",
@@ -31,7 +32,8 @@ class RecipeFactory extends Factory
             'time_cook' => $this->faker->numberBetween(0, 90),
             'source' => $this->faker->optional()->url,
             'servings' => $this->faker->numberBetween(1, 10),
-            'weight' => $this->faker->randomFloat(1, 60, 2000),
+            'weight' => $this->faker->optional()->randomFloat(1, 60, 2000),
+            'volume' => $this->faker->optional()->randomElement($volumes),
             'tags' => Words::randomWords(Arr::random(['a', 'aa', 'aaa']), TRUE),
         ];
     }

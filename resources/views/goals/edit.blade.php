@@ -15,7 +15,8 @@
                     <x-inputs.input name="from"
                                     type="date"
                                     class="block w-full"
-                                    :value="old('from', $goal->from?->toDateString())" />
+                                    :value="old('from', $goal->from?->toDateString())"
+                                    :hasError="$errors->has('from')" />
                 </div>
 
                 <!-- To -->
@@ -24,7 +25,8 @@
                     <x-inputs.input name="to"
                                     type="date"
                                     class="block w-full"
-                                    :value="old('to', $goal->to?->toDateString())" />
+                                    :value="old('to', $goal->to?->toDateString())"
+                                    :hasError="$errors->has('to')" />
                 </div>
 
                 <!-- Frequency -->
@@ -33,7 +35,8 @@
                     <x-inputs.select name="frequency"
                                      class="block w-full"
                                      :options="$frequencyOptions"
-                                     :selectedValue="old('frequency', $goal->frequency)">
+                                     :selectedValue="old('frequency', $goal->frequency)"
+                                     :hasError="$errors->has('frequency')">
                     </x-inputs.select>
                 </div>
 
@@ -44,6 +47,7 @@
                                      class="block w-full"
                                      :options="$nameOptions"
                                      :selectedValue="old('name', $goal->name)"
+                                     :hasError="$errors->has('name')"
                                      required>
                     </x-inputs.select>
                 </div>
@@ -56,6 +60,7 @@
                                     step="any"
                                     class="block w-full"
                                     :value="old('goal', $goal->goal)"
+                                    :hasError="$errors->has('goal')"
                                     required />
                 </div>
             </div>

@@ -1,3 +1,5 @@
+@props(['hasError' => false])
+
 <div x-data="picker()">
     <div>
         <div>
@@ -11,7 +13,7 @@
                             x-ref="ingredients_type"/>
             <x-inputs.input type="text"
                             name="ingredients[name][]"
-                            class="w-full"
+                            class="w-full{{ $hasError ? ' border-red-600' : '' }}"
                             value="{{ $defaultName ?? '' }}"
                             placeholder="Search..."
                             autocomplete="off"
