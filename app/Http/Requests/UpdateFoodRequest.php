@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\StringIsDecimalOrFraction;
+use App\Rules\StringIsPositiveDecimalOrFraction;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateFoodRequest extends FormRequest
@@ -19,7 +19,7 @@ class UpdateFoodRequest extends FormRequest
             'brand' => ['nullable', 'string'],
             'source' => ['nullable', 'string'],
             'notes' => ['nullable', 'string'],
-            'serving_size' => ['required', new StringIsDecimalOrFraction],
+            'serving_size' => ['required', new StringIsPositiveDecimalOrFraction],
             'serving_unit' => ['nullable', 'string'],
             'serving_unit_name' => ['nullable', 'string'],
             'serving_weight' => ['required', 'numeric', 'min:0'],

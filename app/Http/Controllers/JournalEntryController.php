@@ -5,13 +5,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFromNutrientsJournalEntryRequest;
+use App\Http\Requests\StoreJournalEntryRequest;
 use App\Models\Food;
 use App\Models\JournalEntry;
 use App\Models\Recipe;
-use App\Rules\ArrayNotEmpty;
-use App\Rules\InArray;
-use App\Rules\StringIsDecimalOrFraction;
-use App\Rules\UsesIngredientTrait;
 use App\Support\ArrayFormat;
 use App\Support\Number;
 use App\Support\Nutrients;
@@ -85,6 +83,7 @@ class JournalEntryController extends Controller
                     continue;
                 }
                 $ingredients[$key] = [
+                    'key' => $key,
                     'date' => $old['date'][$key],
                     'meal' => $old['meal'][$key],
                     'amount' => $amount,
@@ -130,28 +129,9 @@ class JournalEntryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreJournalEntryRequest $request): RedirectResponse
     {
-        $input = $request->validate([
-            'ingredients.date' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.date.*' => ['nullable', 'date', 'required_with:ingredients.id.*'],
-            'ingredients.meal' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.meal.*' => [
-                'nullable',
-                'string',
-                'required_with:ingredients.id.*',
-                new InArray(JournalEntry::meals()->pluck('value')->toArray())
-            ],
-            'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
-            'ingredients.unit' => ['required', 'array'],
-            'ingredients.unit.*' => ['required_with:ingredients.id.*'],
-            'ingredients.id' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
-            'ingredients.type' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.type.*' => ['required_with:ingredients.id.*', 'nullable', new UsesIngredientTrait()],
-            'group_entries' => ['nullable', 'boolean'],
-        ]);
+        $input = $request->validated();
 
         $ingredients = ArrayFormat::flipTwoDimensionalKeys($input['ingredients']);
 
@@ -284,23 +264,8 @@ class JournalEntryController extends Controller
     /**
      * Store an entry from nutrients.
      */
-    public function storeFromNutrients(Request $request): RedirectResponse {
-        $attributes = $request->validate([
-            'date' => ['required', 'date'],
-            'meal' => [
-                'required',
-                'string',
-                new InArray(JournalEntry::meals()->pluck('value')->toArray())
-            ],
-            'summary' => ['required', 'string'],
-            'calories' => ['nullable', 'required_without_all:fat,cholesterol,sodium,carbohydrates,protein', 'numeric'],
-            'fat' => ['nullable', 'required_without_all:calories,cholesterol,sodium,carbohydrates,protein', 'numeric'],
-            'cholesterol' => ['nullable', 'required_without_all:calories,fat,sodium,carbohydrates,protein', 'numeric'],
-            'sodium' => ['nullable', 'required_without_all:calories,fat,cholesterol,carbohydrates,protein', 'numeric'],
-            'carbohydrates' => ['nullable', 'required_without_all:calories,fat,cholesterol,sodium,protein', 'numeric'],
-            'protein' => ['nullable', 'required_without_all:calories,fat,cholesterol,sodium,carbohydrates', 'numeric'],
-        ]);
-
+    public function storeFromNutrients(StoreFromNutrientsJournalEntryRequest $request): RedirectResponse {
+        $attributes = $request->validated();
         $entry = JournalEntry::make(array_filter($attributes))
             ->user()->associate(Auth::user());
         $entry->save();

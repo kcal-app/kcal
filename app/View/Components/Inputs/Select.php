@@ -8,20 +8,20 @@ use Illuminate\View\Component;
 
 class Select extends Component
 {
+    public ?bool $hasError;
     public Collection|array $options;
     public ?string $selectedValue;
 
     /**
      * Select constructor.
-     *
-     * @param \Illuminate\Support\Collection|array $options
-     * @param ?string $selectedValue
      */
     public function __construct(
         Collection|array $options,
+        ?bool $hasError = false,
         ?string $selectedValue = '',
     ) {
         $this->options = $options;
+        $this->hasError = $hasError;
         $this->selectedValue = $selectedValue;
     }
 
@@ -29,6 +29,7 @@ class Select extends Component
     {
         return view('components.inputs.select')
             ->with('options', $this->options)
+            ->with('hasError', $this->hasError)
             ->with('selectedValue', $this->selectedValue);
     }
 

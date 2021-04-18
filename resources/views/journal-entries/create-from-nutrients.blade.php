@@ -19,6 +19,7 @@
                                 type="date"
                                 class="block w-full"
                                 :value="old('date', $default_date->toDateString())"
+                                :hasError="$errors->has('date')"
                                 required />
             </div>
 
@@ -30,6 +31,7 @@
                                  class="block w-full"
                                  :options="$meals"
                                  :selectedValue="old('meal')"
+                                 :hasError="$errors->has('meal')"
                                  required>
                     <option value=""></option>
                 </x-inputs.select>
@@ -43,6 +45,7 @@
                                 type="text"
                                 class="block w-full"
                                 :value="old('summary')"
+                                :hasError="$errors->has('summary')"
                                 required />
             </div>
         </div>
@@ -58,7 +61,8 @@
                                     type="number"
                                     step="any"
                                     class="block w-full"
-                                    :value="old($nutrient['value'])"/>
+                                    :value="old($nutrient['value'])"
+                                    :hasError="$errors->has($nutrient['value'])"/>
                 </div>
             @endforeach
         </div>

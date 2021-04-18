@@ -1,3 +1,4 @@
+@php($key = $key ?? null)
 <div x-data class="entry-item flex items-center space-x-2">
     <div class="flex flex-col space-y-4 w-full">
         <!-- Ingredient -->
@@ -15,6 +16,7 @@
                                 type="date"
                                 class="block w-full"
                                 :value="$date ?? $default_date->toDateString()"
+                                :hasError="$errors->has('ingredients.date.' . $key)"
                                 required />
             </div>
 
@@ -25,8 +27,9 @@
                                  class="block w-full"
                                  :options="$meals"
                                  :selectedValue="$meal ?? null"
+                                 :hasError="$errors->has('ingredients.meal.' . $key)"
                                  required>
-                    <option value="">-- Meal --</option>
+                    @if(is_null($key))<option value="">-- Meal --</option>@endif
                 </x-inputs.select>
             </div>
 
@@ -39,6 +42,7 @@
                                 class="block w-full"
                                 placeholder="Amount"
                                 :value="$amount ?? null"
+                                :hasError="$errors->has('ingredients.amount.' . $key)"
                                 required />
             </div>
 
@@ -48,8 +52,9 @@
                 <x-inputs.select name="ingredients[unit][]"
                                  class="block w-full"
                                  :options="$units ?? []"
-                                 :selectedValue="$unit ?? null">
-                    <option value="">-- Unit --</option>
+                                 :selectedValue="$unit ?? null"
+                                 :hasError="$errors->has('ingredients.unit.' . $key)">
+                    @if(is_null($key))<option value="">-- Unit --</option>@endif
                 </x-inputs.select>
             </div>
         </div>

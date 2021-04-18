@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\ArrayNotEmpty;
-use App\Rules\StringIsDecimalOrFraction;
+use App\Rules\StringIsPositiveDecimalOrFraction;
 use App\Rules\UsesIngredientTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,7 +27,7 @@ class UpdateRecipeRequest extends FormRequest
             'weight' => ['nullable', 'numeric'],
             'source' => ['nullable', 'string'],
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsDecimalOrFraction],
+            'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsPositiveDecimalOrFraction],
             'ingredients.unit' => ['required', 'array'],
             'ingredients.unit.*' => ['required_with:ingredients.id.*'],
             'ingredients.detail' => ['required', 'array'],
