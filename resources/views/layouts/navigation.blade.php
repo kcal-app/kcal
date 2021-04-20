@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
+            <!-- User Menu -->
             <div class="flex items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -32,17 +32,9 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <div class="ml-3">
-                            <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                            <div class="font-medium text-sm text-gray-500">{{ Auth::user()->username }}</div>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
+                        <div class="space-y-2">
                             <x-dropdown-link :href="route('goals.index')">Goals</x-dropdown-link>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
-                            <!-- Authentication -->
+                            <x-dropdown-link :href="route('users.index')">Users</x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
                                 <x-dropdown-link :href="route('logout')" @click.prevent="$el.closest('form').submit();">Logout</x-dropdown-link>

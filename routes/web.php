@@ -5,6 +5,7 @@ use App\Http\Controllers\GoalController;
 use App\Http\Controllers\IngredientPickerController;
 use App\Http\Controllers\JournalEntryController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\UserController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
@@ -44,5 +45,9 @@ Route::get('/journal-entries/{journal_entry}/delete', [JournalEntryController::c
 // Recipes.
 Route::resource('recipes', RecipeController::class)->middleware(['auth']);
 Route::get('/recipes/{recipe}/delete', [RecipeController::class, 'delete'])->middleware(['auth'])->name('recipes.delete');
+
+// Users.
+Route::resource('users', UserController::class)->middleware(['auth']);
+Route::get('/users/{user}/delete', [UserController::class, 'delete'])->middleware(['auth'])->name('users.delete');
 
 require __DIR__.'/auth.php';
