@@ -34,7 +34,9 @@
                     <x-slot name="content">
                         <div class="space-y-2">
                             <x-dropdown-link :href="route('goals.index')">Goals</x-dropdown-link>
-                            <x-dropdown-link :href="route('users.index')">Users</x-dropdown-link>
+                            @can('administer', \App\Models\User::class)
+                                <x-dropdown-link :href="route('users.index')">Users</x-dropdown-link>
+                            @endcan
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
                                 <x-dropdown-link :href="route('logout')" @click.prevent="$el.closest('form').submit();">Logout</x-dropdown-link>

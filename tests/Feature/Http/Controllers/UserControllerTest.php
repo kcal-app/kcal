@@ -66,4 +66,12 @@ class UserControllerTest extends HttpControllerTestCase
         $response->assertForbidden();
     }
 
+    public function testCanNotAccessIndexAsNonAdmin(): void {
+        $this->logout();
+        $this->loginUser();
+        $index_url = action([$this->class(), 'index']);
+        $response = $this->get($index_url);
+        $response->assertForbidden();
+    }
+
 }

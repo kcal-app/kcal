@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'can:administer'])->group(function () {
+Route::middleware(['auth', 'can:administer,\App\Models\User'])->group(function () {
     Route::resource('users', UserController::class);
     Route::get('/users/{user}/delete', [UserController::class, 'delete'])->name('users.delete');
 });

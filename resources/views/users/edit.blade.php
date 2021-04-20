@@ -53,6 +53,17 @@
                                     :hasError="$errors->has('password')"
                                     :required="!$user->exists"/>
                 </div>
+
+                <!-- Admin -->
+                <div>
+                    <x-inputs.label for="admin" value="Site Admin"/>
+
+                    <x-inputs.input name="admin"
+                                    type="checkbox"
+                                    value="1"
+                                    :checked="old('admin', $user->admin)" />
+                </div>
+
             </div>
         </div>
 

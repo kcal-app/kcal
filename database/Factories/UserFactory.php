@@ -23,7 +23,16 @@ class UserFactory extends Factory
             'username' => $this->faker->unique()->userName,
             'password' => Hash::make('password'),
             'name' => $this->faker->name,
+            'admin' => $this->faker->boolean,
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * Create an admin user.
+     */
+    public function admin(): static
+    {
+        return $this->state(['admin' => true]);
     }
 }

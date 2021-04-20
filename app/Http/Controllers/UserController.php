@@ -53,6 +53,7 @@ class UserController extends Controller
         $attributes = $request->validated();
         $attributes['remember_token'] = Str::random(10);
         $attributes['password'] = Hash::make($attributes['password']);
+        $attributes['admin'] = $attributes['admin'] ?? false;
         $user->fill($attributes)->save();
         session()->flash('message', "User {$user->name} updated!");
         return redirect()->route('users.index');

@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Auth;
  * App\Models\User
  *
  * @property int $id
+ * @property string $slug
  * @property string $name
  * @property string $username
  * @property string $password
+ * @property bool $admin
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -38,6 +40,10 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User findSimilarSlugs(string $attribute, array $config, string $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @mixin \Eloquent
  */
 final class User extends Authenticatable
@@ -51,6 +57,7 @@ final class User extends Authenticatable
         'username',
         'password',
         'name',
+        'admin',
     ];
 
     /**
@@ -59,6 +66,13 @@ final class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    /**
+     * @inheritdoc
+     */
+    protected $casts = [
+        'admin' => 'bool',
     ];
 
     /**
