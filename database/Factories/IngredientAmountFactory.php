@@ -43,6 +43,9 @@ class IngredientAmountFactory extends Factory
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configure(): static
     {
         return $this->afterMaking(function (IngredientAmount $ingredient_amount) {
