@@ -27,7 +27,7 @@ class FoodFactory extends Factory
             'source' => $this->faker->optional()->url,
             'notes' => $this->faker->optional(0.25)->realText(),
             'serving_size' => $this->faker->numberBetween(1, 3),
-            'serving_unit' => $this->faker->randomElement(['tsp', 'tbsp', 'cup']),
+            'serving_unit' => $this->faker->randomElement(['tsp', 'tbsp', 'cup', 'oz']),
             'serving_weight' => $this->faker->numberBetween(5, 500),
             'calories' => $this->faker->randomFloat(1, 0, 100),
             'fat' => $this->faker->randomFloat(1, 0, 10),
