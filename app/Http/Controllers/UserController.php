@@ -52,7 +52,12 @@ class UserController extends Controller
     {
         $input = $request->validated();
         $input['remember_token'] = Str::random(10);
-        $input['password'] = Hash::make($input['password']);
+        if (!empty($input['password'])) {
+            $input['password'] = Hash::make($input['password']);
+        }
+        else {
+            unset($input['password']);
+        }
         $input['admin'] = $input['admin'] ?? false;
 
         $user->fill($input)->save();
