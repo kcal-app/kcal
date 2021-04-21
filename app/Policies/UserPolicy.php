@@ -17,6 +17,13 @@ class UserPolicy
     }
 
     /**
+     * Determine whether the user can edit a user via the "profile".
+     */
+    public function editProfile(User $user, User $model): bool {
+        return $user->id === $model->id;
+    }
+
+    /**
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, User $model): bool

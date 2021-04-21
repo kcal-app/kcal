@@ -84,6 +84,14 @@ final class User extends Authenticatable implements HasMedia
     ];
 
     /**
+     * @inheritdoc
+     */
+    public function sluggable(): array
+    {
+        return ['slug' => ['source' => 'username']];
+    }
+
+    /**
      * Get the User's goals.
      */
     public function goals(): HasMany {

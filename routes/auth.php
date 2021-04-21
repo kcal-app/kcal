@@ -4,6 +4,7 @@ use App\Http\Controllers\FoodController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\IngredientPickerController;
 use App\Http\Controllers\JournalEntryController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth'])->group(function () {
+    // Auth.
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
     // Foods.
     Route::resource('foods', FoodController::class);
     Route::get('/foods/{food}/delete', [FoodController::class, 'delete'])->name('foods.delete');
@@ -36,4 +39,13 @@ Route::middleware(['auth'])->group(function () {
     // Recipes.
     Route::resource('recipes', RecipeController::class);
     Route::get('/recipes/{recipe}/delete', [RecipeController::class, 'delete'])->name('recipes.delete');
+
+    // Users.
+    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profiles.show');
+});
+
+Route::middleware(['auth', 'can:editProfile,user'])->group(function () {
+    // Profiles (non-admin Users variant).
+    Route::get('/profile/{user}/edit', [ProfileController::class, 'edit'])->name('profiles.edit');
+    Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profiles.update');
 });

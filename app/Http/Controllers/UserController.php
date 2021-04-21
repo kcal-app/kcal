@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\UpdatesUser;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    use UpdatesUser;
+
     /**
      * Display a listing of the resource.
      */
@@ -50,33 +51,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $input = $request->validated();
-        $input['remember_token'] = Str::random(10);
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($input['password']);
-        }
-        else {
-            unset($input['password']);
-        }
-        $input['admin'] = $input['admin'] ?? false;
-
-        $user->fill($input)->save();
-
-        // Handle image.
-        if (!empty($input['image'])) {
-            /** @var \Illuminate\Http\UploadedFile $file */
-            $file = $input['image'];
-            $user->clearMediaCollection();
-            $user
-                ->addMediaFromRequest('image')
-                ->usingName($user->username)
-                ->usingFileName("{$user->slug}.{$file->extension()}")
-                ->toMediaCollection();
-        }
-        elseif (isset($input['remove_image']) && $input['remove_image']) {
-            $user->clearMediaCollection();
-        }
-
+        $this->updateUser($request, $user);
         session()->flash('message', "User {$user->name} updated!");
         return redirect()->route('users.index');
     }
