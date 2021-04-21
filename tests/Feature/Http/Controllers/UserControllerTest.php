@@ -34,6 +34,14 @@ class UserControllerTest extends HttpControllerTestCase
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function createInstance(): User
+    {
+        return $this->factory()->createOneWithMedia();
+    }
+
+    /**
      * @doesNotPerformAssertions
      */
     public function testCanViewInstance(): void

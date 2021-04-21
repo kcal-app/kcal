@@ -32,7 +32,7 @@ trait LogsIn
         $this->user = User::factory()
             ->hasGoals(2)
             ->hasJournalEntries(5)
-            ->create(['admin' => false]);
+            ->createOneWithMedia(['admin' => false]);
         $this->post('/login', [
             'username' => $this->user->username,
             'password' => 'password',
