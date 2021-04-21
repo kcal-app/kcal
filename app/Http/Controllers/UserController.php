@@ -50,11 +50,28 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $attributes = $request->validated();
-        $attributes['remember_token'] = Str::random(10);
-        $attributes['password'] = Hash::make($attributes['password']);
-        $attributes['admin'] = $attributes['admin'] ?? false;
-        $user->fill($attributes)->save();
+        $input = $request->validated();
+        $input['remember_token'] = Str::random(10);
+        $input['password'] = Hash::make($input['password']);
+        $input['admin'] = $input['admin'] ?? false;
+
+        $user->fill($input)->save();
+
+        // Handle image.
+        if (!empty($input['image'])) {
+            /** @var \Illuminate\Http\UploadedFile $file */
+            $file = $input['image'];
+            $user->clearMediaCollection();
+            $user
+                ->addMediaFromRequest('image')
+                ->usingName($user->username)
+                ->usingFileName("{$user->slug}.{$file->extension()}")
+                ->toMediaCollection();
+        }
+        elseif (isset($input['remove_image']) && $input['remove_image']) {
+            $user->clearMediaCollection();
+        }
+
         session()->flash('message', "User {$user->name} updated!");
         return redirect()->route('users.index');
     }

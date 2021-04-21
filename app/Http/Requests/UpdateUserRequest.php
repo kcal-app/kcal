@@ -19,6 +19,8 @@ class UpdateUserRequest extends FormRequest
             'password' => ['nullable', 'string', 'confirmed'],
             'password_confirmation' => ['nullable', 'string'],
             'admin' => ['nullable', 'boolean'],
+            'image' => ['nullable', 'file', 'mimes:jpg,png,gif'],
+            'remove_image' => ['nullable', 'boolean'],
         ];
         if (!$this->user) {
             $rules['password'] = ['required', 'string', 'confirmed'];

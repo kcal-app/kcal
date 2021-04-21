@@ -10,6 +10,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * App\Models\User
@@ -29,6 +32,8 @@ use Illuminate\Support\Facades\Auth;
  * @property-read int|null $journal_entries_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|Media[] $media
+ * @property-read int|null $media_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -46,9 +51,12 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|User withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @mixin \Eloquent
  */
-final class User extends Authenticatable
+final class User extends Authenticatable implements HasMedia
 {
-    use HasFactory, Notifiable, Sluggable;
+    use HasFactory;
+    use InteractsWithMedia;
+    use Notifiable;
+    use Sluggable;
 
     /**
      * @inheritdoc
@@ -114,5 +122,21 @@ final class User extends Authenticatable
                 }
             });
         return $goals;
+    }
+
+    /**
+     * Defines conversions for the User image.
+     *
+     * @throws \Spatie\Image\Exceptions\InvalidManipulation
+     *
+     * @see https://spatie.be/docs/laravel-medialibrary/v9/converting-images/defining-conversions
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('icon')
+            ->width(300)
+            ->height(300)
+            ->sharpen(10)
+            ->optimize();
     }
 }

@@ -4,7 +4,7 @@
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h1>
     </x-slot>
-    <form method="POST" action="{{ ($user->exists ? route('users.update', $user) : route('users.store')) }}">
+    <form method="POST" enctype="multipart/form-data" action="{{ ($user->exists ? route('users.update', $user) : route('users.store')) }}">
         @if ($user->exists)@method('put')@endif
         @csrf
         <div class="flex flex-col space-y-4">
@@ -24,7 +24,7 @@
 
                 <!-- Name -->
                 <div class="flex-auto">
-                    <x-inputs.label for="name" value="Name"/>
+                    <x-inputs.label for="name" value="Display name"/>
 
                     <x-inputs.input name="name"
                                     type="text"
@@ -32,8 +32,11 @@
                                     :value="old('name', $user->name)"/>
                 </div>
 
+            </div>
+
+            <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
                 <!-- Password -->
-                <div>
+                <div class="flex-auto">
                     <x-inputs.label for="password" value="Password"/>
 
                     <x-inputs.input name="password"
@@ -44,7 +47,7 @@
                 </div>
 
                 <!-- Password confirm -->
-                <div>
+                <div class="flex-auto">
                     <x-inputs.label for="password_confirmation" value="Confirm Password"/>
 
                     <x-inputs.input name="password_confirmation"
@@ -53,17 +56,21 @@
                                     :hasError="$errors->has('password')"
                                     :required="!$user->exists"/>
                 </div>
+            </div>
 
-                <!-- Admin -->
-                <div>
-                    <x-inputs.label for="admin" value="Site Admin"/>
+            <!-- Admin -->
+            <div class="space-x-2">
+                <x-inputs.label for="admin" value="Site Admin" class="inline-block"/>
 
-                    <x-inputs.input name="admin"
-                                    type="checkbox"
-                                    value="1"
-                                    :checked="old('admin', $user->admin)" />
-                </div>
+                <x-inputs.input name="admin"
+                                type="checkbox"
+                                value="1"
+                                :checked="old('admin', $user->admin)" />
+            </div>
 
+            <!-- Image -->
+            <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+                <x-inputs.image :model="$user" preview_name="icon" />
             </div>
         </div>
 

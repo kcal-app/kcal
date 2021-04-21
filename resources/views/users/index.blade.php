@@ -13,6 +13,7 @@
         <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
             <th class="py-3 px-6 text-left">Username</th>
             <th class="py-3 px-6 text-left">Name</th>
+            <th class="py-3 px-6 text-left">Photo</th>
             <th class="py-3 px-6 text-left">Admin</th>
             <th class="py-3 px-6 text-left">Created</th>
             <th class="py-3 px-6 text-left">Updated</th>
@@ -24,6 +25,9 @@
             <tr class="border-b border-gray-200">
                 <td class="py-3 px-6">{{ $user->username }}</td>
                 <td class="py-3 px-6">{{ $user->name }}</td>
+                <td class="py-3 px-6">
+                    <x-user-icon :user="$user" />
+                </td>
                 <td class="py-3 px-6">@if($user->admin) Yes @else No @endif</td>
                 <td class="py-3 px-6">{{ $user->created_at }}</td>
                 <td class="py-3 px-6">{{ $user->updated_at }}</td>
