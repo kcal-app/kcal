@@ -16,7 +16,7 @@ class UserAddTest extends TestCase
             ->expectsQuestion('Enter a username for the user', $user->username)
             ->expectsQuestion('Enter a password for the user (leave blank for a random password)', 'password')
             ->expectsQuestion('Re-type the password to confirm', 'password')
-            ->expectsQuestion('Enter a name for the user (optional)', $user->name)
+            ->expectsQuestion('Enter a name for the user', $user->name)
             ->assertExitCode(0);
         /** @var \App\Models\User $new_user */
         $new_user = User::whereUsername($user->username)->get()->first();
@@ -39,6 +39,24 @@ class UserAddTest extends TestCase
         $new_user = User::whereUsername($user->username)->get()->first();
         $this->assertEquals($user->username, $new_user->username);
         $this->assertEquals($user->name, $new_user->name);
+    }
+
+    public function testCanAddAdminUser(): void
+    {
+        /** @var \App\Models\User $user */
+        $user = User::factory()->makeOne();
+        $parameters = [
+            'username' => $user->username,
+            'password' => 'password',
+            '--name' => $user->name,
+            '--admin' => true,
+        ];
+        $this->artisan('user:add', $parameters)->assertExitCode(0);
+        /** @var \App\Models\User $new_user */
+        $new_user = User::whereUsername($user->username)->get()->first();
+        $this->assertEquals($user->username, $new_user->username);
+        $this->assertEquals($user->name, $new_user->name);
+        $this->assertTrue($new_user->admin);
     }
 
     public function testCanNotAddExistingUsername(): void
