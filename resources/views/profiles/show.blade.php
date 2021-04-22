@@ -17,8 +17,8 @@
                 {{ $user->getFirstMedia()('icon') }}
             </a>
         </div>
-        <div class="mt-2 text-gray-500">
-            {{ $user->name }}
-        </div>
     @endif
+    <div class="mt-2 text-gray-500">
+        {{ $user->name }}
+    </div>
 </x-app-layout>

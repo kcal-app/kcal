@@ -9,65 +9,15 @@
         @csrf
         <div class="flex flex-col space-y-4">
             <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
-                <!-- Username -->
-                <div class="flex-auto space-y-1">
-                    <x-inputs.label for="username" value="Username"/>
-
-                    <x-inputs.input name="username"
-                                    type="text"
-                                    class="block w-full"
-                                    autocapitalize="none"
-                                    :value="old('username', $user->username)"
-                                    :hasError="$errors->has('username')"
-                                    required />
-                </div>
-
-                <!-- Name -->
-                <div class="flex-auto space-y-1">
-                    <x-inputs.label for="name" value="Display name"/>
-
-                    <x-inputs.input name="name"
-                                    type="text"
-                                    class="block w-full"
-                                    :value="old('name', $user->name)"/>
-                </div>
-
+                @include('users.partials.inputs.username')
+                @include('users.partials.inputs.name')
             </div>
 
             <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
-                <!-- Password -->
-                <div class="flex-auto space-y-1">
-                    <x-inputs.label for="password" value="Password"/>
-
-                    <x-inputs.input name="password"
-                                    type="password"
-                                    class="block w-full"
-                                    :hasError="$errors->has('password')"
-                                    :required="!$user->exists"/>
-                </div>
-
-                <!-- Password confirm -->
-                <div class="flex-auto space-y-1">
-                    <x-inputs.label for="password_confirmation" value="Confirm Password"/>
-
-                    <x-inputs.input name="password_confirmation"
-                                    type="password"
-                                    class="block w-full"
-                                    :hasError="$errors->has('password')"
-                                    :required="!$user->exists"/>
-                </div>
+                @include('users.partials.inputs.password')
             </div>
 
-            <!-- Admin -->
-            <div class="space-y-1">
-                <x-inputs.label for="admin" value="Site Admin" class="inline-block"/>
-
-                <x-inputs.select name="admin"
-                                 class="block"
-                                 :options="[['value' => 0, 'label' => 'No'], ['value' => 1, 'label' => 'Yes']]"
-                                 :selectedValue="old('admin', $user->admin)">
-                </x-inputs.select>
-            </div>
+            @include('users.partials.inputs.admin')
 
             <!-- Image -->
             <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
