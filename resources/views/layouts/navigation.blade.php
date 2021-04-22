@@ -27,10 +27,13 @@
 
                     <x-slot name="content">
                         <div class="space-y-2">
-                            <x-dropdown-link :href="route('goals.index')">Goals</x-dropdown-link>
+                            <x-dropdown-link :href="route('profiles.show', Auth::user())">My Profile</x-dropdown-link>
+                            <x-dropdown-link :href="route('goals.index')">My Goals</x-dropdown-link>
                             @can('administer', \App\Models\User::class)
-                                <x-dropdown-link :href="route('users.index')">Users</x-dropdown-link>
+                                <hr />
+                                <x-dropdown-link :href="route('users.index')">Manage Users</x-dropdown-link>
                             @endcan
+                            <hr />
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
                                 <x-dropdown-link :href="route('logout')" @click.prevent="$el.closest('form').submit();">Logout</x-dropdown-link>

@@ -22,7 +22,9 @@ trait UpdatesUser
         else {
             unset($input['password']);
         }
-        $input['admin'] = $input['admin'] ?? false;
+
+        // Maintain the existing value if it is not on the form.
+        $input['admin'] = $input['admin'] ?? ($user->exists && $user->admin);
 
         $user->fill($input)->save();
 
