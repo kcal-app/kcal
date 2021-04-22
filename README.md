@@ -16,6 +16,7 @@ to use recipe presentation for preparing meals.
 - [Deployment](#deployment)
     - [Heroku](#heroku)
 - [Configuration](#configuration)
+    - [Media Storage](#media-storage)
     - [Search](#search-mag)
 - [Development](#development)
     - [Testing](#testing)
@@ -52,7 +53,9 @@ For a manual deploy using Heroku CLI, execute the following after initial deploy
 
 #### Media storage
 
-:warning: Storage (for recipe photos) is not supported on Heroku *yet*. :warning:
+Heroku uses an ephemeral disk. In order to maintain recipe and/or user images between
+app restarts AWS can be used. See [Media Storage - AWS S3](#aws-s3) for additional
+guidance.
 
 #### Search drivers
 
@@ -67,6 +70,62 @@ added to the app and will work without any configuration changes. It is left out
 of the default build only because it takes a very long time to provision.
 
 ## Configuration
+
+### Media Storage
+
+Recipes and users can have associated media (images) that by default are stored
+on a local disk under the path `{app}/public/media`. If a local disk solution is
+not feasible, an AWS S3 bucket can be used instead.
+
+#### AWS S3
+
+Use the general guidance below to create an AWS S3 bucket and IAM user for media
+storage in AWS S3.
+
+1. Create a bucket that allows objects to be configured with public access.
+
+1. Create an IAM user with access to the bucket.
+
+    Use this example policy to grant necessary permissions to a specific bucket:
+
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                   "Sid": "VisualEditor0",
+                   "Effect": "Allow",
+                   "Action": [
+                       "s3:GetBucketPublicAccessBlock",
+                       "s3:GetBucketPolicyStatus",
+                       "s3:GetAccountPublicAccessBlock",
+                       "s3:ListAllMyBuckets",
+                       "s3:GetBucketAcl",
+                       "s3:GetBucketLocation"
+                   ],
+                   "Resource": "*"
+               },
+               {
+                   "Sid": "VisualEditor1",
+                   "Effect": "Allow",
+                   "Action": "s3:ListBucket",
+                   "Resource": "arn:aws:s3:::REPLACE_WITH_S3_BUCKET_NAME"
+               },
+               {
+                   "Sid": "VisualEditor2",
+                   "Effect": "Allow",
+                   "Action": ["s3:*Object", "s3:*ObjectAcl*"],
+                   "Resource": "arn:aws:s3:::REPLACE_WITH_S3_BUCKET_NAME/*"
+               }
+            ]
+        }
+
+1. Set necessary environment variables (via `.env` or some other mechanism).
+
+        MEDIA_DISK=s3-public
+        AWS_ACCESS_KEY_ID=REPLACE_WITH_IAM_KEY
+        AWS_SECRET_ACCESS_KEY=REPLACE_WITH_IAM_SECRET
+        AWS_DEFAULT_REGION=REPLACE_WITH_S3_BUCKET_NAME
+        AWS_BUCKET=REPLACE_WITH_S3_BUCKET_REGION
 
 ### Search :mag:
 

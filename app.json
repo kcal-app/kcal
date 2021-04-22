@@ -38,6 +38,26 @@
         "SCOUT_DRIVER": {
             "description": "Search driver ('algolia', 'elastic', or 'null').",
             "value": "null"
+        },
+        "MEDIA_DISK": {
+            "description": "Media disk. Set to 's3-public' for recipe/user image support.",
+            "value": "local"
+        },
+        "AWS_BUCKET": {
+            "description": "AWS bucket name for recipe/user image storage. Required when MEDIA_DISK is 's3-public'.",
+            "value": ""
+        },
+        "AWS_DEFAULT_REGION": {
+            "description": "AWS region for AWS_BUCKET. Required when MEDIA_DISK is 's3-public'.",
+            "value": ""
+        },
+        "AWS_ACCESS_KEY_ID": {
+            "description": "AWS access key ID for AWS_BUCKET. Required when MEDIA_DISK is 's3-public'.",
+            "value": ""
+        },
+        "AWS_SECRET_ACCESS_KEY": {
+            "description": "AWS secret key ID for AWS_ACCESS_KEY_ID. Required when MEDIA_DISK is 's3-public'.",
+            "value": ""
         }
     },
     "scripts": {
