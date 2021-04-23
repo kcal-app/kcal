@@ -61,7 +61,7 @@ services:
     cap_add:
       - IPC_LOCK
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
+      - 'elasticsearch-data:/usr/share/elasticsearch/data'
     ports:
       - '${ELASTIC_PORT:-9200}:9200'
     networks:
