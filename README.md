@@ -25,6 +25,13 @@ The demo instance resets every hour, on the hour.
 
 ## Deployment
 
+### Docker
+
+There is a [`Dockerfile`](Dockerfile) and automated build process to create builds
+at [kcalapp/kcal](https://hub.docker.com/repository/docker/kcalapp/kcal) on Docker Hub.
+See the [kcal-app/kcal-docker](https://github.com/kcal-app/kcal-docker) repository
+for a Docker Compose based template and instructions.
+
 ### Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
@@ -236,7 +243,7 @@ Execute tests.
 #### Caveats
 
 In order to support parallel testing, tests are run using sqlite (even though Sail
-provides MySQL). To test with MySQL make a copy of `phpunit.xml.dist` as `phpunit.dist`
+provides MySQL). To test with MySQL make a copy of `phpunit.xml.dist` as `phpunit.xml`
 and change:
 
 ```
