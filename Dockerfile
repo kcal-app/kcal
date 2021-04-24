@@ -54,11 +54,6 @@ RUN composer install --optimize-autoloader --no-dev
 # Change current user to www.
 USER www
 
-# Optimize application.
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
-
 # Expose port 9000 and start php-fpm server.
 EXPOSE 9000
 CMD ["php-fpm"]
