@@ -149,7 +149,7 @@ adds support for Scout (see: laravel-json-api/laravel#32).
 
 ### ElasticSearch (`elastic`)
 
-1. Determine the host and port for your ElasticSearch service.
+1. Determine the ElasticSearch service host and port.
 
 1. Update kcal's `.env` file.
 
@@ -187,9 +187,6 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 1. Clone the repository.
 
         git clone https://github.com/kcal-app/kcal.git
-
-1. Move in to the cloned folder.
-
         cd kcal
 
 1. Install development dependencies.
@@ -200,16 +197,12 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 
         cp .env.local.example .env
 
-   Note: the default `APP_URL` setting is `http://127.0.0.1`. If you have
-   [dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html) or something similar
-   configured for the `test` domain you can change this to `http://kcal.test`.
-
 1. Generate an app key.
 
         php artisan key:generate
 
     Verify that the `APP_KEY` variable has been set in `.env`. If has not, run
-    `php artisan key:generate --show` and copy the key and append in to the
+    `php artisan key:generate --show` and copy the key and append it to the
     `APP_KEY=` line manually.
 
 1. Run it! :sailboat:
@@ -227,8 +220,10 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 
     The default username and password is `kcal` / `kcal`.
 
-Once the application finishes starting, navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080)
-(or [http://kcal.test:8080](http://kcal.test:8080) if configured).
+Navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080) to log in!
+
+Create a `docker-compose.override.yml` file to override any of the default settings
+provided for this environment.
 
 ### Testing
 
