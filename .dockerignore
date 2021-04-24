@@ -1,0 +1,16 @@
+*
+!app
+!bootstrap
+!config
+!database
+!elastic
+!public
+!resources
+!routes
+!storage
+!artisan
+!ATTRIBUTIONS.md
+!composer.json
+!composer.lock
+!LICENSE
+!README.md
