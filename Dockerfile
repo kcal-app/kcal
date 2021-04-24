@@ -2,7 +2,7 @@ FROM php:8.0-fpm-alpine
 
 RUN apk add --no-cache --virtual \
     .build-deps \
-    $PHPIZE_DEPS \
+    ${PHPIZE_DEPS} \
     bash \
     freetype-dev \
     git \
@@ -15,6 +15,7 @@ RUN apk add --no-cache --virtual \
     oniguruma-dev \
     openssh-client \
     openssl \
+    pcre-dev \
     postgresql-dev \
     rsync \
     zlib-dev
@@ -33,6 +34,10 @@ RUN docker-php-ext-install \
     pdo_pgsql \
     pcntl \
     zip
+
+# Install PECL extensions.
+RUN pecl install redis
+RUN docker-php-ext-enable redis
 
 # Install composer.
 ENV COMPOSER_HOME /composer
