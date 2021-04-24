@@ -1,8 +1,12 @@
+ARG MEDIA_LIBRARY_DEPS="jpegoptim optipng pngquant gifsicle"
+
 FROM php:8.0-fpm-alpine
+ARG MEDIA_LIBRARY_DEPS
 
 RUN apk add --no-cache --virtual \
     .build-deps \
     ${PHPIZE_DEPS} \
+    ${MEDIA_LIBRARY_DEPS} \
     bash \
     freetype-dev \
     git \
