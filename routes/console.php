@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use Illuminate\Foundation\Console\ClosureCommand;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -14,6 +14,19 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+if (!App::isProduction()) {
+    /**
+     * Wipe, migrate, and seed the database.
+     */
+    Artisan::command('dev:reset', function () {
+        /** @phpstan-ignore-next-line */
+        assert($this instanceof ClosureCommand);
+        Artisan::call('db:wipe');
+        $this->info(Artisan::output());
+        Artisan::call('migrate');
+        $this->info(Artisan::output());
+        Artisan::call('db:seed');
+        $this->info(Artisan::output());
+        $this->info('Database reset complete!');
+    })->purpose('Wipe, migrate, and seed the database.');
+}

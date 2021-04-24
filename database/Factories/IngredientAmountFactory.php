@@ -25,12 +25,10 @@ class IngredientAmountFactory extends Factory
         if ($this->faker->boolean(90)) {
             $ingredient_factory = Food::factory();
             $ingredient_type = Food::class;
-            $ingredient_unit = Nutrients::units()->pluck('value')->random(1)->first();
         }
         else {
             $ingredient_factory = Recipe::factory();
             $ingredient_type = Recipe::class;
-            $ingredient_unit = 'serving';
         }
 
         $amounts = [1/8, 1/4, 1/3, 1/2, 2/3, 3/4, 1, 1 + 1/4, 1 + 1/3, 1 + 1/2, 1 + 2/3, 1 + 3/4, 2, 2 + 1/2, 3];
@@ -38,12 +36,26 @@ class IngredientAmountFactory extends Factory
             'ingredient_id' => $ingredient_factory,
             'ingredient_type' => $ingredient_type,
             'amount' => $this->faker->randomElement($amounts),
-            'unit' => $ingredient_unit,
             'detail' => $this->faker->boolean() ? Words::randomWords('a') : null,
             'weight' => $this->faker->numberBetween(0, 50),
             'parent_id' => Recipe::factory(),
             'parent_type' => Recipe::class,
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configure(): static
+    {
+        return $this->afterMaking(function (IngredientAmount $ingredient_amount) {
+            // Set the unit to a random one supported by the ingredient.
+            $ingredient_amount->unit = $ingredient_amount->ingredient
+                ->units_supported
+                ->random(1)
+                ->pluck('value')
+                ->first();
+        });
     }
 
     /**

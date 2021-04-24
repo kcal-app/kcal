@@ -154,9 +154,9 @@
                 </div>
             </div>
             <section class="flex flex-row space-x-2 justify-around md:flex-col md:space-y-2 md:space-x-0">
-                <x-button-link.base href="{{ route('recipes.edit', $recipe) }}">
+                <x-button-link.gray href="{{ route('recipes.edit', $recipe) }}">
                     Edit Recipe
-                </x-button-link.base>
+                </x-button-link.gray>
                 <x-button-link.red href="{{ route('recipes.delete', $recipe) }}">
                     Delete Recipe
                 </x-button-link.red>

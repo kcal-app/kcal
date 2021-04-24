@@ -15,7 +15,8 @@ class UserAdd extends Command
     protected $signature = 'user:add
                             {username? : Username}
                             {password? : Password}
-                            {--name= : User short name}';
+                            {--name= : User short name};
+                            {--admin : Makes the user an admin}';
 
     /**
      * @inheritdoc
@@ -69,13 +70,14 @@ class UserAdd extends Command
 
         $options = $this->options();
         if (!$options['name']) {
-            $options['name'] = $this->ask('Enter a name for the user (optional)');
+            $options['name'] = $this->ask('Enter a name for the user', $arguments['username']);
         }
 
         User::create([
             'username' => $arguments['username'],
             'password' => Hash::make($arguments['password']),
             'name' => $options['name'] ?: $arguments['username'],
+            'admin' => $options['admin'],
             'remember_token' => Str::random(10),
         ])->save();
 

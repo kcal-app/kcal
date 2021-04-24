@@ -65,6 +65,7 @@ class FoodController extends Controller
                 ['value' => 'tsp', 'label' => 'tsp.'],
                 ['value' => 'tbsp', 'label' => 'tbsp.'],
                 ['value' => 'cup', 'label' => 'cup'],
+                ['value' => 'oz', 'label' => 'oz'],
             ]));
     }
 

@@ -9,7 +9,7 @@ abstract class LoggedInTestCase extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loginUser();
+        $this->loginAdmin();
     }
 
 }

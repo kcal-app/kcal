@@ -116,7 +116,7 @@ class NutrientsTest extends TestCase
             [$foodInvalidUnit, 1, 'tsp'],
             [$foodInvalidUnit, 1, 'tbsp'],
             [$foodInvalidUnit, 1, 'cup'],
-            [Food::factory()->tspServingUnit()->make(), 1, 'invalid'],
+            [Food::factory()->make(['serving_unit' => 'tsp', 'serving_size' => 1]), 1, 'invalid'],
         ];
     }
 
@@ -128,10 +128,10 @@ class NutrientsTest extends TestCase
 
         /** @var \App\Models\Food[] $foods */
         $foods = [
-            'tsp' => Food::factory()->tspServingUnit()->make(),
-            'tbsp' => Food::factory()->tbspServingUnit()->make(),
-            'cup' => Food::factory()->cupServingUnit()->make(),
-            'none' => Food::factory()->noServingUnit()->make(),
+            'tsp' => Food::factory()->make(['serving_unit' => 'tsp', 'serving_size' => 1]),
+            'tbsp' => Food::factory()->make(['serving_unit' => 'tbsp', 'serving_size' => 1]),
+            'cup' => Food::factory()->make(['serving_unit' => 'cup', 'serving_size' => 1]),
+            'none' => Food::factory()->make(['serving_unit' => null, 'serving_unit_name' => 'head']),
         ];
 
         return [

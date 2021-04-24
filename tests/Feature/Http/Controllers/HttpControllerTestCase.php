@@ -31,6 +31,9 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
         return $this->factory()->create();
     }
 
+    /**
+     * Test instances index.
+     */
     public function testCanLoadIndex(): void
     {
         $index_url = action([$this->class(), 'index']);
@@ -38,6 +41,9 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
         $response->assertOk();
     }
 
+    /**
+     * Test instance add.
+     */
     public function testCanAddInstance(): void
     {
         $create_url = action([$this->class(), 'create']);
@@ -49,6 +55,9 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
         $response->assertSessionHasNoErrors();
     }
 
+    /**
+     * Test instance view.
+     */
     public function testCanViewInstance(): void
     {
         $instance = $this->createInstance();
@@ -58,6 +67,9 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
         $response->assertViewHas($this->routeKey());
     }
 
+    /**
+     * Test instance edit.
+     */
     public function testCanEditInstance(): void
     {
         $instance = $this->createInstance();
@@ -71,6 +83,9 @@ abstract class HttpControllerTestCase extends LoggedInTestCase
         $response->assertSessionHasNoErrors();
     }
 
+    /**
+     * Test instance delete/destroy.
+     */
     public function testCanDeleteInstance(): void
     {
         $instance = $this->createInstance();
