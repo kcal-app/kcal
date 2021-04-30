@@ -108,28 +108,12 @@ final class User extends Authenticatable implements HasMedia
     /**
      * Get User's past, present, and future goals.
      *
-     * @return \App\Models\Goal[]
+     * @todo Refactor or remove as needed.
+     *
+     * @return \Illuminate\Support\Collection[]
      */
     public function getGoalsByTime(?Carbon $date = null): array {
-        $now = $date ?? Carbon::now();
-        $goals = ['past' => new Collection(), 'present' => new Collection(), 'future' => new Collection()];
-        Goal::all()->where('user_id', Auth::user()->id)
-            ->each(function ($item) use(&$goals, $now) {
-                if ($item->to && $now->isAfter($item->to)) {
-                    $goals['past'][$item->id] = $item;
-                }
-                elseif ($item->from && $now->isBefore($item->from)) {
-                    $goals['future'][$item->id] = $item;
-                }
-                elseif (
-                    empty($item->from)
-                    || empty($item->to)
-                    || $now->isBetween($item->from, $item->to)
-                ) {
-                    $goals['present'][$item->id] = $item;
-                }
-            });
-        return $goals;
+        return ['past' => new Collection(), 'present' => new Collection(), 'future' => new Collection()];
     }
 
     /**
