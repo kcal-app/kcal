@@ -9,6 +9,18 @@
         @csrf
         <div class="flex flex-col space-y-4">
             <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+                <!-- Name -->
+                <div class="flex-auto">
+                    <x-inputs.label for="name" value="Name" />
+
+                    <x-inputs.input name="name"
+                                    type="text"
+                                    class="block mt-1 w-full"
+                                    :value="old('name', $goal->name)"
+                                    required />
+                </div>
+            </div>
+            <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
                 <!-- From -->
                 <div class="flex-auto">
                     <x-inputs.label for="from" value="From"/>
@@ -27,29 +39,6 @@
                                     class="block w-full"
                                     :value="old('to', $goal->to?->toDateString())"
                                     :hasError="$errors->has('to')" />
-                </div>
-
-                <!-- Frequency -->
-                <div class="flex-auto">
-                    <x-inputs.label for="frequency" value="Frequency" />
-                    <x-inputs.select name="frequency"
-                                     class="block w-full"
-                                     :options="$frequencyOptions"
-                                     :selectedValue="old('frequency', $goal->frequency)"
-                                     :hasError="$errors->has('frequency')">
-                    </x-inputs.select>
-                </div>
-
-                <!-- Trackable -->
-                <div class="flex-auto">
-                    <x-inputs.label for="name" value="Trackable" />
-                    <x-inputs.select name="name"
-                                     class="block w-full"
-                                     :options="$nameOptions"
-                                     :selectedValue="old('name', $goal->name)"
-                                     :hasError="$errors->has('name')"
-                                     required>
-                    </x-inputs.select>
                 </div>
 
                 <!-- Goal -->
