@@ -23,10 +23,10 @@
                 </svg>
             </x-inputs.icon-green>
             <div class="flex items-center justify-end mt-4 space-x-4">
-                <fieldset class="flex space-x-2">
-                    <x-inputs.input name="group_entries" type="checkbox" class="h-5 w-5" value="1" />
-                    <x-inputs.label for="groupEntries" value="Group entries by day and meal" />
-                </fieldset>
+                <x-inputs.label class="inline-flex items-center">
+                    <x-inputs.input type="checkbox" name="group_entries" class="h-5 w-5" value="1" />
+                    <span class="ml-2">Group entries by day and meal</span>
+                </x-inputs.label>
                 <x-inputs.button x-on:click="removeTemplate($el);">Add entries</x-inputs.button>
             </div>
         </div>

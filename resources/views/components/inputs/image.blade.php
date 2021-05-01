@@ -4,10 +4,10 @@
         <a href="{{ $model->getFirstMedia()->getFullUrl() }}" target="_blank">
             {{ $model->getFirstMedia()($previewName) }}
         </a>
-        <fieldset class="flex space-x-2 mt-1 items-center">
-            <x-inputs.label for="remove_image" class="text-red-800" value="Remove this image" />
+        <x-inputs.label class="inline-flex items-center">
             <x-inputs.input type="checkbox" name="remove_image" value="1" />
-        </fieldset>
+            <span class="ml-2 text-red-800">Remove this image</span>
+        </x-inputs.label>
     </div>
 @endif
 <div>
