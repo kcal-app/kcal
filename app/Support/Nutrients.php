@@ -13,13 +13,11 @@ class Nutrients
     /**
      * Get all supported units and metadata.
      *
-     * Each entry has two keys:
+     * Each entry has the following keys:
      *  - value: Machine name for the unit.
      *  - label: Human-readable name for the unit.
      *  - plural: Human-readable plural form of the unit name.
      *  - type: Unit type -- matching types can be converted.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public static function units(): Collection {
         return new Collection([

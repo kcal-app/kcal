@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use App\Support\Nutrients;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Goal
@@ -57,7 +56,7 @@ final class Goal extends Model
         'name',
         'from',
         'to',
-        // Bitwise field: sun=1, mon=2, tue=4, wed=8, thu=16, fri=32, sat=64.
+        // Bitwise field: mon=1, tue=2, wed=4, thu=8, fri=16, sat=32, sun=64.
         'days',
         'calories',
         'carbohydrates',
@@ -81,6 +80,47 @@ final class Goal extends Model
         'protein' => 'float',
         'sodium' => 'float',
     ];
+
+    /**
+     * Get all supported days and metadata.
+     *
+     * Each entry has the following keys:
+     *  - value: Day value (used for bitwise operations).
+     *  - label: Human-readable name for the day.
+     */
+    public static function days(): Collection
+    {
+        return new Collection([
+            [
+                'value' => 1,
+                'label' => 'monday',
+            ],
+            [
+                'value' => 2,
+                'label' => 'tuesday',
+            ],
+            [
+                'value' => 4,
+                'label' => 'wednesday',
+            ],
+            [
+                'value' => 8,
+                'label' => 'thursday',
+            ],
+            [
+                'value' => 16,
+                'label' => 'friday',
+            ],
+            [
+                'value' => 32,
+                'label' => 'saturday',
+            ],
+            [
+                'value' => 64,
+                'label' => 'sunday',
+            ],
+        ]);
+    }
 
     /**
      * Get the User this goal belongs to.
