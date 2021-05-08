@@ -12,8 +12,6 @@ use Illuminate\Support\Collection;
  *
  * @property int $id
  * @property int $user_id
- * @property \datetime|null $from
- * @property \datetime|null $to
  * @property int $days
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -54,8 +52,6 @@ final class Goal extends Model
      */
     protected $fillable = [
         'name',
-        'from',
-        'to',
         // Bitwise field: mon=1, tue=2, wed=4, thu=8, fri=16, sat=32, sun=64.
         'days',
         'calories',
@@ -70,8 +66,6 @@ final class Goal extends Model
      * @inheritdoc
      */
     protected $casts = [
-        'from' => 'datetime:Y-m-d',
-        'to' => 'datetime:Y-m-d',
         'days' => 'int',
         'calories' => 'float',
         'carbohydrates' => 'float',

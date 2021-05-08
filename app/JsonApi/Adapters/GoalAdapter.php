@@ -23,7 +23,7 @@ class GoalAdapter extends AdapterBase
     /**
      * {@inheritdoc}
      */
-    protected $defaultSort = ['-from', '-to'];
+    protected $defaultSort = ['-name'];
 
     /**
      * @inheritdoc

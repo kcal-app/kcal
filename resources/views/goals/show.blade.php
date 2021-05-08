@@ -19,15 +19,6 @@
         </h1>
     </x-slot>
     <div class="grid grid-cols-2 gap-y-1 gap-x-3 max-w-md inline-grid">
-        <div class="font-bold">From</div>
-        <div>{{ $goal->from?->toDateString() ?? 'Any' }}</div>
-        <div class="font-bold">To</div>
-        <div>{{ $goal->to?->toDateString() ?? 'Any' }}</div>
-        <div class="font-bold">Frequency</div>
-        <div>{{ \Illuminate\Support\Str::ucfirst($frequencyOptions[$goal->frequency]['label']) }}</div>
-        <div class="font-bold">Trackable</div>
-        <div>{{ \Illuminate\Support\Str::ucfirst($nameOptions[$goal->name]['label']) }}</div>
-        <div class="font-bold">Goal</div>
-        <div>{{ $goal->goal }}{{ $nameOptions[$goal->name]['unit'] }}</div>
+        @todo Add data!
     </div>
 </x-app-layout>

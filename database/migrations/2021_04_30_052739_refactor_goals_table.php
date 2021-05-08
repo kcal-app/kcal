@@ -16,14 +16,14 @@ class RefactorGoalsTable extends Migration
     {
         DB::table('goals')->truncate();
         Schema::table('goals', function (Blueprint $table) {
-            $table->unsignedTinyInteger('days')->default(127)->after('to');
-            $table->unsignedFloat('calories')->nullable()->after('name');
+            $table->unsignedTinyInteger('days')->default(127)->after('name');
+            $table->unsignedFloat('calories')->nullable()->after('days');
             $table->unsignedFloat('fat')->nullable()->after('calories');
             $table->unsignedFloat('cholesterol')->nullable()->after('fat');
             $table->unsignedFloat('sodium')->nullable()->after('cholesterol');
             $table->unsignedFloat('carbohydrates')->nullable()->after('sodium');
             $table->unsignedFloat('protein')->nullable()->after('carbohydrates');
-            $table->dropColumn(['frequency', 'goal']);
+            $table->dropColumn(['frequency', 'from', 'goal', 'to']);
         });
     }
 
@@ -36,8 +36,10 @@ class RefactorGoalsTable extends Migration
     {
         DB::table('goals')->truncate();
         Schema::table('goals', function (Blueprint $table) {
-            $table->string('frequency')->nullable()->after('to');
-            $table->unsignedFloat('goal')->nullable()->after('name');
+            $table->date('from')->nullable();
+            $table->date('to')->nullable();
+            $table->string('frequency')->nullable();
+            $table->unsignedFloat('goal')->nullable();
             $table->dropColumn(['days', 'calories', 'fat', 'cholesterol', 'sodium', 'carbohydrates', 'protein']);
         });
     }

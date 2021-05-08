@@ -12,8 +12,6 @@
         <thead>
         <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
             <th class="py-3 px-6 text-left">Name</th>
-            <th class="py-3 px-6 text-left">From</th>
-            <th class="py-3 px-6 text-left">To</th>
             <th class="py-3 px-6 text-left">Days of Week</th>
             <th class="py-3 px-6 text-left">Goals</th>
             <th class="py-3 px-6 text-left">&nbsp;</th>
@@ -23,8 +21,6 @@
         @foreach($goals as $goal)
             <tr class="border-b border-gray-200">
                 <td class="py-3 px-6">{{ $goal->name }}</td>
-                <td class="py-3 px-6">{{ $goal->from }}</td>
-                <td class="py-3 px-6">{{ $goal->to }}</td>
                 <td class="py-3 px-6">{{ $goal->days }}</td>
                 <td class="py-3 px-6">
                     Calories: {{ $goal->calories }}<br />
