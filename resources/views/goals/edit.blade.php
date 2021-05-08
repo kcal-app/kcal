@@ -21,26 +21,6 @@
                 </div>
             </div>
             <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
-                <!-- From -->
-                <div class="flex-auto">
-                    <x-inputs.label for="from" value="From"/>
-                    <x-inputs.input name="from"
-                                    type="date"
-                                    class="block w-full"
-                                    :value="old('from', $goal->from?->toDateString())"
-                                    :hasError="$errors->has('from')" />
-                </div>
-
-                <!-- To -->
-                <div class="flex-auto">
-                    <x-inputs.label for="to" value="To"/>
-                    <x-inputs.input name="to"
-                                    type="date"
-                                    class="block w-full"
-                                    :value="old('to', $goal->to?->toDateString())"
-                                    :hasError="$errors->has('to')" />
-                </div>
-
                 <!-- Days of the week -->
                 <fieldset class="flex-auto">
                     <legend class="block font-medium text-sm text-gray-700">Days of the week</legend>
