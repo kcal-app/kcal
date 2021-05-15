@@ -59,7 +59,9 @@ class GoalController extends Controller
     public function update(UpdateGoalRequest $request, Goal $goal): RedirectResponse
     {
         $attributes = $request->validated();
-        $attributes['days'] = array_sum($attributes['days']);
+        if (isset($attributes['days'])) {
+            $attributes['days'] = array_sum($attributes['days']);
+        }
         $goal->fill($attributes)->user()->associate(Auth::user());
         $goal->save();
         session()->flash('message', "Goal updated!");

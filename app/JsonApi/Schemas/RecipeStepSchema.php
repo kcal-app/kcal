@@ -25,6 +25,7 @@ class RecipeStepSchema extends SchemaProvider
      */
     public function getAttributes($resource): array
     {
+        /** @var \App\Models\RecipeStep $resource */
         return [
             'number' => $resource->number,
             'step' => $resource->step,

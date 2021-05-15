@@ -25,6 +25,7 @@ class RecipeSchema extends SchemaProvider
      */
     public function getAttributes($resource): array
     {
+        /** @var \App\Models\Recipe $resource */
         return [
             'slug' => $resource->slug,
             'name' => $resource->name,

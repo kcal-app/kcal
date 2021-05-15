@@ -29,6 +29,7 @@ class GoalSchema extends SchemaProvider
         return [
             'name' => $resource->name,
             'days' => $resource->days,
+            'daysFormatted' => $resource->days_formatted,
             'calories' => $resource->calories,
             'carbohydrates' => $resource->carbohydrates,
             'cholesterol' => $resource->cholesterol,

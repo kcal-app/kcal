@@ -25,6 +25,7 @@ class JournalEntrySchema extends SchemaProvider
      */
     public function getAttributes($resource): array
     {
+        /** @var \App\Models\JournalEntry $resource */
         return [
             'calories' => $resource->calories,
             'carbohydrates' => $resource->carbohydrates,

@@ -42,6 +42,7 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Goal whereUserId($value)
  * @mixin \Eloquent
+ * @property-read array $days_formatted
  */
 final class Goal extends Model
 {
@@ -74,6 +75,31 @@ final class Goal extends Model
         'protein' => 'float',
         'sodium' => 'float',
     ];
+
+    /**
+     * @inheritdoc
+     */
+    protected $appends = [
+        'days_formatted',
+    ];
+
+    /**
+     * Get the days for the goals as strings in array keyed by dow.
+     */
+    public function getDaysFormattedAttribute(): array {
+        $days = [];
+        if (empty($this->days)) {
+            return $days;
+        }
+
+        self::days()->each(function ($day) use (&$days) {
+            if (($this->days & $day['value']) != 0) {
+                $days[$day['dow']] = $day['label'];
+            }
+        });
+
+        return $days;
+    }
 
     /**
      * Get all supported days and metadata.
