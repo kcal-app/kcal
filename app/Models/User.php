@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -50,6 +49,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalDate[] $journalDates
+ * @property-read int|null $journal_dates_count
  */
 final class User extends Authenticatable implements HasMedia
 {
@@ -99,6 +100,13 @@ final class User extends Authenticatable implements HasMedia
     }
 
     /**
+     * Get the User's journal dates.
+     */
+    public function journalDates(): HasMany {
+        return $this->hasMany(JournalDate::class);
+    }
+
+    /**
      * Get the User's journal entries.
      */
     public function journalEntries(): HasMany {
@@ -107,13 +115,36 @@ final class User extends Authenticatable implements HasMedia
 
     /**
      * Get user's goal (if one exists) for a specific date.
+     *
+     * The primary use for a JournalDate entry right now is the goal so this
+     * method also creates a JournalDate if one does not already exist.
      */
     public function getGoalByDate(Carbon $date): ?Goal {
+        /** @var \App\Models\JournalDate $journal_date */
+        $journal_date = $this->journalDates()->whereDate('date', '=', $date)->first();
+        if (empty($journal_date)) {
+            $journal_date = JournalDate::make(['date' => $date])->user()->associate(Auth::user());
+        }
+        if ($journal_date->goal) {
+            return $journal_date->goal;
+        }
+
+        // Check for a goal based on day of week configurations.
         $day = Goal::days()->firstWhere('dow', $date->format('N'));
         if (!$day) {
             throw new \BadMethodCallException("No day with `dow` value {$date->format('N')}.");
         }
-        return $this->goals()->whereRaw("(days & {$day['value']}) != 0")->get()->first();
+        /** @var \App\Models\Goal $goal */
+        $goal = $this->goals()->whereRaw("(days & {$day['value']}) != 0")->first();
+        if (!empty($goal)) {
+            $journal_date->goal()->associate($goal);
+        }
+
+        if ($journal_date->hasChanges(['date', 'goal'])) {
+            $journal_date->save();
+        }
+
+        return $goal;
     }
 
     /**
