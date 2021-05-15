@@ -25,6 +25,7 @@ class GoalSchema extends SchemaProvider
      */
     public function getAttributes($resource): array
     {
+        /** @var \App\Models\Goal $resource */
         return [
             'name' => $resource->name,
             'days' => $resource->days,
