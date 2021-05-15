@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|JournalDate whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JournalDate whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Database\Factories\JournalDateFactory factory(...$parameters)
  */
 final class JournalDate extends Model
 {

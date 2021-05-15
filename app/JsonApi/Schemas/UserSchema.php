@@ -25,6 +25,7 @@ class UserSchema extends SchemaProvider
      */
     public function getAttributes($resource): array
     {
+        /** @var \App\Models\User $resource */
         return [
             'username' => $resource->username,
             'name' => $resource->name,

@@ -25,6 +25,7 @@ class FoodSchema extends SchemaProvider
      */
     public function getAttributes($resource): array
     {
+        /** @var \App\Models\Food $resource */
         return [
             'slug' => $resource->slug,
             'name' => $resource->name,

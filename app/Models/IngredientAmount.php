@@ -150,8 +150,6 @@ final class IngredientAmount extends Model
      * @param array $parameters
      *
      * @return mixed
-     *
-     * @noinspection PhpMissingParamTypeInspection
      */
     public function __call($method, $parameters): mixed {
         if (in_array($method, $this->nutrientMethods)) {
