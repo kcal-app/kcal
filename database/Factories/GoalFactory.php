@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Goal;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class GoalFactory extends Factory
@@ -15,16 +16,18 @@ class GoalFactory extends Factory
     /**
      * {@inheritdoc}
      */
-    public function definition()
+    public function definition(): array
     {
-        $from = $this->faker->dateTimeThisMonth;
-        $to = $this->faker->dateTimeBetween($from, '+1 year');
         return [
-            'from' => $this->faker->randomElement([$from, null]),
-            'to' => $this->faker->randomElement([$to, null]),
-            'frequency' => $this->faker->randomElement(Goal::$frequencyOptions)['value'],
-            'name' => $this->faker->randomElement(Goal::getNameOptions())['value'],
-            'goal' => $this->faker->numberBetween(0, 2000),
+            'user_id' => User::factory(),
+            'name' => $this->faker->words,
+            'days' => $this->faker->randomElement(Goal::days()->pluck('value')->all()),
+            'calories' => $this->faker->numberBetween(1600, 2500),
+            'fat' => $this->faker->numberBetween(40, 90),
+            'cholesterol' => $this->faker->numberBetween(0, 500),
+            'sodium' => $this->faker->numberBetween(0, 3000),
+            'carbohydrates' => $this->faker->numberBetween(50, 100),
+            'protein' => $this->faker->numberBetween(90, 200),
         ];
     }
 }
