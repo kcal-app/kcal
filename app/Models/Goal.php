@@ -81,6 +81,7 @@ final class Goal extends Model
      * Each entry has the following keys:
      *  - value: Day value (used for bitwise operations).
      *  - label: Human-readable name for the day.
+     *  - dow: ISO-8601 numeric representation of the day of the week.
      */
     public static function days(): Collection
     {
@@ -88,30 +89,37 @@ final class Goal extends Model
             [
                 'value' => 1,
                 'label' => 'monday',
+                'dow' => 1,
             ],
             [
                 'value' => 2,
                 'label' => 'tuesday',
+                'dow' => 2,
             ],
             [
                 'value' => 4,
                 'label' => 'wednesday',
+                'dow' => 3,
             ],
             [
                 'value' => 8,
                 'label' => 'thursday',
+                'dow' => 4,
             ],
             [
                 'value' => 16,
                 'label' => 'friday',
+                'dow' => 5,
             ],
             [
                 'value' => 32,
                 'label' => 'saturday',
+                'dow' => 6,
             ],
             [
                 'value' => 64,
                 'label' => 'sunday',
+                'dow' => 7,
             ],
         ]);
     }

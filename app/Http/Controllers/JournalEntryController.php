@@ -42,25 +42,20 @@ class JournalEntryController extends Controller
         }
 
         // Get daily goals data for user.
-        $goals = Auth::user()->getGoalsByTime($date);
-        $dailyGoals = [];
-        foreach (Nutrients::all()->pluck('value') as $nutrient) {
-            $goal = $goals['present']
-                ->where('frequency', 'daily')
-                ->where('name', $nutrient)
-                ->first();
-            if ($goal) {
-                $dailyGoals[$goal->name] = round($sums[$goal->name] / $goal->goal * 100);
-                if ($dailyGoals[$goal->name] > 0) {
-                    $dailyGoals[$goal->name] .= '%';
-                }
+        $goal = Auth::user()->getGoalByDate($date);
+        $goalProgress = [];
+        if ($goal) {
+            foreach (Nutrients::all()->pluck('value') as $nutrient) {
+                $goalProgress[$nutrient] = round($sums[$nutrient] / $goal->{$nutrient} * 100);
+                $goalProgress[$nutrient] .= '%';
             }
         }
 
         return view('journal-entries.index')
             ->with('entries', $entries)
             ->with('sums', $sums)
-            ->with('dailyGoals', $dailyGoals)
+            ->with('goal', $goal)
+            ->with('goalProgress', $goalProgress)
             ->with('date', $date);
     }
 

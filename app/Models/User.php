@@ -106,14 +106,14 @@ final class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * Get User's past, present, and future goals.
-     *
-     * @todo Refactor or remove as needed.
-     *
-     * @return \Illuminate\Support\Collection[]
+     * Get user's goal (if one exists) for a specific date.
      */
-    public function getGoalsByTime(?Carbon $date = null): array {
-        return ['past' => new Collection(), 'present' => new Collection(), 'future' => new Collection()];
+    public function getGoalByDate(Carbon $date): ?Goal {
+        $day = Goal::days()->firstWhere('dow', $date->format('N'));
+        if (!$day) {
+            throw new \BadMethodCallException("No day with `dow` value {$date->format('N')}.");
+        }
+        return $this->goals()->whereRaw("(days & {$day['value']}) != 0")->get()->first();
     }
 
     /**

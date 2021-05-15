@@ -51,7 +51,7 @@
                     <span class="text-lg">{{ number_format($sums['calories']) }}</span>
                 </div>
                 <div class="font-extrabold text-right text-lg">
-                    {{ $dailyGoals['calories'] ?? 'N/A' }}
+                    {{ $goalProgress['calories'] ?? 'N/A' }}
                 </div>
             </div>
             <div class="flex justify-between items-baseline border-b border-gray-300 text-sm">
@@ -60,7 +60,7 @@
                     {{ number_format($sums['fat']) }}g
                 </div>
                 <div class="text-right">
-                    {{ $dailyGoals['fat'] ?? 'N/A' }}
+                    {{ $goalProgress['fat'] ?? 'N/A' }}
                 </div>
             </div>
             <div class="flex justify-between items-baseline border-b border-gray-300 text-sm">
@@ -69,7 +69,7 @@
                     {{ number_format($sums['cholesterol']) }}mg
                 </div>
                 <div class="text-right">
-                    {{ $dailyGoals['cholesterol'] ?? 'N/A' }}
+                    {{ $goalProgress['cholesterol'] ?? 'N/A' }}
                 </div>
             </div>
             <div class="flex justify-between items-baseline border-b border-gray-300 text-sm">
@@ -78,7 +78,7 @@
                     {{ number_format($sums['sodium']) }}mg
                 </div>
                 <div class="text-right">
-                    {{ $dailyGoals['sodium'] ?? 'N/A' }}
+                    {{ $goalProgress['sodium'] ?? 'N/A' }}
                 </div>
             </div>
             <div class="flex justify-between items-baseline border-b border-gray-300 text-sm">
@@ -87,7 +87,7 @@
                     {{ number_format($sums['carbohydrates']) }}g
                 </div>
                 <div class="text-right">
-                    {{ $dailyGoals['carbohydrates'] ?? 'N/A' }}
+                    {{ $goalProgress['carbohydrates'] ?? 'N/A' }}
                 </div>
             </div>
             <div class="flex justify-between items-baseline text-sm">
@@ -96,9 +96,18 @@
                     {{ number_format($sums['protein']) }}g
                 </div>
                 <div class="text-right">
-                    {{ $dailyGoals['protein'] ?? 'N/A' }}
+                    {{ $goalProgress['protein'] ?? 'N/A' }}
                 </div>
             </div>
+            <h4 class="font-semibold text-lg pt-2">Goal</h4>
+            @empty($goal)
+                <div class="italic">No goal.</div>
+            @else
+                <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                   href="{{ route('goals.show', $goal) }}">
+                    {{ $goal->name }}
+                </a>
+            @endempty
         </div>
         <div class="w-full sm:w-3/5 md:w-2/3 lg:w-3/4 flex flex-col space-y-4">
             @foreach(['breakfast', 'lunch', 'dinner', 'snacks'] as $meal)
@@ -110,9 +119,9 @@
                         </div>
                         <span class="text-sm text-gray-500">
                         @foreach(\App\Support\Nutrients::all()->sortBy('weight') as $nutrient)
-                                {{ \App\Support\Nutrients::round($entries->where('meal', $meal)->sum($nutrient['value']), $nutrient['value']) }}{{ $nutrient['unit'] }}
-                                {{ $nutrient['value'] }}@if(!$loop->last), @endif
-                            @endforeach
+                            {{ \App\Support\Nutrients::round($entries->where('meal', $meal)->sum($nutrient['value']), $nutrient['value']) }}{{ $nutrient['unit'] }}
+                            {{ $nutrient['value'] }}@if(!$loop->last), @endif
+                        @endforeach
                     </span>
                     </h3>
                     @forelse($entries->where('meal', $meal) as $entry)
