@@ -20,12 +20,12 @@ class GoalFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'name' => $this->faker->words,
-            'days' => $this->faker->randomElement(Goal::days()->pluck('value')->all()),
+            'name' => $this->faker->words(asText: true),
+            'days' => $this->faker->numberBetween(1, Goal::days()->pluck('value')->sum()),
             'calories' => $this->faker->numberBetween(1600, 2500),
             'fat' => $this->faker->numberBetween(40, 90),
-            'cholesterol' => $this->faker->numberBetween(0, 500),
-            'sodium' => $this->faker->numberBetween(0, 3000),
+            'cholesterol' => $this->faker->numberBetween(int2: 500),
+            'sodium' => $this->faker->numberBetween(int2: 3000),
             'carbohydrates' => $this->faker->numberBetween(50, 100),
             'protein' => $this->faker->numberBetween(90, 200),
         ];

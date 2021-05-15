@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        /** @var \App\Models\User $user */
         $user = User::factory()->admin()->create([
             'username' => 'kcal',
             'password' => Hash::make('kcal'),
@@ -28,15 +29,8 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        $goals = [];
-        foreach (Nutrients::all() as $nutrient) {
-            $goals[] = [
-                'frequency' => 'daily',
-                'name' => $nutrient['value'],
-                'goal' => $nutrient['rdi'],
-            ];
-        }
-        Goal::factory()->for($user)->createMany($goals);
+        // Goals will probably overlap but that's OK.
+        Goal::factory()->for($user)->count(3)->create();
 
         $foods = Food::factory()->count(100)->create();
         $recipes = Recipe::factory()
