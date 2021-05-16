@@ -22,12 +22,12 @@
             </div>
             <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
                 <!-- Days of the week -->
-                <fieldset class="flex-auto">
+                <fieldset>
                     <legend class="block font-medium text-sm text-gray-700">Days of the week</legend>
-                    <div class="inline-flex justify-between divide-x border rounded-md shadow-sm border-gray-300">
+                    <div class="flex flex-col justify-content divide-x border rounded-md shadow-sm border-gray-300 md:inline-flex md:flex-row">
                         @foreach(\App\Models\Goal::days() as $day)
-                            <x-inputs.label class="inline-flex items-center p-2">
-                                <x-inputs.input type="checkbox" name="days[]" :value="$day['value']" />
+                            <x-inputs.label class="inline-flex justify-center p-2">
+                                <x-inputs.input type="checkbox" name="days[]" :value="$day['value']" :checked="($goal->days & $day['value']) != 0" />
                                 <span class="ml-2">{{ \Illuminate\Support\Str::ucfirst($day['label']) }}</span>
                             </x-inputs.label>
                         @endforeach
