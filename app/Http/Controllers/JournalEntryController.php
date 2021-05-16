@@ -46,8 +46,10 @@ class JournalEntryController extends Controller
         $goalProgress = [];
         if ($goal) {
             foreach (Nutrients::all()->pluck('value') as $nutrient) {
-                $goalProgress[$nutrient] = round($sums[$nutrient] / $goal->{$nutrient} * 100);
-                $goalProgress[$nutrient] .= '%';
+                if ($goal->{$nutrient} > 0) {
+                    $goalProgress[$nutrient] = round($sums[$nutrient] / $goal->{$nutrient} * 100);
+                    $goalProgress[$nutrient] .= '%';
+                }
             }
         }
 
