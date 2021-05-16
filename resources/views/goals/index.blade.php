@@ -8,12 +8,12 @@
             </x-button-link.green>
         </div>
     </x-slot>
-    <table class="min-w-max w-full table-auto">
+    <table class="w-full table-fixed">
         <thead>
         <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
             <th class="py-3 px-6 text-left">Name</th>
-            <th class="py-3 px-6 text-left">Days of Week</th>
-            <th class="py-3 px-6 text-left">Total Calories</th>
+            <th class="hidden py-3 px-6 text-left lg:table-cell">Days of Week</th>
+            <th class="hidden py-3 px-6 text-left sm:table-cell">Total Calories</th>
             <th class="py-3 px-6 text-left">Operations</th>
         </tr>
         </thead>
@@ -26,12 +26,18 @@
                         {{ $goal->name }}
                     </a>
                 </td>
-                <td class="py-3 px-6">{{ $goal->days_formatted->pluck('label')->join(', ') }}</td>
-                <td class="py-3 px-6">
+                <td class="hidden py-3 px-6 lg:table-cell">
+                    @empty($goal->days_formatted->count())
+                        <em>none</em>
+                    @else
+                        {{ $goal->days_formatted->pluck('label')->join(', ') }}
+                    @endempty
+                </td>
+                <td class="hidden py-3 px-6 sm:table-cell">
                     {{ number_format($goal->calories) }}
                 </td>
                 <td class="py-3 px-6">
-                    <div class="flex space-x-2 justify-start">
+                    <div class="flex flex-col space-y-2 justify-start sm:flex-row sm:space-x-2 sm:space-y-0">
                         <x-button-link.gray href="{{ route('goals.edit', $goal) }}">
                             Edit
                         </x-button-link.gray>
