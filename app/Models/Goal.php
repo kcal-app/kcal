@@ -86,19 +86,16 @@ final class Goal extends Model
     /**
      * Get the days for the goals as strings in array keyed by dow.
      */
-    public function getDaysFormattedAttribute(): array {
-        $days = [];
+    public function getDaysFormattedAttribute(): Collection {
         if (empty($this->days)) {
-            return $days;
+            return new Collection([]);
         }
-
-        self::days()->each(function ($day) use (&$days) {
+        return self::days()->filter(function ($day) {
             if (($this->days & $day['value']) != 0) {
-                $days[$day['dow']] = $day['label'];
+                return true;
             }
+            return false;
         });
-
-        return $days;
     }
 
     /**

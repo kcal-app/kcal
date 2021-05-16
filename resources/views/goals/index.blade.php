@@ -13,25 +13,25 @@
         <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
             <th class="py-3 px-6 text-left">Name</th>
             <th class="py-3 px-6 text-left">Days of Week</th>
-            <th class="py-3 px-6 text-left">Goals</th>
-            <th class="py-3 px-6 text-left">&nbsp;</th>
+            <th class="py-3 px-6 text-left">Total Calories</th>
+            <th class="py-3 px-6 text-left">Operations</th>
         </tr>
         </thead>
         <tbody>
         @foreach($goals as $goal)
             <tr class="border-b border-gray-200">
-                <td class="py-3 px-6">{{ $goal->name }}</td>
-                <td class="py-3 px-6">{{ $goal->days }}</td>
                 <td class="py-3 px-6">
-                    Calories: {{ $goal->calories }}<br />
-                    Carbohydrates: {{ $goal->carbohydrates }}<br />
-                    Cholesterol: {{ $goal->cholesterol }}<br />
-                    Fat: {{ $goal->fat }}<br />
-                    Protein: {{ $goal->Protein }}<br />
-                    Sodium: {{ $goal->sodium }}<br />
+                    <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                       href="{{ route('goals.show', $goal) }}">
+                        {{ $goal->name }}
+                    </a>
+                </td>
+                <td class="py-3 px-6">{{ $goal->days_formatted->pluck('label')->join(', ') }}</td>
+                <td class="py-3 px-6">
+                    {{ number_format($goal->calories) }}
                 </td>
                 <td class="py-3 px-6">
-                    <div class="flex space-x-2 justify-end">
+                    <div class="flex space-x-2 justify-start">
                         <x-button-link.gray href="{{ route('goals.edit', $goal) }}">
                             Edit
                         </x-button-link.gray>
