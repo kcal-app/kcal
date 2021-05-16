@@ -62,10 +62,13 @@ class GoalController extends Controller
         if (isset($attributes['days'])) {
             $attributes['days'] = array_sum($attributes['days']);
         }
+        else if (!empty($goal->days)) {
+            $attributes['days'] = null;
+        }
         $goal->fill($attributes)->user()->associate(Auth::user());
         $goal->save();
         session()->flash('message', "Goal updated!");
-        return redirect()->route('goals.show', $goal);
+        return redirect()->route('goals.index');
     }
 
     /**
