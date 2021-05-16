@@ -1,24 +1,67 @@
 <x-app-layout>
-    <x-slot name="title">Goal</x-slot>
+    <x-slot name="title">{{ $goal->name }}</x-slot>
     <x-slot name="header">
-        <h1 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto">
-            {{ $goal->summary }}
-            <a class="ml-2 text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"
-               href="{{ route('goals.edit', $goal) }}">
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                </svg>
-            </a>
-            <a class="h-6 w-6 text-red-500 hover:text-red-700 hover:border-red-300 float-right text-sm"
-               href="{{ route('goals.delete', $goal) }}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
-            </a>
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight flex flex-auto items-center">
+            {{ $goal->name }}
         </h1>
     </x-slot>
-    <div class="grid grid-cols-2 gap-y-1 gap-x-3 max-w-md inline-grid">
-        @todo Add data!
+    <div class="flex flex-col-reverse justify-between pb-4 md:flex-row md:space-x-4">
+        <div class="flex-1">
+            <section>
+                Default goal <span class="font-bold">{{ $goal->days_formatted->count() }}</span> days per week.
+                @if($goal->days_formatted->count() > 1)
+                    <ul class="list-disc list-inside pt-2">
+                        @foreach($goal->days_formatted->pluck('label') as $day)
+                            <li>{{ \Illuminate\Support\Str::ucfirst($day) }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </section>
+        </div>
+        <aside class="flex flex-col space-y-4 mt-8 sm:mt-0 sm:max-w-xs">
+            <section class="p-1 border-2 border-black font-sans md:w-72">
+                <h1 class="text-3xl font-extrabold leading-none border-b-8 border-black">Goals</h1>
+                <h2 class="font-bold text-right">Amount per day</h2>
+                <section class="flex justify-between items-end font-extrabold">
+                    <h1 class="text-3xl">Calories</h1>
+                    <div class="text-4xl">{{ number_format($goal->calories) }}</div>
+                </section>
+                <div class="border-t-4 border-black text-sm">
+                    <hr class="border-gray-500"/>
+                    <section class="flex justify-between">
+                        <h1 class="font-bold">Total Fat</h1>
+                        <div>{{ number_format($goal->fat) }}g</div>
+                    </section>
+                    <hr class="border-gray-500"/>
+                    <section class="flex justify-between">
+                        <h1 class="font-bold">Cholesterol</h1>
+                        <div>{{ number_format($goal->cholesterol) }}mg</div>
+                    </section>
+                    <hr class="border-gray-500"/>
+                    <section class="flex justify-between">
+                        <h1 class="font-bold">Sodium</h1>
+                        <div>{{ number_format($goal->sodium) }}mg</div>
+                    </section>
+                    <hr class="border-gray-500"/>
+                    <section class="flex justify-between">
+                        <h1 class="font-bold">Total Carbohydrate</h1>
+                        <div>{{ number_format($goal->carbohydrates) }}g</div>
+                    </section>
+                    <hr class="border-gray-500"/>
+                    <section class="flex justify-between">
+                        <h1 class="font-bold">Protein</h1>
+                        <div>{{ number_format($goal->protein) }}g</div>
+                    </section>
+                </div>
+            </section>
+            <section class="flex flex-row space-x-2 justify-around md:flex-col md:space-y-2 md:space-x-0">
+                <x-button-link.gray href="{{ route('goals.edit', $goal) }}">
+                    Edit Goal
+                </x-button-link.gray>
+                <x-button-link.red href="{{ route('goals.delete', $goal) }}">
+                    Delete Goal
+                </x-button-link.red>
+            </section>
+        </aside>
     </div>
 </x-app-layout>
