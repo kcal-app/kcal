@@ -8,6 +8,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFromNutrientsJournalEntryRequest;
 use App\Http\Requests\StoreJournalEntryRequest;
 use App\Models\Food;
+use App\Models\Goal;
 use App\Models\JournalEntry;
 use App\Models\Recipe;
 use App\Support\ArrayFormat;
@@ -53,11 +54,20 @@ class JournalEntryController extends Controller
             }
         }
 
+        // Get all goals as options to change for the date.
+        $goalOptions = Goal::whereUserId(Auth::user()->id)
+            ->orderBy('name')
+            ->get()
+            ->map(function (Goal $goal) {
+                return ['value' => $goal->id, 'label' => $goal->name];
+            });
+
         return view('journal-entries.index')
             ->with('entries', $entries)
             ->with('sums', $sums)
-            ->with('goal', $goal)
+            ->with('currentGoal', $goal)
             ->with('goalProgress', $goalProgress)
+            ->with('goalOptions', $goalOptions)
             ->with('date', $date);
     }
 

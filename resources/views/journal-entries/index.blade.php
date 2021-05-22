@@ -100,14 +100,25 @@
                 </div>
             </div>
             <h4 class="font-semibold text-lg pt-2">Goal</h4>
-            @empty($goal)
+            @empty($currentGoal)
                 <div class="italic">No goal.</div>
             @else
                 <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                   href="{{ route('goals.show', $goal) }}">
-                    {{ $goal->name }}
+                   href="{{ route('goals.show', $currentGoal) }}">
+                    {{ $currentGoal->name }}
                 </a>
             @endempty
+            <form method="POST" action="{{ route('journal-dates.update.goal') }}">
+                @csrf
+                <x-inputs.select name="goal"
+                                 class="block w-full"
+                                 :options="$goalOptions ?? []"
+                                 :selectedValue="$currentGoal?->id ?? null">
+                </x-inputs.select>
+                <div class="flex items-center justify-start mt-4">
+                    <x-inputs.button>Change Goal</x-inputs.button>
+                </div>
+            </form>
         </div>
         <div class="w-full sm:w-3/5 md:w-2/3 lg:w-3/4 flex flex-col space-y-4">
             @foreach(['breakfast', 'lunch', 'dinner', 'snacks'] as $meal)
