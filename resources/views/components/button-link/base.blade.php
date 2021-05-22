@@ -15,7 +15,8 @@
         'disabled:opacity-25',
         'transition',
         'ease-in-out',
-        'duration-150'
+        'duration-150',
+        'cursor-pointer',
     ];
 @endphp
 <a {{ $attributes->merge(['class' => implode(' ', $classes)]) }}>
