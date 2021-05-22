@@ -108,7 +108,7 @@
                     {{ $currentGoal->name }}
                 </a>
             @endempty
-            <form method="POST" action="{{ route('journal-dates.update.goal') }}">
+            <form method="POST" action="{{ route('journal-dates.update.goal', $journalDate) }}">
                 @csrf
                 <x-inputs.select name="goal"
                                  class="block w-full"

@@ -9,6 +9,7 @@ use App\Http\Requests\StoreFromNutrientsJournalEntryRequest;
 use App\Http\Requests\StoreJournalEntryRequest;
 use App\Models\Food;
 use App\Models\Goal;
+use App\Models\JournalDate;
 use App\Models\JournalEntry;
 use App\Models\Recipe;
 use App\Support\ArrayFormat;
@@ -62,12 +63,17 @@ class JournalEntryController extends Controller
                 return ['value' => $goal->id, 'label' => $goal->name];
             });
 
+        // Get the associated journal date.
+        // @todo Refactor journal date as a relationship on journal entries.
+        $journalDate = JournalDate::getOrCreateJournalDate(Auth::user(), $date);
+
         return view('journal-entries.index')
             ->with('entries', $entries)
             ->with('sums', $sums)
             ->with('currentGoal', $goal)
             ->with('goalProgress', $goalProgress)
             ->with('goalOptions', $goalOptions)
+            ->with('journalDate', $journalDate)
             ->with('date', $date);
     }
 

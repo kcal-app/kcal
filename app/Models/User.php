@@ -120,11 +120,7 @@ final class User extends Authenticatable implements HasMedia
      * method also creates a JournalDate if one does not already exist.
      */
     public function getGoalByDate(Carbon $date): ?Goal {
-        /** @var \App\Models\JournalDate $journal_date */
-        $journal_date = $this->journalDates()->whereDate('date', '=', $date)->first();
-        if (empty($journal_date)) {
-            $journal_date = JournalDate::make(['date' => $date])->user()->associate(Auth::user());
-        }
+        $journal_date = JournalDate::getOrCreateJournalDate($this, $date);
         if ($journal_date->goal) {
             return $journal_date->goal;
         }
