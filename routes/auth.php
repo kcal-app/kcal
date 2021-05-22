@@ -3,6 +3,7 @@
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\IngredientPickerController;
+use App\Http\Controllers\JournalDateController;
 use App\Http\Controllers\JournalEntryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
@@ -29,6 +30,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Ingredient picker.
     Route::get('/ingredient-picker/search', [IngredientPickerController::class, 'search'])->name('ingredient-picker.search');
+
+    // Journal dates.
+    Route::post('/journal-dates/{journal_date}/update/goal', [JournalDateController::class, 'updateGoal'])->name('journal-dates.update.goal');
 
     // Journal entries.
     Route::get('/journal-entries/create/from-nutrients', [JournalEntryController::class, 'createFromNutrients'])->name('journal-entries.create.from-nutrients');
