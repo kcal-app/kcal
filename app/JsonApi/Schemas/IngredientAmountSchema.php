@@ -25,6 +25,7 @@ class IngredientAmountSchema extends SchemaProvider
      */
     public function getAttributes($resource): array
     {
+        /** @var \App\Models\IngredientAmount $resource */
         return [
             'amount' => $resource->amount,
             'amountFormatted' => $resource->amount_formatted,

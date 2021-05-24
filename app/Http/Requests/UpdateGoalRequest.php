@@ -14,11 +14,15 @@ class UpdateGoalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'from' => ['nullable', 'date'],
-            'to' => ['nullable', 'date'],
-            'frequency' => ['required', 'string'],
             'name' => ['required', 'string'],
-            'goal' => ['required', 'numeric', 'min:0'],
+            'days' => ['nullable', 'array'],
+            'days.*' => ['nullable', 'numeric', 'min:0', 'max:64'],
+            'calories' => ['nullable', 'numeric', 'min:0'],
+            'fat' => ['nullable', 'numeric', 'min:0'],
+            'cholesterol' => ['nullable', 'numeric', 'min:0'],
+            'sodium' => ['nullable', 'numeric', 'min:0'],
+            'carbohydrates' => ['nullable', 'numeric', 'min:0'],
+            'protein' => ['nullable', 'numeric', 'min:0'],
         ];
     }
 

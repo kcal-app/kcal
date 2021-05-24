@@ -6,8 +6,6 @@ use App\Http\Requests\UpdateGoalRequest;
 use App\Models\Goal;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class GoalController extends Controller
@@ -15,17 +13,10 @@ class GoalController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(): View
     {
-        if ($request->date) {
-            $date = Carbon::createFromFormat('Y-m-d', $request->date);
-        }
-        else {
-            $date = Carbon::now();
-        }
         return view('goals.index')
-            ->with('date', $date)
-            ->with('goals', Auth::user()->getGoalsByTime($date));
+            ->with('goals', Goal::whereUserId(Auth::user()->id)->get());
     }
 
     /**
@@ -51,10 +42,7 @@ class GoalController extends Controller
      */
     public function show(Goal $goal): View
     {
-        return view('goals.show')
-            ->with('goal', $goal)
-            ->with('nameOptions', Goal::getNameOptions())
-            ->with('frequencyOptions', Goal::$frequencyOptions);
+        return view('goals.show')->with('goal', $goal);
     }
 
     /**
@@ -62,10 +50,7 @@ class GoalController extends Controller
      */
     public function edit(Goal $goal): View
     {
-        return view('goals.edit')
-            ->with('goal', $goal)
-            ->with('nameOptions', Goal::getNameOptions())
-            ->with('frequencyOptions', Goal::$frequencyOptions);
+        return view('goals.edit')->with('goal', $goal);
     }
 
     /**
@@ -74,10 +59,16 @@ class GoalController extends Controller
     public function update(UpdateGoalRequest $request, Goal $goal): RedirectResponse
     {
         $attributes = $request->validated();
+        if (isset($attributes['days'])) {
+            $attributes['days'] = array_sum($attributes['days']);
+        }
+        else if (!empty($goal->days)) {
+            $attributes['days'] = null;
+        }
         $goal->fill($attributes)->user()->associate(Auth::user());
         $goal->save();
         session()->flash('message', "Goal updated!");
-        return redirect()->route('goals.show', $goal);
+        return redirect()->route('goals.index');
     }
 
     /**

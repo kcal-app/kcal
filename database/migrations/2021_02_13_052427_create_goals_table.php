@@ -17,11 +17,14 @@ class CreateGoalsTable extends Migration
         Schema::create('goals', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->date('from')->nullable();
-            $table->date('to')->nullable();
-            $table->string('frequency')->nullable();
             $table->string('name');
-            $table->unsignedFloat('goal');
+            $table->unsignedTinyInteger('days')->nullable();
+            $table->unsignedFloat('calories')->nullable();
+            $table->unsignedFloat('fat')->nullable();
+            $table->unsignedFloat('cholesterol')->nullable();
+            $table->unsignedFloat('sodium')->nullable();
+            $table->unsignedFloat('carbohydrates')->nullable();
+            $table->unsignedFloat('protein')->nullable();
             $table->timestamps();
             $table->index('user_id');
         });

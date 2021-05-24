@@ -25,12 +25,17 @@ class GoalSchema extends SchemaProvider
      */
     public function getAttributes($resource): array
     {
+        /** @var \App\Models\Goal $resource */
         return [
-            'frequency' => $resource->frequency,
-            'from' => $resource->from,
-            'goal' => $resource->goal,
             'name' => $resource->name,
-            'to' => $resource->to,
+            'days' => $resource->days,
+            'daysFormatted' => $resource->days_formatted,
+            'calories' => $resource->calories,
+            'carbohydrates' => $resource->carbohydrates,
+            'cholesterol' => $resource->cholesterol,
+            'fat' => $resource->fat,
+            'protein' => $resource->protein,
+            'sodium' => $resource->sodium,
         ];
     }
 

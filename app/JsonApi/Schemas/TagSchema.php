@@ -25,6 +25,7 @@ class TagSchema extends SchemaProvider
      */
     public function getAttributes($resource): array
     {
+        /** @var \App\Models\Tag $resource */
         return [
             'name' => $resource->name,
             'slug' => $resource->slug,

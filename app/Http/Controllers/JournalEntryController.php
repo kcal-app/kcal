@@ -8,6 +8,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFromNutrientsJournalEntryRequest;
 use App\Http\Requests\StoreJournalEntryRequest;
 use App\Models\Food;
+use App\Models\Goal;
+use App\Models\JournalDate;
 use App\Models\JournalEntry;
 use App\Models\Recipe;
 use App\Support\ArrayFormat;
@@ -42,25 +44,36 @@ class JournalEntryController extends Controller
         }
 
         // Get daily goals data for user.
-        $goals = Auth::user()->getGoalsByTime($date);
-        $dailyGoals = [];
-        foreach (Nutrients::all()->pluck('value') as $nutrient) {
-            $goal = $goals['present']
-                ->where('frequency', 'daily')
-                ->where('name', $nutrient)
-                ->first();
-            if ($goal) {
-                $dailyGoals[$goal->name] = round($sums[$goal->name] / $goal->goal * 100);
-                if ($dailyGoals[$goal->name] > 0) {
-                    $dailyGoals[$goal->name] .= '%';
+        $goal = Auth::user()->getGoalByDate($date);
+        $goalProgress = [];
+        if ($goal) {
+            foreach (Nutrients::all()->pluck('value') as $nutrient) {
+                if ($goal->{$nutrient} > 0) {
+                    $goalProgress[$nutrient] = round($sums[$nutrient] / $goal->{$nutrient} * 100);
+                    $goalProgress[$nutrient] .= '%';
                 }
             }
         }
 
+        // Get all goals as options to change for the date.
+        $goalOptions = Goal::whereUserId(Auth::user()->id)
+            ->orderBy('name')
+            ->get()
+            ->map(function (Goal $goal) {
+                return ['value' => $goal->id, 'label' => $goal->name];
+            });
+
+        // Get the associated journal date.
+        // @todo Refactor journal date as a relationship on journal entries.
+        $journalDate = JournalDate::getOrCreateJournalDate(Auth::user(), $date);
+
         return view('journal-entries.index')
             ->with('entries', $entries)
             ->with('sums', $sums)
-            ->with('dailyGoals', $dailyGoals)
+            ->with('currentGoal', $goal)
+            ->with('goalProgress', $goalProgress)
+            ->with('goalOptions', $goalOptions)
+            ->with('journalDate', $journalDate)
             ->with('date', $date);
     }
 
