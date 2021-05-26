@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Sluggable;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,6 +52,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalDate[] $journalDates
  * @property-read int|null $journal_dates_count
+ * @property \Illuminate\Support\Collection|null $meals
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereMeals($value)
  */
 final class User extends Authenticatable implements HasMedia
 {
@@ -66,6 +69,7 @@ final class User extends Authenticatable implements HasMedia
         'username',
         'password',
         'name',
+        'meals',
         'admin',
     ];
 
@@ -82,6 +86,7 @@ final class User extends Authenticatable implements HasMedia
      */
     protected $casts = [
         'admin' => 'bool',
+        'meals' => AsCollection::class,
     ];
 
     /**
