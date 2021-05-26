@@ -25,7 +25,7 @@
                 <x-inputs.label for="ingredients[meal][]" value="Meal" class="md:hidden"/>
                 <x-inputs.select name="ingredients[meal][]"
                                  class="block w-full"
-                                 :options="$meals"
+                                 :options="$meals->toArray()"
                                  :selectedValue="$meal ?? null"
                                  :hasError="$errors->has('ingredients.meal.' . $key)"
                                  required>

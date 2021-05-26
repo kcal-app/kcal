@@ -29,7 +29,7 @@
 
                 <x-inputs.select name="meal"
                                  class="block w-full"
-                                 :options="$meals"
+                                 :options="$meals->toArray()"
                                  :selectedValue="old('meal')"
                                  :hasError="$errors->has('meal')"
                                  required>
