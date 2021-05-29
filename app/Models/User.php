@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -88,6 +89,22 @@ final class User extends Authenticatable implements HasMedia
         'admin' => 'bool',
         'meals' => AsCollection::class,
     ];
+
+    /**
+     * Get the default meals structure.
+     */
+    public static function getDefaultMeals(): Collection {
+        $meals = new Collection();
+        for ($i = 0; $i <= 7; $i++) {
+            $meals->add([
+                'value' => $i,
+                'label' => 'Meal ' . ($i + 1),
+                'weight' => $i,
+                'active' => $i < 3,
+            ]);
+        }
+        return $meals;
+    }
 
     /**
      * @inheritdoc

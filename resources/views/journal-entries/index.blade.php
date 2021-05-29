@@ -135,12 +135,12 @@
             </section>
         </div>
         <div class="w-full sm:w-3/5 md:w-2/3 lg:w-3/4 flex flex-col space-y-4">
-            @foreach(\Illuminate\Support\Facades\Auth::user()->meals as $meal)
+            @foreach(\Illuminate\Support\Facades\Auth::user()->meals->where('active')->sortBy('weight') as $meal)
                 <div>
                     <h3 class="font-semibold text-lg text-gray-800">
                         <div class="flex items-center">
                             <div>{{ $meal['label'] }}</div>
-                            <div class="ml-2 w-full"><hr/></div>
+                            <div class="ml-2 flex-grow"><hr/></div>
                         </div>
                         <span class="text-sm text-gray-500">
                         @foreach(\App\Support\Nutrients::all()->sortBy('weight') as $nutrient)
