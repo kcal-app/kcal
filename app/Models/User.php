@@ -100,7 +100,7 @@ final class User extends Authenticatable implements HasMedia
                 'value' => $i,
                 'label' => 'Meal ' . ($i + 1),
                 'weight' => $i,
-                'active' => $i < 3,
+                'enabled' => $i < 3,
             ]);
         }
         return $meals;

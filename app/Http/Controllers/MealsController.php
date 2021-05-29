@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Rules\ArrayNotEmpty;
+use App\Support\ArrayFormat;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Client\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class MealsController extends Controller
@@ -23,8 +25,17 @@ class MealsController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        // @todo Handle meals update request.
-        Auth::user()->refresh();
+        $attributes = $request->validate([
+            'meal' => ['required', new ArrayNotEmpty],
+            'meal.value.*' => ['required', 'numeric'],
+            'meal.weight.*' => ['required', 'numeric'],
+            'meal.label.*' => ['nullable', 'string'],
+            'meal.enabled.*' => ['required', 'boolean'],
+        ]);
+
+        $user = Auth::user();
+        $user->meals = ArrayFormat::flipTwoDimensionalKeys($attributes['meal']);
+        $user->save();
         session()->flash('message', "Meals customizations updated!");
         return redirect()->route('meals.edit');
     }
