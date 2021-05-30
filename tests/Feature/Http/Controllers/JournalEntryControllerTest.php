@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Http\Controllers\JournalEntryController;
 use App\Models\IngredientAmount;
 use App\Models\JournalEntry;
+use App\Models\User;
 use Database\Factories\JournalEntryFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -130,7 +131,7 @@ class JournalEntryControllerTest extends HttpControllerTestCase
         /** @var \App\Models\IngredientAmount $ingredient_amount */
         foreach ($ingredient_amounts as $ingredient_amount) {
             $ingredients['date'][] = $this->faker->dateTimeThisMonth->format('Y-m-d');
-            $ingredients['meal'][] = $this->faker->randomElement(JournalEntry::meals()->pluck('value')->toArray());
+            $ingredients['meal'][] = $this->user->meals_enabled->pluck('value')->random();
             $ingredients['name'][] = $ingredient_amount->ingredient->name;
             $ingredients['amount'][] = $ingredient_amount->amount;
             $ingredients['unit'][] = $ingredient_amount->unit;

@@ -135,21 +135,21 @@
             </section>
         </div>
         <div class="w-full sm:w-3/5 md:w-2/3 lg:w-3/4 flex flex-col space-y-4">
-            @foreach(['breakfast', 'lunch', 'dinner', 'snacks'] as $meal)
+            @foreach(\Illuminate\Support\Facades\Auth::user()->meals_enabled as $meal)
                 <div>
                     <h3 class="font-semibold text-lg text-gray-800">
                         <div class="flex items-center">
-                            <div>{{ Str::ucfirst($meal) }}</div>
-                            <div class="ml-2 w-full"><hr/></div>
+                            <div>{{ $meal['label'] }}</div>
+                            <div class="ml-2 flex-grow"><hr/></div>
                         </div>
                         <span class="text-sm text-gray-500">
                         @foreach(\App\Support\Nutrients::all()->sortBy('weight') as $nutrient)
-                            {{ \App\Support\Nutrients::round($entries->where('meal', $meal)->sum($nutrient['value']), $nutrient['value']) }}{{ $nutrient['unit'] }}
+                            {{ \App\Support\Nutrients::round($entries->where('meal', $meal['value'])->sum($nutrient['value']), $nutrient['value']) }}{{ $nutrient['unit'] }}
                             {{ $nutrient['value'] }}@if(!$loop->last), @endif
                         @endforeach
                     </span>
                     </h3>
-                    @forelse($entries->where('meal', $meal) as $entry)
+                    @forelse($entries->where('meal', $meal['value']) as $entry)
                         <details>
                             <summary>{{ $entry->summary }}</summary>
                             <div class="border-blue-100 border-2 p-2 ml-4">

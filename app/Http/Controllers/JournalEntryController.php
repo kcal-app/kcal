@@ -122,7 +122,6 @@ class JournalEntryController extends Controller
 
         return view('journal-entries.create')
             ->with('ingredients', $ingredients)
-            ->with('meals', JournalEntry::meals()->toArray())
             ->with('units', Nutrients::units()->toArray())
             ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
@@ -134,7 +133,6 @@ class JournalEntryController extends Controller
     {
         $date = $request->date ?? Carbon::now()->toDateString();
         return view('journal-entries.create-from-nutrients')
-            ->with('meals', JournalEntry::meals()->toArray())
             ->with('units', Nutrients::units()->toArray())
             ->with('default_date', Carbon::createFromFormat('Y-m-d', $date));
     }
@@ -279,8 +277,9 @@ class JournalEntryController extends Controller
      */
     public function storeFromNutrients(StoreFromNutrientsJournalEntryRequest $request): RedirectResponse {
         $attributes = $request->validated();
-        $entry = JournalEntry::make(array_filter($attributes))
-            ->user()->associate(Auth::user());
+        $entry = JournalEntry::make(array_filter($attributes, function ($value) {
+            return !is_null($value);
+        }))->user()->associate(Auth::user());
         $entry->save();
         session()->flash('message', "Journal entry added!");
         return redirect()->route(

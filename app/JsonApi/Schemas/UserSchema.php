@@ -29,6 +29,7 @@ class UserSchema extends SchemaProvider
         return [
             'username' => $resource->username,
             'name' => $resource->name,
+            'meals' => $resource->meals,
             'createdAt' => $resource->created_at,
             'updatedAt' => $resource->updated_at,
         ];

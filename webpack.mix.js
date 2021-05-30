@@ -13,7 +13,8 @@ const mix = require('laravel-mix');
 
 mix
     .js('resources/js/app.js', 'public/js')
-    .js('resources/js/recipes/edit.js', 'public/js/recipes')
+    .js('resources/js/draggable.js', 'public/js')
+    .js('resources/js/quill.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         require('postcss-import'),
         require('tailwindcss'),

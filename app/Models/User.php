@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Models\Traits\Sluggable;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -51,6 +53,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JournalDate[] $journalDates
  * @property-read int|null $journal_dates_count
+ * @property \Illuminate\Support\Collection|null $meals
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereMeals($value)
+ * @property-read Collection $meals_enabled
  */
 final class User extends Authenticatable implements HasMedia
 {
@@ -62,10 +67,21 @@ final class User extends Authenticatable implements HasMedia
     /**
      * @inheritdoc
      */
+    protected static function booted(): void {
+        static::creating(function (User $user) {
+            // Set default meals configuration.
+            $user->meals = User::getDefaultMeals();
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected $fillable = [
         'username',
         'password',
         'name',
+        'meals',
         'admin',
     ];
 
@@ -82,7 +98,24 @@ final class User extends Authenticatable implements HasMedia
      */
     protected $casts = [
         'admin' => 'bool',
+        'meals' => AsCollection::class,
     ];
+
+    /**
+     * Get the default meals structure.
+     */
+    public static function getDefaultMeals(): Collection {
+        $meals = new Collection();
+        for ($i = 0; $i <= 7; $i++) {
+            $meals->add([
+                'value' => $i,
+                'label' => 'Meal ' . ($i + 1),
+                'weight' => $i,
+                'enabled' => $i < 3,
+            ]);
+        }
+        return $meals;
+    }
 
     /**
      * @inheritdoc
@@ -111,6 +144,13 @@ final class User extends Authenticatable implements HasMedia
      */
     public function journalEntries(): HasMany {
         return $this->hasMany(JournalEntry::class);
+    }
+
+    /**
+     * Get the User's enabled meals, sorted by weight.
+     */
+    public function getMealsEnabledAttribute(): Collection {
+        return $this->meals->where('enabled', true)->sortBy('weight');
     }
 
     /**

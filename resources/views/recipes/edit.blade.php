@@ -182,7 +182,8 @@
 
     @once
         @push('scripts')
-            <script src="{{ asset('js/recipes/edit.js') }}"></script>
+            <script src="{{ asset('js/draggable.js') }}"></script>
+            <script src="{{ asset('js/quill.js') }}"></script>
             <script type="text/javascript">
 
                 // Enforce inline (style-base) alignment.
