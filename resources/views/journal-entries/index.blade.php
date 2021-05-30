@@ -135,7 +135,7 @@
             </section>
         </div>
         <div class="w-full sm:w-3/5 md:w-2/3 lg:w-3/4 flex flex-col space-y-4">
-            @foreach(\Illuminate\Support\Facades\Auth::user()->meals->where('enabled')->sortBy('weight') as $meal)
+            @foreach(\Illuminate\Support\Facades\Auth::user()->meals_enabled as $meal)
                 <div>
                     <h3 class="font-semibold text-lg text-gray-800">
                         <div class="flex items-center">

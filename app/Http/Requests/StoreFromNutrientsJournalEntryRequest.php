@@ -18,7 +18,7 @@ class StoreFromNutrientsJournalEntryRequest extends FormRequest
             'date' => ['required', 'date'],
             'meal' => [
                 'required',
-                new InArray(Auth::user()->meals->where('enabled', true)->pluck('value')->toArray())
+                new InArray(Auth::user()->meals_enabled->pluck('value')->toArray())
             ],
             'summary' => ['required', 'string'],
             'calories' => ['nullable', 'numeric', 'min:0', 'required_without_all:fat,cholesterol,sodium,carbohydrates,protein'],

@@ -55,6 +55,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read int|null $journal_dates_count
  * @property \Illuminate\Support\Collection|null $meals
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMeals($value)
+ * @property-read Collection $meals_enabled
  */
 final class User extends Authenticatable implements HasMedia
 {
@@ -133,6 +134,13 @@ final class User extends Authenticatable implements HasMedia
      */
     public function journalEntries(): HasMany {
         return $this->hasMany(JournalEntry::class);
+    }
+
+    /**
+     * Get the User's enabled meals, sorted by weight.
+     */
+    public function getMealsEnabledAttribute(): Collection {
+        return $this->meals->where('enabled', true)->sortBy('weight');
     }
 
     /**
