@@ -29,7 +29,7 @@ class JournalEntryFactory extends Factory
             'sodium' => $this->faker->randomFloat(1, 0, 500),
             'carbohydrates' => $this->faker->randomFloat(1, 0, 40),
             'protein' => $this->faker->randomFloat(1, 0, 20),
-            'meal' => $this->faker->randomElement(['breakfast', 'lunch', 'dinner', 'snacks']),
+            'meal' => User::getDefaultMeals()->pluck('value')->random(),
         ];
     }
 
