@@ -29,7 +29,7 @@
 
                 <x-inputs.select name="meal"
                                  class="block w-full"
-                                 :options="$meals->toArray()"
+                                 :options="Auth::user()->meals->where('enabled', true)->sortBy('weight')->toArray()"
                                  :selectedValue="old('meal')"
                                  :hasError="$errors->has('meal')"
                                  required>

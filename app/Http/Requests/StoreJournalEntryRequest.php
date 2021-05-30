@@ -25,7 +25,7 @@ class StoreJournalEntryRequest extends FormRequest
             'ingredients.meal.*' => [
                 'required',
                 'required_with:ingredients.id.*',
-                new InArray(Auth::user()->meals->pluck('value')->toArray())
+                new InArray(Auth::user()->meals->where('enabled', true)->pluck('value')->toArray())
             ],
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsPositiveDecimalOrFraction],
