@@ -67,6 +67,16 @@ final class User extends Authenticatable implements HasMedia
     /**
      * @inheritdoc
      */
+    protected static function booted(): void {
+        static::creating(function (User $user) {
+            // Set default meals configuration.
+            $user->meals = User::getDefaultMeals();
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected $fillable = [
         'username',
         'password',

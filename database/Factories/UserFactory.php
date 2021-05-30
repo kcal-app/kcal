@@ -25,7 +25,6 @@ class UserFactory extends Factory
             'username' => $this->faker->unique()->userName,
             'password' => Hash::make('password'),
             'name' => $this->faker->name,
-            'meals' => User::getDefaultMeals(),
             'admin' => $this->faker->boolean,
             'remember_token' => Str::random(10),
         ];
