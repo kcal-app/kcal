@@ -14,14 +14,14 @@ class AddMealsToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->json('meals')->nullable()->after('name');
-        });
-
-        User::each(function (User $user) {
-           $user->meals = User::getDefaultMeals();
-           $user->save();
-        });
+//        Schema::table('users', function (Blueprint $table) {
+//            $table->json('meals')->nullable()->after('name');
+//        });
+//
+//        User::each(function (User $user) {
+//           $user->meals = User::getDefaultMeals();
+//           $user->save();
+//        });
     }
 
     /**
@@ -31,8 +31,8 @@ class AddMealsToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('meals');
-        });
+//        Schema::table('users', function (Blueprint $table) {
+//            $table->dropColumn('meals');
+//        });
     }
 }

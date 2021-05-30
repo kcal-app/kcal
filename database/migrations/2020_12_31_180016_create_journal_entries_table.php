@@ -26,7 +26,7 @@ class CreateJournalEntriesTable extends Migration
             $table->unsignedFloat('sodium')->default(0);
             $table->unsignedFloat('carbohydrates')->default(0);
             $table->unsignedFloat('protein')->default(0);
-            $table->enum('meal', JournalEntry::meals()->pluck('value')->toArray());
+            $table->integer('meal')->unsigned();
             $table->timestamps();
         });
     }
