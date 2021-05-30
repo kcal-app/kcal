@@ -277,7 +277,9 @@ class JournalEntryController extends Controller
      */
     public function storeFromNutrients(StoreFromNutrientsJournalEntryRequest $request): RedirectResponse {
         $attributes = $request->validated();
-        $entry = JournalEntry::make($attributes)->user()->associate(Auth::user());
+        $entry = JournalEntry::make(array_filter($attributes, function ($value) {
+            return !is_null($value);
+        }))->user()->associate(Auth::user());
         $entry->save();
         session()->flash('message', "Journal entry added!");
         return redirect()->route(
