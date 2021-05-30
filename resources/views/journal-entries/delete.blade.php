@@ -20,7 +20,7 @@
             </div>
             <div>
                 <span class="font-bold">Meal:</span>
-                <span>{{ $journal_entry->meal }}</span>
+                <span>{{ \Illuminate\Support\Facades\Auth::user()->meals->firstWhere('value', $journal_entry->meal)['label'] }}</span>
             </div>
         </div>
         <x-inputs.button class="bg-red-800 hover:bg-red-700">

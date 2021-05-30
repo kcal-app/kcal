@@ -5,6 +5,7 @@ use App\Http\Controllers\GoalController;
 use App\Http\Controllers\IngredientPickerController;
 use App\Http\Controllers\JournalDateController;
 use App\Http\Controllers\JournalEntryController;
+use App\Http\Controllers\MealsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -39,6 +40,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/journal-entries/create/from-nutrients', [JournalEntryController::class, 'storeFromNutrients'])->name('journal-entries.store.from-nutrients');
     Route::resource('journal-entries', JournalEntryController::class);
     Route::get('/journal-entries/{journal_entry}/delete', [JournalEntryController::class, 'delete'])->name('journal-entries.delete');
+
+    // Meals.
+    Route::get('/meals', [MealsController::class, 'edit'])->name('meals.edit');
+    Route::put('/meals', [MealsController::class, 'update'])->name('meals.update');
 
     // Recipes.
     Route::resource('recipes', RecipeController::class);

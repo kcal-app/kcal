@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\JournalEntry;
-use App\Rules\ArrayNotEmpty;
 use App\Rules\InArray;
-use App\Rules\StringIsPositiveDecimalOrFraction;
-use App\Rules\UsesIngredientTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreFromNutrientsJournalEntryRequest extends FormRequest
 {
@@ -21,8 +18,7 @@ class StoreFromNutrientsJournalEntryRequest extends FormRequest
             'date' => ['required', 'date'],
             'meal' => [
                 'required',
-                'string',
-                new InArray(JournalEntry::meals()->pluck('value')->toArray())
+                new InArray(Auth::user()->meals_enabled->pluck('value')->toArray())
             ],
             'summary' => ['required', 'string'],
             'calories' => ['nullable', 'numeric', 'min:0', 'required_without_all:fat,cholesterol,sodium,carbohydrates,protein'],

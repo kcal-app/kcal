@@ -29,6 +29,7 @@
                         <div class="space-y-2">
                             <x-dropdown-link :href="route('profiles.show', Auth::user())">My Profile</x-dropdown-link>
                             <x-dropdown-link :href="route('goals.index')">My Goals</x-dropdown-link>
+                            <x-dropdown-link :href="route('meals.edit')">My Meals</x-dropdown-link>
                             @can('administer', \App\Models\User::class)
                                 <hr />
                                 <x-dropdown-link :href="route('users.index')">Manage Users</x-dropdown-link>

@@ -11,7 +11,10 @@ class ArrayNotEmpty implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        return !empty(array_filter($value));
+        return !empty(array_filter($value, function ($value) {
+            // Allow other "empty-y" values like false and 0.
+            return $value !== null;
+        }));
     }
 
     /**

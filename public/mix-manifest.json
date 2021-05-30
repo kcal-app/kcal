@@ -1,6 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
-    "/js/recipes/edit.js": "/js/recipes/edit.js",
+    "/js/draggable.js": "/js/draggable.js",
+    "/js/quill.js": "/js/quill.js",
     "/css/recipes/edit.css": "/css/recipes/edit.css",
     "/css/app.css": "/css/app.css"
 }

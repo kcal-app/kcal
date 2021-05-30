@@ -8,6 +8,7 @@ use App\Rules\InArray;
 use App\Rules\StringIsPositiveDecimalOrFraction;
 use App\Rules\UsesIngredientTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreJournalEntryRequest extends FormRequest
 {
@@ -22,10 +23,9 @@ class StoreJournalEntryRequest extends FormRequest
             'ingredients.date.*' => ['nullable', 'date', 'required_with:ingredients.id.*'],
             'ingredients.meal' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.meal.*' => [
-                'nullable',
-                'string',
+                'required',
                 'required_with:ingredients.id.*',
-                new InArray(JournalEntry::meals()->pluck('value')->toArray())
+                new InArray(Auth::user()->meals_enabled->pluck('value')->toArray())
             ],
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsPositiveDecimalOrFraction],
