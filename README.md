@@ -64,6 +64,119 @@ The [Heroku Redis](https://elements.heroku.com/addons/heroku-redis) add-on can b
 added to the app and will work without any configuration changes. It is left out
 of the default build only because it takes a very long time to provision.
 
+### Manual
+
+This deployment process has been tested with an Ubuntu 20.04 LTS instance with
+2GB of memory which should be enough to host the app for a few regular users.
+The memory is primarily needed for Elasticsearch -- See the [Search](#search-mag) 
+section for other options if lower memory support is needed.
+
+1. Add [PHP 8.x repository](https://launchpad.net/~ondrej/+archive/ubuntu/php).
+
+        sudo apt-get install software-properties-common
+        sudo add-apt-repository ppa:ondrej/php
+
+1. Add [Elasticsearch repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html).
+
+        wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+        echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
+
+1. Update available packages.
+
+        sudo apt-get update
+
+1. Install dependencies.
+
+        sudo apt-get install elasticsearch mysql-server-8.0 ngingx-full php8.0 php8.0-bcmath php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-redis php8.0-xml php8.0-zip redis
+
+1. Configure Elasticsearch to run at start up.
+
+        sudo systemctl start elasticsearch
+        sudo systemctl enable elasticsearch
+
+1. Install Composer.
+
+        curl -s https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin/ --filename=composer
+
+1. Clone the app repository.
+
+        cd /var/www
+        sudo mkdir kcal
+        sudo chown $USER:`id -gn $USER` kcal
+        cd kcal
+        git clone https://github.com/kcal-app/kcal.git .
+
+1. Configure nginx to serve the app public files.
+
+        sudo vim /etc/nginx/conf.d/kcal.conf
+        sudo service nginx restart
+
+    Example config:
+
+        server {
+            listen 80;
+            server_name 2gb.kcal.cooking;
+            root /var/www/kcal/public;
+            
+            add_header X-Frame-Options "SAMEORIGIN";
+            add_header X-Content-Type-Options "nosniff";
+            
+            index index.php;
+            
+            charset utf-8;
+            
+            location / {
+                try_files $uri $uri/ /index.php?$query_string;
+            }
+            
+            location = /favicon.ico { access_log off; log_not_found off; }
+            location = /robots.txt  { access_log off; log_not_found off; }
+            
+            error_page 404 /index.php;
+            
+            location ~ \.php$ {
+                fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
+                fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+                include fastcgi_params;
+            }
+            
+            location ~ /\.(?!well-known).* {
+                deny all;
+            }
+        }
+
+1. Create database user (with secure credentials!).
+
+        sudo mysql -u root
+        CREATE DATABASE `kcal`;
+        CREATE USER 'kcal'@'localhost' IDENTIFIED BY 'kcal';
+        GRANT ALL ON `kcal`.* TO 'kcal'@'localhost';
+        FLUSH PRIVILEGES;
+
+1. Generate an app key to use in the next step.
+
+        php artisan --no-ansi key:generate --show
+
+1. Copy environment config file and adjust as desired.
+
+        cp .env.example .env
+
+    Set the `APP_KEY` to the value generated in the previous step and the `APP_URL`
+    to match the host configured in nginx.
+
+1. Run initial app installation/bootstrap commands.
+
+        cd /var/www/kcal
+        composer install --optimize-autoloader --no-dev
+        php artisan migrate
+        php artisan elastic:migrate
+        php artisan config:cache
+        php artisan route:cache
+        php artisan view:cache
+        php artisan user:add --admin
+
+1. Visit the `APP_URL` and log in!
+
 ## Configuration
 
 ### Media Storage
