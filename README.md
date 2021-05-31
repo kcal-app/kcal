@@ -6,8 +6,8 @@
 
 Track nutritional information about foods and recipes, set goals, and record a food
 journal to help along the way. Kcal is a *personal* system that focuses on direct
-control of inputs (as opposed to unwieldy user generated datasets) and a minimal, easy
-to use recipe presentation for preparing meals.
+control of inputs (as opposed to unwieldy user generated datasets) and a minimal,
+easy to use recipe presentation for preparing meals.
 
 ## Demo
 
@@ -22,6 +22,139 @@ The demo instance resets every hour, on the hour.
 
 ![Baby Buddy mobile view](screenshot-mobile.png)
 ![Baby Buddy desktop view](screenshot.png)
+
+## Functionality
+
+Kcal's primary functionality includes three main content categories -- journal,
+recipes, and foods -- and two per-user configurations -- goals and meals. Users
+can customize meals (up to eight per day) for meal planning, set multiple
+goals for tracking calories and macros (fat, carbohydrates, protein), enter food
+data with calories and macros, create recipes based on foods and other recipes,
+and record foods and recipes in a journal tracked against goals.
+
+### Foods
+
+Foods are shared between all users.
+
+Foods are the basis for recipes and calorie and macro calculations throughout the
+app. They can be added directly to journal entries and included in recipes that
+roll-up nutritional data per serving.
+
+Food servings can be recorded using U.S. measure units (teaspoon, tablespoon, cup)
+and use a weight basis of grams. These units and weights are commonly used in the
+United States and required by law for most packaged foods. Kcal tries to make data
+entry as easy as possible by organization field order and units to match nutritional
+label configurations.
+
+Food data does not (currently) make use of any API or service for retrieving
+information about food. While this may change in the future, there are a couple
+of reason this feature has been left out of kcal:
+
+ - There is a very large volume of data in most food databases such that organizing,
+   categorizing, and searching for the right food can be daunting.
+
+ - Food databases that allow and include input from large groups of users can be
+   inaccurate and counter-productive for users with calorie and/or macro goals.
+   
+ - Kcal's self-hostable nature is in part for privacy-conscious users so limiting
+   interactions with third-party services is desirable (though adding APIs as an
+   optional enhancement is not a major concern here).
+
+Foods are taggable and tags can be used to filter and search for foods quickly.
+
+### Recipes
+
+Recipes are shared between all users. They (currently) cannot be shared externally,
+but a feature enhancement to support optional, per-recipe public link creation is
+planned.
+
+Configurable recipe metadata includes servings, weight, volume, timing, image,
+description, ingredients, and steps.
+
+The recipe view is meant to be as uncluttered as possible, to support browser
+"reader mode", and to still provide nutritional metadata at a glance.
+
+Recipes are taggable and tags can be used to filter and search for recipes quickly.
+
+### Journal entries
+
+Journal entries are private. Each user has and can only see their own entries.
+
+Planning and tracking calories and macros is the primary focus of journal entries.
+The journal section aggregates this information by day and by meal.
+
+Recipes and foods can be added to journal entries in various quantities and configurations
+(depending on the associated serving data). Manual entries can also be used to record
+data for foods and recipes *not* in the kcal's database.
+
+Journal entries are not editable. The calorie and macro information for each entry is
+recorded with the entry. This allows for recoding and maintaining journal entry
+data even as foods and recipes are updated.
+
+### Goals
+
+Goals are private. Each user can create and see only their own goals.
+
+Goals reflect daily calories and macros and are therefore closely related to journal
+entries.
+
+Goals can be configured as "default" for specific days of the week but can also
+be overridden for individual days in the journal section.
+
+There is no limit to the number of goals a user can create.
+
+### Meals
+
+Meals are private. Each user can rename, arrange, and enable or disabled their
+own meals.
+
+Meals are used to aggregate data within a day in the journal section and can be
+used for both meal planning and goal tracking.
+
+There is a pre-configured maximum of eight meals for each user.
+
+## Use cases
+
+Kcal's primary focus is tracking nutrition (recipe management is the most important
+secondary focus), so it should be a useful tool for anyone looking to implement a
+specific diet. Below are some (very) broad diet types and information about how
+kcal can be helpful. Kcal intentionally **does not** provide any specific dieting
+guidance or recommend any particular diet or type of diet. Individual users are
+expected to research and make their own plans and goals -- kcal is here to help
+record and organize the data.
+
+### Hypocaloric diets
+
+Hypocaloric diets use [calorie restriction](https://en.wikipedia.org/wiki/Calorie_restriction)
+for weight loss or other dietary management. Kcal users can create low calorie
+(relative to personal regular calorie) intake goals and use the detailed nutritional
+data of food and recipes and to plan meals and record caloric intake using journal
+entries.
+
+### Hypercaloric diets
+
+Hypercaloric diets are used for weight gain and can be especially useful for building
+muscle in weight training. Kcal users can create calorie goals that exceed expected
+calorie burn on a day-to-day basis. For the weight training example users can create
+a goal for training days and separate, lower goal for rest days. The goals can be
+automated based on the day of the week and journal entries can be used to ensure
+that a proper macro balance is maintained. More meals may also be helpful on a
+hypercaloric diet and kcal supports up to eight meals per day.
+
+### Plant based diets (vegetarian, vegan, etc.)
+
+Diets that exclude animal-based products may require special attention to ensure
+a proper balance of nutrients (particularly when transitioning). Kcal's goals and
+food nutritional data can help to make sure that appropriate fat, carbohydrate,
+and protein needs are met.
+
+### Low-X diets
+
+Any diet that focuses on lowering a particular nutrient can be trackable with kcal.
+In addition to the macronutrients (fat, carbohydrates, and protein) foods support
+cholesterol and sodium data as well. Support for other common nutrients like
+saturated fats, trans fats, fiber, sugar, etc. may also be available in future
+iterations.
 
 ## Deployment
 
