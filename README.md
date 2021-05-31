@@ -25,6 +25,21 @@ The demo instance resets every hour, on the hour.
 
 ## Deployment
 
+Docker is the recommended deployment method. See [kcal-app/kcal-docker](https://github.com/kcal-app/kcal-docker).
+
+General requirements for any deployment are:
+
+ - PHP 8.x with Composer 2.x and PHP extensions: `bcmath`, `curl`, `gd`, `intl`,
+   `mbstring`, `xml`, `zip`.
+ - Web server/proxy (Apache, nginx, etc.)
+ - Database (MySQL/MariaDB, PostgreSQL, etc.)
+
+Optional but useful additions are:
+
+ - [Search driver](#search-mag) (Algolia, Elasticsearch, and database supported)
+ - Redis
+ - [Media Storage](#media-storage) (local or AWS S3 supported)
+
 ### Docker
 
 There is a [`Dockerfile`](Dockerfile) and automated build process to create builds
