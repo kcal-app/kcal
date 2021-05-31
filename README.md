@@ -76,7 +76,7 @@ section for other options if lower memory support is needed.
         sudo apt-get install software-properties-common
         sudo add-apt-repository ppa:ondrej/php
 
-1. Add [Elasticsearch repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html).
+1. Add [Elasticsearch 7.x repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html).
 
         wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
         echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
@@ -89,12 +89,15 @@ section for other options if lower memory support is needed.
 
         sudo apt-get install elasticsearch mysql-server-8.0 ngingx-full php8.0 php8.0-bcmath php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-redis php8.0-xml php8.0-zip redis
 
-1. Configure Elasticsearch to run at start up.
+1. Start Elasticsearch and configure to run at start up.
 
         sudo systemctl start elasticsearch
         sudo systemctl enable elasticsearch
 
 1. Install Composer.
+
+    :rotating_light: This command runs code from a remote location as root.
+    See [Download Composer](https://getcomposer.org/download/) for alternative install options.
 
         curl -s https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin/ --filename=composer
 
@@ -109,13 +112,14 @@ section for other options if lower memory support is needed.
 1. Configure nginx to serve the app public files.
 
         sudo vim /etc/nginx/conf.d/kcal.conf
+        <edit config, see example below>
         sudo service nginx restart
 
     Example config:
 
         server {
             listen 80;
-            server_name 2gb.kcal.cooking;
+            server_name kcal.example.com;
             root /var/www/kcal/public;
             
             add_header X-Frame-Options "SAMEORIGIN";
@@ -161,8 +165,10 @@ section for other options if lower memory support is needed.
 
         cp .env.example .env
 
-    Set the `APP_KEY` to the value generated in the previous step and the `APP_URL`
-    to match the host configured in nginx.
+    At a minimum:
+    - Set `APP_KEY` to the value generated in the previous step.
+    - Set `APP_URL` to match the host configured in nginx configuration.
+    - Set the `DATABASE_` values to the configured credentials.
 
 1. Run initial app installation/bootstrap commands.
 
