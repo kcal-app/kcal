@@ -20,8 +20,8 @@ The demo instance resets every hour, on the hour.
 
 ## Screenshots
 
-![Baby Buddy mobile view](screenshot-mobile.png)
-![Baby Buddy desktop view](screenshot.png)
+![kcal mobile screenshot](screenshots/mobile.png)
+![kcal desktop screenshot](screenshots/desktop.png)
 
 ## Functionality
 
@@ -62,6 +62,8 @@ of reason this feature has been left out of kcal:
 
 Foods are taggable and tags can be used to filter and search for foods quickly.
 
+![kcal foods edit and show screenshot](screenshots/foods.png)
+
 ### Recipes
 
 Recipes are shared between all users. They (currently) cannot be shared externally,
@@ -75,6 +77,8 @@ The recipe view is meant to be as uncluttered as possible, to support browser
 "reader mode", and to still provide nutritional metadata at a glance.
 
 Recipes are taggable and tags can be used to filter and search for recipes quickly.
+
+![kcal foods edit and show screenshot](screenshots/recipes.png)
 
 ### Journal entries
 
@@ -91,6 +95,8 @@ Journal entries are not editable. The calorie and macro information for each ent
 recorded with the entry. This allows for recoding and maintaining journal entry
 data even as foods and recipes are updated.
 
+![kcal journal entries edit and show screenshot](screenshots/journal-entries.png)
+
 ### Goals
 
 Goals are private. Each user can create and see only their own goals.
@@ -103,6 +109,8 @@ be overridden for individual days in the journal section.
 
 There is no limit to the number of goals a user can create.
 
+![kcal goals edit and show screenshot](screenshots/goals.png)
+
 ### Meals
 
 Meals are private. Each user can rename, arrange, and enable or disabled their
@@ -112,6 +120,8 @@ Meals are used to aggregate data within a day in the journal section and can be
 used for both meal planning and goal tracking.
 
 There is a pre-configured maximum of eight meals for each user.
+
+![kcal meals edit and show screenshot](screenshots/meals.png)
 
 ## Use cases
 
