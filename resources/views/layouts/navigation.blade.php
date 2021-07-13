@@ -35,9 +35,9 @@
                                 <x-dropdown-link :href="route('users.index')">Manage Users</x-dropdown-link>
                             @endcan
                             <hr />
-                            <form method="POST" action="{{ route('logout') }}" x-data>
+                            <form method="POST" action="{{ route('logout') }}" x-data x-ref="root">
                                 @csrf
-                                <x-dropdown-link :href="route('logout')" @click.prevent="$el.closest('form').submit();">Logout</x-dropdown-link>
+                                <x-dropdown-link :href="route('logout')" @click.prevent="$refs.root.closest('form').submit();">Logout</x-dropdown-link>
                             </form>
                         </div>
                     </x-slot>

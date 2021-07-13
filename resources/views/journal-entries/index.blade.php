@@ -14,12 +14,12 @@
                         </a>
                     </div>
                     <div class="text-base text-gray-500">
-                        <form x-data method="GET" action="{{ route('journal-entries.index') }}">
+                        <form x-data x-ref="root" method="GET" action="{{ route('journal-entries.index') }}">
                             <x-inputs.input name="date"
                                             type="date"
                                             class="border-0 shadow-none p-0 text-center"
                                             :value="$date->toDateString()"
-                                            x-on:change="$el.submit();"
+                                            x-on:change="$refs.root.submit();"
                                             required />
                         </form>
                     </div>

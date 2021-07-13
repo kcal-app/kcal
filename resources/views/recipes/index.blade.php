@@ -10,7 +10,7 @@
     </x-slot>
     <x-search-view :route="route('api:v1:recipes.index')" :tags="$tags">
         <x-slot name="results">
-            <template x-for="recipe in results" :key="recipe">
+            <template x-for="recipe in results" :key="recipe.slug">
                 <article class="p-1 border-2 border-black font-sans">
                     <h1 class="text-2xl font-extrabold">
                         <a x-bind:href="recipe.showUrl"

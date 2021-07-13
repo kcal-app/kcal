@@ -9,7 +9,7 @@
         </h1>
     </x-slot>
     <div class="flex flex-col-reverse justify-between md:flex-row md:space-x-4">
-        <div class="flex-1" x-data="{showNutrientsSummary: false}">
+        <div class="flex-1" x-data="{ showNutrientsSummary: false }">
             @if($recipe->time_total > 0)
                 <section class="flex justify-between mb-2 p-2 bg-gray-100 rounded max-w-3xl">
                     <div>
@@ -31,7 +31,7 @@
                     {!! $recipe->description !!}
                 </section>
             @endif
-            <section x-data="{showNutrientsSummary: false}">
+            <section x-data="{ showNutrientsSummary: false }">
                 <h1 class="mb-2 font-bold text-2xl">
                     Ingredients
                     <span class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"

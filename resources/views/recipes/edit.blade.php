@@ -4,7 +4,7 @@
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ $title }}</h1>
     </x-slot>
-    <form x-data method="POST" enctype="multipart/form-data" action="{{ ($recipe->exists ? route('recipes.update', $recipe) : route('recipes.store')) }}">
+    <form x-data x-ref="root" method="POST" enctype="multipart/form-data" action="{{ ($recipe->exists ? route('recipes.update', $recipe) : route('recipes.store')) }}">
         @if ($recipe->exists)@method('put')@endif
         @csrf
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
@@ -114,7 +114,7 @@
 
         <!-- Ingredients -->
         <h3 class="mt-6 mb-2 font-extrabold text-lg">Ingredients</h3>
-        <div x-data class="ingredients space-y-4">
+        <div x-data x-ref="ingredients" class="ingredients space-y-4">
             @forelse($ingredients_list->sortBy('weight') as $item)
                 @if($item['type'] === 'ingredient')
                     @include('recipes.partials.ingredient-input', $item)
@@ -134,19 +134,19 @@
             </div>
             <x-inputs.button type="button"
                              class="bg-green-800 hover:bg-green-700 active:bg-green-900 focus:border-green-900 ring-green-300"
-                             x-on:click="addNodeFromTemplate($el, 'ingredient');">
+                             x-on:click="addNodeFromTemplate($refs.ingredients, 'ingredient');">
                 Add Ingredient
             </x-inputs.button>
             <x-inputs.button type="button"
                              class="bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900 ring-blue-300"
-                             x-on:click="addNodeFromTemplate($el, 'separator');">
+                             x-on:click="addNodeFromTemplate($refs.ingredients, 'separator');">
                 Add Separator
             </x-inputs.button>
         </div>
 
         <!-- Steps -->
         <h3 class="mt-6 mb-2 font-extrabold text-lg">Steps</h3>
-        <div x-data class="steps">
+        <div x-data x-ref="steps" class="steps">
             @forelse($steps as $step)
                 @include('recipes.partials.step-input', $step)
             @empty
@@ -159,13 +159,13 @@
             </div>
             <x-inputs.button type="button"
                              class="bg-green-800 hover:bg-green-700 active:bg-green-900 focus:border-green-900 ring-green-300"
-                             x-on:click="addNodeFromTemplate($el, 'step');">
+                             x-on:click="addNodeFromTemplate($refs.steps, 'step');">
                 Add Step
             </x-inputs.button>
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-inputs.button x-on:click="prepareForm($el);" class="ml-3">
+            <x-inputs.button x-on:click="prepareForm($refs.root);" class="ml-3">
                 {{ ($recipe->exists ? 'Save' : 'Add') }}
             </x-inputs.button>
         </div>
