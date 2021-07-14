@@ -1,6 +1,6 @@
 ARG MEDIA_LIBRARY_DEPS="jpegoptim optipng pngquant gifsicle"
 
-FROM php:8.0-fpm-alpine
+FROM php:8.0-fpm-alpine3.13
 ARG MEDIA_LIBRARY_DEPS
 
 RUN apk add --no-cache --virtual \
