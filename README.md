@@ -315,7 +315,7 @@ section for other options if lower memory support is needed.
         GRANT ALL ON `kcal`.* TO 'kcal'@'localhost';
         FLUSH PRIVILEGES;
 
-1. Install dependencies and gGenerate an app key to use in the next step.
+1. Install dependencies and generate an app key to use in the next step.
 
         composer install --optimize-autoloader --no-dev
         php artisan --no-ansi key:generate --show
