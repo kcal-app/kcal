@@ -245,7 +245,7 @@ section for other options if lower memory support is needed.
 
 1. Install dependencies.
 
-        sudo apt-get install elasticsearch mysql-server-8.0 nginx-full php8.0 php8.0-bcmath php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-redis php8.0-xml php8.0-zip redis
+        sudo apt-get install elasticsearch mysql-server-8.0 nginx-full php8.0 php8.0-bcmath php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-redis php8.0-xml php8.0-zip redis php8.0-fpm
 
 1. Start Elasticsearch and configure to run at start up.
 
@@ -315,8 +315,9 @@ section for other options if lower memory support is needed.
         GRANT ALL ON `kcal`.* TO 'kcal'@'localhost';
         FLUSH PRIVILEGES;
 
-1. Generate an app key to use in the next step.
+1. Install dependencies and gGenerate an app key to use in the next step.
 
+        composer install --optimize-autoloader --no-dev
         php artisan --no-ansi key:generate --show
 
 1. Copy environment config file and adjust as desired.
@@ -331,7 +332,6 @@ section for other options if lower memory support is needed.
 1. Run initial app installation/bootstrap commands.
 
         cd /var/www/kcal
-        composer install --optimize-autoloader --no-dev
         php artisan migrate
         php artisan elastic:migrate
         php artisan config:cache
