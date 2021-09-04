@@ -245,7 +245,7 @@ section for other options if lower memory support is needed.
 
 1. Install dependencies.
 
-        sudo apt-get install elasticsearch mysql-server-8.0 ngingx-full php8.0 php8.0-bcmath php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-redis php8.0-xml php8.0-zip redis
+        sudo apt-get install elasticsearch mysql-server-8.0 nginx-full php8.0 php8.0-bcmath php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-redis php8.0-xml php8.0-zip redis
 
 1. Start Elasticsearch and configure to run at start up.
 
