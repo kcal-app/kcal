@@ -231,98 +231,98 @@ section for other options if lower memory support is needed.
 
 1. Add [PHP 8.x repository](https://launchpad.net/~ondrej/+archive/ubuntu/php).
 
-        sudo apt-get install software-properties-common
-        sudo add-apt-repository ppa:ondrej/php
+       sudo apt-get install software-properties-common
+       sudo add-apt-repository ppa:ondrej/php
 
 1. Add [Elasticsearch 7.x repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html).
 
-        wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-        echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
+       wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+       echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
 
 1. Update available packages.
 
-        sudo apt-get update
+       sudo apt-get update
 
 1. Install dependencies.
 
-        sudo apt-get install elasticsearch mysql-server-8.0 nginx-full php8.0 php8.0-bcmath php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-redis php8.0-xml php8.0-zip redis php8.0-fpm
+       sudo apt-get install elasticsearch mysql-server-8.0 nginx-full php8.0 php8.0-bcmath php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-redis php8.0-xml php8.0-zip redis php8.0-fpm
 
 1. Start Elasticsearch and configure to run at start up.
 
-        sudo systemctl start elasticsearch
-        sudo systemctl enable elasticsearch
+       sudo systemctl start elasticsearch
+       sudo systemctl enable elasticsearch
 
 1. Install Composer.
 
     :rotating_light: This command runs code from a remote location as root.
     See [Download Composer](https://getcomposer.org/download/) for alternative install options.
 
-        curl -s https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin/ --filename=composer
+       curl -s https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin/ --filename=composer
 
 1. Clone the app repository.
 
-        cd /var/www
-        sudo mkdir kcal
-        sudo chown $USER:`id -gn $USER` kcal
-        cd kcal
-        git clone https://github.com/kcal-app/kcal.git .
+       cd /var/www
+       sudo mkdir kcal
+       sudo chown $USER:`id -gn $USER` kcal
+       cd kcal
+       git clone https://github.com/kcal-app/kcal.git .
 
 1. Configure nginx to serve the app public files.
 
-        sudo vim /etc/nginx/conf.d/kcal.conf
-        <edit config, see example below>
-        sudo service nginx restart
+       sudo vim /etc/nginx/conf.d/kcal.conf
+       <edit config, see example below>
+       sudo service nginx restart
 
     Example config:
 
-        server {
-            listen 80;
-            server_name kcal.example.com;
-            root /var/www/kcal/public;
-            
-            add_header X-Frame-Options "SAMEORIGIN";
-            add_header X-Content-Type-Options "nosniff";
-            
-            index index.php;
-            
-            charset utf-8;
-            
-            location / {
-                try_files $uri $uri/ /index.php?$query_string;
-            }
-            
-            location = /favicon.ico { access_log off; log_not_found off; }
-            location = /robots.txt  { access_log off; log_not_found off; }
-            
-            error_page 404 /index.php;
-            
-            location ~ \.php$ {
-                fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
-                fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-                include fastcgi_params;
-            }
-            
-            location ~ /\.(?!well-known).* {
-                deny all;
-            }
-        }
+       server {
+           listen 80;
+           server_name kcal.example.com;
+           root /var/www/kcal/public;
+           
+           add_header X-Frame-Options "SAMEORIGIN";
+           add_header X-Content-Type-Options "nosniff";
+           
+           index index.php;
+           
+           charset utf-8;
+           
+           location / {
+              try_files $uri $uri/ /index.php?$query_string;
+           }
+           
+           location = /favicon.ico { access_log off; log_not_found off; }
+           location = /robots.txt  { access_log off; log_not_found off; }
+           
+           error_page 404 /index.php;
+           
+           location ~ \.php$ {
+              fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
+              fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+              include fastcgi_params;
+           }
+           
+           location ~ /\.(?!well-known).* {
+              deny all;
+           }
+       }
 
 1. Create database user (with secure credentials!).
 
-        sudo mysql -u root
-        CREATE DATABASE `kcal`;
-        CREATE USER 'kcal'@'localhost' IDENTIFIED BY 'kcal';
-        GRANT ALL ON `kcal`.* TO 'kcal'@'localhost';
-        FLUSH PRIVILEGES;
+       sudo mysql -u root
+       CREATE DATABASE `kcal`;
+       CREATE USER 'kcal'@'localhost' IDENTIFIED BY 'kcal';
+       GRANT ALL ON `kcal`.* TO 'kcal'@'localhost';
+       FLUSH PRIVILEGES;
 
 1. Install dependencies and generate an app key to use in the next step.
 
-        composer install --optimize-autoloader --no-dev
-        php artisan --no-ansi key:generate --show
+       composer install --optimize-autoloader --no-dev
+       php artisan --no-ansi key:generate --show
 
 1. Copy environment config file and adjust as desired.
 
-        cp .env.example .env
+       cp .env.example .env
 
     At a minimum:
     - Set `APP_KEY` to the value generated in the previous step.
@@ -331,13 +331,13 @@ section for other options if lower memory support is needed.
 
 1. Run initial app installation/bootstrap commands.
 
-        cd /var/www/kcal
-        php artisan migrate
-        php artisan elastic:migrate
-        php artisan config:cache
-        php artisan route:cache
-        php artisan view:cache
-        php artisan user:add --admin
+       cd /var/www/kcal
+       php artisan migrate
+       php artisan elastic:migrate
+       php artisan config:cache
+       php artisan route:cache
+       php artisan view:cache
+       php artisan user:add --admin
 
 1. Visit the `APP_URL` and log in!
 
@@ -360,44 +360,44 @@ storage in AWS S3.
 
     Use this example policy to grant necessary permissions to a specific bucket:
 
-        {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                   "Sid": "VisualEditor0",
-                   "Effect": "Allow",
-                   "Action": [
-                       "s3:GetBucketPublicAccessBlock",
-                       "s3:GetBucketPolicyStatus",
-                       "s3:GetAccountPublicAccessBlock",
-                       "s3:ListAllMyBuckets",
-                       "s3:GetBucketAcl",
-                       "s3:GetBucketLocation"
-                   ],
-                   "Resource": "*"
-               },
-               {
-                   "Sid": "VisualEditor1",
-                   "Effect": "Allow",
-                   "Action": "s3:ListBucket",
-                   "Resource": "arn:aws:s3:::REPLACE_WITH_S3_BUCKET_NAME"
-               },
-               {
-                   "Sid": "VisualEditor2",
-                   "Effect": "Allow",
-                   "Action": ["s3:*Object", "s3:*ObjectAcl*"],
-                   "Resource": "arn:aws:s3:::REPLACE_WITH_S3_BUCKET_NAME/*"
-               }
-            ]
-        }
+       {
+           "Version": "2012-10-17",
+           "Statement": [
+              {
+                 "Sid": "VisualEditor0",
+                 "Effect": "Allow",
+                 "Action": [
+                     "s3:GetBucketPublicAccessBlock",
+                     "s3:GetBucketPolicyStatus",
+                     "s3:GetAccountPublicAccessBlock",
+                     "s3:ListAllMyBuckets",
+                     "s3:GetBucketAcl",
+                     "s3:GetBucketLocation"
+                 ],
+                 "Resource": "*"
+              },
+              {
+                 "Sid": "VisualEditor1",
+                 "Effect": "Allow",
+                 "Action": "s3:ListBucket",
+                 "Resource": "arn:aws:s3:::REPLACE_WITH_S3_BUCKET_NAME"
+              },
+              {
+                 "Sid": "VisualEditor2",
+                 "Effect": "Allow",
+                 "Action": ["s3:*Object", "s3:*ObjectAcl*"],
+                 "Resource": "arn:aws:s3:::REPLACE_WITH_S3_BUCKET_NAME/*"
+              }
+           ]
+       }
 
 1. Set necessary environment variables (via `.env` or some other mechanism).
 
-        MEDIA_DISK=s3-public
-        AWS_ACCESS_KEY_ID=REPLACE_WITH_IAM_KEY
-        AWS_SECRET_ACCESS_KEY=REPLACE_WITH_IAM_SECRET
-        AWS_DEFAULT_REGION=REPLACE_WITH_S3_BUCKET_NAME
-        AWS_BUCKET=REPLACE_WITH_S3_BUCKET_REGION
+       MEDIA_DISK=s3-public
+       AWS_ACCESS_KEY_ID=REPLACE_WITH_IAM_KEY
+       AWS_SECRET_ACCESS_KEY=REPLACE_WITH_IAM_SECRET
+       AWS_DEFAULT_REGION=REPLACE_WITH_S3_BUCKET_NAME
+       AWS_BUCKET=REPLACE_WITH_S3_BUCKET_REGION
 
 ### Search :mag:
 
@@ -420,9 +420,9 @@ adds support for Scout (see: laravel-json-api/laravel#32).
 
 1. Using the **Application ID** and **Admin API Key** values, update kcal's `.env` file:
 
-        SCOUT_DRIVER=algolia
-        ALGOLIA_APP_ID=<APPLICATION_ID>
-        ALGOLIA_SECRET=<ADMIN_API_KEY>
+       SCOUT_DRIVER=algolia
+       ALGOLIA_APP_ID=<APPLICATION_ID>
+       ALGOLIA_SECRET=<ADMIN_API_KEY>
 
 ### ElasticSearch (`elastic`)
 
@@ -430,16 +430,16 @@ adds support for Scout (see: laravel-json-api/laravel#32).
 
 1. Update kcal's `.env` file.
 
-        SCOUT_DRIVER=elastic
-        ELASTIC_HOST=<HOST:PORT>
-        ELASTIC_PORT=<PORT>
+       SCOUT_DRIVER=elastic
+       ELASTIC_HOST=<HOST:PORT>
+       ELASTIC_PORT=<PORT>
 
    Note: The `ELASTIC_PORT` variable is a convenience option specifically for
    Docker Compose configurations and is not strictly required.
    
 1. Run Elastic's migrations.
 
-        php artisan elastic:migrate
+       php artisan elastic:migrate
 
 ### Fallback (`null`)
 
@@ -463,20 +463,20 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 
 1. Clone the repository.
 
-        git clone https://github.com/kcal-app/kcal.git
-        cd kcal
+       git clone https://github.com/kcal-app/kcal.git
+       cd kcal
 
 1. Install development dependencies.
 
-        composer install
+       composer install
 
 1. Create a local `.env` file.
 
-        cp .env.local.example .env
+       cp .env.local.example .env
 
 1. Generate an app key.
 
-        php artisan key:generate
+       php artisan key:generate
 
     Verify that the `APP_KEY` variable has been set in `.env`. If has not, run
     `php artisan key:generate --show` and copy the key and append it to the
@@ -484,16 +484,16 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 
 1. Run it! :sailboat:
 
-        vendor/bin/sail up
+       vendor/bin/sail up
 
 1. (On first run) Run migrations.
 
-        vendor/bin/sail artisan migrate
-        vendor/bin/sail artisan elastic:migrate
+       vendor/bin/sail artisan migrate
+       vendor/bin/sail artisan elastic:migrate
 
 1. (On first run) Seed the database.
 
-        vendor/bin/sail artisan db:seed
+       vendor/bin/sail artisan db:seed
 
     The default username and password is `kcal` / `kcal`.
 
