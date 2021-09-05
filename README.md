@@ -307,13 +307,15 @@ section for other options if lower memory support is needed.
            }
        }
 
-1. Create database user (with secure credentials!).
+1. Create database user.
 
        sudo mysql -u root
        CREATE DATABASE `kcal`;
-       CREATE USER 'kcal'@'localhost' IDENTIFIED BY 'kcal';
+       CREATE USER 'kcal'@'localhost' IDENTIFIED BY RANDOM PASSWORD;
        GRANT ALL ON `kcal`.* TO 'kcal'@'localhost';
        FLUSH PRIVILEGES;
+
+    :lock: Save the generated password output by the `CREATE USER` statement.
 
 1. Install dependencies and generate an app key to use in the next step.
 
@@ -325,19 +327,23 @@ section for other options if lower memory support is needed.
        cp .env.example .env
 
     At a minimum:
-    - Set `APP_KEY` to the value generated in the previous step.
-    - Set `APP_URL` to match the host configured in nginx configuration.
-    - Set the `DATABASE_` values to the configured credentials.
+     - Set `APP_KEY` to the value generated in the previous step.
+     - Set `APP_URL` to match the host configured in nginx configuration.
+     - Set the `DATABASE_` values to the configured credentials.
 
 1. Run initial app installation/bootstrap commands.
 
-       cd /var/www/kcal
        php artisan migrate
        php artisan elastic:migrate
        php artisan config:cache
        php artisan route:cache
        php artisan view:cache
        php artisan user:add --admin
+
+1. Allow web server to access required directories.
+
+       sudo chown -R $USER:www-data {storage,public}
+       sudo chmod g+s {storage,public}
 
 1. Visit the `APP_URL` and log in!
 
