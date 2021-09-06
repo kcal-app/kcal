@@ -8,11 +8,15 @@ services:
       args:
         WWWGROUP: '${WWWGROUP}'
     image: sail-8.0/app
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     ports:
       - '${APP_PORT:-8080}:80'
     environment:
       WWWUSER: '${WWWUSER}'
       LARAVEL_SAIL: 1
+      XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+      XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
     volumes:
       - '.:/var/www/html'
     networks:
@@ -24,7 +28,7 @@ services:
   db:
     image: 'mysql:8.0'
     ports:
-      - '${DB_PORT:-3306}:3306'
+      - '${FORWARD_DB_PORT:-3306}:3306'
     environment:
       MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'
       MYSQL_DATABASE: '${DB_DATABASE:-kcal}'
@@ -32,9 +36,13 @@ services:
       MYSQL_PASSWORD: '${DB_PASSWORD:-kcal}'
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
-      - 'mysql-data:/var/lib/mysql'
+      - 'db-data:/var/lib/mysql'
     networks:
       - sail
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+      retries: 3
+      timeout: 5s
   phpmyadmin:
     image: phpmyadmin
     ports:
@@ -47,7 +55,7 @@ services:
     depends_on:
       - db
   elasticsearch:
-    image: 'elasticsearch:7.12.0'
+    image: 'elasticsearch:7.14.1'
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
@@ -64,6 +72,7 @@ services:
       - 'elasticsearch-data:/usr/share/elasticsearch/data'
     ports:
       - '${ELASTIC_PORT:-9200}:9200'
+      - '${ELASTIC_BIN_PORT:-9300}:9300'
     networks:
       - sail
   redis:
@@ -80,7 +89,7 @@ networks:
 volumes:
   elasticsearch-data:
     driver: local
-  mysql-data:
+  db-data:
     driver: local
   redis-data:
     driver: local
