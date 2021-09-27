@@ -25,6 +25,7 @@
         "laravel/tinker": "^2.5",
         "league/flysystem-aws-s3-v3": "~1.0",
         "phospr/fraction": "^1.2",
+        "spatie/laravel-csp": "^2.6",
         "spatie/laravel-medialibrary": "^9.0.0",
         "spatie/laravel-tags": "^3.0"
     },
