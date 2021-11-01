@@ -26,6 +26,7 @@
         "laravel/tinker": "^2.5",
         "league/flysystem-aws-s3-v3": "~1.0",
         "phospr/fraction": "^1.2",
+        "spatie/laravel-csp": "^2.6",
         "spatie/laravel-medialibrary": "^9.0.0",
         "spatie/laravel-tags": "^3.0"
     },
@@ -35,7 +36,7 @@
         "cloudcreativity/json-api-testing": "^3.2",
         "facade/ignition": "^2.5",
         "laravel/breeze": "^1.0",
-        "laravel/sail": "^0.0.5",
+        "laravel/sail": "^1.10",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "nunomaduro/larastan": "^0.6.13",

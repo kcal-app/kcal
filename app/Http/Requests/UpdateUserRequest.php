@@ -16,8 +16,7 @@ class UpdateUserRequest extends FormRequest
         $rules = [
             'username' => ['required', 'string', Rule::unique('users')->ignore($this->user)],
             'name' => ['required', 'string'],
-            'password' => ['nullable', 'string', 'confirmed'],
-            'password_confirmation' => ['nullable', 'string'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'admin' => ['nullable', 'boolean'],
             'image' => ['nullable', 'file', 'mimes:jpg,png,gif'],
             'remove_image' => ['nullable', 'boolean'],

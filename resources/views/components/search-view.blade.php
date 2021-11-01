@@ -1,4 +1,4 @@
-<div x-data="searchView()" x-init="loadMore()">
+<div x-data="searchView">
     <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
         <nav class="md:w-1/4">
             <x-inputs.input name="search"
@@ -41,7 +41,7 @@
                 class="bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900 ring-blue-300"
                 x-show="morePages"
                 x-cloak
-                @click.prevent="loadMore()">
+                @click.prevent="loadMore">
                 Load more
             </x-inputs.button>
         </section>
@@ -51,8 +51,8 @@
 @once
     @push('scripts')
         <script type="text/javascript">
-            let searchView = () => {
-                return {
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('searchView', () => ({
                     results: [],
                     number: 1,
                     size: 12,
@@ -60,6 +60,9 @@
                     searchTerm: null,
                     searching: false,
                     filterTags: [],
+                    init() {
+                        this.loadMore();
+                    },
                     resetPagination() {
                         this.number = 1;
                         this.morePages = false;
@@ -109,8 +112,8 @@
                         }
                         this.loadMore();
                     }
-                }
-            }
+                }))
+            })
         </script>
     @endpush
 @endonce

@@ -10,14 +10,14 @@
     </x-slot>
     <form method="POST" action="{{ route('journal-entries.store') }}">
         @csrf
-        <div x-data x-init="initJournalEntries($el);" class="space-y-4">
+        <div x-data x-ref="root" x-init="initJournalEntries($refs.root)" class="space-y-4">
             @foreach($ingredients as $ingredient)
                 @include('journal-entries.partials.entry-item-input', $ingredient)
             @endforeach
             <div class="journal-entry-template hidden">
                 @include('journal-entries.partials.entry-item-input', ['default_date' => $default_date])
             </div>
-            <x-inputs.icon-green type="button" class="add-entry-item" x-on:click="addEntryNode($el);">
+            <x-inputs.icon-green type="button" class="add-entry-item" x-on:click="addEntryNode($refs.root);">
                 <svg class="h-10 w-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
                 </svg>
@@ -27,7 +27,7 @@
                     <x-inputs.input type="checkbox" name="group_entries" class="h-5 w-5" value="1" />
                     <span class="ml-2">Group entries by day and meal</span>
                 </x-inputs.label>
-                <x-inputs.button x-on:click="removeTemplate($el);">Add entries</x-inputs.button>
+                <x-inputs.button x-on:click="removeTemplate($refs.root);">Add entries</x-inputs.button>
             </div>
         </div>
     </form>
