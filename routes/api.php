@@ -4,14 +4,9 @@
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
-|
-| See: https://laravel-json-api.readthedocs.io/en/latest/
-|
-| TODO: Get auth middleware working...
-|
 */
 
-JsonApi::register('v1')->middleware('auth')->routes(function ($api) {
+JsonApi::register('v1')->middleware('auth:api,web')->routes(function ($api) {
     $api->resource('foods')->relationships(function ($relations) {
         $relations->hasMany('tags')->readOnly();
     })->readOnly();
