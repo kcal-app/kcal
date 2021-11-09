@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -56,6 +56,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \Illuminate\Support\Collection|null $meals
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMeals($value)
  * @property-read Collection $meals_enabled
+ * @property string|null $api_token
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereApiToken($value)
  */
 final class User extends Authenticatable implements HasMedia
 {
@@ -71,6 +73,9 @@ final class User extends Authenticatable implements HasMedia
         static::creating(function (User $user) {
             // Set default meals configuration.
             $user->meals = User::getDefaultMeals();
+
+            // Set default API token.
+            $user->api_token = Str::random(32);
         });
     }
 
@@ -78,17 +83,19 @@ final class User extends Authenticatable implements HasMedia
      * @inheritdoc
      */
     protected $fillable = [
-        'username',
-        'password',
-        'name',
-        'meals',
         'admin',
+        'api_token',
+        'meals',
+        'name',
+        'password',
+        'username',
     ];
 
     /**
      * @inheritdoc
      */
     protected $hidden = [
+        'api_token',
         'password',
         'remember_token',
     ];

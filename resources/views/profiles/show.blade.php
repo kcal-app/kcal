@@ -18,7 +18,10 @@
             </a>
         </div>
     @endif
-    <div class="mt-2 text-gray-500">
-        {{ $user->name }}
+    <div class="mt-2">
+        <p class="mt-2">{{ $user->name }}</p>
+        @if($user->id === Auth::user()->id)
+            <p class="mt-2"><strong>API key</strong>: {{ $user->api_token }}</p>
+        @endif
     </div>
 </x-app-layout>
