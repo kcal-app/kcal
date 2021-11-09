@@ -11,7 +11,7 @@
 |
 */
 
-JsonApi::register('v1')->routes(function ($api) {
+JsonApi::register('v1')->middleware('auth')->routes(function ($api) {
     $api->resource('foods')->relationships(function ($relations) {
         $relations->hasMany('tags')->readOnly();
     })->readOnly();
