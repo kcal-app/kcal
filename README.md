@@ -535,25 +535,5 @@ Ensure that Sail is running (primarily to provide ElasticSearch):
 
 Execute tests.
 
-    vendor/bin/sail artisan test --parallel
-
-#### Caveats
-
-In order to support parallel testing, tests are run using sqlite (even though Sail
-provides MySQL). To test with MySQL make a copy of `phpunit.xml.dist` as `phpunit.xml`
-and change:
-
-```
-<server name="DB_CONNECTION" value="sqlite"/>
-<server name="DB_DATABASE" value=":memory:"/>
-```
-
-to 
-
-```
-<server name="DB_CONNECTION" value="mysql"/>
-<server name="DB_HOST" value="db"/>
-```
-
-Now running `vendor/bin/sail artisan test` will run tests with MySQL **but** tests
-cannot be run in parallel.
+    vendor/bin/sail artisan dev:cache-clear
+    vendor/bin/sail artisan test --parallel --recreate-databases
