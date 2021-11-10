@@ -508,6 +508,25 @@ Navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080) to log in!
 Create a `docker-compose.override.yml` file to override any of the default settings
 provided for this environment.
 
+### Custom console commands
+
+#### `dev:cache-clear`
+
+Executes the various cache clearing artisan commands:
+
+- `cache:clear`
+- `config:clear`
+- `route:clear`
+- `view:clear`
+
+#### `dev:reset`
+
+Resets and seeds the database by executing the following artisan commands:
+
+- `db:wipe`
+- `migrate`
+- `db:seed`
+
 ### Testing
 
 Ensure that Sail is running (primarily to provide ElasticSearch):
