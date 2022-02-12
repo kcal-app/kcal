@@ -41,7 +41,7 @@
         <!-- Page Content -->
         <main>
             @if(session()->has('message'))
-                <div class="bg-green-200 p-2 mb-2">
+                <div class="bg-emerald-200 p-2 mb-2">
                     {{ session()->get('message') }}
                 </div>
             @endif
