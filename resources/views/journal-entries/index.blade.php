@@ -125,7 +125,7 @@
                                          :selectedValue="$currentGoal?->id ?? null">
                         </x-inputs.select>
                         <div class="flex items-center justify-start mt-4">
-                            <x-inputs.button class="bg-green-800 hover:bg-green-700">Change Goal</x-inputs.button>
+                            <x-inputs.button class="bg-emerald-800 hover:bg-emerald-700">Change Goal</x-inputs.button>
                             <x-button-link.red class="ml-3" x-on:click="showGoalChangeForm = !showGoalChangeForm">
                                 Cancel
                             </x-button-link.red>

@@ -1,4 +1,4 @@
-<div x-data data-tags="{{ $defaultTags ?? '[]' }}">
+<div x-data data-tags="{!! $defaultTags ?? '[]' !!}">
     <div x-data="tagSelect()" @click.outside="clearSearch()" @keydown.escape="clearSearch()">
         <div class="relative" @keydown.enter.prevent="addTag(searchTerm)">
             <x-inputs.input type="hidden"

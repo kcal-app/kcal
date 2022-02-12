@@ -1,9 +1,8 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    mode: 'jit',
 
-    purge: [
+    content: [
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
@@ -13,12 +12,6 @@ module.exports = {
             fontFamily: {
                 sans: [...defaultTheme.fontFamily.sans],
             },
-        },
-    },
-
-    variants: {
-        extend: {
-            opacity: ['disabled'],
         },
     },
 

@@ -26,8 +26,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/foods/{food}/delete', [FoodController::class, 'delete'])->name('foods.delete');
 
     // Goals.
-    Route::resource('goals', GoalController::class);
-    Route::get('/goals/{goal}/delete', [GoalController::class, 'delete'])->name('goals.delete');
+    Route::resource('goals', GoalController::class)->only(['index', 'create', 'store']);
+    Route::resource('goals', GoalController::class)->except(['index', 'create', 'store'])->middleware(['can:access,goal']);
+    Route::get('/goals/{goal}/delete', [GoalController::class, 'delete'])->middleware(['can:access,goal'])->name('goals.delete');
 
     // Ingredient picker.
     Route::get('/ingredient-picker/search', [IngredientPickerController::class, 'search'])->name('ingredient-picker.search');
@@ -51,10 +52,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Users.
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profiles.show');
-});
 
-Route::middleware(['auth', 'can:editProfile,user'])->group(function () {
     // Profiles (non-admin Users variant).
-    Route::get('/profile/{user}/edit', [ProfileController::class, 'edit'])->name('profiles.edit');
-    Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profiles.update');
+    Route::get('/profile/{user}/edit', [ProfileController::class, 'edit'])->middleware(['can:editProfile,user'])->name('profiles.edit');
+    Route::put('/profile/{user}', [ProfileController::class, 'update'])->middleware(['can:editProfile,user'])->name('profiles.update');
 });

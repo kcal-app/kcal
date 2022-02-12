@@ -7,10 +7,9 @@ use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
 use App\Models\Traits\Taggable;
 use App\Support\Number;
-use ElasticScoutDriverPlus\QueryDsl;
+use ElasticScoutDriverPlus\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
 
 /**
  * App\Models\Food
@@ -80,7 +79,6 @@ final class Food extends Model
     use HasFactory;
     use Ingredient;
     use Journalable;
-    use QueryDsl;
     use Searchable;
     use Sluggable;
     use Taggable;

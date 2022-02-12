@@ -43,8 +43,18 @@
                             @if($item::class === \App\Models\IngredientAmount::class)
                                 <li>
                                     <span>
-                                        {{ \App\Support\Number::rationalStringFromFloat($item->amount) }}
-                                        @if($item->unitFormatted){{ $item->unitFormatted }}@endif
+                                        {{-- Prevent food with serving size > 1 from incorrectly using formatted
+                                             serving unit with number of servings. E.g., for a recipe calling for 1
+                                             serving of a food with 4 tbsp. to a serving size show "1 serving" instead
+                                             of "1 tbsp." (incorrect). --}}
+                                        @if($item->unit === 'serving' && $item->ingredient->serving_size > 1 && ($item->ingredient->serving_unit || $item->ingredient->serving_unit_name))
+                                            {{ \App\Support\Number::rationalStringFromFloat($item->amount * $item->ingredient->serving_size) }} {{ $item->unitFormatted }}
+                                            <span class="text-gray-500">({{ \App\Support\Number::rationalStringFromFloat($item->amount) }} {{ \Illuminate\Support\Str::plural('serving', $item->amount ) }})</span>
+                                        @else
+                                            {{ \App\Support\Number::rationalStringFromFloat($item->amount) }}
+                                            @if($item->unitFormatted){{ $item->unitFormatted }}@endif
+                                        @endif
+
                                         @if($item->ingredient->type === \App\Models\Recipe::class)
                                             <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
                                                href="{{ route('recipes.show', $item->ingredient) }}">

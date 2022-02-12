@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use Algolia\AlgoliaSearch\Exceptions\UnreachableException;
 use App\Http\Controllers\IngredientPickerController;
 use App\Models\Food;
 use App\Models\Recipe;
@@ -42,8 +43,8 @@ class IngredientPickerControllerTest extends LoggedInTestCase
      */
     public function testCanSearchWithAlgolia(): void
     {
-        $this->expectException(ConnectException::class);
-        $this->expectExceptionMessageMatches("/Could not resolve host: \-dsn\.algolia\.net/");
+        $this->expectException(UnreachableException::class);
+        $this->expectExceptionMessage("Impossible to connect, please check your Algolia Application Id.");
 
         Config::set('scout.driver', 'algolia');
         $response = $this->get($this->buildUrl(['term' => 'butter']));
