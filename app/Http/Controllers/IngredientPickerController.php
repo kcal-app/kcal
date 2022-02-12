@@ -7,6 +7,7 @@ use App\Models\Recipe;
 use App\Search\Ingredient;
 use ElasticScoutDriverPlus\Builders\MultiMatchQueryBuilder;
 use ElasticScoutDriverPlus\Builders\TermsQueryBuilder;
+use ElasticScoutDriverPlus\Support\Query;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -42,11 +43,10 @@ class IngredientPickerController extends Controller
      * Search using an ElasticSearch service.
      */
     private function searchWithElasticSearch(string $term): Collection {
-        return Food::boolSearch()
-            ->join(Recipe::class)
+        $query = Query::bool()
 
             // Attempt to match exact phrase first.
-            ->should('match_phrase', ['name' => $term])
+            ->should(Query::matchPhrase()->field('name')->query($term))
 
             // Attempt multi-match search on all relevant fields with search-as-you-type on name.
             ->should((new MultiMatchQueryBuilder())
@@ -57,10 +57,12 @@ class IngredientPickerController extends Controller
                 ->fuzziness('AUTO'))
 
             // Attempt to match on any tags in the term.
-            ->should((new TermsQueryBuilder())
-                ->terms('tags', explode(' ', $term)))
+            ->should((new TermsQueryBuilder())->field('tags')->values(explode(' ', $term)))
 
-            // Get resulting models.
+            ->minimumShouldMatch(1);
+
+        return Food::searchQuery($query)
+            ->join(Recipe::class)
             ->execute()
             ->models();
     }
