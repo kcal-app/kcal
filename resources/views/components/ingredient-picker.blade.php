@@ -25,7 +25,7 @@
         <div x-show="searching" x-cloak>
             <div class="absolute border-2 border-gray-500 border-b-0 bg-white"
                  x-bind="ingredient">
-                <template x-for="result in results" :key="result.id">
+                <template x-for="result in results" :key="result.ingredient_id">
                     <div class="p-1 border-b-2 border-gray-500 hover:bg-amber-300 cursor-pointer" x-bind:data-id="result.id">
                         <div class="pointer-events-none">
                             <div>

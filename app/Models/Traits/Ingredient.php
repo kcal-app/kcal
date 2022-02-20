@@ -8,21 +8,28 @@ use Illuminate\Database\Eloquent\Collection as DatabaseCollection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\Tags\Tag;
 
 trait Ingredient
 {
     /**
-     * Add special `type` attribute to appends.
+     * Add special attributes to appends.
      */
     public function initializeIngredient(): void {
+        $this->appends[] = 'ingredient_id';
         $this->appends[] = 'type';
     }
 
     /**
+     * Gets the class short name and ID combo to ensure uniqueness between models.
+     */
+    public function getIngredientIdAttribute(): string {
+        return Str::lower((new \ReflectionClass($this))->getShortName()) . "-$this->id";
+    }
+
+    /**
      * Get the class name.
-     *
-     * This is necessary e.g. to provide data in ingredient picker responses.
      */
     public function getTypeAttribute(): string {
         return $this::class;
