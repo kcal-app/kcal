@@ -74,6 +74,8 @@ final class Goal extends Model
         'fat' => 'float',
         'protein' => 'float',
         'sodium' => 'float',
+        // @todo Determine why `user_id` is a string and fix it.
+        'user_id' => 'int',
     ];
 
     /**
