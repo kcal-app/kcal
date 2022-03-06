@@ -87,17 +87,7 @@ class FoodController extends Controller
         }
 
         $food->fill($attributes)->save();
-
-        $tags = $request->get('tags', []);
-        if (!empty($tags)) {
-            $food->syncTags(explode(',', $tags));
-        }
-        elseif ($food->tags->isNotEmpty()) {
-            $food->detachTags($food->tags);
-        }
-
-        // Refresh and index updated tags.
-        $food->fresh()->searchable();
+        $food->updateTagsFromRequest($request);
 
         session()->flash('message', "Food {$food->name} updated!");
         return redirect()->route('foods.show', $food);

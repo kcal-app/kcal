@@ -216,17 +216,7 @@ class RecipeController extends Controller
                 $this->updateIngredients($recipe, $input);
                 $this->updateIngredientSeparators($recipe, $input);
                 $this->updateSteps($recipe, $input);
-
-                $tags = $request->get('tags', []);
-                if (!empty($tags)) {
-                    $recipe->syncTags(explode(',', $tags));
-                }
-                elseif ($recipe->tags->isNotEmpty()) {
-                    $recipe->detachTags($recipe->tags);
-                }
-
-                // Refresh and index updated tags.
-                $recipe->fresh()->searchable();
+                $recipe->updateTagsFromRequest($request);
             });
         } catch (\Exception $e) {
             DB::rollBack();

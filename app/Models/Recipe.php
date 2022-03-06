@@ -82,6 +82,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property float|null $volume
  * @property-read string|null $volume_formatted
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereVolume($value)
+ * @property-read string $ingredient_id
  */
 final class Recipe extends Model implements HasMedia
 {

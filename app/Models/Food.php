@@ -73,6 +73,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Food withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @method static \Database\Factories\FoodFactory factory(...$parameters)
  * @property-read \Illuminate\Support\Collection $units_supported
+ * @property-read string $ingredient_id
  */
 final class Food extends Model
 {
