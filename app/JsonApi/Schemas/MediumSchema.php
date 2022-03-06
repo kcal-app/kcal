@@ -42,7 +42,7 @@ class MediumSchema extends SchemaProvider
             'url' => $resource->getUrl(),
             'mimeType' => $resource->mime_type,
             'size' => $resource->size,
-            'sizeFormatted' => $resource->getHumanReadableSizeAttribute(),
+            'sizeFormatted' => $resource->human_readable_size,
             'manipulations' => $resource->manipulations,
             'customProperties' => $resource->custom_properties,
             'conversions' => [],
