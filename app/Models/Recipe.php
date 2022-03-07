@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -260,6 +261,57 @@ final class Recipe extends Model implements HasMedia
             ->fit(Manipulations::FIT_CROP, 1600, 900)
             ->sharpen(10)
             ->optimize();
+    }
+
+    /**
+     * Duplicates the recipe, updating provided attributes.
+     *
+     * @throws \Throwable
+     */
+    public function duplicate(array $attributes): Recipe {
+        /** @var \App\Models\Recipe $recipe */
+        $recipe = $this->replicate();
+        $recipe->fill($attributes);
+
+        try {
+            DB::transaction(function () use ($recipe) {
+                $recipe->save();
+
+                $recipe->tags()->attach($this->tags);
+
+                $ingredient_amounts = [];
+                foreach ($this->ingredientAmounts as $ia) {
+                    $new_ia = $ia->replicate();
+                    $new_ia->parent_id = $recipe->id;
+                    $new_ia->parent_type = Recipe::class;
+                    $ingredient_amounts[] = $new_ia;
+                }
+                $recipe->ingredientAmounts()->saveMany($ingredient_amounts);
+
+                $steps = [];
+                foreach ($this->steps as $step) {
+                    $new_step = $step->replicate();
+                    $new_step->recipe_id = $recipe->id;
+                    $steps[] = $new_step;
+                }
+                $recipe->steps()->saveMany($steps);
+
+                $separators = [];
+                foreach ($this->separators as $separator) {
+                    $new_separator = $separator->replicate();
+                    $new_separator->recipe_id = $recipe->id;
+                    $separators[] = $new_separator;
+                }
+                $recipe->separators()->saveMany($separators);
+
+                $recipe->push();
+            });
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $recipe;
     }
 
 }

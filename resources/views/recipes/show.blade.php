@@ -167,6 +167,9 @@
                 <x-button-link.gray href="{{ route('recipes.edit', $recipe) }}">
                     Edit Recipe
                 </x-button-link.gray>
+                <x-button-link.gray href="{{ route('recipes.duplicate.confirm', $recipe) }}">
+                    Duplicate Recipe
+                </x-button-link.gray>
                 <x-button-link.red href="{{ route('recipes.delete', $recipe) }}">
                     Delete Recipe
                 </x-button-link.red>

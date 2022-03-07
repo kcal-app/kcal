@@ -12,6 +12,7 @@ use App\Support\Number;
 use App\Support\Nutrients;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -348,6 +349,30 @@ class RecipeController extends Controller
 
         }
         $recipe->ingredientSeparators()->saveMany($ingredient_separators);
+    }
+
+    /**
+     * Confirm duplicating recipe.
+     */
+    public function duplicateConfirm(Recipe $recipe): View {
+        return view('recipes.duplicate')->with('recipe', $recipe);
+    }
+
+    /**
+     * Duplicate a recipe.
+     */
+    public function duplicate(Request $request, Recipe $recipe): RedirectResponse
+    {
+        $attributes = $request->validate(['name' => ['required', 'string']]);
+
+        try {
+            $new_recipe = $recipe->duplicate($attributes);
+        } catch (\Throwable $e) {
+            return back()->withInput()->withErrors($e->getMessage());
+        }
+
+        return redirect()->route('recipes.show', $new_recipe)
+            ->with('message', "Recipe {$recipe->name} duplicated!");
     }
 
     /**
