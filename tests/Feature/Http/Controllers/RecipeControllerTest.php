@@ -102,6 +102,25 @@ class RecipeControllerTest extends HttpControllerTestCase
         $response->assertSessionHasNoErrors();
     }
 
+    public function testCanDuplicateInstances(): void {
+        $instance = $this->createInstance();
+        $confirm_url = action([$this->class(), 'duplicateConfirm'], [$this->routeKey() => $instance]);
+        $response = $this->get($confirm_url);
+        $response->assertOk();
+        $response->assertViewHas($this->routeKey());
+
+        $duplicate_url = action([$this->class(), 'duplicate'], [$this->routeKey() => $instance]);
+        $response = $this->followingRedirects()->post($duplicate_url, ['name' => 'Duplicated Recipe']);
+        $response->assertOk();
+
+        $recipe = Recipe::latest()->first();
+        $this->assertEquals('Duplicated Recipe', $recipe->name);
+        $this->assertEquals($instance->tags->toArray(), $instance->tags->toArray());
+        $this->assertEquals($instance->ingredientAmounts->toArray(), $instance->ingredientAmounts->toArray());
+        $this->assertEquals($instance->steps->toArray(), $instance->steps->toArray());
+        $this->assertEquals($instance->separators->toArray(), $instance->separators->toArray());
+    }
+
     public function testSessionKeepsOldInputOnAdd(): void {
         $instance = $this->createInstance();
         $data = $this->createInvalidFormData($instance);
