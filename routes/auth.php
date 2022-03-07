@@ -49,6 +49,9 @@ Route::middleware(['auth'])->group(function () {
     // Recipes.
     Route::resource('recipes', RecipeController::class);
     Route::get('/recipes/{recipe}/delete', [RecipeController::class, 'delete'])->name('recipes.delete');
+    Route::get('/recipes/{recipe}/duplicate', [RecipeController::class, 'duplicateConfirm'])->name('recipes.duplicate.confirm');
+    Route::post('/recipes/{recipe}/duplicate', [RecipeController::class, 'duplicate'])->name('recipes.duplicate');
+
 
     // Users.
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profiles.show');
