@@ -18,7 +18,6 @@ class StoreJournalEntryRequest extends FormRequest
      */
     public function rules(): array
     {
-//        dd($this->all());
         return [
             'ingredients.date' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.date.*' => ['nullable', 'date', 'required_with:ingredients.id.*'],
@@ -29,7 +28,11 @@ class StoreJournalEntryRequest extends FormRequest
                 new InArray(Auth::user()->meals_enabled->pluck('value')->toArray())
             ],
             'ingredients.amount' => ['required', 'array', new ArrayNotEmpty],
-            'ingredients.amount.*' => ['required_with:ingredients.id.*', 'nullable', new StringIsPositiveDecimalOrFraction],
+            'ingredients.amount.*' => [
+                'required_with:ingredients.id.*',
+                'nullable',
+                new StringIsPositiveDecimalOrFraction
+            ],
             'ingredients.unit' => ['required', 'array'],
             'ingredients.unit.*' => ['required_with:ingredients.id.*'],
             'ingredients.id.*' => 'required_with:ingredients.amount.*|nullable',
