@@ -1,3 +1,7 @@
+@php use App\Models\IngredientAmount; @endphp
+@php use App\Support\Number; @endphp
+@php use App\Models\Recipe; @endphp
+@php use App\Models\RecipeSeparator; @endphp
 <x-app-layout>
     <x-slot name="title">{{ $recipe->name }}</x-slot>
     @if(!empty($feature_image))
@@ -34,13 +38,14 @@
             <section x-data="{ showNutrientsSummary: false }">
                 <h1 class="mb-2 font-bold text-2xl">
                     Ingredients
-                    <span class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"
-                          x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
+                    <span
+                        class="text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 font-normal cursor-pointer"
+                        x-on:click="showNutrientsSummary = !showNutrientsSummary">[toggle nutrients]</span>
                 </h1>
                 <div class="prose prose-lg">
                     <ul class="space-y-2">
                         @foreach($recipe->ingredientsList->sortBy('weight') as $item)
-                            @if($item::class === \App\Models\IngredientAmount::class)
+                            @if($item::class === IngredientAmount::class)
                                 <li>
                                     <span>
                                         {{-- Prevent food with serving size > 1 from incorrectly using formatted
@@ -48,35 +53,44 @@
                                              serving of a food with 4 tbsp. to a serving size show "1 serving" instead
                                              of "1 tbsp." (incorrect). --}}
                                         @if($item->unit === 'serving' && $item->ingredient->serving_size > 1 && ($item->ingredient->serving_unit || $item->ingredient->serving_unit_name))
-                                            {{ \App\Support\Number::rationalStringFromFloat($item->amount * $item->ingredient->serving_size) }} {{ $item->unitFormatted }}
-                                            <span class="text-gray-500">({{ \App\Support\Number::rationalStringFromFloat($item->amount) }} {{ \Illuminate\Support\Str::plural('serving', $item->amount ) }})</span>
+                                            {{ Number::rationalStringFromFloat($item->amount * $item->ingredient->serving_size) }} {{ $item->unitFormatted }}
+                                            <span
+                                                class="text-gray-500">({{ Number::rationalStringFromFloat($item->amount) }} {{ \Illuminate\Support\Str::plural('serving', $item->amount ) }})</span>
                                         @else
-                                            {{ \App\Support\Number::rationalStringFromFloat($item->amount) }}
-                                            @if($item->unitFormatted){{ $item->unitFormatted }}@endif
+                                            {{ Number::rationalStringFromFloat($item->amount) }}
+                                            @if($item->unitFormatted)
+                                                {{ $item->unitFormatted }}
+                                            @endif
                                         @endif
 
-                                        @if($item->ingredient->type === \App\Models\Recipe::class)
+                                        @if($item->ingredient->type === Recipe::class)
                                             <a class="text-gray-500 hover:text-gray-700 hover:border-gray-300"
                                                href="{{ route('recipes.show', $item->ingredient) }}">
                                                 {{ $item->ingredient->name }}
                                             </a>
                                         @else
-                                            {{ $item->ingredient->name }}@if($item->ingredient->detail), {{ $item->ingredient->detail }}@endif
+                                            {{ $item->ingredient->name }}@if($item->ingredient->detail)
+                                                , {{ $item->ingredient->detail }}
+                                            @endif
                                         @endif
-                                        @if($item->detail)<span class="text-gray-500">{{ $item->detail }}</span>@endif
-                                        <div x-show="showNutrientsSummary" class="text-sm text-gray-500">{{ $item->nutrients_summary }}</div>
+                                        @if($item->detail)
+                                            <span class="text-gray-500">{{ $item->detail }}</span>
+                                        @endif
+                                        <div x-show="showNutrientsSummary"
+                                             class="text-sm text-gray-500">{{ $item->nutrients_summary }}</div>
                                     </span>
                                 </li>
-                            @elseif($item::class === \App\Models\RecipeSeparator::class)
-                                </ul></div>
-                                @if($item->text)
-                                    <h2 class="mt-3 font-bold">{{ $item->text }}</h2>
-                                @else
-                                    <hr class="mt-3 lg:w-1/2" />
-                                @endif
-                                <div class="prose prose-lg">
-                                <ul class="space-y-2">
-                            @endif
+                            @elseif($item::class === RecipeSeparator::class)
+                    </ul>
+                </div>
+                @if($item->text)
+                    <h2 class="mt-3 font-bold">{{ $item->text }}</h2>
+                @else
+                    <hr class="mt-3 lg:w-1/2"/>
+                @endif
+                <div class="prose prose-lg">
+                    <ul class="space-y-2">
+                        @endif
                         @endforeach
                     </ul>
                 </div>
@@ -97,7 +111,8 @@
                         <h1 class="mb-2 font-bold text-2xl">Tags</h1>
                         <div class="flex flex-wrap">
                             @foreach($recipe->tags as $tag)
-                                <span class="m-1 bg-gray-200 rounded-full px-2 leading-loose cursor-default">{{ $tag->name }}</span>
+                                <span
+                                    class="m-1 bg-gray-200 rounded-full px-2 leading-loose cursor-default">{{ $tag->name }}</span>
                             @endforeach
                         </div>
                     </section>
@@ -164,6 +179,7 @@
                 </div>
             </div>
             <section class="flex flex-row space-x-2 justify-around md:flex-col md:space-y-2 md:space-x-0">
+                <x-log-journalable :journalable="$recipe"></x-log-journalable>
                 <x-button-link.gray href="{{ route('recipes.edit', $recipe) }}">
                     Edit Recipe
                 </x-button-link.gray>

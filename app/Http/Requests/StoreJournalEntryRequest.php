@@ -18,6 +18,7 @@ class StoreJournalEntryRequest extends FormRequest
      */
     public function rules(): array
     {
+//        dd($this->all());
         return [
             'ingredients.date' => ['required', 'array', new ArrayNotEmpty],
             'ingredients.date.*' => ['nullable', 'date', 'required_with:ingredients.id.*'],

@@ -100,6 +100,7 @@
                 </div>
             </section>
             <section class="flex flex-row space-x-2 justify-around md:flex-col md:space-y-2 md:space-x-0">
+                <x-log-journalable :journalable="$food"></x-log-journalable>
                 <x-button-link.gray href="{{ route('foods.edit', $food) }}">
                     Edit Food
                 </x-button-link.gray>
