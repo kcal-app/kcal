@@ -9,15 +9,6 @@ journal to help along the way. Kcal is a *personal* system that focuses on direc
 control of inputs (as opposed to unwieldy user generated datasets) and a minimal,
 easy to use recipe presentation for preparing meals.
 
-## Demo
-
-A [demo of kcal](http://demo.kcal.cooking) is available on Heroku. Login credentials are:
-
-- Username: `kcal`
-- Password: `kcal`
-
-The demo instance resets every hour, on the hour.
-
 ## Screenshots
 
 ![kcal mobile screenshot](screenshots/mobile.png)
