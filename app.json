@@ -13,7 +13,7 @@
         "self-host"
     ],
     "repository": "https://github.com/kcal-app/kcal",
-    "website": "http://demo.kcal.cooking",
+    "website": "https://github.com/kcal-app/kcal",
     "buildpacks": [
         {
             "url": "heroku/php"
