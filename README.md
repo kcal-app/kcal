@@ -236,7 +236,7 @@ section for other options if lower memory support is needed.
 
 1. Install dependencies.
 
-       sudo apt-get install elasticsearch mysql-server-8.0 nginx-full php8.0 php8.0-bcmath php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-redis php8.0-xml php8.0-zip redis php8.0-fpm
+       sudo apt-get install elasticsearch mysql-server-8.0 nginx-full php8.2 php8.2-bcmath php8.2-cli php8.2-curl php8.2-gd php8.2-intl php8.2-mbstring php8.2-mysql php8.2-redis php8.2-xml php8.2-zip redis php8.2-fpm
 
 1. Start Elasticsearch and configure to run at start up.
 
@@ -288,7 +288,7 @@ section for other options if lower memory support is needed.
            error_page 404 /index.php;
            
            location ~ \.php$ {
-              fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
+              fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
               fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
               include fastcgi_params;
            }
@@ -469,7 +469,7 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 
 1. Create a local `.env` file.
 
-       cp .env.local.example .env
+       cp .env.example .env
 
 1. Generate an app key.
 

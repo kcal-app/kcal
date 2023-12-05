@@ -1,95 +1,107 @@
-# For more information: https://laravel.com/docs/sail
-version: '3'
 services:
-  app:
-    build:
-      context: ./vendor/laravel/sail/runtimes/8.0
-      dockerfile: Dockerfile
-      args:
-        WWWGROUP: '${WWWGROUP}'
-    image: sail-8.0/app
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    ports:
-      - '${APP_PORT:-8080}:80'
-    environment:
-      WWWUSER: '${WWWUSER}'
-      LARAVEL_SAIL: 1
-      XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-      XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-    volumes:
-      - '.:/var/www/html'
-    networks:
-      - sail
-    depends_on:
-      - db
-      - redis
-      - elasticsearch
-  db:
-    image: 'mysql:8.0'
-    ports:
-      - '${FORWARD_DB_PORT:-3306}:3306'
-    environment:
-      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'
-      MYSQL_DATABASE: '${DB_DATABASE:-kcal}'
-      MYSQL_USER: '${DB_USERNAME:-kcal}'
-      MYSQL_PASSWORD: '${DB_PASSWORD:-kcal}'
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-    volumes:
-      - 'db-data:/var/lib/mysql'
-    networks:
-      - sail
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
-      retries: 3
-      timeout: 5s
-  phpmyadmin:
-    image: phpmyadmin
-    ports:
-      - 8081:80
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'
-    networks:
-      - sail
-    depends_on:
-      - db
-  elasticsearch:
-    image: 'elasticsearch:7.14.1'
-    environment:
-      - xpack.security.enabled=false
-      - discovery.type=single-node
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    cap_add:
-      - IPC_LOCK
-    volumes:
-      - 'elasticsearch-data:/usr/share/elasticsearch/data'
-    ports:
-      - '${ELASTIC_PORT:-9200}:9200'
-      - '${ELASTIC_BIN_PORT:-9300}:9300'
-    networks:
-      - sail
-  redis:
-    image: 'redis:alpine'
-    ports:
-      - '${REDIS_PORT:-6379}:6379'
-    volumes:
-      - 'redis-data:/data'
-    networks:
-      - sail
+    app:
+        build:
+            context: ./vendor/laravel/sail/runtimes/8.2
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.2/app
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-80}:80'
+            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            IGNITION_LOCAL_SITES_PATH: '${PWD}'
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sail
+        depends_on:
+            - db
+            - redis
+    db:
+        image: 'mysql/mysql-server:8.0'
+        ports:
+            - '${FORWARD_DB_PORT:-3306}:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_DATABASE: '${DB_DATABASE:-kcal}'
+            MYSQL_USER: '${DB_USERNAME:-kcal}'
+            MYSQL_PASSWORD: '${DB_PASSWORD:-kcal}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        volumes:
+            - 'db-data:/var/lib/mysql'
+            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - mysqladmin
+                - ping
+                - '-p${DB_PASSWORD}'
+            retries: 3
+            timeout: 5s
+    redis:
+        image: 'redis:alpine'
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        volumes:
+            - 'redis-data:/data'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - redis-cli
+                - ping
+            retries: 3
+            timeout: 5s
+    elasticsearch:
+      image: 'elasticsearch:7.14.1'
+      environment:
+        - xpack.security.enabled=false
+        - discovery.type=single-node
+      ulimits:
+        memlock:
+          soft: -1
+          hard: -1
+        nofile:
+          soft: 65536
+          hard: 65536
+      cap_add:
+        - IPC_LOCK
+      volumes:
+        - 'elasticsearch-data:/usr/share/elasticsearch/data'
+      ports:
+        - '${ELASTIC_PORT:-9200}:9200'
+        - '${ELASTIC_BIN_PORT:-9300}:9300'
+      networks:
+        - sail
+    phpmyadmin:
+      image: phpmyadmin
+      ports:
+        - 8081:80
+      environment:
+        PMA_HOST: mysql
+        MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'
+      networks:
+        - sail
+      depends_on:
+        - db
 networks:
-  sail:
-    driver: bridge
+    sail:
+        driver: bridge
 volumes:
-  elasticsearch-data:
-    driver: local
-  db-data:
-    driver: local
-  redis-data:
-    driver: local
+    db-data:
+        driver: local
+    redis-data:
+        driver: local
+    elasticsearch-data:
+      driver: local
