@@ -52,9 +52,9 @@ trait Ingredient
     public static function getTagTotals(string $locale = null): DatabaseCollection {
         $locale = $locale ?? app()->getLocale();
         return Tag::query()->join('taggables', 'taggables.tag_id', '=', 'id')
-            ->select(['id', 'name', DB::raw('count(*) as total')])
+            ->select(['name', DB::raw('count(*) as total')])
             ->where('taggables.taggable_type', '=', static::class)
-            ->groupBy('id')
+            ->groupBy('name')
             ->orderBy("name->{$locale}")
             ->get();
     }
