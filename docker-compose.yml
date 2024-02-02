@@ -25,7 +25,7 @@ services:
             - db
             - redis
     db:
-        image: 'mysql/mysql-server:8.0'
+        image: 'mariadb:10'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
         environment:
@@ -34,7 +34,7 @@ services:
             MYSQL_DATABASE: '${DB_DATABASE:-kcal}'
             MYSQL_USER: '${DB_USERNAME:-kcal}'
             MYSQL_PASSWORD: '${DB_PASSWORD:-kcal}'
-            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         volumes:
             - 'db-data:/var/lib/mysql'
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
@@ -64,37 +64,32 @@ services:
             retries: 3
             timeout: 5s
     elasticsearch:
-      image: 'elasticsearch:7.14.1'
-      environment:
-        - xpack.security.enabled=false
-        - discovery.type=single-node
-      ulimits:
-        memlock:
-          soft: -1
-          hard: -1
-        nofile:
-          soft: 65536
-          hard: 65536
-      cap_add:
-        - IPC_LOCK
-      volumes:
-        - 'elasticsearch-data:/usr/share/elasticsearch/data'
-      ports:
-        - '${ELASTIC_PORT:-9200}:9200'
-        - '${ELASTIC_BIN_PORT:-9300}:9300'
-      networks:
-        - sail
+        image: 'elasticsearch:7.17.17'
+        environment:
+            - xpack.security.enabled=false
+            - discovery.type=single-node
+        deploy:
+          resources:
+            limits:
+              memory: 1G
+        volumes:
+            - 'elasticsearch-data:/usr/share/elasticsearch/data'
+        ports:
+            - '${ELASTIC_PORT:-9200}:9200'
+            - '${ELASTIC_BIN_PORT:-9300}:9300'
+        networks:
+            - sail
     phpmyadmin:
-      image: phpmyadmin
-      ports:
-        - 8081:80
-      environment:
-        PMA_HOST: mysql
-        MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'
-      networks:
-        - sail
-      depends_on:
-        - db
+        image: phpmyadmin
+        ports:
+            - '8081:80'
+        environment:
+            PMA_HOST: db
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'
+        networks:
+            - sail
+        depends_on:
+            - db
 networks:
     sail:
         driver: bridge
@@ -104,4 +99,3 @@ volumes:
     redis-data:
         driver: local
     elasticsearch-data:
-      driver: local
