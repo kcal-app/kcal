@@ -2,7 +2,7 @@
 
 namespace App\JsonApi\Schemas;
 
-use Neomerx\JsonApi\Schema\SchemaProvider;
+use CloudCreativity\LaravelJsonApi\Schema\SchemaProvider;
 
 class UserSchema extends SchemaProvider
 {
@@ -10,7 +10,7 @@ class UserSchema extends SchemaProvider
     /**
      * {@inheritdoc}
      */
-    protected $resourceType = 'users';
+    protected string $resourceType = 'users';
 
     /**
      * {@inheritdoc}

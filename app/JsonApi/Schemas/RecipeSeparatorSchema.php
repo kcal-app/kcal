@@ -2,7 +2,7 @@
 
 namespace App\JsonApi\Schemas;
 
-use Neomerx\JsonApi\Schema\SchemaProvider;
+use CloudCreativity\LaravelJsonApi\Schema\SchemaProvider;
 
 class RecipeSeparatorSchema extends SchemaProvider
 {
@@ -10,7 +10,7 @@ class RecipeSeparatorSchema extends SchemaProvider
     /**
      * {@inheritdoc}
      */
-    protected $resourceType = 'recipe-separators';
+    protected string $resourceType = 'recipe-separators';
 
     /**
      * {@inheritdoc}

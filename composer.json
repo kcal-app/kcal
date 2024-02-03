@@ -10,17 +10,16 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "algolia/algoliasearch-client-php": "^3.2",
-        "algolia/scout-extended": "^2.0",
-        "babenkoivan/elastic-migrations": "^2.0",
-        "babenkoivan/elastic-scout-driver": "^2.0",
-        "babenkoivan/elastic-scout-driver-plus": "^3.3",
-        "cloudcreativity/laravel-json-api": "^4.0",
-        "cviebrock/eloquent-sluggable": "^9.0",
+        "algolia/scout-extended": "^3.0",
+        "babenkoivan/elastic-migrations": "^3.0",
+        "babenkoivan/elastic-scout-driver": "^3.0",
+        "babenkoivan/elastic-scout-driver-plus": "^4.0",
+        "cloudcreativity/laravel-json-api": "^6.0",
+        "cviebrock/eloquent-sluggable": "^10.0",
         "doctrine/dbal": "^3.0",
-        "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^9.0",
-        "laravel/scout": "^9.0",
+        "laravel/framework": "^10.0",
+        "laravel/scout": "^10.0",
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.0",
         "phospr/fraction": "^1.2",
@@ -31,7 +30,7 @@
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9",
         "brianium/paratest": "^6.2",
-        "cloudcreativity/json-api-testing": "^4.0",
+        "cloudcreativity/json-api-testing": "^5.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.0",
         "laravel/sail": "^1.10",
@@ -40,12 +39,15 @@
         "nunomaduro/larastan": "^2.0",
         "php-coveralls/php-coveralls": "^2.4",
         "phpunit/phpunit": "^9.3.3",
-        "spatie/laravel-ignition": "^1.0"
+        "spatie/laravel-ignition": "^2.0"
     },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "laravel": {

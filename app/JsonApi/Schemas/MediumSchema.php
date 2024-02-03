@@ -2,7 +2,7 @@
 
 namespace App\JsonApi\Schemas;
 
-use Neomerx\JsonApi\Schema\SchemaProvider;
+use CloudCreativity\LaravelJsonApi\Schema\SchemaProvider;
 
 /**
  * Media schema.
@@ -18,7 +18,7 @@ class MediumSchema extends SchemaProvider
     /**
      * {@inheritdoc}
      */
-    protected $resourceType = 'media';
+    protected string $resourceType = 'media';
 
     /**
      * {@inheritdoc}

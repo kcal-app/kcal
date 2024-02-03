@@ -7,7 +7,7 @@ use App\Models\Traits\Journalable;
 use App\Models\Traits\Sluggable;
 use App\Models\Traits\Taggable;
 use App\Support\Number;
-use ElasticScoutDriverPlus\Searchable;
+use Elastic\ScoutDriverPlus\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

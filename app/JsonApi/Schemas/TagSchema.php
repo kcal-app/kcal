@@ -2,7 +2,7 @@
 
 namespace App\JsonApi\Schemas;
 
-use Neomerx\JsonApi\Schema\SchemaProvider;
+use CloudCreativity\LaravelJsonApi\Schema\SchemaProvider;
 
 class TagSchema extends SchemaProvider
 {
@@ -10,7 +10,7 @@ class TagSchema extends SchemaProvider
     /**
      * {@inheritdoc}
      */
-    protected $resourceType = 'tags';
+    protected string $resourceType = 'tags';
 
     /**
      * {@inheritdoc}

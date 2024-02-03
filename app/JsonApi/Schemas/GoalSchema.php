@@ -2,7 +2,7 @@
 
 namespace App\JsonApi\Schemas;
 
-use Neomerx\JsonApi\Schema\SchemaProvider;
+use CloudCreativity\LaravelJsonApi\Schema\SchemaProvider;
 
 class GoalSchema extends SchemaProvider
 {
@@ -10,7 +10,7 @@ class GoalSchema extends SchemaProvider
     /**
      * {@inheritdoc}
      */
-    protected $resourceType = 'goals';
+    protected string $resourceType = 'goals';
 
     /**
      * {@inheritdoc}

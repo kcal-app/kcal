@@ -2,7 +2,7 @@
 
 namespace App\JsonApi\Schemas;
 
-use Neomerx\JsonApi\Schema\SchemaProvider;
+use CloudCreativity\LaravelJsonApi\Schema\SchemaProvider;
 
 class JournalEntrySchema extends SchemaProvider
 {
@@ -10,7 +10,7 @@ class JournalEntrySchema extends SchemaProvider
     /**
      * {@inheritdoc}
      */
-    protected $resourceType = 'journal-entries';
+    protected string $resourceType = 'journal-entries';
 
     /**
      * {@inheritdoc}

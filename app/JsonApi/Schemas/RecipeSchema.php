@@ -2,7 +2,7 @@
 
 namespace App\JsonApi\Schemas;
 
-use Neomerx\JsonApi\Schema\SchemaProvider;
+use CloudCreativity\LaravelJsonApi\Schema\SchemaProvider;
 
 class RecipeSchema extends SchemaProvider
 {
@@ -10,7 +10,7 @@ class RecipeSchema extends SchemaProvider
     /**
      * @var string
      */
-    protected $resourceType = 'recipes';
+    protected string $resourceType = 'recipes';
 
     /**
      * {@inheritdoc}
