@@ -22,12 +22,12 @@ class RecipeFactory extends Factory
      */
     public function definition(): array
     {
-        $description = htmlspecialchars($this->faker->realText(500));
+        $description = $this->faker->realText(500);
         $volumes = [1/4, 1/3, 1/2, 2/3, 3/4, 1, 1 + 1/2, 1 + 3/4, 2, 2 + 1/2, 3, 3 + 1/2, 4, 5];
         return [
             'name' => Words::randomWords(Arr::random(['npan', 'npn', 'anpn'])),
             'description' => "<p>{$description}</p>",
-            'description_delta' => '{"ops":[{"insert":"' . htmlentities($description) . '\n"}]}"',
+            'description_delta' => '{"ops":[{"insert":"' . $description . '\n"}]}',
             'time_prep' => $this->faker->numberBetween(0, 20),
             'time_cook' => $this->faker->numberBetween(0, 90),
             'source' => $this->faker->optional()->url,

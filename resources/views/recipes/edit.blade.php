@@ -187,11 +187,11 @@
             <script type="text/javascript">
 
                 // Enforce inline (style-base) alignment.
-                const AlignStyle = Quill.import('attributors/style/align');
-                Quill.register(AlignStyle, true);
+                const AlignStyle = Quill.default.import('attributors/style/align');
+                Quill.default.register(AlignStyle, true);
 
                 // Activate Quill editor.
-                const description = new Quill('.quill-editor', {
+                const description = new Quill.default('.quill-editor', {
                     modules: {
                         toolbar: [
                             [{ 'header': [1, 2, 3, 4, false] }],
@@ -209,7 +209,9 @@
                 });
                 try {
                     description.setContents(JSON.parse(document.querySelector('input[name="description_delta"]').value));
-                } catch (e) {}
+                } catch (e) {
+                    console.error(e)
+                }
 
                 // Activate ingredient sortable.
                 const ingredientsSortable = new Draggable.Sortable(document.querySelector('.ingredients'), {
