@@ -1,0 +1,28 @@
+// https://aka.ms/devcontainer.json
+{
+	"name": "kcal",
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "app",
+	"workspaceFolder": "/var/www/html",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"mikestead.dotenv",
+				"amiralizadeh9480.laravel-extra-intellisense",
+				"ryannaddy.laravel-artisan",
+				"onecentlin.laravel5-snippets",
+				"onecentlin.laravel-blade"
+			],
+			"settings": {}
+		}
+	},
+	"remoteUser": "sail",
+	"postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+	"forwardPorts": [
+		8081
+	]
+	// "runServices": [],
+	// "shutdownAction": "none",
+}

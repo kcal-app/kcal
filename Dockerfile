@@ -1,6 +1,6 @@
 ARG MEDIA_LIBRARY_DEPS="jpegoptim optipng pngquant gifsicle"
 
-FROM php:8.2-fpm-alpine
+FROM docker pull mcr.microsoft.com/devcontainers/php:8.2 AS base
 ARG MEDIA_LIBRARY_DEPS
 
 RUN apk add --no-cache --virtual \
