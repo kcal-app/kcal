@@ -181,38 +181,6 @@ at [kcalapp/kcal](https://hub.docker.com/repository/docker/kcalapp/kcal) on Dock
 See the [kcal-app/kcal-docker](https://github.com/kcal-app/kcal-docker) repository
 for a Docker Compose based template and instructions.
 
-### Heroku
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-The default username and password for a Heroku deployment is `kcal`/`kcal`.
-
-#### Using Heroku CLI
-
-For a manual deploy using Heroku CLI, execute the following after initial deployment:
-
-    heroku run php artisan migrate
-    heroku run php artisan user:add
-    heroku config:set APP_KEY=$(php artisan --no-ansi key:generate --show)
-
-#### Media storage
-
-Heroku uses an ephemeral disk. In order to maintain recipe and/or user images between
-app restarts AWS can be used. See [Media Storage - AWS S3](#aws-s3) for additional
-guidance.
-
-#### Search drivers
-
-See the [Search](#search-mag) section for information about supported drivers. Additional
-environment variable configuration is necessary when using any search driver other
-than the default ("null").
-
-#### Redis Add-on
-
-The [Heroku Redis](https://elements.heroku.com/addons/heroku-redis) add-on can be
-added to the app and will work without any configuration changes. It is left out
-of the default build only because it takes a very long time to provision.
-
 ### Manual
 
 This deployment process has been tested with an Ubuntu 20.04 LTS instance with
