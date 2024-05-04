@@ -19,10 +19,7 @@
 		}
 	},
 	"remoteUser": "sail",
-	"postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
-	"forwardPorts": [
-		8081
-	]
+	"postCreateCommand": "bash .devcontainer/postCreateCommand.sh"
 	// "runServices": [],
 	// "shutdownAction": "none",
 }

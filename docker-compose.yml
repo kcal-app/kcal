@@ -82,7 +82,8 @@ services:
         ports:
             - '8081:80'
         environment:
-            PMA_HOST: db
+            PBA_HOST: db
+            PMA_PORT: '${FORWARD_DB_PORT:-3306}:3306'
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-kcal}'
         networks:
             - sail
