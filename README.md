@@ -448,6 +448,10 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 
 ## Development
 
+### Dev Container
+
+Clone the project in an IDE with Dev Container support and build the container.
+
 ### Laravel Sail
 
 #### Prerequisites

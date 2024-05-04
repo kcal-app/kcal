@@ -4,4 +4,7 @@ echo alias sail=\'sh $([ -f sail ] && echo sail || echo vendor/bin/sail)\' >> ~/
 chown -R 1000:1000 /var/www/html
 composer install
 cp .env.example .env
+php artisan migrate
+php artisan elastic:migrate
 php artisan key:generate --force -n
+php artisan db:seed
