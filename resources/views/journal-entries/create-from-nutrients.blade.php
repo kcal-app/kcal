@@ -3,9 +3,9 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h1 class="font-semibold text-xl text-gray-800 leading-tight">Add Entry</h1>
-            <x-button-link.green href="{{ route('journal-entries.create', ['date' => $default_date->format('Y-m-d')]) }}" class="text-sm">
+            <x-button-link.gray href="{{ route('journal-entries.create', ['date' => $default_date->format('Y-m-d')]) }}" class="text-sm">
                 Add by Recipes/Foods
-            </x-button-link.green>
+            </x-button-link.gray>
         </div>
     </x-slot>
     <form method="POST" action="{{ route('journal-entries.store.from-nutrients') }}">

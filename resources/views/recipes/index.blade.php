@@ -3,9 +3,9 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h1 class="font-semibold text-2xl text-gray-800 leading-tight">Recipes</h1>
-            <x-button-link.green href="{{ route('recipes.create') }}" class="text-sm">
+            <x-button-link.gray href="{{ route('recipes.create') }}" class="text-sm">
                 Add Recipe
-            </x-button-link.green>
+            </x-button-link.gray>
         </div>
     </x-slot>
     <x-search-view :route="route('api:v1:recipes.index')" :tags="$tags">
