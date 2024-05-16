@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Search\Ingredient;
 use CloudCreativity\LaravelJsonApi\LaravelJsonApi;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (strpos(env('APP_URL', ''), 'https') !== false) {
+            URL::forceScheme('https');
+        }
         LaravelJsonApi::defaultApi('v1');
 
         if (config('scout.driver') === 'algolia') {
