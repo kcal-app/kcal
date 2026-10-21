@@ -419,6 +419,21 @@ Set `SCOUT_DRIVER=null` in kcal's `.env` file to use the fallback driver.
 ### Dev Container
 
 Clone the project in an IDE with Dev Container support and build the container.
+Only Docker and the IDE's Dev Container support are required on the host; PHP,
+Composer, and Node.js run inside the container. In VS Code, run **Dev Containers:
+Rebuild and Reopen in Container**.
+
+The initial setup installs Composer and npm dependencies, generates a missing app
+key, runs database and Elasticsearch migrations, seeds the demo account when no
+users exist, and builds frontend assets. Existing `.env` settings and app keys
+are preserved on rebuilds. Database initialization waits for the services to be
+healthy.
+
+Open [http://127.0.0.1:8080](http://127.0.0.1:8080) and log in with `kcal` / `kcal`
+on a fresh database. Set `APP_PORT` before starting Compose to use a different
+host port. To rerun setup inside the container:
+
+       bash .devcontainer/postCreateCommand.sh
 
 ### Laravel Sail
 

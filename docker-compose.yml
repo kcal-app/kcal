@@ -1,15 +1,16 @@
 services:
     app:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.2
+            context: ./.devcontainer
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP:-1000}'
-        image: sail-8.2/app
+                WWWUSER: '${WWWUSER:-1000}'
+        image: kcal-dev/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${APP_PORT:-80}:80'
+            - '${APP_PORT:-8080}:8000'
             - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
         environment:
             WWWUSER: '${WWWUSER:-1000}'
@@ -22,10 +23,17 @@ services:
         networks:
             - sail
         depends_on:
-            - db
-            - redis
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            elasticsearch:
+                condition: service_healthy
     db:
-        image: 'mariadb:10'
+        build:
+            context: ./.devcontainer
+            dockerfile: mariadb.Dockerfile
+        image: kcal-dev/db
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
         environment:
@@ -35,16 +43,16 @@ services:
             MARIADB_USER: '${DB_USERNAME:-kcal}'
         volumes:
             - 'db-data:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
         healthcheck:
             test:
                 - CMD
-                - mysqladmin
-                - ping
-                - '-p${DB_PASSWORD}'
-            retries: 3
+                - healthcheck.sh
+                - --connect
+                - --innodb_initialized
+            retries: 30
+            interval: 5s
             timeout: 5s
     redis:
         image: 'redis:alpine'
@@ -77,6 +85,11 @@ services:
             - '${ELASTIC_BIN_PORT:-9300}:9300'
         networks:
             - sail
+        healthcheck:
+            test: ['CMD', 'curl', '-fsS', 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s']
+            interval: 10s
+            timeout: 10s
+            retries: 30
     phpmyadmin:
         image: phpmyadmin
         ports:

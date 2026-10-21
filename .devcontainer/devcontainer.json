@@ -20,6 +20,4 @@
 	},
 	"remoteUser": "sail",
 	"postCreateCommand": "bash .devcontainer/postCreateCommand.sh"
-	// "runServices": [],
-	// "shutdownAction": "none",
 }
