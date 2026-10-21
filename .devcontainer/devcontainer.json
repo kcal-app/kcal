@@ -2,7 +2,8 @@
 {
 	"name": "kcal",
 	"dockerComposeFile": [
-		"../docker-compose.yml"
+		"../docker-compose.yml",
+		"docker-compose.yml"
 	],
 	"service": "app",
 	"workspaceFolder": "/var/www/html",

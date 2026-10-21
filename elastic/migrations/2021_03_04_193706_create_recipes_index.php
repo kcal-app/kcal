@@ -13,7 +13,7 @@ final class CreateRecipesIndex implements MigrationInterface
      */
     public function up(): void
     {
-        Index::create('recipes', function (Mapping $mapping, Settings $settings) {
+        Index::createIfNotExists('recipes', function (Mapping $mapping, Settings $settings) {
             $mapping->searchAsYouType('name', ['boost' => 2])
                 ->keyword('tags', ['normalizer' => 'lowercase'])
                 ->text('description')

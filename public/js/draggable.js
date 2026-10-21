@@ -1,1 +1,4912 @@
-(()=>{var t={5458:(t,e,r)=>{"use strict";r.r(e),r.d(e,{BaseEvent:()=>i,BasePlugin:()=>o,Draggable:()=>Ue,Droppable:()=>hr,Plugins:()=>s,Sensors:()=>n,Sortable:()=>Tr,Swappable:()=>Er});var n={};r.r(n),r.d(n,{DragMoveSensorEvent:()=>g,DragPressureSensorEvent:()=>p,DragSensor:()=>B,DragStartSensorEvent:()=>u,DragStopSensorEvent:()=>m,ForceTouchSensor:()=>V,MouseSensor:()=>S,Sensor:()=>l,SensorEvent:()=>d,TouchSensor:()=>M});var s={};r.r(s),r.d(s,{Collidable:()=>et,ResizeMirror:()=>Ft,Snappable:()=>$t,SortAnimation:()=>Vt,SwapAnimation:()=>jt,defaultResizeMirrorOptions:()=>Ot,defaultSortAnimationOptions:()=>Wt,defaultSwapAnimationOptions:()=>qt});class i{constructor(t){this._canceled=!1,this.data=t}get type(){return this.constructor.type}get cancelable(){return this.constructor.cancelable}cancel(){this._canceled=!0}canceled(){return this._canceled}clone(t){return new this.constructor({...this.data,...t})}}i.type="event",i.cancelable=!1;class o{constructor(t){this.draggable=t}attach(){throw new Error("Not Implemented")}detach(){throw new Error("Not Implemented")}}const a={mouse:0,drag:0,touch:100};class l{constructor(t=[],e={}){this.containers=[...t],this.options={...e},this.dragging=!1,this.currentContainer=null,this.originalSource=null,this.startEvent=null,this.delay=function(t){const e={};if(void 0===t)return{...a};if("number"==typeof t){for(const r in a)Object.prototype.hasOwnProperty.call(a,r)&&(e[r]=t);return e}for(const r in a)Object.prototype.hasOwnProperty.call(a,r)&&(void 0===t[r]?e[r]=a[r]:e[r]=t[r]);return e}(e.delay)}attach(){return this}detach(){return this}addContainer(...t){this.containers=[...this.containers,...t]}removeContainer(...t){this.containers=this.containers.filter((e=>!t.includes(e)))}trigger(t,e){const r=document.createEvent("Event");return r.detail=e,r.initEvent(e.type,!0,!0),t.dispatchEvent(r),this.lastEvent=e,e}}function c(t,e){if(null==t)return null;function r(t){return null!=t&&null!=e&&(function(t){return Boolean("string"==typeof t)}(e)?Element.prototype.matches.call(t,e):function(t){return Boolean(t instanceof NodeList||t instanceof Array)}(e)?[...e].includes(t):function(t){return Boolean(t instanceof Node)}(e)?e===t:!!function(t){return Boolean("function"==typeof t)}(e)&&e(t))}let n=t;do{if(n=n.correspondingUseElement||n.correspondingElement||n,r(n))return n;n=n?.parentNode||null}while(null!=n&&n!==document.body&&n!==document);return null}function h(t,e,r,n){return Math.sqrt((r-t)**2+(n-e)**2)}class d extends i{get originalEvent(){return this.data.originalEvent}get clientX(){return this.data.clientX}get clientY(){return this.data.clientY}get target(){return this.data.target}get container(){return this.data.container}get originalSource(){return this.data.originalSource}get pressure(){return this.data.pressure}}class u extends d{}u.type="drag:start";class g extends d{}g.type="drag:move";class m extends d{}m.type="drag:stop";class p extends d{}p.type="drag:pressure";const v=Symbol("onContextMenuWhileDragging"),f=Symbol("onMouseDown"),b=Symbol("onMouseMove"),y=Symbol("onMouseUp"),E=Symbol("startDrag"),C=Symbol("onDistanceChange");class S extends l{constructor(t=[],e={}){super(t,e),this.mouseDownTimeout=null,this.pageX=null,this.pageY=null,this[v]=this[v].bind(this),this[f]=this[f].bind(this),this[b]=this[b].bind(this),this[y]=this[y].bind(this),this[E]=this[E].bind(this),this[C]=this[C].bind(this)}attach(){document.addEventListener("mousedown",this[f],!0)}detach(){document.removeEventListener("mousedown",this[f],!0)}[f](t){if(0!==t.button||t.ctrlKey||t.metaKey)return;const e=c(t.target,this.containers);if(!e)return;if(this.options.handle&&t.target&&!c(t.target,this.options.handle))return;const r=c(t.target,this.options.draggable);if(!r)return;const{delay:n}=this,{pageX:s,pageY:i}=t;Object.assign(this,{pageX:s,pageY:i}),this.onMouseDownAt=Date.now(),this.startEvent=t,this.currentContainer=e,this.originalSource=r,document.addEventListener("mouseup",this[y]),document.addEventListener("dragstart",w),document.addEventListener("mousemove",this[C]),this.mouseDownTimeout=window.setTimeout((()=>{this[C]({pageX:this.pageX,pageY:this.pageY})}),n.mouse)}[E](){const t=this.startEvent,e=this.currentContainer,r=this.originalSource,n=new u({clientX:t.clientX,clientY:t.clientY,target:t.target,container:e,originalSource:r,originalEvent:t});this.trigger(this.currentContainer,n),this.dragging=!n.canceled(),this.dragging&&(document.addEventListener("contextmenu",this[v],!0),document.addEventListener("mousemove",this[b]))}[C](t){const{pageX:e,pageY:r}=t,{distance:n}=this.options,{startEvent:s,delay:i}=this;if(Object.assign(this,{pageX:e,pageY:r}),!this.currentContainer)return;const o=Date.now()-this.onMouseDownAt,a=h(s.pageX,s.pageY,e,r)||0;clearTimeout(this.mouseDownTimeout),o<i.mouse?document.removeEventListener("mousemove",this[C]):a>=n&&(document.removeEventListener("mousemove",this[C]),this[E]())}[b](t){if(!this.dragging)return;const e=document.elementFromPoint(t.clientX,t.clientY),r=new g({clientX:t.clientX,clientY:t.clientY,target:e,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,r)}[y](t){if(clearTimeout(this.mouseDownTimeout),0!==t.button)return;if(document.removeEventListener("mouseup",this[y]),document.removeEventListener("dragstart",w),document.removeEventListener("mousemove",this[C]),!this.dragging)return;const e=document.elementFromPoint(t.clientX,t.clientY),r=new m({clientX:t.clientX,clientY:t.clientY,target:e,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,r),document.removeEventListener("contextmenu",this[v],!0),document.removeEventListener("mousemove",this[b]),this.currentContainer=null,this.dragging=!1,this.startEvent=null}[v](t){t.preventDefault()}}function w(t){t.preventDefault()}function x(t){const{touches:e,changedTouches:r}=t;return e&&e[0]||r&&r[0]}const D=Symbol("onTouchStart"),L=Symbol("onTouchEnd"),O=Symbol("onTouchMove"),F=Symbol("startDrag"),X=Symbol("onDistanceChange");let Y=!1;window.addEventListener("touchmove",(t=>{Y&&t.preventDefault()}),{passive:!1});class M extends l{constructor(t=[],e={}){super(t,e),this.currentScrollableParent=null,this.tapTimeout=null,this.touchMoved=!1,this.pageX=null,this.pageY=null,this[D]=this[D].bind(this),this[L]=this[L].bind(this),this[O]=this[O].bind(this),this[F]=this[F].bind(this),this[X]=this[X].bind(this)}attach(){document.addEventListener("touchstart",this[D])}detach(){document.removeEventListener("touchstart",this[D])}[D](t){const e=c(t.target,this.containers);if(!e)return;if(this.options.handle&&t.target&&!c(t.target,this.options.handle))return;const r=c(t.target,this.options.draggable);if(!r)return;const{distance:n=0}=this.options,{delay:s}=this,{pageX:i,pageY:o}=x(t);Object.assign(this,{pageX:i,pageY:o}),this.onTouchStartAt=Date.now(),this.startEvent=t,this.currentContainer=e,this.originalSource=r,document.addEventListener("touchend",this[L]),document.addEventListener("touchcancel",this[L]),document.addEventListener("touchmove",this[X]),e.addEventListener("contextmenu",T),n&&(Y=!0),this.tapTimeout=window.setTimeout((()=>{this[X]({touches:[{pageX:this.pageX,pageY:this.pageY}]})}),s.touch)}[F](){const t=this.startEvent,e=this.currentContainer,r=x(t),n=this.originalSource,s=new u({clientX:r.pageX,clientY:r.pageY,target:t.target,container:e,originalSource:n,originalEvent:t});this.trigger(this.currentContainer,s),this.dragging=!s.canceled(),this.dragging&&document.addEventListener("touchmove",this[O]),Y=this.dragging}[X](t){const{distance:e}=this.options,{startEvent:r,delay:n}=this,s=x(r),i=x(t),o=Date.now()-this.onTouchStartAt,a=h(s.pageX,s.pageY,i.pageX,i.pageY);Object.assign(this,i),clearTimeout(this.tapTimeout),o<n.touch?document.removeEventListener("touchmove",this[X]):a>=e&&(document.removeEventListener("touchmove",this[X]),this[F]())}[O](t){if(!this.dragging)return;const{pageX:e,pageY:r}=x(t),n=document.elementFromPoint(e-window.scrollX,r-window.scrollY),s=new g({clientX:e,clientY:r,target:n,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,s)}[L](t){if(clearTimeout(this.tapTimeout),Y=!1,document.removeEventListener("touchend",this[L]),document.removeEventListener("touchcancel",this[L]),document.removeEventListener("touchmove",this[X]),this.currentContainer&&this.currentContainer.removeEventListener("contextmenu",T),!this.dragging)return;document.removeEventListener("touchmove",this[O]);const{pageX:e,pageY:r}=x(t),n=document.elementFromPoint(e-window.scrollX,r-window.scrollY);t.preventDefault();const s=new m({clientX:e,clientY:r,target:n,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,s),this.currentContainer=null,this.dragging=!1,this.startEvent=null}}function T(t){t.preventDefault(),t.stopPropagation()}const A=Symbol("onMouseDown"),N=Symbol("onMouseUp"),z=Symbol("onDragStart"),P=Symbol("onDragOver"),I=Symbol("onDragEnd"),$=Symbol("onDrop"),k=Symbol("reset");class B extends l{constructor(t=[],e={}){super(t,e),this.mouseDownTimeout=null,this.draggableElement=null,this.nativeDraggableElement=null,this[A]=this[A].bind(this),this[N]=this[N].bind(this),this[z]=this[z].bind(this),this[P]=this[P].bind(this),this[I]=this[I].bind(this),this[$]=this[$].bind(this)}attach(){document.addEventListener("mousedown",this[A],!0)}detach(){document.removeEventListener("mousedown",this[A],!0)}[z](t){t.dataTransfer.setData("text",""),t.dataTransfer.effectAllowed=this.options.type;const e=document.elementFromPoint(t.clientX,t.clientY),r=this.draggableElement;if(!r)return;const n=new u({clientX:t.clientX,clientY:t.clientY,target:e,originalSource:r,container:this.currentContainer,originalEvent:t});setTimeout((()=>{this.trigger(this.currentContainer,n),n.canceled()?this.dragging=!1:this.dragging=!0}),0)}[P](t){if(!this.dragging)return;const e=document.elementFromPoint(t.clientX,t.clientY),r=this.currentContainer,n=new g({clientX:t.clientX,clientY:t.clientY,target:e,container:r,originalEvent:t});this.trigger(r,n),n.canceled()||(t.preventDefault(),t.dataTransfer.dropEffect=this.options.type)}[I](t){if(!this.dragging)return;document.removeEventListener("mouseup",this[N],!0);const e=document.elementFromPoint(t.clientX,t.clientY),r=this.currentContainer,n=new m({clientX:t.clientX,clientY:t.clientY,target:e,container:r,originalEvent:t});this.trigger(r,n),this.dragging=!1,this.startEvent=null,this[k]()}[$](t){t.preventDefault()}[A](t){if(t.target&&(t.target.form||t.target.contenteditable))return;const e=t.target;if(this.currentContainer=c(e,this.containers),!this.currentContainer)return;if(this.options.handle&&e&&!c(e,this.options.handle))return;const r=c(e,this.options.draggable);if(!r)return;const n=c(t.target,(t=>t.draggable));n&&(n.draggable=!1,this.nativeDraggableElement=n),document.addEventListener("mouseup",this[N],!0),document.addEventListener("dragstart",this[z],!1),document.addEventListener("dragover",this[P],!1),document.addEventListener("dragend",this[I],!1),document.addEventListener("drop",this[$],!1),this.startEvent=t,this.mouseDownTimeout=setTimeout((()=>{r.draggable=!0,this.draggableElement=r}),this.delay.drag)}[N](){this[k]()}[k](){clearTimeout(this.mouseDownTimeout),document.removeEventListener("mouseup",this[N],!0),document.removeEventListener("dragstart",this[z],!1),document.removeEventListener("dragover",this[P],!1),document.removeEventListener("dragend",this[I],!1),document.removeEventListener("drop",this[$],!1),this.nativeDraggableElement&&(this.nativeDraggableElement.draggable=!0,this.nativeDraggableElement=null),this.draggableElement&&(this.draggableElement.draggable=!1,this.draggableElement=null)}}const q=Symbol("onMouseForceWillBegin"),j=Symbol("onMouseForceDown"),H=Symbol("onMouseDown"),R=Symbol("onMouseForceChange"),_=Symbol("onMouseMove"),U=Symbol("onMouseUp"),W=Symbol("onMouseForceGlobalChange");class V extends l{constructor(t=[],e={}){super(t,e),this.mightDrag=!1,this[q]=this[q].bind(this),this[j]=this[j].bind(this),this[H]=this[H].bind(this),this[R]=this[R].bind(this),this[_]=this[_].bind(this),this[U]=this[U].bind(this)}attach(){for(const t of this.containers)t.addEventListener("webkitmouseforcewillbegin",this[q],!1),t.addEventListener("webkitmouseforcedown",this[j],!1),t.addEventListener("mousedown",this[H],!0),t.addEventListener("webkitmouseforcechanged",this[R],!1);document.addEventListener("mousemove",this[_]),document.addEventListener("mouseup",this[U])}detach(){for(const t of this.containers)t.removeEventListener("webkitmouseforcewillbegin",this[q],!1),t.removeEventListener("webkitmouseforcedown",this[j],!1),t.removeEventListener("mousedown",this[H],!0),t.removeEventListener("webkitmouseforcechanged",this[R],!1);document.removeEventListener("mousemove",this[_]),document.removeEventListener("mouseup",this[U])}[q](t){t.preventDefault(),this.mightDrag=!0}[j](t){if(this.dragging)return;const e=document.elementFromPoint(t.clientX,t.clientY),r=t.currentTarget;if(this.options.handle&&e&&!c(e,this.options.handle))return;const n=c(e,this.options.draggable);if(!n)return;const s=new u({clientX:t.clientX,clientY:t.clientY,target:e,container:r,originalSource:n,originalEvent:t});this.trigger(r,s),this.currentContainer=r,this.dragging=!s.canceled(),this.mightDrag=!1}[U](t){if(!this.dragging)return;const e=new m({clientX:t.clientX,clientY:t.clientY,target:null,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,e),this.currentContainer=null,this.dragging=!1,this.mightDrag=!1}[H](t){this.mightDrag&&(t.stopPropagation(),t.stopImmediatePropagation(),t.preventDefault())}[_](t){if(!this.dragging)return;const e=document.elementFromPoint(t.clientX,t.clientY),r=new g({clientX:t.clientX,clientY:t.clientY,target:e,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,r)}[R](t){if(this.dragging)return;const e=t.target,r=t.currentTarget,n=new p({pressure:t.webkitForce,clientX:t.clientX,clientY:t.clientY,target:e,container:r,originalEvent:t});this.trigger(r,n)}[W](t){if(!this.dragging)return;const e=t.target,r=new p({pressure:t.webkitForce,clientX:t.clientX,clientY:t.clientY,target:e,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,r)}}class G extends i{constructor(t){super(t),this.data=t}get dragEvent(){return this.data.dragEvent}}G.type="collidable";class K extends G{get collidingElement(){return this.data.collidingElement}}K.type="collidable:in";class Z extends G{get collidingElement(){return this.data.collidingElement}}Z.type="collidable:out";const J=Symbol("onDragMove"),Q=Symbol("onDragStop"),tt=Symbol("onRequestAnimationFrame");class et extends o{constructor(t){super(t),this.currentlyCollidingElement=null,this.lastCollidingElement=null,this.currentAnimationFrame=null,this[J]=this[J].bind(this),this[Q]=this[Q].bind(this),this[tt]=this[tt].bind(this)}attach(){this.draggable.on("drag:move",this[J]).on("drag:stop",this[Q])}detach(){this.draggable.off("drag:move",this[J]).off("drag:stop",this[Q])}getCollidables(){const t=this.draggable.options.collidables;return"string"==typeof t?Array.prototype.slice.call(document.querySelectorAll(t)):t instanceof NodeList||t instanceof Array?Array.prototype.slice.call(t):t instanceof HTMLElement?[t]:"function"==typeof t?t():[]}[J](t){const e=t.sensorEvent.target;this.currentAnimationFrame=requestAnimationFrame(this[tt](e)),this.currentlyCollidingElement&&t.cancel();const r=new K({dragEvent:t,collidingElement:this.currentlyCollidingElement}),n=new Z({dragEvent:t,collidingElement:this.lastCollidingElement}),s=Boolean(this.currentlyCollidingElement&&this.lastCollidingElement!==this.currentlyCollidingElement),i=Boolean(!this.currentlyCollidingElement&&this.lastCollidingElement);s?(this.lastCollidingElement&&this.draggable.trigger(n),this.draggable.trigger(r)):i&&this.draggable.trigger(n),this.lastCollidingElement=this.currentlyCollidingElement}[Q](t){const e=this.currentlyCollidingElement||this.lastCollidingElement,r=new Z({dragEvent:t,collidingElement:e});e&&this.draggable.trigger(r),this.lastCollidingElement=null,this.currentlyCollidingElement=null}[tt](t){return()=>{const e=this.getCollidables();this.currentlyCollidingElement=c(t,(t=>e.includes(t)))}}}function rt(t,e){return function(r){(function(t,e){if(t.v)throw new Error("attempted to call "+e+" after decoration was finished")})(e,"addInitializer"),it(r,"An initializer"),t.push(r)}}function nt(t,e){if(!t(e))throw new TypeError("Attempted to access private element on non-instance")}function st(t,e,r,n,s,i,o,a,l,c,h){var d;switch(i){case 1:d="accessor";break;case 2:d="method";break;case 3:d="getter";break;case 4:d="setter";break;default:d="field"}var u,g,m={kind:d,name:a?"#"+r:r,static:o,private:a,metadata:h},p={v:!1};if(0!==i&&(m.addInitializer=rt(s,p)),a||0!==i&&2!==i)if(2===i)u=function(t){return nt(c,t),n.value};else{var v=0===i||1===i;(v||3===i)&&(u=a?function(t){return nt(c,t),n.get.call(t)}:function(t){return n.get.call(t)}),(v||4===i)&&(g=a?function(t,e){nt(c,t),n.set.call(t,e)}:function(t,e){n.set.call(t,e)})}else u=function(t){return t[r]},0===i&&(g=function(t,e){t[r]=e});var f=a?c.bind():function(t){return r in t};m.access=u&&g?{get:u,set:g,has:f}:u?{get:u,has:f}:{set:g,has:f};try{return t.call(e,l,m)}finally{p.v=!0}}function it(t,e){if("function"!=typeof t)throw new TypeError(e+" must be a function")}function ot(t,e){var r=typeof e;if(1===t){if("object"!==r||null===e)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==e.get&&it(e.get,"accessor.get"),void 0!==e.set&&it(e.set,"accessor.set"),void 0!==e.init&&it(e.init,"accessor.init")}else if("function"!==r){throw new TypeError((0===t?"field":5===t?"class":"method")+" decorators must return a function or void 0")}}function at(t){return function(){return t(this)}}function lt(t){return function(e){t(this,e)}}function ct(t,e,r,n,s,i,o,a,l,c,h){var d,u,g,m,p,v,f=r[0];n||Array.isArray(f)||(f=[f]),a?d=0===i||1===i?{get:at(r[3]),set:lt(r[4])}:3===i?{get:r[3]}:4===i?{set:r[3]}:{value:r[3]}:0!==i&&(d=Object.getOwnPropertyDescriptor(e,s)),1===i?g={get:d.get,set:d.set}:2===i?g=d.value:3===i?g=d.get:4===i&&(g=d.set);for(var b=n?2:1,y=f.length-1;y>=0;y-=b){var E;void 0!==(m=st(f[y],n?f[y-1]:void 0,s,d,l,i,o,a,g,c,h))&&(ot(i,m),0===i?E=m:1===i?(E=m.init,p=m.get||g.get,v=m.set||g.set,g={get:p,set:v}):g=m,void 0!==E&&(void 0===u?u=E:"function"==typeof u?u=[u,E]:u.push(E)))}if(0===i||1===i){if(void 0===u)u=function(t,e){return e};else if("function"!=typeof u){var C=u;u=function(t,e){for(var r=e,n=C.length-1;n>=0;n--)r=C[n].call(t,r);return r}}else{var S=u;u=function(t,e){return S.call(t,e)}}t.push(u)}0!==i&&(1===i?(d.get=g.get,d.set=g.set):2===i?d.value=g:3===i?d.get=g:4===i&&(d.set=g),a?1===i?(t.push((function(t,e){return g.get.call(t,e)})),t.push((function(t,e){return g.set.call(t,e)}))):2===i?t.push(g):t.push((function(t,e){return g.call(t,e)})):Object.defineProperty(e,s,d))}function ht(t,e){e&&t.push((function(t){for(var r=0;r<e.length;r++)e[r].call(t);return t}))}function dt(t,e){return Object.defineProperty(t,Symbol.metadata||Symbol.for("Symbol.metadata"),{configurable:!0,enumerable:!0,value:e})}function ut(t,e,r,n,s,i){if(arguments.length>=6)var o=i[Symbol.metadata||Symbol.for("Symbol.metadata")];var a=Object.create(void 0===o?null:o),l=function(t,e,r,n){for(var s,i,o,a=[],l=new Map,c=new Map,h=0;h<e.length;h++){var d=e[h];if(Array.isArray(d)){var u,g,m=d[1],p=d[2],v=d.length>3,f=16&m,b=!!(8&m),y=r;if(m&=7,b?(u=t,0!==m&&(g=i=i||[]),v&&!o&&(o=function(e){return gt(e)===t}),y=o):(u=t.prototype,0!==m&&(g=s=s||[])),0!==m&&!v){var E=b?c:l,C=E.get(p)||0;if(!0===C||3===C&&4!==m||4===C&&3!==m)throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+p);E.set(p,!(!C&&m>2)||m)}ct(a,u,d,f,p,m,b,v,g,y,n)}}return ht(a,s),ht(a,i),a}(t,e,s,a);return r.length||dt(t,a),{e:l,get c(){return function(t,e,r,n){if(e.length){for(var s=[],i=t,o=t.name,a=r?2:1,l=e.length-1;l>=0;l-=a){var c={v:!1};try{var h=e[l].call(r?e[l-1]:void 0,i,{kind:"class",name:o,addInitializer:rt(s,c),metadata:n})}finally{c.v=!0}void 0!==h&&(ot(5,h),i=h)}return[dt(i,n),function(){for(var t=0;t<s.length;t++)s[t].call(i)}]}}(t,r,n,a)}}}function gt(t){if(Object(t)!==t)throw TypeError("right-hand side of 'in' should be an object, got "+(null!==t?typeof t:"null"));return t}function mt(t,{name:e,addInitializer:r}){r((function(){this[e]=t.bind(this)}))}class pt extends i{constructor(t){super(t),this.data=t}get source(){return this.data.source}get originalSource(){return this.data.originalSource}get mirror(){return this.data.mirror}get sourceContainer(){return this.data.sourceContainer}get sensorEvent(){return this.data.sensorEvent}get originalEvent(){return this.sensorEvent?this.sensorEvent.originalEvent:null}}pt.type="drag";class vt extends pt{}vt.type="drag:start",vt.cancelable=!0;class ft extends pt{}ft.type="drag:move";class bt extends pt{get overContainer(){return this.data.overContainer}get over(){return this.data.over}}bt.type="drag:over",bt.cancelable=!0;class yt extends pt{get overContainer(){return this.data.overContainer}get over(){return this.data.over}}yt.type="drag:out";class Et extends pt{get overContainer(){return this.data.overContainer}}Et.type="drag:over:container";class Ct extends pt{get overContainer(){return this.data.overContainer}}Ct.type="drag:out:container";class St extends pt{get pressure(){return this.data.pressure}}St.type="drag:pressure";class wt extends pt{}wt.type="drag:stop",wt.cancelable=!0;class xt extends pt{}var Dt,Lt;xt.type="drag:stopped";const Ot={};class Ft extends o{constructor(t){Dt(super(t)),this.lastWidth=0,this.lastHeight=0,this.mirror=null}attach(){this.draggable.on("mirror:created",this.onMirrorCreated).on("drag:over",this.onDragOver).on("drag:over:container",this.onDragOver)}detach(){this.draggable.off("mirror:created",this.onMirrorCreated).off("mirror:destroy",this.onMirrorDestroy).off("drag:over",this.onDragOver).off("drag:over:container",this.onDragOver)}getOptions(){return this.draggable.options.resizeMirror||{}}onMirrorCreated({mirror:t}){this.mirror=t}onMirrorDestroy(){this.mirror=null}onDragOver(t){this.resize(t)}resize(t){requestAnimationFrame((()=>{let e=null;const{overContainer:r}=t;if(null==this.mirror||null==this.mirror.parentNode)return;this.mirror.parentNode!==r&&r.appendChild(this.mirror),t.type===bt.type&&(e=t.over);const n=e||this.draggable.getDraggableElementsForContainer(r)[0];var s;n&&(s=()=>{const t=n.getBoundingClientRect();null==this.mirror||this.lastHeight===t.height&&this.lastWidth===t.width||(this.mirror.style.width=`${t.width}px`,this.mirror.style.height=`${t.height}px`,this.lastWidth=t.width,this.lastHeight=t.height)},requestAnimationFrame((()=>{requestAnimationFrame(s)})))}))}}Lt=Ft,[Dt]=ut(Lt,[[mt,2,"onMirrorCreated"],[mt,2,"onMirrorDestroy"],[mt,2,"onDragOver"]],[],0,void 0,o).e;class Xt extends i{get dragEvent(){return this.data.dragEvent}get snappable(){return this.data.snappable}}Xt.type="snap";class Yt extends Xt{}Yt.type="snap:in",Yt.cancelable=!0;class Mt extends Xt{}Mt.type="snap:out",Mt.cancelable=!0;const Tt=Symbol("onDragStart"),At=Symbol("onDragStop"),Nt=Symbol("onDragOver"),zt=Symbol("onDragOut"),Pt=Symbol("onMirrorCreated"),It=Symbol("onMirrorDestroy");class $t extends o{constructor(t){super(t),this.firstSource=null,this.mirror=null,this[Tt]=this[Tt].bind(this),this[At]=this[At].bind(this),this[Nt]=this[Nt].bind(this),this[zt]=this[zt].bind(this),this[Pt]=this[Pt].bind(this),this[It]=this[It].bind(this)}attach(){this.draggable.on("drag:start",this[Tt]).on("drag:stop",this[At]).on("drag:over",this[Nt]).on("drag:out",this[zt]).on("droppable:over",this[Nt]).on("droppable:out",this[zt]).on("mirror:created",this[Pt]).on("mirror:destroy",this[It])}detach(){this.draggable.off("drag:start",this[Tt]).off("drag:stop",this[At]).off("drag:over",this[Nt]).off("drag:out",this[zt]).off("droppable:over",this[Nt]).off("droppable:out",this[zt]).off("mirror:created",this[Pt]).off("mirror:destroy",this[It])}[Tt](t){t.canceled()||(this.firstSource=t.source)}[At](){this.firstSource=null}[Nt](t){if(t.canceled())return;const e=t.source||t.dragEvent.source;if(e===this.firstSource)return void(this.firstSource=null);const r=new Yt({dragEvent:t,snappable:t.over||t.droppable});this.draggable.trigger(r),r.canceled()||(this.mirror&&(this.mirror.style.display="none"),e.classList.remove(...this.draggable.getClassNamesFor("source:dragging")),e.classList.add(...this.draggable.getClassNamesFor("source:placed")),setTimeout((()=>{e.classList.remove(...this.draggable.getClassNamesFor("source:placed"))}),this.draggable.options.placedTimeout))}[zt](t){if(t.canceled())return;const e=t.source||t.dragEvent.source,r=new Mt({dragEvent:t,snappable:t.over||t.droppable});this.draggable.trigger(r),r.canceled()||(this.mirror&&(this.mirror.style.display=""),e.classList.add(...this.draggable.getClassNamesFor("source:dragging")))}[Pt]({mirror:t}){this.mirror=t}[It](){this.mirror=null}}var kt,Bt;const qt={duration:150,easingFunction:"ease-in-out",horizontal:!1};class jt extends o{constructor(t){kt(super(t)),this.options={...qt,...this.getOptions()},this.lastAnimationFrame=null}attach(){this.draggable.on("sortable:sorted",this.onSortableSorted)}detach(){this.draggable.off("sortable:sorted",this.onSortableSorted)}getOptions(){return this.draggable.options.swapAnimation||{}}onSortableSorted({oldIndex:t,newIndex:e,dragEvent:r}){const{source:n,over:s}=r;this.lastAnimationFrame&&cancelAnimationFrame(this.lastAnimationFrame),this.lastAnimationFrame=requestAnimationFrame((()=>{t>=e?Ht(n,s,this.options):Ht(s,n,this.options)}))}}function Ht(t,e,{duration:r,easingFunction:n,horizontal:s}){for(const r of[t,e])r.style.pointerEvents="none";if(s){const r=t.offsetWidth;t.style.transform=`translate3d(${r}px, 0, 0)`,e.style.transform=`translate3d(-${r}px, 0, 0)`}else{const r=t.offsetHeight;t.style.transform=`translate3d(0, ${r}px, 0)`,e.style.transform=`translate3d(0, -${r}px, 0)`}requestAnimationFrame((()=>{for(const s of[t,e])s.addEventListener("transitionend",Rt),s.style.transition=`transform ${r}ms ${n}`,s.style.transform=""}))}function Rt(t){var e;null!=t.target&&(e=t.target,Boolean("style"in e))&&(t.target.style.transition="",t.target.style.pointerEvents="",t.target.removeEventListener("transitionend",Rt))}Bt=jt,[kt]=ut(Bt,[[mt,2,"onSortableSorted"]],[],0,void 0,o).e;const _t=Symbol("onSortableSorted"),Ut=Symbol("onSortableSort"),Wt={duration:150,easingFunction:"ease-in-out"};class Vt extends o{constructor(t){super(t),this.options={...Wt,...this.getOptions()},this.lastAnimationFrame=null,this.lastElements=[],this[_t]=this[_t].bind(this),this[Ut]=this[Ut].bind(this)}attach(){this.draggable.on("sortable:sort",this[Ut]),this.draggable.on("sortable:sorted",this[_t])}detach(){this.draggable.off("sortable:sort",this[Ut]),this.draggable.off("sortable:sorted",this[_t])}getOptions(){return this.draggable.options.sortAnimation||{}}[Ut]({dragEvent:t}){const{sourceContainer:e}=t,r=this.draggable.getDraggableElementsForContainer(e);this.lastElements=Array.from(r).map((t=>({domEl:t,offsetTop:t.offsetTop,offsetLeft:t.offsetLeft})))}[_t]({oldIndex:t,newIndex:e}){if(t===e)return;const r=[];let n,s,i;t>e?(n=e,s=t-1,i=1):(n=t+1,s=e,i=-1);for(let t=n;t<=s;t++){const e=this.lastElements[t],n=this.lastElements[t+i];r.push({from:e,to:n})}cancelAnimationFrame(this.lastAnimationFrame),this.lastAnimationFrame=requestAnimationFrame((()=>{r.forEach((t=>function({from:t,to:e},{duration:r,easingFunction:n}){const s=t.domEl,i=t.offsetLeft-e.offsetLeft,o=t.offsetTop-e.offsetTop;s.style.pointerEvents="none",s.style.transform=`translate3d(${i}px, ${o}px, 0)`,requestAnimationFrame((()=>{s.addEventListener("transitionend",Gt),s.style.transition=`transform ${r}ms ${n}`,s.style.transform=""}))}(t,this.options)))}))}}function Gt(t){t.target.style.transition="",t.target.style.pointerEvents="",t.target.removeEventListener("transitionend",Gt)}const Kt=Symbol("onInitialize"),Zt=Symbol("onDestroy"),Jt=Symbol("announceEvent"),Qt=Symbol("announceMessage"),te={expire:7e3};const ee=function(){const t=document.createElement("div");return t.setAttribute("id","draggable-live-region"),t.setAttribute("aria-relevant","additions"),t.setAttribute("aria-atomic","true"),t.setAttribute("aria-live","assertive"),t.setAttribute("role","log"),t.style.position="fixed",t.style.width="1px",t.style.height="1px",t.style.top="-1px",t.style.overflow="hidden",t}();document.addEventListener("DOMContentLoaded",(()=>{document.body.appendChild(ee)}));const re=Symbol("onInitialize"),ne=Symbol("onDestroy"),se={};const ie=[];class oe extends i{constructor(t){super(t),this.data=t}get source(){return this.data.source}get originalSource(){return this.data.originalSource}get sourceContainer(){return this.data.sourceContainer}get sensorEvent(){return this.data.sensorEvent}get dragEvent(){return this.data.dragEvent}get originalEvent(){return this.sensorEvent?this.sensorEvent.originalEvent:null}}class ae extends oe{}ae.type="mirror:create";class le extends oe{get mirror(){return this.data.mirror}}le.type="mirror:created";class ce extends oe{get mirror(){return this.data.mirror}}ce.type="mirror:attached";class he extends oe{get mirror(){return this.data.mirror}get passedThreshX(){return this.data.passedThreshX}get passedThreshY(){return this.data.passedThreshY}}he.type="mirror:move",he.cancelable=!0;class de extends oe{get mirror(){return this.data.mirror}get passedThreshX(){return this.data.passedThreshX}get passedThreshY(){return this.data.passedThreshY}}de.type="mirror:moved";class ue extends oe{get mirror(){return this.data.mirror}}ue.type="mirror:destroy",ue.cancelable=!0;const ge=Symbol("onDragStart"),me=Symbol("onDragMove"),pe=Symbol("onDragStop"),ve=Symbol("onMirrorCreated"),fe=Symbol("onMirrorMove"),be=Symbol("onScroll"),ye=Symbol("getAppendableContainer"),Ee={constrainDimensions:!1,xAxis:!0,yAxis:!0,cursorOffsetX:null,cursorOffsetY:null,thresholdX:null,thresholdY:null};function Ce({source:t,...e}){return Oe((r=>{const n=t.getBoundingClientRect();r({source:t,sourceRect:n,...e})}))}function Se({sensorEvent:t,sourceRect:e,options:r,...n}){return Oe((s=>{const i=null===r.cursorOffsetY?t.clientY-e.top:r.cursorOffsetY,o=null===r.cursorOffsetX?t.clientX-e.left:r.cursorOffsetX;s({sensorEvent:t,sourceRect:e,mirrorOffset:{top:i,left:o},options:r,...n})}))}function we({mirror:t,source:e,options:r,...n}){return Oe((s=>{let i,o;if(r.constrainDimensions){const t=getComputedStyle(e);i=t.getPropertyValue("height"),o=t.getPropertyValue("width")}t.style.display=null,t.style.position="fixed",t.style.pointerEvents="none",t.style.top=0,t.style.left=0,t.style.margin=0,r.constrainDimensions&&(t.style.height=i,t.style.width=o),s({mirror:t,source:e,options:r,...n})}))}function xe({mirror:t,mirrorClasses:e,...r}){return Oe((n=>{t.classList.add(...e),n({mirror:t,mirrorClasses:e,...r})}))}function De({mirror:t,...e}){return Oe((r=>{t.removeAttribute("id"),delete t.id,r({mirror:t,...e})}))}function Le({withFrame:t=!1,initial:e=!1}={}){return({mirror:r,sensorEvent:n,mirrorOffset:s,initialY:i,initialX:o,scrollOffset:a,options:l,passedThreshX:c,passedThreshY:h,lastMovedX:d,lastMovedY:u,...g})=>Oe((t=>{const m={mirror:r,sensorEvent:n,mirrorOffset:s,options:l,...g};if(s){const t=c?Math.round((n.clientX-s.left-a.x)/(l.thresholdX||1))*(l.thresholdX||1):Math.round(d),g=h?Math.round((n.clientY-s.top-a.y)/(l.thresholdY||1))*(l.thresholdY||1):Math.round(u);l.xAxis&&l.yAxis||e?r.style.transform=`translate3d(${t}px, ${g}px, 0)`:l.xAxis&&!l.yAxis?r.style.transform=`translate3d(${t}px, ${i}px, 0)`:l.yAxis&&!l.xAxis&&(r.style.transform=`translate3d(${o}px, ${g}px, 0)`),e&&(m.initialX=t,m.initialY=g),m.lastMovedX=t,m.lastMovedY=g}t(m)}),{frame:t})}function Oe(t,{raf:e=!1}={}){return new Promise(((r,n)=>{e?requestAnimationFrame((()=>{t(r,n)})):t(r,n)}))}const Fe=Symbol("onDragStart"),Xe=Symbol("onDragMove"),Ye=Symbol("onDragStop"),Me=Symbol("scroll"),Te={speed:6,sensitivity:50,scrollableElements:[]};function Ae(){return document.scrollingElement||document.documentElement}class Ne{constructor(){this.callbacks={}}on(t,...e){return this.callbacks[t]||(this.callbacks[t]=[]),this.callbacks[t].push(...e),this}off(t,e){if(!this.callbacks[t])return null;const r=this.callbacks[t].slice(0);for(let n=0;n<r.length;n++)e===r[n]&&this.callbacks[t].splice(n,1);return this}trigger(t){if(!this.callbacks[t.type])return null;const e=[...this.callbacks[t.type]],r=[];for(let n=e.length-1;n>=0;n--){const s=e[n];try{s(t)}catch(t){r.push(t)}}return r.length&&console.error(`Draggable caught errors while triggering '${t.type}'`,r),this}}class ze extends i{get draggable(){return this.data.draggable}}ze.type="draggable";class Pe extends ze{}Pe.type="draggable:initialize";class Ie extends ze{}Ie.type="draggable:destroy";const $e=Symbol("onDragStart"),ke=Symbol("onDragMove"),Be=Symbol("onDragStop"),qe=Symbol("onDragPressure"),je=Symbol("dragStop"),He={"drag:start":t=>`Picked up ${t.source.textContent.trim()||t.source.id||"draggable element"}`,"drag:stop":t=>`Released ${t.source.textContent.trim()||t.source.id||"draggable element"}`},Re={"container:dragging":"draggable-container--is-dragging","source:dragging":"draggable-source--is-dragging","source:placed":"draggable-source--placed","container:placed":"draggable-container--placed","body:dragging":"draggable--is-dragging","draggable:over":"draggable--over","container:over":"draggable-container--over","source:original":"draggable--original",mirror:"draggable-mirror"},_e={draggable:".draggable-source",handle:null,delay:{},distance:0,placedTimeout:800,plugins:[],sensors:[],exclude:{plugins:[],sensors:[]}};class Ue{constructor(t=[document.body],e={}){if(t instanceof NodeList||t instanceof Array)this.containers=[...t];else{if(!(t instanceof HTMLElement))throw new Error("Draggable containers are expected to be of type `NodeList`, `HTMLElement[]` or `HTMLElement`");this.containers=[t]}this.options={..._e,...e,classes:{...Re,...e.classes||{}},announcements:{...He,...e.announcements||{}},exclude:{plugins:e.exclude&&e.exclude.plugins||[],sensors:e.exclude&&e.exclude.sensors||[]}},this.emitter=new Ne,this.dragging=!1,this.plugins=[],this.sensors=[],this[$e]=this[$e].bind(this),this[ke]=this[ke].bind(this),this[Be]=this[Be].bind(this),this[qe]=this[qe].bind(this),this[je]=this[je].bind(this),document.addEventListener("drag:start",this[$e],!0),document.addEventListener("drag:move",this[ke],!0),document.addEventListener("drag:stop",this[Be],!0),document.addEventListener("drag:pressure",this[qe],!0);const r=Object.values(Ue.Plugins).filter((t=>!this.options.exclude.plugins.includes(t))),n=Object.values(Ue.Sensors).filter((t=>!this.options.exclude.sensors.includes(t)));this.addPlugin(...r,...this.options.plugins),this.addSensor(...n,...this.options.sensors);const s=new Pe({draggable:this});this.on("mirror:created",(({mirror:t})=>this.mirror=t)),this.on("mirror:destroy",(()=>this.mirror=null)),this.trigger(s)}destroy(){document.removeEventListener("drag:start",this[$e],!0),document.removeEventListener("drag:move",this[ke],!0),document.removeEventListener("drag:stop",this[Be],!0),document.removeEventListener("drag:pressure",this[qe],!0);const t=new Ie({draggable:this});this.trigger(t),this.removePlugin(...this.plugins.map((t=>t.constructor))),this.removeSensor(...this.sensors.map((t=>t.constructor)))}addPlugin(...t){const e=t.map((t=>new t(this)));return e.forEach((t=>t.attach())),this.plugins=[...this.plugins,...e],this}removePlugin(...t){return this.plugins.filter((e=>t.includes(e.constructor))).forEach((t=>t.detach())),this.plugins=this.plugins.filter((e=>!t.includes(e.constructor))),this}addSensor(...t){const e=t.map((t=>new t(this.containers,this.options)));return e.forEach((t=>t.attach())),this.sensors=[...this.sensors,...e],this}removeSensor(...t){return this.sensors.filter((e=>t.includes(e.constructor))).forEach((t=>t.detach())),this.sensors=this.sensors.filter((e=>!t.includes(e.constructor))),this}addContainer(...t){return this.containers=[...this.containers,...t],this.sensors.forEach((e=>e.addContainer(...t))),this}removeContainer(...t){return this.containers=this.containers.filter((e=>!t.includes(e))),this.sensors.forEach((e=>e.removeContainer(...t))),this}on(t,...e){return this.emitter.on(t,...e),this}off(t,e){return this.emitter.off(t,e),this}trigger(t){return this.emitter.trigger(t),this}getClassNameFor(t){return this.getClassNamesFor(t)[0]}getClassNamesFor(t){const e=this.options.classes[t];return e instanceof Array?e:"string"==typeof e||e instanceof String?[e]:[]}isDragging(){return Boolean(this.dragging)}getDraggableElements(){return this.containers.reduce(((t,e)=>[...t,...this.getDraggableElementsForContainer(e)]),[])}getDraggableElementsForContainer(t){return[...t.querySelectorAll(this.options.draggable)].filter((t=>t!==this.originalSource&&t!==this.mirror))}cancel(){this[je]()}[$e](t){const e=We(t),{target:r,container:n,originalSource:s}=e;if(!this.containers.includes(n))return;if(this.options.handle&&r&&!c(r,this.options.handle))return void e.cancel();this.originalSource=s,this.sourceContainer=n,this.lastPlacedSource&&this.lastPlacedContainer&&(clearTimeout(this.placedTimeoutID),this.lastPlacedSource.classList.remove(...this.getClassNamesFor("source:placed")),this.lastPlacedContainer.classList.remove(...this.getClassNamesFor("container:placed"))),this.source=this.originalSource.cloneNode(!0),this.originalSource.parentNode.insertBefore(this.source,this.originalSource),this.originalSource.style.display="none";const i=new vt({source:this.source,originalSource:this.originalSource,sourceContainer:n,sensorEvent:e});if(this.trigger(i),this.dragging=!i.canceled(),i.canceled())return this.source.remove(),void(this.originalSource.style.display=null);this.originalSource.classList.add(...this.getClassNamesFor("source:original")),this.source.classList.add(...this.getClassNamesFor("source:dragging")),this.sourceContainer.classList.add(...this.getClassNamesFor("container:dragging")),document.body.classList.add(...this.getClassNamesFor("body:dragging")),Ve(document.body,"none"),requestAnimationFrame((()=>{const e=We(t).clone({target:this.source});this[ke]({...t,detail:e})}))}[ke](t){if(!this.dragging)return;const e=We(t),{container:r}=e;let n=e.target;const s=new ft({source:this.source,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e});this.trigger(s),s.canceled()&&e.cancel(),n=c(n,this.options.draggable);const i=c(e.target,this.containers),o=e.overContainer||i,a=this.currentOverContainer&&o!==this.currentOverContainer,l=this.currentOver&&n!==this.currentOver,h=o&&this.currentOverContainer!==o,d=i&&n&&this.currentOver!==n;if(l){const t=new yt({source:this.source,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e,over:this.currentOver,overContainer:this.currentOverContainer});this.currentOver.classList.remove(...this.getClassNamesFor("draggable:over")),this.currentOver=null,this.trigger(t)}if(a){const t=new Ct({source:this.source,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e,overContainer:this.currentOverContainer});this.currentOverContainer.classList.remove(...this.getClassNamesFor("container:over")),this.currentOverContainer=null,this.trigger(t)}if(h){o.classList.add(...this.getClassNamesFor("container:over"));const t=new Et({source:this.source,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e,overContainer:o});this.currentOverContainer=o,this.trigger(t)}if(d){n.classList.add(...this.getClassNamesFor("draggable:over"));const t=new bt({source:this.source,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e,overContainer:o,over:n});this.currentOver=n,this.trigger(t)}}[je](t){if(!this.dragging)return;this.dragging=!1;const e=new wt({source:this.source,originalSource:this.originalSource,sensorEvent:t?t.sensorEvent:null,sourceContainer:this.sourceContainer});this.trigger(e),e.canceled()||this.source.parentNode.insertBefore(this.originalSource,this.source),this.source.remove(),this.originalSource.style.display="",this.source.classList.remove(...this.getClassNamesFor("source:dragging")),this.originalSource.classList.remove(...this.getClassNamesFor("source:original")),this.originalSource.classList.add(...this.getClassNamesFor("source:placed")),this.sourceContainer.classList.add(...this.getClassNamesFor("container:placed")),this.sourceContainer.classList.remove(...this.getClassNamesFor("container:dragging")),document.body.classList.remove(...this.getClassNamesFor("body:dragging")),Ve(document.body,""),this.currentOver&&this.currentOver.classList.remove(...this.getClassNamesFor("draggable:over")),this.currentOverContainer&&this.currentOverContainer.classList.remove(...this.getClassNamesFor("container:over")),this.lastPlacedSource=this.originalSource,this.lastPlacedContainer=this.sourceContainer,this.placedTimeoutID=setTimeout((()=>{this.lastPlacedSource&&this.lastPlacedSource.classList.remove(...this.getClassNamesFor("source:placed")),this.lastPlacedContainer&&this.lastPlacedContainer.classList.remove(...this.getClassNamesFor("container:placed")),this.lastPlacedSource=null,this.lastPlacedContainer=null}),this.options.placedTimeout);const r=new xt({source:this.source,originalSource:this.originalSource,sensorEvent:t?t.sensorEvent:null,sourceContainer:this.sourceContainer});this.trigger(r),this.source=null,this.originalSource=null,this.currentOverContainer=null,this.currentOver=null,this.sourceContainer=null}[Be](t){this[je](t)}[qe](t){if(!this.dragging)return;const e=We(t),r=this.source||c(e.originalEvent.target,this.options.draggable),n=new St({sensorEvent:e,source:r,pressure:e.pressure});this.trigger(n)}}function We(t){return t.detail}function Ve(t,e){t.style.webkitUserSelect=e,t.style.mozUserSelect=e,t.style.msUserSelect=e,t.style.oUserSelect=e,t.style.userSelect=e}Ue.Plugins={Announcement:class extends o{constructor(t){super(t),this.options={...te,...this.getOptions()},this.originalTriggerMethod=this.draggable.trigger,this[Kt]=this[Kt].bind(this),this[Zt]=this[Zt].bind(this)}attach(){this.draggable.on("draggable:initialize",this[Kt])}detach(){this.draggable.off("draggable:destroy",this[Zt])}getOptions(){return this.draggable.options.announcements||{}}[Jt](t){const e=this.options[t.type];e&&"string"==typeof e&&this[Qt](e),e&&"function"==typeof e&&this[Qt](e(t))}[Qt](t){!function(t,{expire:e}){const r=document.createElement("div");r.textContent=t,ee.appendChild(r),setTimeout((()=>{ee.removeChild(r)}),e)}(t,{expire:this.options.expire})}[Kt](){this.draggable.trigger=t=>{try{this[Jt](t)}finally{this.originalTriggerMethod.call(this.draggable,t)}}}[Zt](){this.draggable.trigger=this.originalTriggerMethod}},Focusable:class extends o{constructor(t){super(t),this.options={...se,...this.getOptions()},this[re]=this[re].bind(this),this[ne]=this[ne].bind(this)}attach(){this.draggable.on("draggable:initialize",this[re]).on("draggable:destroy",this[ne])}detach(){this.draggable.off("draggable:initialize",this[re]).off("draggable:destroy",this[ne]),this[ne]()}getOptions(){return this.draggable.options.focusable||{}}getElements(){return[...this.draggable.containers,...this.draggable.getDraggableElements()]}[re](){requestAnimationFrame((()=>{this.getElements().forEach((t=>function(t){const e=Boolean(!t.getAttribute("tabindex")&&-1===t.tabIndex);e&&(ie.push(t),t.tabIndex=0)}(t)))}))}[ne](){requestAnimationFrame((()=>{this.getElements().forEach((t=>function(t){const e=ie.indexOf(t);-1!==e&&(t.tabIndex=-1,ie.splice(e,1))}(t)))}))}},Mirror:class extends o{constructor(t){super(t),this.options={...Ee,...this.getOptions()},this.scrollOffset={x:0,y:0},this.initialScrollOffset={x:window.scrollX,y:window.scrollY},this[ge]=this[ge].bind(this),this[me]=this[me].bind(this),this[pe]=this[pe].bind(this),this[ve]=this[ve].bind(this),this[fe]=this[fe].bind(this),this[be]=this[be].bind(this)}attach(){this.draggable.on("drag:start",this[ge]).on("drag:move",this[me]).on("drag:stop",this[pe]).on("mirror:created",this[ve]).on("mirror:move",this[fe])}detach(){this.draggable.off("drag:start",this[ge]).off("drag:move",this[me]).off("drag:stop",this[pe]).off("mirror:created",this[ve]).off("mirror:move",this[fe])}getOptions(){return this.draggable.options.mirror||{}}[ge](t){if(t.canceled())return;"ontouchstart"in window&&document.addEventListener("scroll",this[be],!0),this.initialScrollOffset={x:window.scrollX,y:window.scrollY};const{source:e,originalSource:r,sourceContainer:n,sensorEvent:s}=t;this.lastMirrorMovedClient={x:s.clientX,y:s.clientY};const i=new ae({source:e,originalSource:r,sourceContainer:n,sensorEvent:s,dragEvent:t});if(this.draggable.trigger(i),function(t){return/^drag/.test(t.originalEvent.type)}(s)||i.canceled())return;const o=this[ye](e)||n;this.mirror=e.cloneNode(!0);const a=new le({source:e,originalSource:r,sourceContainer:n,sensorEvent:s,dragEvent:t,mirror:this.mirror}),l=new ce({source:e,originalSource:r,sourceContainer:n,sensorEvent:s,dragEvent:t,mirror:this.mirror});this.draggable.trigger(a),o.appendChild(this.mirror),this.draggable.trigger(l)}[me](t){if(!this.mirror||t.canceled())return;const{source:e,originalSource:r,sourceContainer:n,sensorEvent:s}=t;let i=!0,o=!0;if(this.options.thresholdX||this.options.thresholdY){const{x:t,y:e}=this.lastMirrorMovedClient;if(Math.abs(t-s.clientX)<this.options.thresholdX?i=!1:this.lastMirrorMovedClient.x=s.clientX,Math.abs(e-s.clientY)<this.options.thresholdY?o=!1:this.lastMirrorMovedClient.y=s.clientY,!i&&!o)return}const a=new he({source:e,originalSource:r,sourceContainer:n,sensorEvent:s,dragEvent:t,mirror:this.mirror,passedThreshX:i,passedThreshY:o});this.draggable.trigger(a)}[pe](t){if("ontouchstart"in window&&document.removeEventListener("scroll",this[be],!0),this.initialScrollOffset={x:0,y:0},this.scrollOffset={x:0,y:0},!this.mirror)return;const{source:e,sourceContainer:r,sensorEvent:n}=t,s=new ue({source:e,mirror:this.mirror,sourceContainer:r,sensorEvent:n,dragEvent:t});this.draggable.trigger(s),s.canceled()||this.mirror.remove()}[be](){this.scrollOffset={x:window.scrollX-this.initialScrollOffset.x,y:window.scrollY-this.initialScrollOffset.y}}[ve]({mirror:t,source:e,sensorEvent:r}){const n=this.draggable.getClassNamesFor("mirror");t.style.display="none";const s={mirror:t,source:e,sensorEvent:r,mirrorClasses:n,scrollOffset:this.scrollOffset,options:this.options,passedThreshX:!0,passedThreshY:!0};return Promise.resolve(s).then(Ce).then(Se).then(we).then(xe).then(Le({initial:!0})).then(De).then((({mirrorOffset:t,initialX:e,initialY:r,...n})=>(this.mirrorOffset=t,this.initialX=e,this.initialY=r,this.lastMovedX=e,this.lastMovedY=r,{mirrorOffset:t,initialX:e,initialY:r,...n})))}[fe](t){if(t.canceled())return null;const e={mirror:t.mirror,sensorEvent:t.sensorEvent,mirrorOffset:this.mirrorOffset,options:this.options,initialX:this.initialX,initialY:this.initialY,scrollOffset:this.scrollOffset,passedThreshX:t.passedThreshX,passedThreshY:t.passedThreshY,lastMovedX:this.lastMovedX,lastMovedY:this.lastMovedY};return Promise.resolve(e).then(Le({raf:!0})).then((({lastMovedX:t,lastMovedY:e,...r})=>(this.lastMovedX=t,this.lastMovedY=e,{lastMovedX:t,lastMovedY:e,...r}))).then((e=>{const r=new de({source:t.source,originalSource:t.originalSource,sourceContainer:t.sourceContainer,sensorEvent:t.sensorEvent,dragEvent:t.dragEvent,mirror:this.mirror,passedThreshX:t.passedThreshX,passedThreshY:t.passedThreshY});return this.draggable.trigger(r),e}))}[ye](t){const e=this.options.appendTo;return"string"==typeof e?document.querySelector(e):e instanceof HTMLElement?e:"function"==typeof e?e(t):t.parentNode}},Scrollable:class extends o{constructor(t){super(t),this.options={...Te,...this.getOptions()},this.currentMousePosition=null,this.scrollAnimationFrame=null,this.scrollableElement=null,this.findScrollableElementFrame=null,this[Fe]=this[Fe].bind(this),this[Xe]=this[Xe].bind(this),this[Ye]=this[Ye].bind(this),this[Me]=this[Me].bind(this)}attach(){this.draggable.on("drag:start",this[Fe]).on("drag:move",this[Xe]).on("drag:stop",this[Ye])}detach(){this.draggable.off("drag:start",this[Fe]).off("drag:move",this[Xe]).off("drag:stop",this[Ye])}getOptions(){return this.draggable.options.scrollable||{}}getScrollableElement(t){return this.hasDefinedScrollableElements()?c(t,this.options.scrollableElements)||document.documentElement:function(t){if(!t)return Ae();const e=getComputedStyle(t).getPropertyValue("position"),r="absolute"===e,n=c(t,(t=>(!r||!function(t){const e=getComputedStyle(t).getPropertyValue("position");return"static"===e}(t))&&function(t){const e=/(auto|scroll)/,r=getComputedStyle(t,null),n=r.getPropertyValue("overflow")+r.getPropertyValue("overflow-y")+r.getPropertyValue("overflow-x");return e.test(n)}(t)));return"fixed"!==e&&n?n:Ae()}(t)}hasDefinedScrollableElements(){return Boolean(0!==this.options.scrollableElements.length)}[Fe](t){this.findScrollableElementFrame=requestAnimationFrame((()=>{this.scrollableElement=this.getScrollableElement(t.source)}))}[Xe](t){if(this.findScrollableElementFrame=requestAnimationFrame((()=>{this.scrollableElement=this.getScrollableElement(t.sensorEvent.target)})),!this.scrollableElement)return;const e=t.sensorEvent,r={x:0,y:0};"ontouchstart"in window&&(r.y=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0,r.x=window.pageXOffset||document.documentElement.scrollLeft||document.body.scrollLeft||0),this.currentMousePosition={clientX:e.clientX-r.x,clientY:e.clientY-r.y},this.scrollAnimationFrame=requestAnimationFrame(this[Me])}[Ye](){cancelAnimationFrame(this.scrollAnimationFrame),cancelAnimationFrame(this.findScrollableElementFrame),this.scrollableElement=null,this.scrollAnimationFrame=null,this.findScrollableElementFrame=null,this.currentMousePosition=null}[Me](){if(!this.scrollableElement||!this.currentMousePosition)return;cancelAnimationFrame(this.scrollAnimationFrame);const{speed:t,sensitivity:e}=this.options,r=this.scrollableElement.getBoundingClientRect(),n=r.bottom>window.innerHeight,s=r.top<0||n,i=Ae(),o=this.scrollableElement,a=this.currentMousePosition.clientX,l=this.currentMousePosition.clientY;if(o===document.body||o===document.documentElement||s){const{innerHeight:r,innerWidth:n}=window;l<e?i.scrollTop-=t:r-l<e&&(i.scrollTop+=t),a<e?i.scrollLeft-=t:n-a<e&&(i.scrollLeft+=t)}else{const{offsetHeight:n,offsetWidth:s}=o;r.top+n-l<e?o.scrollTop+=t:l-r.top<e&&(o.scrollTop-=t),r.left+s-a<e?o.scrollLeft+=t:a-r.left<e&&(o.scrollLeft-=t)}this.scrollAnimationFrame=requestAnimationFrame(this[Me])}}},Ue.Sensors={MouseSensor:S,TouchSensor:M};class Ge extends i{constructor(t){super(t),this.data=t}get dragEvent(){return this.data.dragEvent}}Ge.type="droppable";class Ke extends Ge{get dropzone(){return this.data.dropzone}}Ke.type="droppable:start",Ke.cancelable=!0;class Ze extends Ge{get dropzone(){return this.data.dropzone}}Ze.type="droppable:dropped",Ze.cancelable=!0;class Je extends Ge{get dropzone(){return this.data.dropzone}}Je.type="droppable:returned",Je.cancelable=!0;class Qe extends Ge{get dropzone(){return this.data.dropzone}}Qe.type="droppable:stop",Qe.cancelable=!0;const tr=Symbol("onDragStart"),er=Symbol("onDragMove"),rr=Symbol("onDragStop"),nr=Symbol("dropInDropZone"),sr=Symbol("returnToOriginalDropzone"),ir=Symbol("closestDropzone"),or=Symbol("getDropzones");const ar={"droppable:dropped":function({dragEvent:t,dropzone:e}){return`Dropped ${t.source.textContent.trim()||t.source.id||"draggable element"} into ${e.textContent.trim()||e.id||"droppable element"}`},"droppable:returned":function({dragEvent:t,dropzone:e}){return`Returned ${t.source.textContent.trim()||t.source.id||"draggable element"} from ${e.textContent.trim()||e.id||"droppable element"}`}},lr={"droppable:active":"draggable-dropzone--active","droppable:occupied":"draggable-dropzone--occupied"},cr={dropzone:".draggable-droppable"};class hr extends Ue{constructor(t=[],e={}){super(t,{...cr,...e,classes:{...lr,...e.classes||{}},announcements:{...ar,...e.announcements||{}}}),this.dropzones=null,this.lastDropzone=null,this.initialDropzone=null,this[tr]=this[tr].bind(this),this[er]=this[er].bind(this),this[rr]=this[rr].bind(this),this.on("drag:start",this[tr]).on("drag:move",this[er]).on("drag:stop",this[rr])}destroy(){super.destroy(),this.off("drag:start",this[tr]).off("drag:move",this[er]).off("drag:stop",this[rr])}[tr](t){if(t.canceled())return;this.dropzones=[...this[or]()];const e=c(t.sensorEvent.target,this.options.dropzone);if(!e)return void t.cancel();const r=new Ke({dragEvent:t,dropzone:e});if(this.trigger(r),r.canceled())t.cancel();else{this.initialDropzone=e;for(const t of this.dropzones)t.classList.contains(this.getClassNameFor("droppable:occupied"))||t.classList.add(...this.getClassNamesFor("droppable:active"))}}[er](t){if(t.canceled())return;const e=this[ir](t.sensorEvent.target);e&&!e.classList.contains(this.getClassNameFor("droppable:occupied"))&&this[nr](t,e)?this.lastDropzone=e:e&&e!==this.initialDropzone||!this.lastDropzone||(this[sr](t),this.lastDropzone=null)}[rr](t){const e=new Qe({dragEvent:t,dropzone:this.lastDropzone||this.initialDropzone});this.trigger(e);const r=this.getClassNamesFor("droppable:occupied");for(const t of this.dropzones)t.classList.remove(...this.getClassNamesFor("droppable:active"));this.lastDropzone&&this.lastDropzone!==this.initialDropzone&&this.initialDropzone.classList.remove(...r),this.dropzones=null,this.lastDropzone=null,this.initialDropzone=null}[nr](t,e){const r=new Ze({dragEvent:t,dropzone:e});if(this.trigger(r),r.canceled())return!1;const n=this.getClassNamesFor("droppable:occupied");return this.lastDropzone&&this.lastDropzone.classList.remove(...n),e.appendChild(t.source),e.classList.add(...n),!0}[sr](t){const e=new Je({dragEvent:t,dropzone:this.lastDropzone});this.trigger(e),e.canceled()||(this.initialDropzone.appendChild(t.source),this.lastDropzone.classList.remove(...this.getClassNamesFor("droppable:occupied")))}[ir](t){return this.dropzones?c(t,this.dropzones):null}[or](){const t=this.options.dropzone;return"string"==typeof t?document.querySelectorAll(t):t instanceof NodeList||t instanceof Array?t:"function"==typeof t?t():[]}}class dr extends i{constructor(t){super(t),this.data=t}get dragEvent(){return this.data.dragEvent}}dr.type="swappable";class ur extends dr{}ur.type="swappable:start",ur.cancelable=!0;class gr extends dr{get over(){return this.data.over}get overContainer(){return this.data.overContainer}}gr.type="swappable:swap",gr.cancelable=!0;class mr extends dr{get swappedElement(){return this.data.swappedElement}}mr.type="swappable:swapped";class pr extends dr{}pr.type="swappable:stop";const vr=Symbol("onDragStart"),fr=Symbol("onDragOver"),br=Symbol("onDragStop");const yr={"swappabled:swapped":function({dragEvent:t,swappedElement:e}){return`Swapped ${t.source.textContent.trim()||t.source.id||"swappable element"} with ${e.textContent.trim()||e.id||"swappable element"}`}};class Er extends Ue{constructor(t=[],e={}){super(t,{...e,announcements:{...yr,...e.announcements||{}}}),this.lastOver=null,this[vr]=this[vr].bind(this),this[fr]=this[fr].bind(this),this[br]=this[br].bind(this),this.on("drag:start",this[vr]).on("drag:over",this[fr]).on("drag:stop",this[br])}destroy(){super.destroy(),this.off("drag:start",this._onDragStart).off("drag:over",this._onDragOver).off("drag:stop",this._onDragStop)}[vr](t){const e=new ur({dragEvent:t});this.trigger(e),e.canceled()&&t.cancel()}[fr](t){if(t.over===t.originalSource||t.over===t.source||t.canceled())return;const e=new gr({dragEvent:t,over:t.over,overContainer:t.overContainer});if(this.trigger(e),e.canceled())return;this.lastOver&&this.lastOver!==t.over&&Cr(this.lastOver,t.source),this.lastOver===t.over?this.lastOver=null:this.lastOver=t.over,Cr(t.source,t.over);const r=new mr({dragEvent:t,swappedElement:t.over});this.trigger(r)}[br](t){const e=new pr({dragEvent:t});this.trigger(e),this.lastOver=null}}function Cr(t,e){const r=e.parentNode,n=t.parentNode;!function(t){const e=document.createElement("div");t(e),e.remove()}((s=>{n.insertBefore(s,t),r.insertBefore(t,e),n.insertBefore(e,s)}))}class Sr extends i{constructor(t){super(t),this.data=t}get dragEvent(){return this.data.dragEvent}}Sr.type="sortable";class wr extends Sr{get startIndex(){return this.data.startIndex}get startContainer(){return this.data.startContainer}}wr.type="sortable:start",wr.cancelable=!0;class xr extends Sr{get currentIndex(){return this.data.currentIndex}get over(){return this.data.over}get overContainer(){return this.data.dragEvent.overContainer}}xr.type="sortable:sort",xr.cancelable=!0;class Dr extends Sr{get oldIndex(){return this.data.oldIndex}get newIndex(){return this.data.newIndex}get oldContainer(){return this.data.oldContainer}get newContainer(){return this.data.newContainer}}Dr.type="sortable:sorted";class Lr extends Sr{get oldIndex(){return this.data.oldIndex}get newIndex(){return this.data.newIndex}get oldContainer(){return this.data.oldContainer}get newContainer(){return this.data.newContainer}}Lr.type="sortable:stop";const Or=Symbol("onDragStart"),Fr=Symbol("onDragOverContainer"),Xr=Symbol("onDragOver"),Yr=Symbol("onDragStop");const Mr={"sortable:sorted":function({dragEvent:t}){const e=t.source.textContent.trim()||t.source.id||"sortable element";if(t.over){const r=t.over.textContent.trim()||t.over.id||"sortable element";return t.source.compareDocumentPosition(t.over)&Node.DOCUMENT_POSITION_FOLLOWING?`Placed ${e} after ${r}`:`Placed ${e} before ${r}`}return`Placed ${e} into a different container`}};class Tr extends Ue{constructor(t=[],e={}){super(t,{...e,announcements:{...Mr,...e.announcements||{}}}),this.startIndex=null,this.startContainer=null,this[Or]=this[Or].bind(this),this[Fr]=this[Fr].bind(this),this[Xr]=this[Xr].bind(this),this[Yr]=this[Yr].bind(this),this.on("drag:start",this[Or]).on("drag:over:container",this[Fr]).on("drag:over",this[Xr]).on("drag:stop",this[Yr])}destroy(){super.destroy(),this.off("drag:start",this[Or]).off("drag:over:container",this[Fr]).off("drag:over",this[Xr]).off("drag:stop",this[Yr])}index(t){return this.getSortableElementsForContainer(t.parentNode).indexOf(t)}getSortableElementsForContainer(t){return[...t.querySelectorAll(this.options.draggable)].filter((e=>e!==this.originalSource&&e!==this.mirror&&e.parentNode===t))}[Or](t){this.startContainer=t.source.parentNode,this.startIndex=this.index(t.source);const e=new wr({dragEvent:t,startIndex:this.startIndex,startContainer:this.startContainer});this.trigger(e),e.canceled()&&t.cancel()}[Fr](t){if(t.canceled())return;const{source:e,over:r,overContainer:n}=t,s=this.index(e),i=new xr({dragEvent:t,currentIndex:s,source:e,over:r});if(this.trigger(i),i.canceled())return;const o=Nr({source:e,over:r,overContainer:n,children:this.getSortableElementsForContainer(n)});if(!o)return;const{oldContainer:a,newContainer:l}=o,c=this.index(t.source),h=new Dr({dragEvent:t,oldIndex:s,newIndex:c,oldContainer:a,newContainer:l});this.trigger(h)}[Xr](t){if(t.over===t.originalSource||t.over===t.source)return;const{source:e,over:r,overContainer:n}=t,s=this.index(e),i=new xr({dragEvent:t,currentIndex:s,source:e,over:r});if(this.trigger(i),i.canceled())return;const o=Nr({source:e,over:r,overContainer:n,children:this.getDraggableElementsForContainer(n)});if(!o)return;const{oldContainer:a,newContainer:l}=o,c=this.index(e),h=new Dr({dragEvent:t,oldIndex:s,newIndex:c,oldContainer:a,newContainer:l});this.trigger(h)}[Yr](t){const e=new Lr({dragEvent:t,oldIndex:this.startIndex,newIndex:this.index(t.source),oldContainer:this.startContainer,newContainer:t.source.parentNode});this.trigger(e),this.startIndex=null,this.startContainer=null}}function Ar(t){return Array.prototype.indexOf.call(t.parentNode.children,t)}function Nr({source:t,over:e,overContainer:r,children:n}){const s=!n.length,i=t.parentNode!==r,o=e&&t.parentNode===e.parentNode;return s?function(t,e){const r=t.parentNode;return e.appendChild(t),{oldContainer:r,newContainer:e}}(t,r):o?function(t,e){const r=Ar(t),n=Ar(e);r<n?t.parentNode.insertBefore(t,e.nextElementSibling):t.parentNode.insertBefore(t,e);return{oldContainer:t.parentNode,newContainer:t.parentNode}}(t,e):i?function(t,e,r){const n=t.parentNode;e?e.parentNode.insertBefore(t,e):r.appendChild(t);return{oldContainer:n,newContainer:t.parentNode}}(t,e,r):null}}},e={};function r(n){var s=e[n];if(void 0!==s)return s.exports;var i=e[n]={exports:{}};return t[n](i,i.exports,r),i.exports}r.d=(t,e)=>{for(var n in e)r.o(e,n)&&!r.o(t,n)&&Object.defineProperty(t,n,{enumerable:!0,get:e[n]})},r.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e),r.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},window.Draggable=r(5458)})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/DragEvent/DragEvent.mjs":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/DragEvent/DragEvent.mjs ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DragEvent: () => (/* binding */ DragEvent),
+/* harmony export */   DragMoveEvent: () => (/* binding */ DragMoveEvent),
+/* harmony export */   DragOutContainerEvent: () => (/* binding */ DragOutContainerEvent),
+/* harmony export */   DragOutEvent: () => (/* binding */ DragOutEvent),
+/* harmony export */   DragOverContainerEvent: () => (/* binding */ DragOverContainerEvent),
+/* harmony export */   DragOverEvent: () => (/* binding */ DragOverEvent),
+/* harmony export */   DragPressureEvent: () => (/* binding */ DragPressureEvent),
+/* harmony export */   DragStartEvent: () => (/* binding */ DragStartEvent),
+/* harmony export */   DragStopEvent: () => (/* binding */ DragStopEvent),
+/* harmony export */   DragStoppedEvent: () => (/* binding */ DragStoppedEvent),
+/* harmony export */   isDragOverEvent: () => (/* binding */ isDragOverEvent)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+
+
+class DragEvent extends _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent {
+
+  constructor(data) {
+    super(data);
+    this.data = data;
+  }
+
+  get source() {
+    return this.data.source;
+  }
+
+  get originalSource() {
+    return this.data.originalSource;
+  }
+
+  get mirror() {
+    return this.data.mirror;
+  }
+
+  get sourceContainer() {
+    return this.data.sourceContainer;
+  }
+
+  get sensorEvent() {
+    return this.data.sensorEvent;
+  }
+
+  get originalEvent() {
+    if (this.sensorEvent) {
+      return this.sensorEvent.originalEvent;
+    }
+    return null;
+  }
+}
+
+DragEvent.type = 'drag';
+class DragStartEvent extends DragEvent {}
+
+DragStartEvent.type = 'drag:start';
+DragStartEvent.cancelable = true;
+class DragMoveEvent extends DragEvent {}
+
+DragMoveEvent.type = 'drag:move';
+
+class DragOverEvent extends DragEvent {
+
+  get overContainer() {
+    return this.data.overContainer;
+  }
+
+  get over() {
+    return this.data.over;
+  }
+}
+DragOverEvent.type = 'drag:over';
+DragOverEvent.cancelable = true;
+function isDragOverEvent(event) {
+  return event.type === DragOverEvent.type;
+}
+
+class DragOutEvent extends DragEvent {
+
+  get overContainer() {
+    return this.data.overContainer;
+  }
+
+  get over() {
+    return this.data.over;
+  }
+}
+
+DragOutEvent.type = 'drag:out';
+
+class DragOverContainerEvent extends DragEvent {
+
+  get overContainer() {
+    return this.data.overContainer;
+  }
+}
+
+DragOverContainerEvent.type = 'drag:over:container';
+
+class DragOutContainerEvent extends DragEvent {
+
+  get overContainer() {
+    return this.data.overContainer;
+  }
+}
+
+DragOutContainerEvent.type = 'drag:out:container';
+
+class DragPressureEvent extends DragEvent {
+
+  get pressure() {
+    return this.data.pressure;
+  }
+}
+
+DragPressureEvent.type = 'drag:pressure';
+class DragStopEvent extends DragEvent {}
+
+DragStopEvent.type = 'drag:stop';
+DragStopEvent.cancelable = true;
+class DragStoppedEvent extends DragEvent {}
+DragStoppedEvent.type = 'drag:stopped';
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Draggable.mjs":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Draggable.mjs ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Draggable),
+/* harmony export */   defaultOptions: () => (/* binding */ defaultOptions)
+/* harmony export */ });
+/* harmony import */ var _shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared/utils/closest/closest.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs");
+/* harmony import */ var _Plugins_Announcement_Announcement_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Plugins/Announcement/Announcement.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Announcement/Announcement.mjs");
+/* harmony import */ var _Plugins_Focusable_Focusable_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Plugins/Focusable/Focusable.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Focusable/Focusable.mjs");
+/* harmony import */ var _Plugins_Mirror_Mirror_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Plugins/Mirror/Mirror.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/Mirror.mjs");
+/* harmony import */ var _Plugins_Scrollable_Scrollable_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Plugins/Scrollable/Scrollable.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Scrollable/Scrollable.mjs");
+/* harmony import */ var _Emitter_Emitter_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Emitter/Emitter.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Emitter/Emitter.mjs");
+/* harmony import */ var _Sensors_MouseSensor_MouseSensor_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Sensors/MouseSensor/MouseSensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/MouseSensor/MouseSensor.mjs");
+/* harmony import */ var _Sensors_TouchSensor_TouchSensor_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Sensors/TouchSensor/TouchSensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/TouchSensor/TouchSensor.mjs");
+/* harmony import */ var _Sensors_SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Sensors/SensorEvent/SensorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs");
+/* harmony import */ var _DraggableEvent_DraggableEvent_mjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./DraggableEvent/DraggableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DraggableEvent/DraggableEvent.mjs");
+/* harmony import */ var _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./DragEvent/DragEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DragEvent/DragEvent.mjs");
+
+
+
+
+
+
+
+
+
+
+
+
+const onDragStart = Symbol('onDragStart');
+const onDragMove = Symbol('onDragMove');
+const onDragStop = Symbol('onDragStop');
+const onDragPressure = Symbol('onDragPressure');
+const dragStop = Symbol('dragStop');
+
+const defaultAnnouncements = {
+  'drag:start': event => `Picked up ${event.source.textContent.trim() || event.source.id || 'draggable element'}`,
+  'drag:stop': event => `Released ${event.source.textContent.trim() || event.source.id || 'draggable element'}`
+};
+const defaultClasses = {
+  'container:dragging': 'draggable-container--is-dragging',
+  'source:dragging': 'draggable-source--is-dragging',
+  'source:placed': 'draggable-source--placed',
+  'container:placed': 'draggable-container--placed',
+  'body:dragging': 'draggable--is-dragging',
+  'draggable:over': 'draggable--over',
+  'container:over': 'draggable-container--over',
+  'source:original': 'draggable--original',
+  mirror: 'draggable-mirror'
+};
+const defaultOptions = {
+  draggable: '.draggable-source',
+  handle: null,
+  delay: {},
+  distance: 0,
+  placedTimeout: 800,
+  plugins: [],
+  sensors: [],
+  exclude: {
+    plugins: [],
+    sensors: []
+  }
+};
+
+class Draggable {
+
+  constructor(containers = [document.body], options = {}) {
+
+    if (containers instanceof NodeList || containers instanceof Array) {
+      this.containers = [...containers];
+    } else if (containers instanceof HTMLElement) {
+      this.containers = [containers];
+    } else {
+      throw new Error('Draggable containers are expected to be of type `NodeList`, `HTMLElement[]` or `HTMLElement`');
+    }
+    this.options = {
+      ...defaultOptions,
+      ...options,
+      classes: {
+        ...defaultClasses,
+        ...(options.classes || {})
+      },
+      announcements: {
+        ...defaultAnnouncements,
+        ...(options.announcements || {})
+      },
+      exclude: {
+        plugins: options.exclude && options.exclude.plugins || [],
+        sensors: options.exclude && options.exclude.sensors || []
+      }
+    };
+
+    this.emitter = new _Emitter_Emitter_mjs__WEBPACK_IMPORTED_MODULE_5__["default"]();
+
+    this.dragging = false;
+
+    this.plugins = [];
+
+    this.sensors = [];
+    this[onDragStart] = this[onDragStart].bind(this);
+    this[onDragMove] = this[onDragMove].bind(this);
+    this[onDragStop] = this[onDragStop].bind(this);
+    this[onDragPressure] = this[onDragPressure].bind(this);
+    this[dragStop] = this[dragStop].bind(this);
+    document.addEventListener('drag:start', this[onDragStart], true);
+    document.addEventListener('drag:move', this[onDragMove], true);
+    document.addEventListener('drag:stop', this[onDragStop], true);
+    document.addEventListener('drag:pressure', this[onDragPressure], true);
+    const defaultPlugins = Object.values(Draggable.Plugins).filter(Plugin => !this.options.exclude.plugins.includes(Plugin));
+    const defaultSensors = Object.values(Draggable.Sensors).filter(sensor => !this.options.exclude.sensors.includes(sensor));
+    this.addPlugin(...[...defaultPlugins, ...this.options.plugins]);
+    this.addSensor(...[...defaultSensors, ...this.options.sensors]);
+    const draggableInitializedEvent = new _DraggableEvent_DraggableEvent_mjs__WEBPACK_IMPORTED_MODULE_9__.DraggableInitializedEvent({
+      draggable: this
+    });
+    this.on('mirror:created', ({
+      mirror
+    }) => this.mirror = mirror);
+    this.on('mirror:destroy', () => this.mirror = null);
+    this.trigger(draggableInitializedEvent);
+  }
+
+  destroy() {
+    document.removeEventListener('drag:start', this[onDragStart], true);
+    document.removeEventListener('drag:move', this[onDragMove], true);
+    document.removeEventListener('drag:stop', this[onDragStop], true);
+    document.removeEventListener('drag:pressure', this[onDragPressure], true);
+    const draggableDestroyEvent = new _DraggableEvent_DraggableEvent_mjs__WEBPACK_IMPORTED_MODULE_9__.DraggableDestroyEvent({
+      draggable: this
+    });
+    this.trigger(draggableDestroyEvent);
+    this.removePlugin(...this.plugins.map(plugin => plugin.constructor));
+    this.removeSensor(...this.sensors.map(sensor => sensor.constructor));
+  }
+
+  addPlugin(...plugins) {
+    const activePlugins = plugins.map(Plugin => new Plugin(this));
+    activePlugins.forEach(plugin => plugin.attach());
+    this.plugins = [...this.plugins, ...activePlugins];
+    return this;
+  }
+
+  removePlugin(...plugins) {
+    const removedPlugins = this.plugins.filter(plugin => plugins.includes(plugin.constructor));
+    removedPlugins.forEach(plugin => plugin.detach());
+    this.plugins = this.plugins.filter(plugin => !plugins.includes(plugin.constructor));
+    return this;
+  }
+
+  addSensor(...sensors) {
+    const activeSensors = sensors.map(Sensor => new Sensor(this.containers, this.options));
+    activeSensors.forEach(sensor => sensor.attach());
+    this.sensors = [...this.sensors, ...activeSensors];
+    return this;
+  }
+
+  removeSensor(...sensors) {
+    const removedSensors = this.sensors.filter(sensor => sensors.includes(sensor.constructor));
+    removedSensors.forEach(sensor => sensor.detach());
+    this.sensors = this.sensors.filter(sensor => !sensors.includes(sensor.constructor));
+    return this;
+  }
+
+  addContainer(...containers) {
+    this.containers = [...this.containers, ...containers];
+    this.sensors.forEach(sensor => sensor.addContainer(...containers));
+    return this;
+  }
+
+  removeContainer(...containers) {
+    this.containers = this.containers.filter(container => !containers.includes(container));
+    this.sensors.forEach(sensor => sensor.removeContainer(...containers));
+    return this;
+  }
+
+  on(type, ...callbacks) {
+    this.emitter.on(type, ...callbacks);
+    return this;
+  }
+
+  off(type, callback) {
+    this.emitter.off(type, callback);
+    return this;
+  }
+
+  trigger(event) {
+    this.emitter.trigger(event);
+    return this;
+  }
+
+  getClassNameFor(name) {
+    return this.getClassNamesFor(name)[0];
+  }
+
+  getClassNamesFor(name) {
+    const classNames = this.options.classes[name];
+    if (classNames instanceof Array) {
+      return classNames;
+    } else if (typeof classNames === 'string' || classNames instanceof String) {
+      return [classNames];
+    } else {
+      return [];
+    }
+  }
+
+  isDragging() {
+    return Boolean(this.dragging);
+  }
+
+  getDraggableElements() {
+    return this.containers.reduce((current, container) => {
+      return [...current, ...this.getDraggableElementsForContainer(container)];
+    }, []);
+  }
+
+  getDraggableElementsForContainer(container) {
+    const allDraggableElements = container.querySelectorAll(this.options.draggable);
+    return [...allDraggableElements].filter(childElement => {
+      return childElement !== this.originalSource && childElement !== this.mirror;
+    });
+  }
+
+  cancel() {
+    this[dragStop]();
+  }
+
+  [onDragStart](event) {
+    const sensorEvent = getSensorEvent(event);
+    const {
+      target,
+      container,
+      originalSource
+    } = sensorEvent;
+    if (!this.containers.includes(container)) {
+      return;
+    }
+    if (this.options.handle && target && !(0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(target, this.options.handle)) {
+      sensorEvent.cancel();
+      return;
+    }
+    this.originalSource = originalSource;
+    this.sourceContainer = container;
+    if (this.lastPlacedSource && this.lastPlacedContainer) {
+      clearTimeout(this.placedTimeoutID);
+      this.lastPlacedSource.classList.remove(...this.getClassNamesFor('source:placed'));
+      this.lastPlacedContainer.classList.remove(...this.getClassNamesFor('container:placed'));
+    }
+    this.source = this.originalSource.cloneNode(true);
+    this.originalSource.parentNode.insertBefore(this.source, this.originalSource);
+    this.originalSource.style.display = 'none';
+    const dragStartEvent = new _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__.DragStartEvent({
+      source: this.source,
+      originalSource: this.originalSource,
+      sourceContainer: container,
+      sensorEvent
+    });
+    this.trigger(dragStartEvent);
+    this.dragging = !dragStartEvent.canceled();
+    if (dragStartEvent.canceled()) {
+      this.source.remove();
+      this.originalSource.style.display = null;
+      return;
+    }
+    this.originalSource.classList.add(...this.getClassNamesFor('source:original'));
+    this.source.classList.add(...this.getClassNamesFor('source:dragging'));
+    this.sourceContainer.classList.add(...this.getClassNamesFor('container:dragging'));
+    document.body.classList.add(...this.getClassNamesFor('body:dragging'));
+    applyUserSelect(document.body, 'none');
+    requestAnimationFrame(() => {
+      const oldSensorEvent = getSensorEvent(event);
+      const newSensorEvent = oldSensorEvent.clone({
+        target: this.source
+      });
+      this[onDragMove]({
+        ...event,
+        detail: newSensorEvent
+      });
+    });
+  }
+
+  [onDragMove](event) {
+    if (!this.dragging) {
+      return;
+    }
+    const sensorEvent = getSensorEvent(event);
+    const {
+      container
+    } = sensorEvent;
+    let target = sensorEvent.target;
+    const dragMoveEvent = new _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__.DragMoveEvent({
+      source: this.source,
+      originalSource: this.originalSource,
+      sourceContainer: container,
+      sensorEvent
+    });
+    this.trigger(dragMoveEvent);
+    if (dragMoveEvent.canceled()) {
+      sensorEvent.cancel();
+    }
+    target = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(target, this.options.draggable);
+    const withinCorrectContainer = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(sensorEvent.target, this.containers);
+    const overContainer = sensorEvent.overContainer || withinCorrectContainer;
+    const isLeavingContainer = this.currentOverContainer && overContainer !== this.currentOverContainer;
+    const isLeavingDraggable = this.currentOver && target !== this.currentOver;
+    const isOverContainer = overContainer && this.currentOverContainer !== overContainer;
+    const isOverDraggable = withinCorrectContainer && target && this.currentOver !== target;
+    if (isLeavingDraggable) {
+      const dragOutEvent = new _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__.DragOutEvent({
+        source: this.source,
+        originalSource: this.originalSource,
+        sourceContainer: container,
+        sensorEvent,
+        over: this.currentOver,
+        overContainer: this.currentOverContainer
+      });
+      this.currentOver.classList.remove(...this.getClassNamesFor('draggable:over'));
+      this.currentOver = null;
+      this.trigger(dragOutEvent);
+    }
+    if (isLeavingContainer) {
+      const dragOutContainerEvent = new _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__.DragOutContainerEvent({
+        source: this.source,
+        originalSource: this.originalSource,
+        sourceContainer: container,
+        sensorEvent,
+        overContainer: this.currentOverContainer
+      });
+      this.currentOverContainer.classList.remove(...this.getClassNamesFor('container:over'));
+      this.currentOverContainer = null;
+      this.trigger(dragOutContainerEvent);
+    }
+    if (isOverContainer) {
+      overContainer.classList.add(...this.getClassNamesFor('container:over'));
+      const dragOverContainerEvent = new _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__.DragOverContainerEvent({
+        source: this.source,
+        originalSource: this.originalSource,
+        sourceContainer: container,
+        sensorEvent,
+        overContainer
+      });
+      this.currentOverContainer = overContainer;
+      this.trigger(dragOverContainerEvent);
+    }
+    if (isOverDraggable) {
+      target.classList.add(...this.getClassNamesFor('draggable:over'));
+      const dragOverEvent = new _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__.DragOverEvent({
+        source: this.source,
+        originalSource: this.originalSource,
+        sourceContainer: container,
+        sensorEvent,
+        overContainer,
+        over: target
+      });
+      this.currentOver = target;
+      this.trigger(dragOverEvent);
+    }
+  }
+
+  [dragStop](event) {
+    if (!this.dragging) {
+      return;
+    }
+    this.dragging = false;
+    const dragStopEvent = new _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__.DragStopEvent({
+      source: this.source,
+      originalSource: this.originalSource,
+      sensorEvent: event ? event.sensorEvent : null,
+      sourceContainer: this.sourceContainer
+    });
+    this.trigger(dragStopEvent);
+    if (!dragStopEvent.canceled()) this.source.parentNode.insertBefore(this.originalSource, this.source);
+    this.source.remove();
+    this.originalSource.style.display = '';
+    this.source.classList.remove(...this.getClassNamesFor('source:dragging'));
+    this.originalSource.classList.remove(...this.getClassNamesFor('source:original'));
+    this.originalSource.classList.add(...this.getClassNamesFor('source:placed'));
+    this.sourceContainer.classList.add(...this.getClassNamesFor('container:placed'));
+    this.sourceContainer.classList.remove(...this.getClassNamesFor('container:dragging'));
+    document.body.classList.remove(...this.getClassNamesFor('body:dragging'));
+    applyUserSelect(document.body, '');
+    if (this.currentOver) {
+      this.currentOver.classList.remove(...this.getClassNamesFor('draggable:over'));
+    }
+    if (this.currentOverContainer) {
+      this.currentOverContainer.classList.remove(...this.getClassNamesFor('container:over'));
+    }
+    this.lastPlacedSource = this.originalSource;
+    this.lastPlacedContainer = this.sourceContainer;
+    this.placedTimeoutID = setTimeout(() => {
+      if (this.lastPlacedSource) {
+        this.lastPlacedSource.classList.remove(...this.getClassNamesFor('source:placed'));
+      }
+      if (this.lastPlacedContainer) {
+        this.lastPlacedContainer.classList.remove(...this.getClassNamesFor('container:placed'));
+      }
+      this.lastPlacedSource = null;
+      this.lastPlacedContainer = null;
+    }, this.options.placedTimeout);
+    const dragStoppedEvent = new _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__.DragStoppedEvent({
+      source: this.source,
+      originalSource: this.originalSource,
+      sensorEvent: event ? event.sensorEvent : null,
+      sourceContainer: this.sourceContainer
+    });
+    this.trigger(dragStoppedEvent);
+    this.source = null;
+    this.originalSource = null;
+    this.currentOverContainer = null;
+    this.currentOver = null;
+    this.sourceContainer = null;
+  }
+
+  [onDragStop](event) {
+    this[dragStop](event);
+  }
+
+  [onDragPressure](event) {
+    if (!this.dragging) {
+      return;
+    }
+    const sensorEvent = getSensorEvent(event);
+    const source = this.source || (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(sensorEvent.originalEvent.target, this.options.draggable);
+    const dragPressureEvent = new _DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_10__.DragPressureEvent({
+      sensorEvent,
+      source,
+      pressure: sensorEvent.pressure
+    });
+    this.trigger(dragPressureEvent);
+  }
+}
+
+Draggable.Plugins = {
+  Announcement: _Plugins_Announcement_Announcement_mjs__WEBPACK_IMPORTED_MODULE_1__["default"],
+  Focusable: _Plugins_Focusable_Focusable_mjs__WEBPACK_IMPORTED_MODULE_2__["default"],
+  Mirror: _Plugins_Mirror_Mirror_mjs__WEBPACK_IMPORTED_MODULE_3__["default"],
+  Scrollable: _Plugins_Scrollable_Scrollable_mjs__WEBPACK_IMPORTED_MODULE_4__["default"]
+};
+
+Draggable.Sensors = {
+  MouseSensor: _Sensors_MouseSensor_MouseSensor_mjs__WEBPACK_IMPORTED_MODULE_6__["default"],
+  TouchSensor: _Sensors_TouchSensor_TouchSensor_mjs__WEBPACK_IMPORTED_MODULE_7__["default"]
+};
+function getSensorEvent(event) {
+  return event.detail;
+}
+function applyUserSelect(element, value) {
+  element.style.webkitUserSelect = value;
+  element.style.mozUserSelect = value;
+  element.style.msUserSelect = value;
+  element.style.oUserSelect = value;
+  element.style.userSelect = value;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/DraggableEvent/DraggableEvent.mjs":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/DraggableEvent/DraggableEvent.mjs ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DraggableDestroyEvent: () => (/* binding */ DraggableDestroyEvent),
+/* harmony export */   DraggableEvent: () => (/* binding */ DraggableEvent),
+/* harmony export */   DraggableInitializedEvent: () => (/* binding */ DraggableInitializedEvent)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+
+
+class DraggableEvent extends _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent {
+
+  get draggable() {
+    return this.data.draggable;
+  }
+}
+
+DraggableEvent.type = 'draggable';
+class DraggableInitializedEvent extends DraggableEvent {}
+
+DraggableInitializedEvent.type = 'draggable:initialize';
+class DraggableDestroyEvent extends DraggableEvent {}
+DraggableDestroyEvent.type = 'draggable:destroy';
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Emitter/Emitter.mjs":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Emitter/Emitter.mjs ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Emitter)
+/* harmony export */ });
+class Emitter {
+  constructor() {
+    this.callbacks = {};
+  }
+
+  on(type, ...callbacks) {
+    if (!this.callbacks[type]) {
+      this.callbacks[type] = [];
+    }
+    this.callbacks[type].push(...callbacks);
+    return this;
+  }
+
+  off(type, callback) {
+    if (!this.callbacks[type]) {
+      return null;
+    }
+    const copy = this.callbacks[type].slice(0);
+    for (let i = 0; i < copy.length; i++) {
+      if (callback === copy[i]) {
+        this.callbacks[type].splice(i, 1);
+      }
+    }
+    return this;
+  }
+
+  trigger(event) {
+    if (!this.callbacks[event.type]) {
+      return null;
+    }
+    const callbacks = [...this.callbacks[event.type]];
+    const caughtErrors = [];
+    for (let i = callbacks.length - 1; i >= 0; i--) {
+      const callback = callbacks[i];
+      try {
+        callback(event);
+      } catch (error) {
+        caughtErrors.push(error);
+      }
+    }
+    if (caughtErrors.length) {
+
+      console.error(`Draggable caught errors while triggering '${event.type}'`, caughtErrors);
+
+    }
+
+    return this;
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Announcement/Announcement.mjs":
+/*!***************************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Announcement/Announcement.mjs ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Announcement),
+/* harmony export */   defaultOptions: () => (/* binding */ defaultOptions)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+
+
+const onInitialize = Symbol('onInitialize');
+const onDestroy = Symbol('onDestroy');
+const announceEvent = Symbol('announceEvent');
+const announceMessage = Symbol('announceMessage');
+const ARIA_RELEVANT = 'aria-relevant';
+const ARIA_ATOMIC = 'aria-atomic';
+const ARIA_LIVE = 'aria-live';
+const ROLE = 'role';
+
+const defaultOptions = {
+  expire: 7000
+};
+
+class Announcement extends _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractPlugin {
+
+  constructor(draggable) {
+    super(draggable);
+
+    this.options = {
+      ...defaultOptions,
+      ...this.getOptions()
+    };
+
+    this.originalTriggerMethod = this.draggable.trigger;
+    this[onInitialize] = this[onInitialize].bind(this);
+    this[onDestroy] = this[onDestroy].bind(this);
+  }
+
+  attach() {
+    this.draggable.on('draggable:initialize', this[onInitialize]);
+  }
+
+  detach() {
+    this.draggable.off('draggable:destroy', this[onDestroy]);
+  }
+
+  getOptions() {
+    return this.draggable.options.announcements || {};
+  }
+
+  [announceEvent](event) {
+    const message = this.options[event.type];
+    if (message && typeof message === 'string') {
+      this[announceMessage](message);
+    }
+    if (message && typeof message === 'function') {
+      this[announceMessage](message(event));
+    }
+  }
+
+  [announceMessage](message) {
+    announce(message, {
+      expire: this.options.expire
+    });
+  }
+
+  [onInitialize]() {
+
+    this.draggable.trigger = event => {
+      try {
+        this[announceEvent](event);
+      } finally {
+
+        this.originalTriggerMethod.call(this.draggable, event);
+      }
+    };
+  }
+
+  [onDestroy]() {
+    this.draggable.trigger = this.originalTriggerMethod;
+  }
+}
+
+const liveRegion = createRegion();
+
+function announce(message, {
+  expire
+}) {
+  const element = document.createElement('div');
+  element.textContent = message;
+  liveRegion.appendChild(element);
+  return setTimeout(() => {
+    liveRegion.removeChild(element);
+  }, expire);
+}
+
+function createRegion() {
+  const element = document.createElement('div');
+  element.setAttribute('id', 'draggable-live-region');
+  element.setAttribute(ARIA_RELEVANT, 'additions');
+  element.setAttribute(ARIA_ATOMIC, 'true');
+  element.setAttribute(ARIA_LIVE, 'assertive');
+  element.setAttribute(ROLE, 'log');
+  element.style.position = 'fixed';
+  element.style.width = '1px';
+  element.style.height = '1px';
+  element.style.top = '-1px';
+  element.style.overflow = 'hidden';
+  return element;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.appendChild(liveRegion);
+});
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Focusable/Focusable.mjs":
+/*!*********************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Focusable/Focusable.mjs ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Focusable)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+
+
+const onInitialize = Symbol('onInitialize');
+const onDestroy = Symbol('onDestroy');
+
+const defaultOptions = {};
+
+class Focusable extends _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractPlugin {
+
+  constructor(draggable) {
+    super(draggable);
+
+    this.options = {
+      ...defaultOptions,
+      ...this.getOptions()
+    };
+    this[onInitialize] = this[onInitialize].bind(this);
+    this[onDestroy] = this[onDestroy].bind(this);
+  }
+
+  attach() {
+    this.draggable.on('draggable:initialize', this[onInitialize]).on('draggable:destroy', this[onDestroy]);
+  }
+
+  detach() {
+    this.draggable.off('draggable:initialize', this[onInitialize]).off('draggable:destroy', this[onDestroy]);
+
+    this[onDestroy]();
+  }
+
+  getOptions() {
+    return this.draggable.options.focusable || {};
+  }
+
+  getElements() {
+    return [...this.draggable.containers, ...this.draggable.getDraggableElements()];
+  }
+
+  [onInitialize]() {
+
+    requestAnimationFrame(() => {
+      this.getElements().forEach(element => decorateElement(element));
+    });
+  }
+
+  [onDestroy]() {
+
+    requestAnimationFrame(() => {
+      this.getElements().forEach(element => stripElement(element));
+    });
+  }
+}
+
+const elementsWithMissingTabIndex = [];
+
+function decorateElement(element) {
+  const hasMissingTabIndex = Boolean(!element.getAttribute('tabindex') && element.tabIndex === -1);
+  if (hasMissingTabIndex) {
+    elementsWithMissingTabIndex.push(element);
+    element.tabIndex = 0;
+  }
+}
+
+function stripElement(element) {
+  const tabIndexElementPosition = elementsWithMissingTabIndex.indexOf(element);
+  if (tabIndexElementPosition !== -1) {
+    element.tabIndex = -1;
+    elementsWithMissingTabIndex.splice(tabIndexElementPosition, 1);
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/Mirror.mjs":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/Mirror.mjs ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Mirror),
+/* harmony export */   defaultOptions: () => (/* binding */ defaultOptions),
+/* harmony export */   getAppendableContainer: () => (/* binding */ getAppendableContainer),
+/* harmony export */   onDragMove: () => (/* binding */ onDragMove),
+/* harmony export */   onDragStart: () => (/* binding */ onDragStart),
+/* harmony export */   onDragStop: () => (/* binding */ onDragStop),
+/* harmony export */   onMirrorCreated: () => (/* binding */ onMirrorCreated),
+/* harmony export */   onMirrorMove: () => (/* binding */ onMirrorMove),
+/* harmony export */   onScroll: () => (/* binding */ onScroll)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+/* harmony import */ var _MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MirrorEvent/MirrorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs");
+
+
+
+const onDragStart = Symbol('onDragStart');
+const onDragMove = Symbol('onDragMove');
+const onDragStop = Symbol('onDragStop');
+const onMirrorCreated = Symbol('onMirrorCreated');
+const onMirrorMove = Symbol('onMirrorMove');
+const onScroll = Symbol('onScroll');
+const getAppendableContainer = Symbol('getAppendableContainer');
+
+const defaultOptions = {
+  constrainDimensions: false,
+  xAxis: true,
+  yAxis: true,
+  cursorOffsetX: null,
+  cursorOffsetY: null,
+  thresholdX: null,
+  thresholdY: null
+};
+
+class Mirror extends _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractPlugin {
+
+  constructor(draggable) {
+    super(draggable);
+
+    this.options = {
+      ...defaultOptions,
+      ...this.getOptions()
+    };
+
+    this.scrollOffset = {
+      x: 0,
+      y: 0
+    };
+
+    this.initialScrollOffset = {
+      x: window.scrollX,
+      y: window.scrollY
+    };
+    this[onDragStart] = this[onDragStart].bind(this);
+    this[onDragMove] = this[onDragMove].bind(this);
+    this[onDragStop] = this[onDragStop].bind(this);
+    this[onMirrorCreated] = this[onMirrorCreated].bind(this);
+    this[onMirrorMove] = this[onMirrorMove].bind(this);
+    this[onScroll] = this[onScroll].bind(this);
+  }
+
+  attach() {
+    this.draggable.on('drag:start', this[onDragStart]).on('drag:move', this[onDragMove]).on('drag:stop', this[onDragStop]).on('mirror:created', this[onMirrorCreated]).on('mirror:move', this[onMirrorMove]);
+  }
+
+  detach() {
+    this.draggable.off('drag:start', this[onDragStart]).off('drag:move', this[onDragMove]).off('drag:stop', this[onDragStop]).off('mirror:created', this[onMirrorCreated]).off('mirror:move', this[onMirrorMove]);
+  }
+
+  getOptions() {
+    return this.draggable.options.mirror || {};
+  }
+  [onDragStart](dragEvent) {
+    if (dragEvent.canceled()) {
+      return;
+    }
+    if ('ontouchstart' in window) {
+      document.addEventListener('scroll', this[onScroll], true);
+    }
+    this.initialScrollOffset = {
+      x: window.scrollX,
+      y: window.scrollY
+    };
+    const {
+      source,
+      originalSource,
+      sourceContainer,
+      sensorEvent
+    } = dragEvent;
+
+    this.lastMirrorMovedClient = {
+      x: sensorEvent.clientX,
+      y: sensorEvent.clientY
+    };
+    const mirrorCreateEvent = new _MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_1__.MirrorCreateEvent({
+      source,
+      originalSource,
+      sourceContainer,
+      sensorEvent,
+      dragEvent
+    });
+    this.draggable.trigger(mirrorCreateEvent);
+    if (isNativeDragEvent(sensorEvent) || mirrorCreateEvent.canceled()) {
+      return;
+    }
+    const appendableContainer = this[getAppendableContainer](source) || sourceContainer;
+    this.mirror = source.cloneNode(true);
+    const mirrorCreatedEvent = new _MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_1__.MirrorCreatedEvent({
+      source,
+      originalSource,
+      sourceContainer,
+      sensorEvent,
+      dragEvent,
+      mirror: this.mirror
+    });
+    const mirrorAttachedEvent = new _MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_1__.MirrorAttachedEvent({
+      source,
+      originalSource,
+      sourceContainer,
+      sensorEvent,
+      dragEvent,
+      mirror: this.mirror
+    });
+    this.draggable.trigger(mirrorCreatedEvent);
+    appendableContainer.appendChild(this.mirror);
+    this.draggable.trigger(mirrorAttachedEvent);
+  }
+  [onDragMove](dragEvent) {
+    if (!this.mirror || dragEvent.canceled()) {
+      return;
+    }
+    const {
+      source,
+      originalSource,
+      sourceContainer,
+      sensorEvent
+    } = dragEvent;
+    let passedThreshX = true;
+    let passedThreshY = true;
+    if (this.options.thresholdX || this.options.thresholdY) {
+      const {
+        x: lastX,
+        y: lastY
+      } = this.lastMirrorMovedClient;
+      if (Math.abs(lastX - sensorEvent.clientX) < this.options.thresholdX) {
+        passedThreshX = false;
+      } else {
+        this.lastMirrorMovedClient.x = sensorEvent.clientX;
+      }
+      if (Math.abs(lastY - sensorEvent.clientY) < this.options.thresholdY) {
+        passedThreshY = false;
+      } else {
+        this.lastMirrorMovedClient.y = sensorEvent.clientY;
+      }
+      if (!passedThreshX && !passedThreshY) {
+        return;
+      }
+    }
+    const mirrorMoveEvent = new _MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_1__.MirrorMoveEvent({
+      source,
+      originalSource,
+      sourceContainer,
+      sensorEvent,
+      dragEvent,
+      mirror: this.mirror,
+      passedThreshX,
+      passedThreshY
+    });
+    this.draggable.trigger(mirrorMoveEvent);
+  }
+  [onDragStop](dragEvent) {
+    if ('ontouchstart' in window) {
+      document.removeEventListener('scroll', this[onScroll], true);
+    }
+    this.initialScrollOffset = {
+      x: 0,
+      y: 0
+    };
+    this.scrollOffset = {
+      x: 0,
+      y: 0
+    };
+    if (!this.mirror) {
+      return;
+    }
+    const {
+      source,
+      sourceContainer,
+      sensorEvent
+    } = dragEvent;
+    const mirrorDestroyEvent = new _MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_1__.MirrorDestroyEvent({
+      source,
+      mirror: this.mirror,
+      sourceContainer,
+      sensorEvent,
+      dragEvent
+    });
+    this.draggable.trigger(mirrorDestroyEvent);
+    if (!mirrorDestroyEvent.canceled()) {
+      this.mirror.remove();
+    }
+  }
+  [onScroll]() {
+    this.scrollOffset = {
+      x: window.scrollX - this.initialScrollOffset.x,
+      y: window.scrollY - this.initialScrollOffset.y
+    };
+  }
+
+  [onMirrorCreated]({
+    mirror,
+    source,
+    sensorEvent
+  }) {
+    const mirrorClasses = this.draggable.getClassNamesFor('mirror');
+    const setState = ({
+      mirrorOffset,
+      initialX,
+      initialY,
+      ...args
+    }) => {
+      this.mirrorOffset = mirrorOffset;
+      this.initialX = initialX;
+      this.initialY = initialY;
+      this.lastMovedX = initialX;
+      this.lastMovedY = initialY;
+      return {
+        mirrorOffset,
+        initialX,
+        initialY,
+        ...args
+      };
+    };
+    mirror.style.display = 'none';
+    const initialState = {
+      mirror,
+      source,
+      sensorEvent,
+      mirrorClasses,
+      scrollOffset: this.scrollOffset,
+      options: this.options,
+      passedThreshX: true,
+      passedThreshY: true
+    };
+    return Promise.resolve(initialState)
+
+    .then(computeMirrorDimensions).then(calculateMirrorOffset).then(resetMirror).then(addMirrorClasses).then(positionMirror({
+      initial: true
+    })).then(removeMirrorID).then(setState);
+  }
+
+  [onMirrorMove](mirrorEvent) {
+    if (mirrorEvent.canceled()) {
+      return null;
+    }
+    const setState = ({
+      lastMovedX,
+      lastMovedY,
+      ...args
+    }) => {
+      this.lastMovedX = lastMovedX;
+      this.lastMovedY = lastMovedY;
+      return {
+        lastMovedX,
+        lastMovedY,
+        ...args
+      };
+    };
+    const triggerMoved = args => {
+      const mirrorMovedEvent = new _MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_1__.MirrorMovedEvent({
+        source: mirrorEvent.source,
+        originalSource: mirrorEvent.originalSource,
+        sourceContainer: mirrorEvent.sourceContainer,
+        sensorEvent: mirrorEvent.sensorEvent,
+        dragEvent: mirrorEvent.dragEvent,
+        mirror: this.mirror,
+        passedThreshX: mirrorEvent.passedThreshX,
+        passedThreshY: mirrorEvent.passedThreshY
+      });
+      this.draggable.trigger(mirrorMovedEvent);
+      return args;
+    };
+    const initialState = {
+      mirror: mirrorEvent.mirror,
+      sensorEvent: mirrorEvent.sensorEvent,
+      mirrorOffset: this.mirrorOffset,
+      options: this.options,
+      initialX: this.initialX,
+      initialY: this.initialY,
+      scrollOffset: this.scrollOffset,
+      passedThreshX: mirrorEvent.passedThreshX,
+      passedThreshY: mirrorEvent.passedThreshY,
+      lastMovedX: this.lastMovedX,
+      lastMovedY: this.lastMovedY
+    };
+    return Promise.resolve(initialState).then(positionMirror({
+      raf: true
+    })).then(setState).then(triggerMoved);
+  }
+
+  [getAppendableContainer](source) {
+    const appendTo = this.options.appendTo;
+    if (typeof appendTo === 'string') {
+      return document.querySelector(appendTo);
+    } else if (appendTo instanceof HTMLElement) {
+      return appendTo;
+    } else if (typeof appendTo === 'function') {
+      return appendTo(source);
+    } else {
+      return source.parentNode;
+    }
+  }
+}
+
+function computeMirrorDimensions({
+  source,
+  ...args
+}) {
+  return withPromise(resolve => {
+    const sourceRect = source.getBoundingClientRect();
+    resolve({
+      source,
+      sourceRect,
+      ...args
+    });
+  });
+}
+
+function calculateMirrorOffset({
+  sensorEvent,
+  sourceRect,
+  options,
+  ...args
+}) {
+  return withPromise(resolve => {
+    const top = options.cursorOffsetY === null ? sensorEvent.clientY - sourceRect.top : options.cursorOffsetY;
+    const left = options.cursorOffsetX === null ? sensorEvent.clientX - sourceRect.left : options.cursorOffsetX;
+    const mirrorOffset = {
+      top,
+      left
+    };
+    resolve({
+      sensorEvent,
+      sourceRect,
+      mirrorOffset,
+      options,
+      ...args
+    });
+  });
+}
+
+function resetMirror({
+  mirror,
+  source,
+  options,
+  ...args
+}) {
+  return withPromise(resolve => {
+    let offsetHeight;
+    let offsetWidth;
+    if (options.constrainDimensions) {
+      const computedSourceStyles = getComputedStyle(source);
+      offsetHeight = computedSourceStyles.getPropertyValue('height');
+      offsetWidth = computedSourceStyles.getPropertyValue('width');
+    }
+    mirror.style.display = null;
+    mirror.style.position = 'fixed';
+    mirror.style.pointerEvents = 'none';
+    mirror.style.top = 0;
+    mirror.style.left = 0;
+    mirror.style.margin = 0;
+    if (options.constrainDimensions) {
+      mirror.style.height = offsetHeight;
+      mirror.style.width = offsetWidth;
+    }
+    resolve({
+      mirror,
+      source,
+      options,
+      ...args
+    });
+  });
+}
+
+function addMirrorClasses({
+  mirror,
+  mirrorClasses,
+  ...args
+}) {
+  return withPromise(resolve => {
+    mirror.classList.add(...mirrorClasses);
+    resolve({
+      mirror,
+      mirrorClasses,
+      ...args
+    });
+  });
+}
+
+function removeMirrorID({
+  mirror,
+  ...args
+}) {
+  return withPromise(resolve => {
+    mirror.removeAttribute('id');
+    delete mirror.id;
+    resolve({
+      mirror,
+      ...args
+    });
+  });
+}
+
+function positionMirror({
+  withFrame = false,
+  initial = false
+} = {}) {
+  return ({
+    mirror,
+    sensorEvent,
+    mirrorOffset,
+    initialY,
+    initialX,
+    scrollOffset,
+    options,
+    passedThreshX,
+    passedThreshY,
+    lastMovedX,
+    lastMovedY,
+    ...args
+  }) => {
+    return withPromise(resolve => {
+      const result = {
+        mirror,
+        sensorEvent,
+        mirrorOffset,
+        options,
+        ...args
+      };
+      if (mirrorOffset) {
+        const x = passedThreshX ? Math.round((sensorEvent.clientX - mirrorOffset.left - scrollOffset.x) / (options.thresholdX || 1)) * (options.thresholdX || 1) : Math.round(lastMovedX);
+        const y = passedThreshY ? Math.round((sensorEvent.clientY - mirrorOffset.top - scrollOffset.y) / (options.thresholdY || 1)) * (options.thresholdY || 1) : Math.round(lastMovedY);
+        if (options.xAxis && options.yAxis || initial) {
+          mirror.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        } else if (options.xAxis && !options.yAxis) {
+          mirror.style.transform = `translate3d(${x}px, ${initialY}px, 0)`;
+        } else if (options.yAxis && !options.xAxis) {
+          mirror.style.transform = `translate3d(${initialX}px, ${y}px, 0)`;
+        }
+        if (initial) {
+          result.initialX = x;
+          result.initialY = y;
+        }
+        result.lastMovedX = x;
+        result.lastMovedY = y;
+      }
+      resolve(result);
+    }, {
+      frame: withFrame
+    });
+  };
+}
+
+function withPromise(callback, {
+  raf = false
+} = {}) {
+  return new Promise((resolve, reject) => {
+    if (raf) {
+      requestAnimationFrame(() => {
+        callback(resolve, reject);
+      });
+    } else {
+      callback(resolve, reject);
+    }
+  });
+}
+
+function isNativeDragEvent(sensorEvent) {
+  return /^drag/.test(sensorEvent.originalEvent.type);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MirrorAttachedEvent: () => (/* binding */ MirrorAttachedEvent),
+/* harmony export */   MirrorCreateEvent: () => (/* binding */ MirrorCreateEvent),
+/* harmony export */   MirrorCreatedEvent: () => (/* binding */ MirrorCreatedEvent),
+/* harmony export */   MirrorDestroyEvent: () => (/* binding */ MirrorDestroyEvent),
+/* harmony export */   MirrorEvent: () => (/* binding */ MirrorEvent),
+/* harmony export */   MirrorMoveEvent: () => (/* binding */ MirrorMoveEvent),
+/* harmony export */   MirrorMovedEvent: () => (/* binding */ MirrorMovedEvent)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+
+
+class MirrorEvent extends _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent {
+
+  constructor(data) {
+    super(data);
+    this.data = data;
+  }
+
+  get source() {
+    return this.data.source;
+  }
+
+  get originalSource() {
+    return this.data.originalSource;
+  }
+
+  get sourceContainer() {
+    return this.data.sourceContainer;
+  }
+
+  get sensorEvent() {
+    return this.data.sensorEvent;
+  }
+
+  get dragEvent() {
+    return this.data.dragEvent;
+  }
+
+  get originalEvent() {
+    if (this.sensorEvent) {
+      return this.sensorEvent.originalEvent;
+    }
+    return null;
+  }
+}
+
+class MirrorCreateEvent extends MirrorEvent {}
+MirrorCreateEvent.type = 'mirror:create';
+
+class MirrorCreatedEvent extends MirrorEvent {
+
+  get mirror() {
+    return this.data.mirror;
+  }
+}
+MirrorCreatedEvent.type = 'mirror:created';
+
+class MirrorAttachedEvent extends MirrorEvent {
+
+  get mirror() {
+    return this.data.mirror;
+  }
+}
+MirrorAttachedEvent.type = 'mirror:attached';
+
+class MirrorMoveEvent extends MirrorEvent {
+
+  get mirror() {
+    return this.data.mirror;
+  }
+
+  get passedThreshX() {
+    return this.data.passedThreshX;
+  }
+
+  get passedThreshY() {
+    return this.data.passedThreshY;
+  }
+}
+MirrorMoveEvent.type = 'mirror:move';
+MirrorMoveEvent.cancelable = true;
+
+class MirrorMovedEvent extends MirrorEvent {
+
+  get mirror() {
+    return this.data.mirror;
+  }
+
+  get passedThreshX() {
+    return this.data.passedThreshX;
+  }
+
+  get passedThreshY() {
+    return this.data.passedThreshY;
+  }
+}
+MirrorMovedEvent.type = 'mirror:moved';
+
+class MirrorDestroyEvent extends MirrorEvent {
+
+  get mirror() {
+    return this.data.mirror;
+  }
+}
+MirrorDestroyEvent.type = 'mirror:destroy';
+MirrorDestroyEvent.cancelable = true;
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Scrollable/Scrollable.mjs":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Scrollable/Scrollable.mjs ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Scrollable),
+/* harmony export */   defaultOptions: () => (/* binding */ defaultOptions),
+/* harmony export */   onDragMove: () => (/* binding */ onDragMove),
+/* harmony export */   onDragStart: () => (/* binding */ onDragStart),
+/* harmony export */   onDragStop: () => (/* binding */ onDragStop),
+/* harmony export */   scroll: () => (/* binding */ scroll)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+/* harmony import */ var _shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../shared/utils/closest/closest.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs");
+
+
+
+const onDragStart = Symbol('onDragStart');
+const onDragMove = Symbol('onDragMove');
+const onDragStop = Symbol('onDragStop');
+const scroll = Symbol('scroll');
+
+const defaultOptions = {
+  speed: 6,
+  sensitivity: 50,
+  scrollableElements: []
+};
+
+class Scrollable extends _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractPlugin {
+
+  constructor(draggable) {
+    super(draggable);
+
+    this.options = {
+      ...defaultOptions,
+      ...this.getOptions()
+    };
+
+    this.currentMousePosition = null;
+
+    this.scrollAnimationFrame = null;
+
+    this.scrollableElement = null;
+
+    this.findScrollableElementFrame = null;
+    this[onDragStart] = this[onDragStart].bind(this);
+    this[onDragMove] = this[onDragMove].bind(this);
+    this[onDragStop] = this[onDragStop].bind(this);
+    this[scroll] = this[scroll].bind(this);
+  }
+
+  attach() {
+    this.draggable.on('drag:start', this[onDragStart]).on('drag:move', this[onDragMove]).on('drag:stop', this[onDragStop]);
+  }
+
+  detach() {
+    this.draggable.off('drag:start', this[onDragStart]).off('drag:move', this[onDragMove]).off('drag:stop', this[onDragStop]);
+  }
+
+  getOptions() {
+    return this.draggable.options.scrollable || {};
+  }
+
+  getScrollableElement(target) {
+    if (this.hasDefinedScrollableElements()) {
+      return (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_1__["default"])(target, this.options.scrollableElements) || document.documentElement;
+    } else {
+      return closestScrollableElement(target);
+    }
+  }
+
+  hasDefinedScrollableElements() {
+    return Boolean(this.options.scrollableElements.length !== 0);
+  }
+
+  [onDragStart](dragEvent) {
+    this.findScrollableElementFrame = requestAnimationFrame(() => {
+      this.scrollableElement = this.getScrollableElement(dragEvent.source);
+    });
+  }
+
+  [onDragMove](dragEvent) {
+    this.findScrollableElementFrame = requestAnimationFrame(() => {
+      this.scrollableElement = this.getScrollableElement(dragEvent.sensorEvent.target);
+    });
+    if (!this.scrollableElement) {
+      return;
+    }
+    const sensorEvent = dragEvent.sensorEvent;
+    const scrollOffset = {
+      x: 0,
+      y: 0
+    };
+    if ('ontouchstart' in window) {
+      scrollOffset.y = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      scrollOffset.x = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+    }
+    this.currentMousePosition = {
+      clientX: sensorEvent.clientX - scrollOffset.x,
+      clientY: sensorEvent.clientY - scrollOffset.y
+    };
+    this.scrollAnimationFrame = requestAnimationFrame(this[scroll]);
+  }
+
+  [onDragStop]() {
+    cancelAnimationFrame(this.scrollAnimationFrame);
+    cancelAnimationFrame(this.findScrollableElementFrame);
+    this.scrollableElement = null;
+    this.scrollAnimationFrame = null;
+    this.findScrollableElementFrame = null;
+    this.currentMousePosition = null;
+  }
+
+  [scroll]() {
+    if (!this.scrollableElement || !this.currentMousePosition) {
+      return;
+    }
+    cancelAnimationFrame(this.scrollAnimationFrame);
+    const {
+      speed,
+      sensitivity
+    } = this.options;
+    const rect = this.scrollableElement.getBoundingClientRect();
+    const bottomCutOff = rect.bottom > window.innerHeight;
+    const topCutOff = rect.top < 0;
+    const cutOff = topCutOff || bottomCutOff;
+    const documentScrollingElement = getDocumentScrollingElement();
+    const scrollableElement = this.scrollableElement;
+    const clientX = this.currentMousePosition.clientX;
+    const clientY = this.currentMousePosition.clientY;
+    if (scrollableElement !== document.body && scrollableElement !== document.documentElement && !cutOff) {
+      const {
+        offsetHeight,
+        offsetWidth
+      } = scrollableElement;
+      if (rect.top + offsetHeight - clientY < sensitivity) {
+        scrollableElement.scrollTop += speed;
+      } else if (clientY - rect.top < sensitivity) {
+        scrollableElement.scrollTop -= speed;
+      }
+      if (rect.left + offsetWidth - clientX < sensitivity) {
+        scrollableElement.scrollLeft += speed;
+      } else if (clientX - rect.left < sensitivity) {
+        scrollableElement.scrollLeft -= speed;
+      }
+    } else {
+      const {
+        innerHeight,
+        innerWidth
+      } = window;
+      if (clientY < sensitivity) {
+        documentScrollingElement.scrollTop -= speed;
+      } else if (innerHeight - clientY < sensitivity) {
+        documentScrollingElement.scrollTop += speed;
+      }
+      if (clientX < sensitivity) {
+        documentScrollingElement.scrollLeft -= speed;
+      } else if (innerWidth - clientX < sensitivity) {
+        documentScrollingElement.scrollLeft += speed;
+      }
+    }
+    this.scrollAnimationFrame = requestAnimationFrame(this[scroll]);
+  }
+}
+
+function hasOverflow(element) {
+  const overflowRegex = /(auto|scroll)/;
+  const computedStyles = getComputedStyle(element, null);
+  const overflow = computedStyles.getPropertyValue('overflow') + computedStyles.getPropertyValue('overflow-y') + computedStyles.getPropertyValue('overflow-x');
+  return overflowRegex.test(overflow);
+}
+
+function isStaticallyPositioned(element) {
+  const position = getComputedStyle(element).getPropertyValue('position');
+  return position === 'static';
+}
+
+function closestScrollableElement(element) {
+  if (!element) {
+    return getDocumentScrollingElement();
+  }
+  const position = getComputedStyle(element).getPropertyValue('position');
+  const excludeStaticParents = position === 'absolute';
+  const scrollableElement = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_1__["default"])(element, parent => {
+    if (excludeStaticParents && isStaticallyPositioned(parent)) {
+      return false;
+    }
+    return hasOverflow(parent);
+  });
+  if (position === 'fixed' || !scrollableElement) {
+    return getDocumentScrollingElement();
+  } else {
+    return scrollableElement;
+  }
+}
+
+function getDocumentScrollingElement() {
+  return document.scrollingElement || document.documentElement;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/DragSensor/DragSensor.mjs":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/DragSensor/DragSensor.mjs ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ DragSensor)
+/* harmony export */ });
+/* harmony import */ var _shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/utils/closest/closest.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs");
+/* harmony import */ var _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Sensor/Sensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/Sensor/Sensor.mjs");
+/* harmony import */ var _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../SensorEvent/SensorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs");
+
+
+
+
+const onMouseDown = Symbol('onMouseDown');
+const onMouseUp = Symbol('onMouseUp');
+const onDragStart = Symbol('onDragStart');
+const onDragOver = Symbol('onDragOver');
+const onDragEnd = Symbol('onDragEnd');
+const onDrop = Symbol('onDrop');
+const reset = Symbol('reset');
+
+class DragSensor extends _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_1__["default"] {
+
+  constructor(containers = [], options = {}) {
+    super(containers, options);
+
+    this.mouseDownTimeout = null;
+
+    this.draggableElement = null;
+
+    this.nativeDraggableElement = null;
+    this[onMouseDown] = this[onMouseDown].bind(this);
+    this[onMouseUp] = this[onMouseUp].bind(this);
+    this[onDragStart] = this[onDragStart].bind(this);
+    this[onDragOver] = this[onDragOver].bind(this);
+    this[onDragEnd] = this[onDragEnd].bind(this);
+    this[onDrop] = this[onDrop].bind(this);
+  }
+
+  attach() {
+    document.addEventListener('mousedown', this[onMouseDown], true);
+  }
+
+  detach() {
+    document.removeEventListener('mousedown', this[onMouseDown], true);
+  }
+
+  [onDragStart](event) {
+
+    event.dataTransfer.setData('text', '');
+    event.dataTransfer.effectAllowed = this.options.type;
+    const target = document.elementFromPoint(event.clientX, event.clientY);
+    const originalSource = this.draggableElement;
+    if (!originalSource) {
+      return;
+    }
+    const dragStartEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.DragStartSensorEvent({
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target,
+      originalSource,
+      container: this.currentContainer,
+      originalEvent: event
+    });
+
+    setTimeout(() => {
+      this.trigger(this.currentContainer, dragStartEvent);
+      if (dragStartEvent.canceled()) {
+        this.dragging = false;
+      } else {
+        this.dragging = true;
+      }
+    }, 0);
+  }
+
+  [onDragOver](event) {
+    if (!this.dragging) {
+      return;
+    }
+    const target = document.elementFromPoint(event.clientX, event.clientY);
+    const container = this.currentContainer;
+    const dragMoveEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.DragMoveSensorEvent({
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target,
+      container,
+      originalEvent: event
+    });
+    this.trigger(container, dragMoveEvent);
+    if (!dragMoveEvent.canceled()) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = this.options.type;
+    }
+  }
+
+  [onDragEnd](event) {
+    if (!this.dragging) {
+      return;
+    }
+    document.removeEventListener('mouseup', this[onMouseUp], true);
+    const target = document.elementFromPoint(event.clientX, event.clientY);
+    const container = this.currentContainer;
+    const dragStopEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.DragStopSensorEvent({
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target,
+      container,
+      originalEvent: event
+    });
+    this.trigger(container, dragStopEvent);
+    this.dragging = false;
+    this.startEvent = null;
+    this[reset]();
+  }
+
+  [onDrop](event) {
+    event.preventDefault();
+  }
+
+  [onMouseDown](event) {
+
+    if (event.target && (event.target.form || event.target.contenteditable)) {
+      return;
+    }
+    const target = event.target;
+    this.currentContainer = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(target, this.containers);
+    if (!this.currentContainer) {
+      return;
+    }
+    if (this.options.handle && target && !(0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(target, this.options.handle)) {
+      return;
+    }
+    const originalSource = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(target, this.options.draggable);
+    if (!originalSource) {
+      return;
+    }
+    const nativeDraggableElement = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target, element => element.draggable);
+    if (nativeDraggableElement) {
+      nativeDraggableElement.draggable = false;
+      this.nativeDraggableElement = nativeDraggableElement;
+    }
+    document.addEventListener('mouseup', this[onMouseUp], true);
+    document.addEventListener('dragstart', this[onDragStart], false);
+    document.addEventListener('dragover', this[onDragOver], false);
+    document.addEventListener('dragend', this[onDragEnd], false);
+    document.addEventListener('drop', this[onDrop], false);
+    this.startEvent = event;
+    this.mouseDownTimeout = setTimeout(() => {
+      originalSource.draggable = true;
+      this.draggableElement = originalSource;
+    }, this.delay.drag);
+  }
+
+  [onMouseUp]() {
+    this[reset]();
+  }
+
+  [reset]() {
+    clearTimeout(this.mouseDownTimeout);
+    document.removeEventListener('mouseup', this[onMouseUp], true);
+    document.removeEventListener('dragstart', this[onDragStart], false);
+    document.removeEventListener('dragover', this[onDragOver], false);
+    document.removeEventListener('dragend', this[onDragEnd], false);
+    document.removeEventListener('drop', this[onDrop], false);
+    if (this.nativeDraggableElement) {
+      this.nativeDraggableElement.draggable = true;
+      this.nativeDraggableElement = null;
+    }
+    if (this.draggableElement) {
+      this.draggableElement.draggable = false;
+      this.draggableElement = null;
+    }
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/ForceTouchSensor/ForceTouchSensor.mjs":
+/*!***********************************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/ForceTouchSensor/ForceTouchSensor.mjs ***!
+  \***********************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ForceTouchSensor)
+/* harmony export */ });
+/* harmony import */ var _shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/utils/closest/closest.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs");
+/* harmony import */ var _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Sensor/Sensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/Sensor/Sensor.mjs");
+/* harmony import */ var _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../SensorEvent/SensorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs");
+
+
+
+
+const onMouseForceWillBegin = Symbol('onMouseForceWillBegin');
+const onMouseForceDown = Symbol('onMouseForceDown');
+const onMouseDown = Symbol('onMouseDown');
+const onMouseForceChange = Symbol('onMouseForceChange');
+const onMouseMove = Symbol('onMouseMove');
+const onMouseUp = Symbol('onMouseUp');
+const onMouseForceGlobalChange = Symbol('onMouseForceGlobalChange');
+
+class ForceTouchSensor extends _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_1__["default"] {
+
+  constructor(containers = [], options = {}) {
+    super(containers, options);
+
+    this.mightDrag = false;
+    this[onMouseForceWillBegin] = this[onMouseForceWillBegin].bind(this);
+    this[onMouseForceDown] = this[onMouseForceDown].bind(this);
+    this[onMouseDown] = this[onMouseDown].bind(this);
+    this[onMouseForceChange] = this[onMouseForceChange].bind(this);
+    this[onMouseMove] = this[onMouseMove].bind(this);
+    this[onMouseUp] = this[onMouseUp].bind(this);
+  }
+
+  attach() {
+    for (const container of this.containers) {
+      container.addEventListener('webkitmouseforcewillbegin', this[onMouseForceWillBegin], false);
+      container.addEventListener('webkitmouseforcedown', this[onMouseForceDown], false);
+      container.addEventListener('mousedown', this[onMouseDown], true);
+      container.addEventListener('webkitmouseforcechanged', this[onMouseForceChange], false);
+    }
+    document.addEventListener('mousemove', this[onMouseMove]);
+    document.addEventListener('mouseup', this[onMouseUp]);
+  }
+
+  detach() {
+    for (const container of this.containers) {
+      container.removeEventListener('webkitmouseforcewillbegin', this[onMouseForceWillBegin], false);
+      container.removeEventListener('webkitmouseforcedown', this[onMouseForceDown], false);
+      container.removeEventListener('mousedown', this[onMouseDown], true);
+      container.removeEventListener('webkitmouseforcechanged', this[onMouseForceChange], false);
+    }
+    document.removeEventListener('mousemove', this[onMouseMove]);
+    document.removeEventListener('mouseup', this[onMouseUp]);
+  }
+
+  [onMouseForceWillBegin](event) {
+    event.preventDefault();
+    this.mightDrag = true;
+  }
+
+  [onMouseForceDown](event) {
+    if (this.dragging) {
+      return;
+    }
+    const target = document.elementFromPoint(event.clientX, event.clientY);
+    const container = event.currentTarget;
+    if (this.options.handle && target && !(0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(target, this.options.handle)) {
+      return;
+    }
+    const originalSource = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(target, this.options.draggable);
+    if (!originalSource) {
+      return;
+    }
+    const dragStartEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.DragStartSensorEvent({
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target,
+      container,
+      originalSource,
+      originalEvent: event
+    });
+    this.trigger(container, dragStartEvent);
+    this.currentContainer = container;
+    this.dragging = !dragStartEvent.canceled();
+    this.mightDrag = false;
+  }
+
+  [onMouseUp](event) {
+    if (!this.dragging) {
+      return;
+    }
+    const dragStopEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.DragStopSensorEvent({
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target: null,
+      container: this.currentContainer,
+      originalEvent: event
+    });
+    this.trigger(this.currentContainer, dragStopEvent);
+    this.currentContainer = null;
+    this.dragging = false;
+    this.mightDrag = false;
+  }
+
+  [onMouseDown](event) {
+    if (!this.mightDrag) {
+      return;
+    }
+
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    event.preventDefault();
+  }
+
+  [onMouseMove](event) {
+    if (!this.dragging) {
+      return;
+    }
+    const target = document.elementFromPoint(event.clientX, event.clientY);
+    const dragMoveEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.DragMoveSensorEvent({
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target,
+      container: this.currentContainer,
+      originalEvent: event
+    });
+    this.trigger(this.currentContainer, dragMoveEvent);
+  }
+
+  [onMouseForceChange](event) {
+    if (this.dragging) {
+      return;
+    }
+    const target = event.target;
+    const container = event.currentTarget;
+    const dragPressureEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.DragPressureSensorEvent({
+      pressure: event.webkitForce,
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target,
+      container,
+      originalEvent: event
+    });
+    this.trigger(container, dragPressureEvent);
+  }
+
+  [onMouseForceGlobalChange](event) {
+    if (!this.dragging) {
+      return;
+    }
+    const target = event.target;
+    const dragPressureEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.DragPressureSensorEvent({
+      pressure: event.webkitForce,
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target,
+      container: this.currentContainer,
+      originalEvent: event
+    });
+    this.trigger(this.currentContainer, dragPressureEvent);
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/MouseSensor/MouseSensor.mjs":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/MouseSensor/MouseSensor.mjs ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ MouseSensor)
+/* harmony export */ });
+/* harmony import */ var _shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/utils/closest/closest.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs");
+/* harmony import */ var _shared_utils_distance_distance_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../shared/utils/distance/distance.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/distance/distance.mjs");
+/* harmony import */ var _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Sensor/Sensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/Sensor/Sensor.mjs");
+/* harmony import */ var _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../SensorEvent/SensorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs");
+
+
+
+
+
+const onContextMenuWhileDragging = Symbol('onContextMenuWhileDragging');
+const onMouseDown = Symbol('onMouseDown');
+const onMouseMove = Symbol('onMouseMove');
+const onMouseUp = Symbol('onMouseUp');
+const startDrag = Symbol('startDrag');
+const onDistanceChange = Symbol('onDistanceChange');
+
+class MouseSensor extends _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_2__["default"] {
+
+  constructor(containers = [], options = {}) {
+    super(containers, options);
+
+    this.mouseDownTimeout = null;
+
+    this.pageX = null;
+
+    this.pageY = null;
+    this[onContextMenuWhileDragging] = this[onContextMenuWhileDragging].bind(this);
+    this[onMouseDown] = this[onMouseDown].bind(this);
+    this[onMouseMove] = this[onMouseMove].bind(this);
+    this[onMouseUp] = this[onMouseUp].bind(this);
+    this[startDrag] = this[startDrag].bind(this);
+    this[onDistanceChange] = this[onDistanceChange].bind(this);
+  }
+
+  attach() {
+    document.addEventListener('mousedown', this[onMouseDown], true);
+  }
+
+  detach() {
+    document.removeEventListener('mousedown', this[onMouseDown], true);
+  }
+
+  [onMouseDown](event) {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey) {
+      return;
+    }
+    const container = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target, this.containers);
+    if (!container) {
+      return;
+    }
+    if (this.options.handle && event.target && !(0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target, this.options.handle)) {
+      return;
+    }
+    const originalSource = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target, this.options.draggable);
+    if (!originalSource) {
+      return;
+    }
+    const {
+      delay
+    } = this;
+    const {
+      pageX,
+      pageY
+    } = event;
+    Object.assign(this, {
+      pageX,
+      pageY
+    });
+    this.onMouseDownAt = Date.now();
+    this.startEvent = event;
+    this.currentContainer = container;
+    this.originalSource = originalSource;
+    document.addEventListener('mouseup', this[onMouseUp]);
+    document.addEventListener('dragstart', preventNativeDragStart);
+    document.addEventListener('mousemove', this[onDistanceChange]);
+    this.mouseDownTimeout = window.setTimeout(() => {
+      this[onDistanceChange]({
+        pageX: this.pageX,
+        pageY: this.pageY
+      });
+    }, delay.mouse);
+  }
+
+  [startDrag]() {
+    const startEvent = this.startEvent;
+    const container = this.currentContainer;
+    const originalSource = this.originalSource;
+    const dragStartEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_3__.DragStartSensorEvent({
+      clientX: startEvent.clientX,
+      clientY: startEvent.clientY,
+      target: startEvent.target,
+      container,
+      originalSource,
+      originalEvent: startEvent
+    });
+    this.trigger(this.currentContainer, dragStartEvent);
+    this.dragging = !dragStartEvent.canceled();
+    if (this.dragging) {
+      document.addEventListener('contextmenu', this[onContextMenuWhileDragging], true);
+      document.addEventListener('mousemove', this[onMouseMove]);
+    }
+  }
+
+  [onDistanceChange](event) {
+    const {
+      pageX,
+      pageY
+    } = event;
+    const {
+      distance: distance$1
+    } = this.options;
+    const {
+      startEvent,
+      delay
+    } = this;
+    Object.assign(this, {
+      pageX,
+      pageY
+    });
+    if (!this.currentContainer) {
+      return;
+    }
+    const timeElapsed = Date.now() - this.onMouseDownAt;
+    const distanceTravelled = (0,_shared_utils_distance_distance_mjs__WEBPACK_IMPORTED_MODULE_1__["default"])(startEvent.pageX, startEvent.pageY, pageX, pageY) || 0;
+    clearTimeout(this.mouseDownTimeout);
+    if (timeElapsed < delay.mouse) {
+
+      document.removeEventListener('mousemove', this[onDistanceChange]);
+    } else if (distanceTravelled >= distance$1) {
+      document.removeEventListener('mousemove', this[onDistanceChange]);
+      this[startDrag]();
+    }
+  }
+
+  [onMouseMove](event) {
+    if (!this.dragging) {
+      return;
+    }
+    const target = document.elementFromPoint(event.clientX, event.clientY);
+    const dragMoveEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_3__.DragMoveSensorEvent({
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target,
+      container: this.currentContainer,
+      originalEvent: event
+    });
+    this.trigger(this.currentContainer, dragMoveEvent);
+  }
+
+  [onMouseUp](event) {
+    clearTimeout(this.mouseDownTimeout);
+    if (event.button !== 0) {
+      return;
+    }
+    document.removeEventListener('mouseup', this[onMouseUp]);
+    document.removeEventListener('dragstart', preventNativeDragStart);
+    document.removeEventListener('mousemove', this[onDistanceChange]);
+    if (!this.dragging) {
+      return;
+    }
+    const target = document.elementFromPoint(event.clientX, event.clientY);
+    const dragStopEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_3__.DragStopSensorEvent({
+      clientX: event.clientX,
+      clientY: event.clientY,
+      target,
+      container: this.currentContainer,
+      originalEvent: event
+    });
+    this.trigger(this.currentContainer, dragStopEvent);
+    document.removeEventListener('contextmenu', this[onContextMenuWhileDragging], true);
+    document.removeEventListener('mousemove', this[onMouseMove]);
+    this.currentContainer = null;
+    this.dragging = false;
+    this.startEvent = null;
+  }
+
+  [onContextMenuWhileDragging](event) {
+    event.preventDefault();
+  }
+}
+function preventNativeDragStart(event) {
+  event.preventDefault();
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/Sensor/Sensor.mjs":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/Sensor/Sensor.mjs ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Sensor)
+/* harmony export */ });
+const defaultDelay = {
+  mouse: 0,
+  drag: 0,
+  touch: 100
+};
+
+class Sensor {
+
+  constructor(containers = [], options = {}) {
+
+    this.containers = [...containers];
+
+    this.options = {
+      ...options
+    };
+
+    this.dragging = false;
+
+    this.currentContainer = null;
+
+    this.originalSource = null;
+
+    this.startEvent = null;
+
+    this.delay = calcDelay(options.delay);
+  }
+
+  attach() {
+    return this;
+  }
+
+  detach() {
+    return this;
+  }
+
+  addContainer(...containers) {
+    this.containers = [...this.containers, ...containers];
+  }
+
+  removeContainer(...containers) {
+    this.containers = this.containers.filter(container => !containers.includes(container));
+  }
+
+  trigger(element, sensorEvent) {
+    const event = document.createEvent('Event');
+    event.detail = sensorEvent;
+    event.initEvent(sensorEvent.type, true, true);
+    element.dispatchEvent(event);
+    this.lastEvent = sensorEvent;
+    return sensorEvent;
+  }
+}
+
+function calcDelay(optionsDelay) {
+  const delay = {};
+  if (optionsDelay === undefined) {
+    return {
+      ...defaultDelay
+    };
+  }
+  if (typeof optionsDelay === 'number') {
+    for (const key in defaultDelay) {
+      if (Object.prototype.hasOwnProperty.call(defaultDelay, key)) {
+        delay[key] = optionsDelay;
+      }
+    }
+    return delay;
+  }
+  for (const key in defaultDelay) {
+    if (Object.prototype.hasOwnProperty.call(defaultDelay, key)) {
+      if (optionsDelay[key] === undefined) {
+        delay[key] = defaultDelay[key];
+      } else {
+        delay[key] = optionsDelay[key];
+      }
+    }
+  }
+  return delay;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DragMoveSensorEvent: () => (/* binding */ DragMoveSensorEvent),
+/* harmony export */   DragPressureSensorEvent: () => (/* binding */ DragPressureSensorEvent),
+/* harmony export */   DragStartSensorEvent: () => (/* binding */ DragStartSensorEvent),
+/* harmony export */   DragStopSensorEvent: () => (/* binding */ DragStopSensorEvent),
+/* harmony export */   SensorEvent: () => (/* binding */ SensorEvent)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+
+
+class SensorEvent extends _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent {
+
+  get originalEvent() {
+    return this.data.originalEvent;
+  }
+
+  get clientX() {
+    return this.data.clientX;
+  }
+
+  get clientY() {
+    return this.data.clientY;
+  }
+
+  get target() {
+    return this.data.target;
+  }
+
+  get container() {
+    return this.data.container;
+  }
+
+  get originalSource() {
+    return this.data.originalSource;
+  }
+
+  get pressure() {
+    return this.data.pressure;
+  }
+}
+
+class DragStartSensorEvent extends SensorEvent {}
+
+DragStartSensorEvent.type = 'drag:start';
+class DragMoveSensorEvent extends SensorEvent {}
+
+DragMoveSensorEvent.type = 'drag:move';
+class DragStopSensorEvent extends SensorEvent {}
+
+DragStopSensorEvent.type = 'drag:stop';
+class DragPressureSensorEvent extends SensorEvent {}
+DragPressureSensorEvent.type = 'drag:pressure';
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/TouchSensor/TouchSensor.mjs":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/TouchSensor/TouchSensor.mjs ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ TouchSensor)
+/* harmony export */ });
+/* harmony import */ var _shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/utils/closest/closest.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs");
+/* harmony import */ var _shared_utils_distance_distance_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../shared/utils/distance/distance.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/distance/distance.mjs");
+/* harmony import */ var _shared_utils_touchCoords_touchCoords_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../shared/utils/touchCoords/touchCoords.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/touchCoords/touchCoords.mjs");
+/* harmony import */ var _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Sensor/Sensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/Sensor/Sensor.mjs");
+/* harmony import */ var _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../SensorEvent/SensorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs");
+
+
+
+
+
+
+const onTouchStart = Symbol('onTouchStart');
+const onTouchEnd = Symbol('onTouchEnd');
+const onTouchMove = Symbol('onTouchMove');
+const startDrag = Symbol('startDrag');
+const onDistanceChange = Symbol('onDistanceChange');
+
+let preventScrolling = false;
+
+window.addEventListener('touchmove', event => {
+  if (!preventScrolling) {
+    return;
+  }
+
+  event.preventDefault();
+}, {
+  passive: false
+});
+
+class TouchSensor extends _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_3__["default"] {
+
+  constructor(containers = [], options = {}) {
+    super(containers, options);
+
+    this.currentScrollableParent = null;
+
+    this.tapTimeout = null;
+
+    this.touchMoved = false;
+
+    this.pageX = null;
+
+    this.pageY = null;
+    this[onTouchStart] = this[onTouchStart].bind(this);
+    this[onTouchEnd] = this[onTouchEnd].bind(this);
+    this[onTouchMove] = this[onTouchMove].bind(this);
+    this[startDrag] = this[startDrag].bind(this);
+    this[onDistanceChange] = this[onDistanceChange].bind(this);
+  }
+
+  attach() {
+    document.addEventListener('touchstart', this[onTouchStart]);
+  }
+
+  detach() {
+    document.removeEventListener('touchstart', this[onTouchStart]);
+  }
+
+  [onTouchStart](event) {
+    const container = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target, this.containers);
+    if (!container) {
+      return;
+    }
+    if (this.options.handle && event.target && !(0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target, this.options.handle)) {
+      return;
+    }
+    const originalSource = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target, this.options.draggable);
+    if (!originalSource) {
+      return;
+    }
+    const {
+      distance = 0
+    } = this.options;
+    const {
+      delay
+    } = this;
+    const {
+      pageX,
+      pageY
+    } = (0,_shared_utils_touchCoords_touchCoords_mjs__WEBPACK_IMPORTED_MODULE_2__["default"])(event);
+    Object.assign(this, {
+      pageX,
+      pageY
+    });
+    this.onTouchStartAt = Date.now();
+    this.startEvent = event;
+    this.currentContainer = container;
+    this.originalSource = originalSource;
+    document.addEventListener('touchend', this[onTouchEnd]);
+    document.addEventListener('touchcancel', this[onTouchEnd]);
+    document.addEventListener('touchmove', this[onDistanceChange]);
+    container.addEventListener('contextmenu', onContextMenu);
+    if (distance) {
+      preventScrolling = true;
+    }
+    this.tapTimeout = window.setTimeout(() => {
+      this[onDistanceChange]({
+        touches: [{
+          pageX: this.pageX,
+          pageY: this.pageY
+        }]
+      });
+    }, delay.touch);
+  }
+
+  [startDrag]() {
+    const startEvent = this.startEvent;
+    const container = this.currentContainer;
+    const touch = (0,_shared_utils_touchCoords_touchCoords_mjs__WEBPACK_IMPORTED_MODULE_2__["default"])(startEvent);
+    const originalSource = this.originalSource;
+    const dragStartEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_4__.DragStartSensorEvent({
+      clientX: touch.pageX,
+      clientY: touch.pageY,
+      target: startEvent.target,
+      container,
+      originalSource,
+      originalEvent: startEvent
+    });
+    this.trigger(this.currentContainer, dragStartEvent);
+    this.dragging = !dragStartEvent.canceled();
+    if (this.dragging) {
+      document.addEventListener('touchmove', this[onTouchMove]);
+    }
+    preventScrolling = this.dragging;
+  }
+
+  [onDistanceChange](event) {
+    const {
+      distance: distance$1
+    } = this.options;
+    const {
+      startEvent,
+      delay
+    } = this;
+    const start = (0,_shared_utils_touchCoords_touchCoords_mjs__WEBPACK_IMPORTED_MODULE_2__["default"])(startEvent);
+    const current = (0,_shared_utils_touchCoords_touchCoords_mjs__WEBPACK_IMPORTED_MODULE_2__["default"])(event);
+    const timeElapsed = Date.now() - this.onTouchStartAt;
+    const distanceTravelled = (0,_shared_utils_distance_distance_mjs__WEBPACK_IMPORTED_MODULE_1__["default"])(start.pageX, start.pageY, current.pageX, current.pageY);
+    Object.assign(this, current);
+    clearTimeout(this.tapTimeout);
+    if (timeElapsed < delay.touch) {
+
+      document.removeEventListener('touchmove', this[onDistanceChange]);
+    } else if (distanceTravelled >= distance$1) {
+      document.removeEventListener('touchmove', this[onDistanceChange]);
+      this[startDrag]();
+    }
+  }
+
+  [onTouchMove](event) {
+    if (!this.dragging) {
+      return;
+    }
+    const {
+      pageX,
+      pageY
+    } = (0,_shared_utils_touchCoords_touchCoords_mjs__WEBPACK_IMPORTED_MODULE_2__["default"])(event);
+    const target = document.elementFromPoint(pageX - window.scrollX, pageY - window.scrollY);
+    const dragMoveEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_4__.DragMoveSensorEvent({
+      clientX: pageX,
+      clientY: pageY,
+      target,
+      container: this.currentContainer,
+      originalEvent: event
+    });
+    this.trigger(this.currentContainer, dragMoveEvent);
+  }
+
+  [onTouchEnd](event) {
+    clearTimeout(this.tapTimeout);
+    preventScrolling = false;
+    document.removeEventListener('touchend', this[onTouchEnd]);
+    document.removeEventListener('touchcancel', this[onTouchEnd]);
+    document.removeEventListener('touchmove', this[onDistanceChange]);
+    if (this.currentContainer) {
+      this.currentContainer.removeEventListener('contextmenu', onContextMenu);
+    }
+    if (!this.dragging) {
+      return;
+    }
+    document.removeEventListener('touchmove', this[onTouchMove]);
+    const {
+      pageX,
+      pageY
+    } = (0,_shared_utils_touchCoords_touchCoords_mjs__WEBPACK_IMPORTED_MODULE_2__["default"])(event);
+    const target = document.elementFromPoint(pageX - window.scrollX, pageY - window.scrollY);
+    event.preventDefault();
+    const dragStopEvent = new _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_4__.DragStopSensorEvent({
+      clientX: pageX,
+      clientY: pageY,
+      target,
+      container: this.currentContainer,
+      originalEvent: event
+    });
+    this.trigger(this.currentContainer, dragStopEvent);
+    this.currentContainer = null;
+    this.dragging = false;
+    this.startEvent = null;
+  }
+}
+function onContextMenu(event) {
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/index.mjs":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/index.mjs ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DragMoveSensorEvent: () => (/* reexport safe */ _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_5__.DragMoveSensorEvent),
+/* harmony export */   DragPressureSensorEvent: () => (/* reexport safe */ _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_5__.DragPressureSensorEvent),
+/* harmony export */   DragSensor: () => (/* reexport safe */ _DragSensor_DragSensor_mjs__WEBPACK_IMPORTED_MODULE_3__["default"]),
+/* harmony export */   DragStartSensorEvent: () => (/* reexport safe */ _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_5__.DragStartSensorEvent),
+/* harmony export */   DragStopSensorEvent: () => (/* reexport safe */ _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_5__.DragStopSensorEvent),
+/* harmony export */   ForceTouchSensor: () => (/* reexport safe */ _ForceTouchSensor_ForceTouchSensor_mjs__WEBPACK_IMPORTED_MODULE_4__["default"]),
+/* harmony export */   MouseSensor: () => (/* reexport safe */ _MouseSensor_MouseSensor_mjs__WEBPACK_IMPORTED_MODULE_1__["default"]),
+/* harmony export */   Sensor: () => (/* reexport safe */ _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   SensorEvent: () => (/* reexport safe */ _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_5__.SensorEvent),
+/* harmony export */   TouchSensor: () => (/* reexport safe */ _TouchSensor_TouchSensor_mjs__WEBPACK_IMPORTED_MODULE_2__["default"])
+/* harmony export */ });
+/* harmony import */ var _Sensor_Sensor_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Sensor/Sensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/Sensor/Sensor.mjs");
+/* harmony import */ var _MouseSensor_MouseSensor_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MouseSensor/MouseSensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/MouseSensor/MouseSensor.mjs");
+/* harmony import */ var _TouchSensor_TouchSensor_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TouchSensor/TouchSensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/TouchSensor/TouchSensor.mjs");
+/* harmony import */ var _DragSensor_DragSensor_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DragSensor/DragSensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/DragSensor/DragSensor.mjs");
+/* harmony import */ var _ForceTouchSensor_ForceTouchSensor_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ForceTouchSensor/ForceTouchSensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/ForceTouchSensor/ForceTouchSensor.mjs");
+/* harmony import */ var _SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SensorEvent/SensorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs");
+
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Droppable/Droppable.mjs":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Droppable/Droppable.mjs ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Droppable)
+/* harmony export */ });
+/* harmony import */ var _shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared/utils/closest/closest.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs");
+/* harmony import */ var _Draggable_Draggable_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Draggable/Draggable.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Draggable.mjs");
+/* harmony import */ var _Draggable_DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Draggable/DragEvent/DragEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DragEvent/DragEvent.mjs");
+/* harmony import */ var _Draggable_DraggableEvent_DraggableEvent_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Draggable/DraggableEvent/DraggableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DraggableEvent/DraggableEvent.mjs");
+/* harmony import */ var _Draggable_Plugins_Announcement_Announcement_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Draggable/Plugins/Announcement/Announcement.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Announcement/Announcement.mjs");
+/* harmony import */ var _Draggable_Plugins_Mirror_MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs");
+/* harmony import */ var _Draggable_Sensors_SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Draggable/Sensors/SensorEvent/SensorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs");
+/* harmony import */ var _Draggable_Sensors_TouchSensor_TouchSensor_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Draggable/Sensors/TouchSensor/TouchSensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/TouchSensor/TouchSensor.mjs");
+/* harmony import */ var _DroppableEvent_DroppableEvent_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./DroppableEvent/DroppableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Droppable/DroppableEvent/DroppableEvent.mjs");
+
+
+
+
+
+
+
+
+
+
+const onDragStart = Symbol('onDragStart');
+const onDragMove = Symbol('onDragMove');
+const onDragStop = Symbol('onDragStop');
+const dropInDropzone = Symbol('dropInDropZone');
+const returnToOriginalDropzone = Symbol('returnToOriginalDropzone');
+const closestDropzone = Symbol('closestDropzone');
+const getDropzones = Symbol('getDropzones');
+
+function onDroppableDroppedDefaultAnnouncement({
+  dragEvent,
+  dropzone
+}) {
+  const sourceText = dragEvent.source.textContent.trim() || dragEvent.source.id || 'draggable element';
+  const dropzoneText = dropzone.textContent.trim() || dropzone.id || 'droppable element';
+  return `Dropped ${sourceText} into ${dropzoneText}`;
+}
+
+function onDroppableReturnedDefaultAnnouncement({
+  dragEvent,
+  dropzone
+}) {
+  const sourceText = dragEvent.source.textContent.trim() || dragEvent.source.id || 'draggable element';
+  const dropzoneText = dropzone.textContent.trim() || dropzone.id || 'droppable element';
+  return `Returned ${sourceText} from ${dropzoneText}`;
+}
+
+const defaultAnnouncements = {
+  'droppable:dropped': onDroppableDroppedDefaultAnnouncement,
+  'droppable:returned': onDroppableReturnedDefaultAnnouncement
+};
+const defaultClasses = {
+  'droppable:active': 'draggable-dropzone--active',
+  'droppable:occupied': 'draggable-dropzone--occupied'
+};
+const defaultOptions = {
+  dropzone: '.draggable-droppable'
+};
+
+class Droppable extends _Draggable_Draggable_mjs__WEBPACK_IMPORTED_MODULE_1__["default"] {
+
+  constructor(containers = [], options = {}) {
+    super(containers, {
+      ...defaultOptions,
+      ...options,
+      classes: {
+        ...defaultClasses,
+        ...(options.classes || {})
+      },
+      announcements: {
+        ...defaultAnnouncements,
+        ...(options.announcements || {})
+      }
+    });
+
+    this.dropzones = null;
+
+    this.lastDropzone = null;
+
+    this.initialDropzone = null;
+    this[onDragStart] = this[onDragStart].bind(this);
+    this[onDragMove] = this[onDragMove].bind(this);
+    this[onDragStop] = this[onDragStop].bind(this);
+    this.on('drag:start', this[onDragStart]).on('drag:move', this[onDragMove]).on('drag:stop', this[onDragStop]);
+  }
+
+  destroy() {
+    super.destroy();
+    this.off('drag:start', this[onDragStart]).off('drag:move', this[onDragMove]).off('drag:stop', this[onDragStop]);
+  }
+
+  [onDragStart](event) {
+    if (event.canceled()) {
+      return;
+    }
+    this.dropzones = [...this[getDropzones]()];
+    const dropzone = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(event.sensorEvent.target, this.options.dropzone);
+    if (!dropzone) {
+      event.cancel();
+      return;
+    }
+    const droppableStartEvent = new _DroppableEvent_DroppableEvent_mjs__WEBPACK_IMPORTED_MODULE_8__.DroppableStartEvent({
+      dragEvent: event,
+      dropzone
+    });
+    this.trigger(droppableStartEvent);
+    if (droppableStartEvent.canceled()) {
+      event.cancel();
+      return;
+    }
+    this.initialDropzone = dropzone;
+    for (const dropzoneElement of this.dropzones) {
+      if (dropzoneElement.classList.contains(this.getClassNameFor('droppable:occupied'))) {
+        continue;
+      }
+      dropzoneElement.classList.add(...this.getClassNamesFor('droppable:active'));
+    }
+  }
+
+  [onDragMove](event) {
+    if (event.canceled()) {
+      return;
+    }
+    const dropzone = this[closestDropzone](event.sensorEvent.target);
+    const overEmptyDropzone = dropzone && !dropzone.classList.contains(this.getClassNameFor('droppable:occupied'));
+    if (overEmptyDropzone && this[dropInDropzone](event, dropzone)) {
+      this.lastDropzone = dropzone;
+    } else if ((!dropzone || dropzone === this.initialDropzone) && this.lastDropzone) {
+      this[returnToOriginalDropzone](event);
+      this.lastDropzone = null;
+    }
+  }
+
+  [onDragStop](event) {
+    const droppableStopEvent = new _DroppableEvent_DroppableEvent_mjs__WEBPACK_IMPORTED_MODULE_8__.DroppableStopEvent({
+      dragEvent: event,
+      dropzone: this.lastDropzone || this.initialDropzone
+    });
+    this.trigger(droppableStopEvent);
+    const occupiedClasses = this.getClassNamesFor('droppable:occupied');
+    for (const dropzone of this.dropzones) {
+      dropzone.classList.remove(...this.getClassNamesFor('droppable:active'));
+    }
+    if (this.lastDropzone && this.lastDropzone !== this.initialDropzone) {
+      this.initialDropzone.classList.remove(...occupiedClasses);
+    }
+    this.dropzones = null;
+    this.lastDropzone = null;
+    this.initialDropzone = null;
+  }
+
+  [dropInDropzone](event, dropzone) {
+    const droppableDroppedEvent = new _DroppableEvent_DroppableEvent_mjs__WEBPACK_IMPORTED_MODULE_8__.DroppableDroppedEvent({
+      dragEvent: event,
+      dropzone
+    });
+    this.trigger(droppableDroppedEvent);
+    if (droppableDroppedEvent.canceled()) {
+      return false;
+    }
+    const occupiedClasses = this.getClassNamesFor('droppable:occupied');
+    if (this.lastDropzone) {
+      this.lastDropzone.classList.remove(...occupiedClasses);
+    }
+    dropzone.appendChild(event.source);
+    dropzone.classList.add(...occupiedClasses);
+    return true;
+  }
+
+  [returnToOriginalDropzone](event) {
+    const droppableReturnedEvent = new _DroppableEvent_DroppableEvent_mjs__WEBPACK_IMPORTED_MODULE_8__.DroppableReturnedEvent({
+      dragEvent: event,
+      dropzone: this.lastDropzone
+    });
+    this.trigger(droppableReturnedEvent);
+    if (droppableReturnedEvent.canceled()) {
+      return;
+    }
+    this.initialDropzone.appendChild(event.source);
+    this.lastDropzone.classList.remove(...this.getClassNamesFor('droppable:occupied'));
+  }
+
+  [closestDropzone](target) {
+    if (!this.dropzones) {
+      return null;
+    }
+    return (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(target, this.dropzones);
+  }
+
+  [getDropzones]() {
+    const dropzone = this.options.dropzone;
+    if (typeof dropzone === 'string') {
+      return document.querySelectorAll(dropzone);
+    } else if (dropzone instanceof NodeList || dropzone instanceof Array) {
+      return dropzone;
+    } else if (typeof dropzone === 'function') {
+      return dropzone();
+    } else {
+      return [];
+    }
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Droppable/DroppableEvent/DroppableEvent.mjs":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Droppable/DroppableEvent/DroppableEvent.mjs ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DroppableDroppedEvent: () => (/* binding */ DroppableDroppedEvent),
+/* harmony export */   DroppableEvent: () => (/* binding */ DroppableEvent),
+/* harmony export */   DroppableReturnedEvent: () => (/* binding */ DroppableReturnedEvent),
+/* harmony export */   DroppableStartEvent: () => (/* binding */ DroppableStartEvent),
+/* harmony export */   DroppableStopEvent: () => (/* binding */ DroppableStopEvent)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+
+
+class DroppableEvent extends _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent {
+
+  constructor(data) {
+    super(data);
+    this.data = data;
+  }
+
+  get dragEvent() {
+    return this.data.dragEvent;
+  }
+}
+DroppableEvent.type = 'droppable';
+
+class DroppableStartEvent extends DroppableEvent {
+
+  get dropzone() {
+    return this.data.dropzone;
+  }
+}
+DroppableStartEvent.type = 'droppable:start';
+DroppableStartEvent.cancelable = true;
+
+class DroppableDroppedEvent extends DroppableEvent {
+
+  get dropzone() {
+    return this.data.dropzone;
+  }
+}
+DroppableDroppedEvent.type = 'droppable:dropped';
+DroppableDroppedEvent.cancelable = true;
+
+class DroppableReturnedEvent extends DroppableEvent {
+
+  get dropzone() {
+    return this.data.dropzone;
+  }
+}
+DroppableReturnedEvent.type = 'droppable:returned';
+DroppableReturnedEvent.cancelable = true;
+
+class DroppableStopEvent extends DroppableEvent {
+
+  get dropzone() {
+    return this.data.dropzone;
+  }
+}
+DroppableStopEvent.type = 'droppable:stop';
+DroppableStopEvent.cancelable = true;
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Plugins/Collidable/Collidable.mjs":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Plugins/Collidable/Collidable.mjs ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Collidable)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+/* harmony import */ var _shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/utils/closest/closest.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs");
+/* harmony import */ var _CollidableEvent_CollidableEvent_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CollidableEvent/CollidableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/Collidable/CollidableEvent/CollidableEvent.mjs");
+
+
+
+
+const onDragMove = Symbol('onDragMove');
+const onDragStop = Symbol('onDragStop');
+const onRequestAnimationFrame = Symbol('onRequestAnimationFrame');
+
+class Collidable extends _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractPlugin {
+
+  constructor(draggable) {
+    super(draggable);
+
+    this.currentlyCollidingElement = null;
+
+    this.lastCollidingElement = null;
+
+    this.currentAnimationFrame = null;
+    this[onDragMove] = this[onDragMove].bind(this);
+    this[onDragStop] = this[onDragStop].bind(this);
+    this[onRequestAnimationFrame] = this[onRequestAnimationFrame].bind(this);
+  }
+
+  attach() {
+    this.draggable.on('drag:move', this[onDragMove]).on('drag:stop', this[onDragStop]);
+  }
+
+  detach() {
+    this.draggable.off('drag:move', this[onDragMove]).off('drag:stop', this[onDragStop]);
+  }
+
+  getCollidables() {
+    const collidables = this.draggable.options.collidables;
+    if (typeof collidables === 'string') {
+      return Array.prototype.slice.call(document.querySelectorAll(collidables));
+    } else if (collidables instanceof NodeList || collidables instanceof Array) {
+      return Array.prototype.slice.call(collidables);
+    } else if (collidables instanceof HTMLElement) {
+      return [collidables];
+    } else if (typeof collidables === 'function') {
+      return collidables();
+    } else {
+      return [];
+    }
+  }
+
+  [onDragMove](event) {
+    const target = event.sensorEvent.target;
+    this.currentAnimationFrame = requestAnimationFrame(this[onRequestAnimationFrame](target));
+    if (this.currentlyCollidingElement) {
+      event.cancel();
+    }
+    const collidableInEvent = new _CollidableEvent_CollidableEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.CollidableInEvent({
+      dragEvent: event,
+      collidingElement: this.currentlyCollidingElement
+    });
+    const collidableOutEvent = new _CollidableEvent_CollidableEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.CollidableOutEvent({
+      dragEvent: event,
+      collidingElement: this.lastCollidingElement
+    });
+    const enteringCollidable = Boolean(this.currentlyCollidingElement && this.lastCollidingElement !== this.currentlyCollidingElement);
+    const leavingCollidable = Boolean(!this.currentlyCollidingElement && this.lastCollidingElement);
+    if (enteringCollidable) {
+      if (this.lastCollidingElement) {
+        this.draggable.trigger(collidableOutEvent);
+      }
+      this.draggable.trigger(collidableInEvent);
+    } else if (leavingCollidable) {
+      this.draggable.trigger(collidableOutEvent);
+    }
+    this.lastCollidingElement = this.currentlyCollidingElement;
+  }
+
+  [onDragStop](event) {
+    const lastCollidingElement = this.currentlyCollidingElement || this.lastCollidingElement;
+    const collidableOutEvent = new _CollidableEvent_CollidableEvent_mjs__WEBPACK_IMPORTED_MODULE_2__.CollidableOutEvent({
+      dragEvent: event,
+      collidingElement: lastCollidingElement
+    });
+    if (lastCollidingElement) {
+      this.draggable.trigger(collidableOutEvent);
+    }
+    this.lastCollidingElement = null;
+    this.currentlyCollidingElement = null;
+  }
+
+  [onRequestAnimationFrame](target) {
+    return () => {
+      const collidables = this.getCollidables();
+      this.currentlyCollidingElement = (0,_shared_utils_closest_closest_mjs__WEBPACK_IMPORTED_MODULE_1__["default"])(target, element => collidables.includes(element));
+    };
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Plugins/Collidable/CollidableEvent/CollidableEvent.mjs":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Plugins/Collidable/CollidableEvent/CollidableEvent.mjs ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CollidableEvent: () => (/* binding */ CollidableEvent),
+/* harmony export */   CollidableInEvent: () => (/* binding */ CollidableInEvent),
+/* harmony export */   CollidableOutEvent: () => (/* binding */ CollidableOutEvent)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+
+
+class CollidableEvent extends _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent {
+
+  constructor(data) {
+    super(data);
+    this.data = data;
+  }
+
+  get dragEvent() {
+    return this.data.dragEvent;
+  }
+}
+CollidableEvent.type = 'collidable';
+
+class CollidableInEvent extends CollidableEvent {
+
+  get collidingElement() {
+    return this.data.collidingElement;
+  }
+}
+CollidableInEvent.type = 'collidable:in';
+
+class CollidableOutEvent extends CollidableEvent {
+
+  get collidingElement() {
+    return this.data.collidingElement;
+  }
+}
+CollidableOutEvent.type = 'collidable:out';
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Plugins/ResizeMirror/ResizeMirror.mjs":
+/*!*****************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Plugins/ResizeMirror/ResizeMirror.mjs ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ResizeMirror),
+/* harmony export */   defaultOptions: () => (/* binding */ defaultOptions)
+/* harmony export */ });
+/* harmony import */ var _virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../_virtual/_rollupPluginBabelHelpers.mjs */ "./node_modules/@shopify/draggable/build/esm/_virtual/_rollupPluginBabelHelpers.mjs");
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+/* harmony import */ var _shared_utils_decorators_AutoBind_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/utils/decorators/AutoBind.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/decorators/AutoBind.mjs");
+/* harmony import */ var _shared_utils_requestNextAnimationFrame_requestNextAnimationFrame_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/utils/requestNextAnimationFrame/requestNextAnimationFrame.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/requestNextAnimationFrame/requestNextAnimationFrame.mjs");
+/* harmony import */ var _Draggable_DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Draggable/DragEvent/DragEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DragEvent/DragEvent.mjs");
+
+
+
+
+
+
+var _initProto, _class;
+
+const defaultOptions = {};
+
+class ResizeMirror extends _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_1__.AbstractPlugin {
+
+  constructor(draggable) {
+    _initProto(super(draggable));
+
+    this.lastWidth = 0;
+
+    this.lastHeight = 0;
+
+    this.mirror = null;
+  }
+
+  attach() {
+    this.draggable.on('mirror:created', this.onMirrorCreated).on('drag:over', this.onDragOver).on('drag:over:container', this.onDragOver);
+  }
+
+  detach() {
+    this.draggable.off('mirror:created', this.onMirrorCreated).off('mirror:destroy', this.onMirrorDestroy).off('drag:over', this.onDragOver).off('drag:over:container', this.onDragOver);
+  }
+
+  getOptions() {
+    return this.draggable.options.resizeMirror || {};
+  }
+
+  onMirrorCreated({
+    mirror
+  }) {
+    this.mirror = mirror;
+  }
+
+  onMirrorDestroy() {
+    this.mirror = null;
+  }
+
+  onDragOver(dragEvent) {
+    this.resize(dragEvent);
+  }
+
+  resize(dragEvent) {
+    requestAnimationFrame(() => {
+      let over = null;
+      const {
+        overContainer
+      } = dragEvent;
+      if (this.mirror == null || this.mirror.parentNode == null) {
+        return;
+      }
+      if (this.mirror.parentNode !== overContainer) {
+        overContainer.appendChild(this.mirror);
+      }
+      if ((0,_Draggable_DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_4__.isDragOverEvent)(dragEvent)) {
+        over = dragEvent.over;
+      }
+      const overElement = over || this.draggable.getDraggableElementsForContainer(overContainer)[0];
+      if (!overElement) {
+        return;
+      }
+      (0,_shared_utils_requestNextAnimationFrame_requestNextAnimationFrame_mjs__WEBPACK_IMPORTED_MODULE_3__["default"])(() => {
+        const overRect = overElement.getBoundingClientRect();
+        if (this.mirror == null || this.lastHeight === overRect.height && this.lastWidth === overRect.width) {
+          return;
+        }
+        this.mirror.style.width = `${overRect.width}px`;
+        this.mirror.style.height = `${overRect.height}px`;
+        this.lastWidth = overRect.width;
+        this.lastHeight = overRect.height;
+      });
+    });
+  }
+}
+_class = ResizeMirror;
+[_initProto] = (0,_virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__.applyDecs2305)(_class, [[_shared_utils_decorators_AutoBind_mjs__WEBPACK_IMPORTED_MODULE_2__.AutoBind, 2, "onMirrorCreated"], [_shared_utils_decorators_AutoBind_mjs__WEBPACK_IMPORTED_MODULE_2__.AutoBind, 2, "onMirrorDestroy"], [_shared_utils_decorators_AutoBind_mjs__WEBPACK_IMPORTED_MODULE_2__.AutoBind, 2, "onDragOver"]], [], 0, void 0, _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_1__.AbstractPlugin).e;
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Plugins/Snappable/Snappable.mjs":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Plugins/Snappable/Snappable.mjs ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Snappable)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+/* harmony import */ var _SnappableEvent_SnappableEvent_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SnappableEvent/SnappableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/Snappable/SnappableEvent/SnappableEvent.mjs");
+
+
+
+const onDragStart = Symbol('onDragStart');
+const onDragStop = Symbol('onDragStop');
+const onDragOver = Symbol('onDragOver');
+const onDragOut = Symbol('onDragOut');
+const onMirrorCreated = Symbol('onMirrorCreated');
+const onMirrorDestroy = Symbol('onMirrorDestroy');
+
+class Snappable extends _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractPlugin {
+
+  constructor(draggable) {
+    super(draggable);
+
+    this.firstSource = null;
+
+    this.mirror = null;
+    this[onDragStart] = this[onDragStart].bind(this);
+    this[onDragStop] = this[onDragStop].bind(this);
+    this[onDragOver] = this[onDragOver].bind(this);
+    this[onDragOut] = this[onDragOut].bind(this);
+    this[onMirrorCreated] = this[onMirrorCreated].bind(this);
+    this[onMirrorDestroy] = this[onMirrorDestroy].bind(this);
+  }
+
+  attach() {
+    this.draggable.on('drag:start', this[onDragStart]).on('drag:stop', this[onDragStop]).on('drag:over', this[onDragOver]).on('drag:out', this[onDragOut]).on('droppable:over', this[onDragOver]).on('droppable:out', this[onDragOut]).on('mirror:created', this[onMirrorCreated]).on('mirror:destroy', this[onMirrorDestroy]);
+  }
+
+  detach() {
+    this.draggable.off('drag:start', this[onDragStart]).off('drag:stop', this[onDragStop]).off('drag:over', this[onDragOver]).off('drag:out', this[onDragOut]).off('droppable:over', this[onDragOver]).off('droppable:out', this[onDragOut]).off('mirror:created', this[onMirrorCreated]).off('mirror:destroy', this[onMirrorDestroy]);
+  }
+
+  [onDragStart](event) {
+    if (event.canceled()) {
+      return;
+    }
+    this.firstSource = event.source;
+  }
+
+  [onDragStop]() {
+    this.firstSource = null;
+  }
+
+  [onDragOver](event) {
+    if (event.canceled()) {
+      return;
+    }
+    const source = event.source || event.dragEvent.source;
+    if (source === this.firstSource) {
+      this.firstSource = null;
+      return;
+    }
+    const snapInEvent = new _SnappableEvent_SnappableEvent_mjs__WEBPACK_IMPORTED_MODULE_1__.SnapInEvent({
+      dragEvent: event,
+      snappable: event.over || event.droppable
+    });
+    this.draggable.trigger(snapInEvent);
+    if (snapInEvent.canceled()) {
+      return;
+    }
+    if (this.mirror) {
+      this.mirror.style.display = 'none';
+    }
+    source.classList.remove(...this.draggable.getClassNamesFor('source:dragging'));
+    source.classList.add(...this.draggable.getClassNamesFor('source:placed'));
+
+    setTimeout(() => {
+      source.classList.remove(...this.draggable.getClassNamesFor('source:placed'));
+    }, this.draggable.options.placedTimeout);
+  }
+
+  [onDragOut](event) {
+    if (event.canceled()) {
+      return;
+    }
+    const source = event.source || event.dragEvent.source;
+    const snapOutEvent = new _SnappableEvent_SnappableEvent_mjs__WEBPACK_IMPORTED_MODULE_1__.SnapOutEvent({
+      dragEvent: event,
+      snappable: event.over || event.droppable
+    });
+    this.draggable.trigger(snapOutEvent);
+    if (snapOutEvent.canceled()) {
+      return;
+    }
+    if (this.mirror) {
+      this.mirror.style.display = '';
+    }
+    source.classList.add(...this.draggable.getClassNamesFor('source:dragging'));
+  }
+
+  [onMirrorCreated]({
+    mirror
+  }) {
+    this.mirror = mirror;
+  }
+
+  [onMirrorDestroy]() {
+    this.mirror = null;
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Plugins/Snappable/SnappableEvent/SnappableEvent.mjs":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Plugins/Snappable/SnappableEvent/SnappableEvent.mjs ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SnapEvent: () => (/* binding */ SnapEvent),
+/* harmony export */   SnapInEvent: () => (/* binding */ SnapInEvent),
+/* harmony export */   SnapOutEvent: () => (/* binding */ SnapOutEvent)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+
+
+class SnapEvent extends _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent {
+
+  get dragEvent() {
+    return this.data.dragEvent;
+  }
+
+  get snappable() {
+    return this.data.snappable;
+  }
+}
+
+SnapEvent.type = 'snap';
+class SnapInEvent extends SnapEvent {}
+
+SnapInEvent.type = 'snap:in';
+SnapInEvent.cancelable = true;
+class SnapOutEvent extends SnapEvent {}
+SnapOutEvent.type = 'snap:out';
+SnapOutEvent.cancelable = true;
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Plugins/SortAnimation/SortAnimation.mjs":
+/*!*******************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Plugins/SortAnimation/SortAnimation.mjs ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SortAnimation),
+/* harmony export */   defaultOptions: () => (/* binding */ defaultOptions)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+
+
+const onSortableSorted = Symbol('onSortableSorted');
+const onSortableSort = Symbol('onSortableSort');
+
+const defaultOptions = {
+  duration: 150,
+  easingFunction: 'ease-in-out'
+};
+
+class SortAnimation extends _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractPlugin {
+
+  constructor(draggable) {
+    super(draggable);
+
+    this.options = {
+      ...defaultOptions,
+      ...this.getOptions()
+    };
+
+    this.lastAnimationFrame = null;
+    this.lastElements = [];
+    this[onSortableSorted] = this[onSortableSorted].bind(this);
+    this[onSortableSort] = this[onSortableSort].bind(this);
+  }
+
+  attach() {
+    this.draggable.on('sortable:sort', this[onSortableSort]);
+    this.draggable.on('sortable:sorted', this[onSortableSorted]);
+  }
+
+  detach() {
+    this.draggable.off('sortable:sort', this[onSortableSort]);
+    this.draggable.off('sortable:sorted', this[onSortableSorted]);
+  }
+
+  getOptions() {
+    return this.draggable.options.sortAnimation || {};
+  }
+
+  [onSortableSort]({
+    dragEvent
+  }) {
+    const {
+      sourceContainer
+    } = dragEvent;
+    const elements = this.draggable.getDraggableElementsForContainer(sourceContainer);
+    this.lastElements = Array.from(elements).map(el => {
+      return {
+        domEl: el,
+        offsetTop: el.offsetTop,
+        offsetLeft: el.offsetLeft
+      };
+    });
+  }
+
+  [onSortableSorted]({
+    oldIndex,
+    newIndex
+  }) {
+    if (oldIndex === newIndex) {
+      return;
+    }
+    const effectedElements = [];
+    let start;
+    let end;
+    let num;
+    if (oldIndex > newIndex) {
+      start = newIndex;
+      end = oldIndex - 1;
+      num = 1;
+    } else {
+      start = oldIndex + 1;
+      end = newIndex;
+      num = -1;
+    }
+    for (let i = start; i <= end; i++) {
+      const from = this.lastElements[i];
+      const to = this.lastElements[i + num];
+      effectedElements.push({
+        from,
+        to
+      });
+    }
+    cancelAnimationFrame(this.lastAnimationFrame);
+
+    this.lastAnimationFrame = requestAnimationFrame(() => {
+      effectedElements.forEach(element => animate(element, this.options));
+    });
+  }
+}
+
+function animate({
+  from,
+  to
+}, {
+  duration,
+  easingFunction
+}) {
+  const domEl = from.domEl;
+  const x = from.offsetLeft - to.offsetLeft;
+  const y = from.offsetTop - to.offsetTop;
+  domEl.style.pointerEvents = 'none';
+  domEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  requestAnimationFrame(() => {
+    domEl.addEventListener('transitionend', resetElementOnTransitionEnd);
+    domEl.style.transition = `transform ${duration}ms ${easingFunction}`;
+    domEl.style.transform = '';
+  });
+}
+
+function resetElementOnTransitionEnd(event) {
+  event.target.style.transition = '';
+  event.target.style.pointerEvents = '';
+  event.target.removeEventListener('transitionend', resetElementOnTransitionEnd);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Plugins/SwapAnimation/SwapAnimation.mjs":
+/*!*******************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Plugins/SwapAnimation/SwapAnimation.mjs ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SwapAnimation),
+/* harmony export */   defaultOptions: () => (/* binding */ defaultOptions)
+/* harmony export */ });
+/* harmony import */ var _virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../_virtual/_rollupPluginBabelHelpers.mjs */ "./node_modules/@shopify/draggable/build/esm/_virtual/_rollupPluginBabelHelpers.mjs");
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+/* harmony import */ var _shared_utils_decorators_AutoBind_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/utils/decorators/AutoBind.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/utils/decorators/AutoBind.mjs");
+
+
+
+
+var _initProto, _class;
+
+const defaultOptions = {
+  duration: 150,
+  easingFunction: 'ease-in-out',
+  horizontal: false
+};
+
+class SwapAnimation extends _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_1__.AbstractPlugin {
+
+  constructor(draggable) {
+    _initProto(super(draggable));
+
+    this.options = {
+      ...defaultOptions,
+      ...this.getOptions()
+    };
+
+    this.lastAnimationFrame = null;
+  }
+
+  attach() {
+    this.draggable.on('sortable:sorted', this.onSortableSorted);
+  }
+
+  detach() {
+    this.draggable.off('sortable:sorted', this.onSortableSorted);
+  }
+
+  getOptions() {
+    return this.draggable.options.swapAnimation || {};
+  }
+
+  onSortableSorted({
+    oldIndex,
+    newIndex,
+    dragEvent
+  }) {
+    const {
+      source,
+      over
+    } = dragEvent;
+    if (this.lastAnimationFrame) {
+      cancelAnimationFrame(this.lastAnimationFrame);
+    }
+
+    this.lastAnimationFrame = requestAnimationFrame(() => {
+      if (oldIndex >= newIndex) {
+        animate(source, over, this.options);
+      } else {
+        animate(over, source, this.options);
+      }
+    });
+  }
+}
+
+_class = SwapAnimation;
+[_initProto] = (0,_virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__.applyDecs2305)(_class, [[_shared_utils_decorators_AutoBind_mjs__WEBPACK_IMPORTED_MODULE_2__.AutoBind, 2, "onSortableSorted"]], [], 0, void 0, _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_1__.AbstractPlugin).e;
+function animate(from, to, {
+  duration,
+  easingFunction,
+  horizontal
+}) {
+  for (const element of [from, to]) {
+    element.style.pointerEvents = 'none';
+  }
+  if (horizontal) {
+    const width = from.offsetWidth;
+    from.style.transform = `translate3d(${width}px, 0, 0)`;
+    to.style.transform = `translate3d(-${width}px, 0, 0)`;
+  } else {
+    const height = from.offsetHeight;
+    from.style.transform = `translate3d(0, ${height}px, 0)`;
+    to.style.transform = `translate3d(0, -${height}px, 0)`;
+  }
+  requestAnimationFrame(() => {
+    for (const element of [from, to]) {
+      element.addEventListener('transitionend', resetElementOnTransitionEnd);
+      element.style.transition = `transform ${duration}ms ${easingFunction}`;
+      element.style.transform = '';
+    }
+  });
+}
+
+function resetElementOnTransitionEnd(event) {
+  if (event.target == null || !isHTMLElement(event.target)) {
+    return;
+  }
+  event.target.style.transition = '';
+  event.target.style.pointerEvents = '';
+  event.target.removeEventListener('transitionend', resetElementOnTransitionEnd);
+}
+function isHTMLElement(eventTarget) {
+  return Boolean('style' in eventTarget);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Plugins/index.mjs":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Plugins/index.mjs ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Collidable: () => (/* reexport safe */ _Collidable_Collidable_mjs__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   ResizeMirror: () => (/* reexport safe */ _ResizeMirror_ResizeMirror_mjs__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   Snappable: () => (/* reexport safe */ _Snappable_Snappable_mjs__WEBPACK_IMPORTED_MODULE_3__["default"]),
+/* harmony export */   SortAnimation: () => (/* reexport safe */ _SortAnimation_SortAnimation_mjs__WEBPACK_IMPORTED_MODULE_6__["default"]),
+/* harmony export */   SwapAnimation: () => (/* reexport safe */ _SwapAnimation_SwapAnimation_mjs__WEBPACK_IMPORTED_MODULE_5__["default"]),
+/* harmony export */   defaultResizeMirrorOptions: () => (/* reexport safe */ _ResizeMirror_ResizeMirror_mjs__WEBPACK_IMPORTED_MODULE_2__.defaultOptions),
+/* harmony export */   defaultSortAnimationOptions: () => (/* reexport safe */ _SortAnimation_SortAnimation_mjs__WEBPACK_IMPORTED_MODULE_6__.defaultOptions),
+/* harmony export */   defaultSwapAnimationOptions: () => (/* reexport safe */ _SwapAnimation_SwapAnimation_mjs__WEBPACK_IMPORTED_MODULE_5__.defaultOptions)
+/* harmony export */ });
+/* harmony import */ var _Collidable_Collidable_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Collidable/Collidable.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/Collidable/Collidable.mjs");
+/* harmony import */ var _Collidable_CollidableEvent_CollidableEvent_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Collidable/CollidableEvent/CollidableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/Collidable/CollidableEvent/CollidableEvent.mjs");
+/* harmony import */ var _ResizeMirror_ResizeMirror_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ResizeMirror/ResizeMirror.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/ResizeMirror/ResizeMirror.mjs");
+/* harmony import */ var _Snappable_Snappable_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Snappable/Snappable.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/Snappable/Snappable.mjs");
+/* harmony import */ var _Snappable_SnappableEvent_SnappableEvent_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Snappable/SnappableEvent/SnappableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/Snappable/SnappableEvent/SnappableEvent.mjs");
+/* harmony import */ var _SwapAnimation_SwapAnimation_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SwapAnimation/SwapAnimation.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/SwapAnimation/SwapAnimation.mjs");
+/* harmony import */ var _SortAnimation_SortAnimation_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SortAnimation/SortAnimation.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/SortAnimation/SortAnimation.mjs");
+
+
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Sortable/Sortable.mjs":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Sortable/Sortable.mjs ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Sortable)
+/* harmony export */ });
+/* harmony import */ var _Draggable_Draggable_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Draggable/Draggable.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Draggable.mjs");
+/* harmony import */ var _Draggable_DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Draggable/DragEvent/DragEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DragEvent/DragEvent.mjs");
+/* harmony import */ var _Draggable_DraggableEvent_DraggableEvent_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Draggable/DraggableEvent/DraggableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DraggableEvent/DraggableEvent.mjs");
+/* harmony import */ var _Draggable_Plugins_Announcement_Announcement_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Draggable/Plugins/Announcement/Announcement.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Announcement/Announcement.mjs");
+/* harmony import */ var _Draggable_Plugins_Mirror_MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs");
+/* harmony import */ var _Draggable_Sensors_SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Draggable/Sensors/SensorEvent/SensorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs");
+/* harmony import */ var _Draggable_Sensors_TouchSensor_TouchSensor_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Draggable/Sensors/TouchSensor/TouchSensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/TouchSensor/TouchSensor.mjs");
+/* harmony import */ var _SortableEvent_SortableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./SortableEvent/SortableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Sortable/SortableEvent/SortableEvent.mjs");
+
+
+
+
+
+
+
+
+
+const onDragStart = Symbol('onDragStart');
+const onDragOverContainer = Symbol('onDragOverContainer');
+const onDragOver = Symbol('onDragOver');
+const onDragStop = Symbol('onDragStop');
+
+function onSortableSortedDefaultAnnouncement({
+  dragEvent
+}) {
+  const sourceText = dragEvent.source.textContent.trim() || dragEvent.source.id || 'sortable element';
+  if (dragEvent.over) {
+    const overText = dragEvent.over.textContent.trim() || dragEvent.over.id || 'sortable element';
+    const isFollowing = dragEvent.source.compareDocumentPosition(dragEvent.over) & Node.DOCUMENT_POSITION_FOLLOWING;
+    if (isFollowing) {
+      return `Placed ${sourceText} after ${overText}`;
+    } else {
+      return `Placed ${sourceText} before ${overText}`;
+    }
+  } else {
+
+    return `Placed ${sourceText} into a different container`;
+  }
+}
+
+const defaultAnnouncements = {
+  'sortable:sorted': onSortableSortedDefaultAnnouncement
+};
+
+class Sortable extends _Draggable_Draggable_mjs__WEBPACK_IMPORTED_MODULE_0__["default"] {
+
+  constructor(containers = [], options = {}) {
+    super(containers, {
+      ...options,
+      announcements: {
+        ...defaultAnnouncements,
+        ...(options.announcements || {})
+      }
+    });
+
+    this.startIndex = null;
+
+    this.startContainer = null;
+    this[onDragStart] = this[onDragStart].bind(this);
+    this[onDragOverContainer] = this[onDragOverContainer].bind(this);
+    this[onDragOver] = this[onDragOver].bind(this);
+    this[onDragStop] = this[onDragStop].bind(this);
+    this.on('drag:start', this[onDragStart]).on('drag:over:container', this[onDragOverContainer]).on('drag:over', this[onDragOver]).on('drag:stop', this[onDragStop]);
+  }
+
+  destroy() {
+    super.destroy();
+    this.off('drag:start', this[onDragStart]).off('drag:over:container', this[onDragOverContainer]).off('drag:over', this[onDragOver]).off('drag:stop', this[onDragStop]);
+  }
+
+  index(element) {
+    return this.getSortableElementsForContainer(element.parentNode).indexOf(element);
+  }
+
+  getSortableElementsForContainer(container) {
+    const allSortableElements = container.querySelectorAll(this.options.draggable);
+    return [...allSortableElements].filter(childElement => {
+      return childElement !== this.originalSource && childElement !== this.mirror && childElement.parentNode === container;
+    });
+  }
+
+  [onDragStart](event) {
+    this.startContainer = event.source.parentNode;
+    this.startIndex = this.index(event.source);
+    const sortableStartEvent = new _SortableEvent_SortableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SortableStartEvent({
+      dragEvent: event,
+      startIndex: this.startIndex,
+      startContainer: this.startContainer
+    });
+    this.trigger(sortableStartEvent);
+    if (sortableStartEvent.canceled()) {
+      event.cancel();
+    }
+  }
+
+  [onDragOverContainer](event) {
+    if (event.canceled()) {
+      return;
+    }
+    const {
+      source,
+      over,
+      overContainer
+    } = event;
+    const oldIndex = this.index(source);
+    const sortableSortEvent = new _SortableEvent_SortableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SortableSortEvent({
+      dragEvent: event,
+      currentIndex: oldIndex,
+      source,
+      over
+    });
+    this.trigger(sortableSortEvent);
+    if (sortableSortEvent.canceled()) {
+      return;
+    }
+    const children = this.getSortableElementsForContainer(overContainer);
+    const moves = move({
+      source,
+      over,
+      overContainer,
+      children
+    });
+    if (!moves) {
+      return;
+    }
+    const {
+      oldContainer,
+      newContainer
+    } = moves;
+    const newIndex = this.index(event.source);
+    const sortableSortedEvent = new _SortableEvent_SortableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SortableSortedEvent({
+      dragEvent: event,
+      oldIndex,
+      newIndex,
+      oldContainer,
+      newContainer
+    });
+    this.trigger(sortableSortedEvent);
+  }
+
+  [onDragOver](event) {
+    if (event.over === event.originalSource || event.over === event.source) {
+      return;
+    }
+    const {
+      source,
+      over,
+      overContainer
+    } = event;
+    const oldIndex = this.index(source);
+    const sortableSortEvent = new _SortableEvent_SortableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SortableSortEvent({
+      dragEvent: event,
+      currentIndex: oldIndex,
+      source,
+      over
+    });
+    this.trigger(sortableSortEvent);
+    if (sortableSortEvent.canceled()) {
+      return;
+    }
+    const children = this.getDraggableElementsForContainer(overContainer);
+    const moves = move({
+      source,
+      over,
+      overContainer,
+      children
+    });
+    if (!moves) {
+      return;
+    }
+    const {
+      oldContainer,
+      newContainer
+    } = moves;
+    const newIndex = this.index(source);
+    const sortableSortedEvent = new _SortableEvent_SortableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SortableSortedEvent({
+      dragEvent: event,
+      oldIndex,
+      newIndex,
+      oldContainer,
+      newContainer
+    });
+    this.trigger(sortableSortedEvent);
+  }
+
+  [onDragStop](event) {
+    const sortableStopEvent = new _SortableEvent_SortableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SortableStopEvent({
+      dragEvent: event,
+      oldIndex: this.startIndex,
+      newIndex: this.index(event.source),
+      oldContainer: this.startContainer,
+      newContainer: event.source.parentNode
+    });
+    this.trigger(sortableStopEvent);
+    this.startIndex = null;
+    this.startContainer = null;
+  }
+}
+function index(element) {
+  return Array.prototype.indexOf.call(element.parentNode.children, element);
+}
+function move({
+  source,
+  over,
+  overContainer,
+  children
+}) {
+  const emptyOverContainer = !children.length;
+  const differentContainer = source.parentNode !== overContainer;
+  const sameContainer = over && source.parentNode === over.parentNode;
+  if (emptyOverContainer) {
+    return moveInsideEmptyContainer(source, overContainer);
+  } else if (sameContainer) {
+    return moveWithinContainer(source, over);
+  } else if (differentContainer) {
+    return moveOutsideContainer(source, over, overContainer);
+  } else {
+    return null;
+  }
+}
+function moveInsideEmptyContainer(source, overContainer) {
+  const oldContainer = source.parentNode;
+  overContainer.appendChild(source);
+  return {
+    oldContainer,
+    newContainer: overContainer
+  };
+}
+function moveWithinContainer(source, over) {
+  const oldIndex = index(source);
+  const newIndex = index(over);
+  if (oldIndex < newIndex) {
+    source.parentNode.insertBefore(source, over.nextElementSibling);
+  } else {
+    source.parentNode.insertBefore(source, over);
+  }
+  return {
+    oldContainer: source.parentNode,
+    newContainer: source.parentNode
+  };
+}
+function moveOutsideContainer(source, over, overContainer) {
+  const oldContainer = source.parentNode;
+  if (over) {
+    over.parentNode.insertBefore(source, over);
+  } else {
+
+    overContainer.appendChild(source);
+  }
+  return {
+    oldContainer,
+    newContainer: source.parentNode
+  };
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Sortable/SortableEvent/SortableEvent.mjs":
+/*!********************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Sortable/SortableEvent/SortableEvent.mjs ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SortableEvent: () => (/* binding */ SortableEvent),
+/* harmony export */   SortableSortEvent: () => (/* binding */ SortableSortEvent),
+/* harmony export */   SortableSortedEvent: () => (/* binding */ SortableSortedEvent),
+/* harmony export */   SortableStartEvent: () => (/* binding */ SortableStartEvent),
+/* harmony export */   SortableStopEvent: () => (/* binding */ SortableStopEvent)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+
+
+class SortableEvent extends _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent {
+
+  constructor(data) {
+    super(data);
+    this.data = data;
+  }
+
+  get dragEvent() {
+    return this.data.dragEvent;
+  }
+}
+SortableEvent.type = 'sortable';
+
+class SortableStartEvent extends SortableEvent {
+
+  get startIndex() {
+    return this.data.startIndex;
+  }
+
+  get startContainer() {
+    return this.data.startContainer;
+  }
+}
+SortableStartEvent.type = 'sortable:start';
+SortableStartEvent.cancelable = true;
+
+class SortableSortEvent extends SortableEvent {
+
+  get currentIndex() {
+    return this.data.currentIndex;
+  }
+
+  get over() {
+    return this.data.over;
+  }
+
+  get overContainer() {
+    return this.data.dragEvent.overContainer;
+  }
+}
+SortableSortEvent.type = 'sortable:sort';
+SortableSortEvent.cancelable = true;
+
+class SortableSortedEvent extends SortableEvent {
+
+  get oldIndex() {
+    return this.data.oldIndex;
+  }
+
+  get newIndex() {
+    return this.data.newIndex;
+  }
+
+  get oldContainer() {
+    return this.data.oldContainer;
+  }
+
+  get newContainer() {
+    return this.data.newContainer;
+  }
+}
+SortableSortedEvent.type = 'sortable:sorted';
+
+class SortableStopEvent extends SortableEvent {
+
+  get oldIndex() {
+    return this.data.oldIndex;
+  }
+
+  get newIndex() {
+    return this.data.newIndex;
+  }
+
+  get oldContainer() {
+    return this.data.oldContainer;
+  }
+
+  get newContainer() {
+    return this.data.newContainer;
+  }
+}
+SortableStopEvent.type = 'sortable:stop';
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Swappable/Swappable.mjs":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Swappable/Swappable.mjs ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Swappable)
+/* harmony export */ });
+/* harmony import */ var _Draggable_Draggable_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Draggable/Draggable.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Draggable.mjs");
+/* harmony import */ var _Draggable_DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Draggable/DragEvent/DragEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DragEvent/DragEvent.mjs");
+/* harmony import */ var _Draggable_DraggableEvent_DraggableEvent_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Draggable/DraggableEvent/DraggableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DraggableEvent/DraggableEvent.mjs");
+/* harmony import */ var _Draggable_Plugins_Announcement_Announcement_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Draggable/Plugins/Announcement/Announcement.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Announcement/Announcement.mjs");
+/* harmony import */ var _Draggable_Plugins_Mirror_MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs");
+/* harmony import */ var _Draggable_Sensors_SensorEvent_SensorEvent_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Draggable/Sensors/SensorEvent/SensorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/SensorEvent/SensorEvent.mjs");
+/* harmony import */ var _Draggable_Sensors_TouchSensor_TouchSensor_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Draggable/Sensors/TouchSensor/TouchSensor.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/TouchSensor/TouchSensor.mjs");
+/* harmony import */ var _SwappableEvent_SwappableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./SwappableEvent/SwappableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Swappable/SwappableEvent/SwappableEvent.mjs");
+
+
+
+
+
+
+
+
+
+const onDragStart = Symbol('onDragStart');
+const onDragOver = Symbol('onDragOver');
+const onDragStop = Symbol('onDragStop');
+
+function onSwappableSwappedDefaultAnnouncement({
+  dragEvent,
+  swappedElement
+}) {
+  const sourceText = dragEvent.source.textContent.trim() || dragEvent.source.id || 'swappable element';
+  const overText = swappedElement.textContent.trim() || swappedElement.id || 'swappable element';
+  return `Swapped ${sourceText} with ${overText}`;
+}
+
+const defaultAnnouncements = {
+  'swappabled:swapped': onSwappableSwappedDefaultAnnouncement
+};
+
+class Swappable extends _Draggable_Draggable_mjs__WEBPACK_IMPORTED_MODULE_0__["default"] {
+
+  constructor(containers = [], options = {}) {
+    super(containers, {
+      ...options,
+      announcements: {
+        ...defaultAnnouncements,
+        ...(options.announcements || {})
+      }
+    });
+
+    this.lastOver = null;
+    this[onDragStart] = this[onDragStart].bind(this);
+    this[onDragOver] = this[onDragOver].bind(this);
+    this[onDragStop] = this[onDragStop].bind(this);
+    this.on('drag:start', this[onDragStart]).on('drag:over', this[onDragOver]).on('drag:stop', this[onDragStop]);
+  }
+
+  destroy() {
+    super.destroy();
+    this.off('drag:start', this._onDragStart).off('drag:over', this._onDragOver).off('drag:stop', this._onDragStop);
+  }
+
+  [onDragStart](event) {
+    const swappableStartEvent = new _SwappableEvent_SwappableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SwappableStartEvent({
+      dragEvent: event
+    });
+    this.trigger(swappableStartEvent);
+    if (swappableStartEvent.canceled()) {
+      event.cancel();
+    }
+  }
+
+  [onDragOver](event) {
+    if (event.over === event.originalSource || event.over === event.source || event.canceled()) {
+      return;
+    }
+    const swappableSwapEvent = new _SwappableEvent_SwappableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SwappableSwapEvent({
+      dragEvent: event,
+      over: event.over,
+      overContainer: event.overContainer
+    });
+    this.trigger(swappableSwapEvent);
+    if (swappableSwapEvent.canceled()) {
+      return;
+    }
+
+    if (this.lastOver && this.lastOver !== event.over) {
+      swap(this.lastOver, event.source);
+    }
+    if (this.lastOver === event.over) {
+      this.lastOver = null;
+    } else {
+      this.lastOver = event.over;
+    }
+    swap(event.source, event.over);
+    const swappableSwappedEvent = new _SwappableEvent_SwappableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SwappableSwappedEvent({
+      dragEvent: event,
+      swappedElement: event.over
+    });
+    this.trigger(swappableSwappedEvent);
+  }
+
+  [onDragStop](event) {
+    const swappableStopEvent = new _SwappableEvent_SwappableEvent_mjs__WEBPACK_IMPORTED_MODULE_7__.SwappableStopEvent({
+      dragEvent: event
+    });
+    this.trigger(swappableStopEvent);
+    this.lastOver = null;
+  }
+}
+function withTempElement(callback) {
+  const tmpElement = document.createElement('div');
+  callback(tmpElement);
+  tmpElement.remove();
+}
+function swap(source, over) {
+  const overParent = over.parentNode;
+  const sourceParent = source.parentNode;
+  withTempElement(tmpElement => {
+    sourceParent.insertBefore(tmpElement, source);
+    overParent.insertBefore(source, over);
+    sourceParent.insertBefore(over, tmpElement);
+  });
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/Swappable/SwappableEvent/SwappableEvent.mjs":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/Swappable/SwappableEvent/SwappableEvent.mjs ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SwappableEvent: () => (/* binding */ SwappableEvent),
+/* harmony export */   SwappableStartEvent: () => (/* binding */ SwappableStartEvent),
+/* harmony export */   SwappableStopEvent: () => (/* binding */ SwappableStopEvent),
+/* harmony export */   SwappableSwapEvent: () => (/* binding */ SwappableSwapEvent),
+/* harmony export */   SwappableSwappedEvent: () => (/* binding */ SwappableSwappedEvent)
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+
+
+class SwappableEvent extends _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent {
+
+  constructor(data) {
+    super(data);
+    this.data = data;
+  }
+
+  get dragEvent() {
+    return this.data.dragEvent;
+  }
+}
+
+SwappableEvent.type = 'swappable';
+class SwappableStartEvent extends SwappableEvent {}
+SwappableStartEvent.type = 'swappable:start';
+SwappableStartEvent.cancelable = true;
+
+class SwappableSwapEvent extends SwappableEvent {
+
+  get over() {
+    return this.data.over;
+  }
+
+  get overContainer() {
+    return this.data.overContainer;
+  }
+}
+SwappableSwapEvent.type = 'swappable:swap';
+SwappableSwapEvent.cancelable = true;
+
+class SwappableSwappedEvent extends SwappableEvent {
+
+  get swappedElement() {
+    return this.data.swappedElement;
+  }
+}
+
+SwappableSwappedEvent.type = 'swappable:swapped';
+class SwappableStopEvent extends SwappableEvent {}
+SwappableStopEvent.type = 'swappable:stop';
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/_virtual/_rollupPluginBabelHelpers.mjs":
+/*!******************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/_virtual/_rollupPluginBabelHelpers.mjs ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   applyDecs2305: () => (/* binding */ _applyDecs2305),
+/* harmony export */   checkInRHS: () => (/* binding */ _checkInRHS)
+/* harmony export */ });
+function createAddInitializerMethod(e, t) {
+  return function (r) {
+    assertNotFinished(t, "addInitializer"), assertCallable(r, "An initializer"), e.push(r);
+  };
+}
+function assertInstanceIfPrivate(e, t) {
+  if (!e(t)) throw new TypeError("Attempted to access private element on non-instance");
+}
+function memberDec(e, t, r, a, n, i, s, o, c, l, u) {
+  var f;
+  switch (i) {
+    case 1:
+      f = "accessor";
+      break;
+    case 2:
+      f = "method";
+      break;
+    case 3:
+      f = "getter";
+      break;
+    case 4:
+      f = "setter";
+      break;
+    default:
+      f = "field";
+  }
+  var d,
+    p,
+    h = {
+      kind: f,
+      name: o ? "#" + r : r,
+      static: s,
+      private: o,
+      metadata: u
+    },
+    v = {
+      v: !1
+    };
+  if (0 !== i && (h.addInitializer = createAddInitializerMethod(n, v)), o || 0 !== i && 2 !== i) {
+    if (2 === i) d = function (e) {
+      return assertInstanceIfPrivate(l, e), a.value;
+    };else {
+      var y = 0 === i || 1 === i;
+      (y || 3 === i) && (d = o ? function (e) {
+        return assertInstanceIfPrivate(l, e), a.get.call(e);
+      } : function (e) {
+        return a.get.call(e);
+      }), (y || 4 === i) && (p = o ? function (e, t) {
+        assertInstanceIfPrivate(l, e), a.set.call(e, t);
+      } : function (e, t) {
+        a.set.call(e, t);
+      });
+    }
+  } else d = function (e) {
+    return e[r];
+  }, 0 === i && (p = function (e, t) {
+    e[r] = t;
+  });
+  var m = o ? l.bind() : function (e) {
+    return r in e;
+  };
+  h.access = d && p ? {
+    get: d,
+    set: p,
+    has: m
+  } : d ? {
+    get: d,
+    has: m
+  } : {
+    set: p,
+    has: m
+  };
+  try {
+    return e.call(t, c, h);
+  } finally {
+    v.v = !0;
+  }
+}
+function assertNotFinished(e, t) {
+  if (e.v) throw new Error("attempted to call " + t + " after decoration was finished");
+}
+function assertCallable(e, t) {
+  if ("function" != typeof e) throw new TypeError(t + " must be a function");
+}
+function assertValidReturnValue(e, t) {
+  var r = typeof t;
+  if (1 === e) {
+    if ("object" !== r || null === t) throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");
+    void 0 !== t.get && assertCallable(t.get, "accessor.get"), void 0 !== t.set && assertCallable(t.set, "accessor.set"), void 0 !== t.init && assertCallable(t.init, "accessor.init");
+  } else if ("function" !== r) {
+    var a;
+    throw a = 0 === e ? "field" : 5 === e ? "class" : "method", new TypeError(a + " decorators must return a function or void 0");
+  }
+}
+function curryThis1(e) {
+  return function () {
+    return e(this);
+  };
+}
+function curryThis2(e) {
+  return function (t) {
+    e(this, t);
+  };
+}
+function applyMemberDec(e, t, r, a, n, i, s, o, c, l, u) {
+  var f,
+    d,
+    p,
+    h,
+    v,
+    y,
+    m = r[0];
+  a || Array.isArray(m) || (m = [m]), o ? f = 0 === i || 1 === i ? {
+    get: curryThis1(r[3]),
+    set: curryThis2(r[4])
+  } : 3 === i ? {
+    get: r[3]
+  } : 4 === i ? {
+    set: r[3]
+  } : {
+    value: r[3]
+  } : 0 !== i && (f = Object.getOwnPropertyDescriptor(t, n)), 1 === i ? p = {
+    get: f.get,
+    set: f.set
+  } : 2 === i ? p = f.value : 3 === i ? p = f.get : 4 === i && (p = f.set);
+  for (var g = a ? 2 : 1, b = m.length - 1; b >= 0; b -= g) {
+    var I;
+    if (void 0 !== (h = memberDec(m[b], a ? m[b - 1] : void 0, n, f, c, i, s, o, p, l, u))) assertValidReturnValue(i, h), 0 === i ? I = h : 1 === i ? (I = h.init, v = h.get || p.get, y = h.set || p.set, p = {
+      get: v,
+      set: y
+    }) : p = h, void 0 !== I && (void 0 === d ? d = I : "function" == typeof d ? d = [d, I] : d.push(I));
+  }
+  if (0 === i || 1 === i) {
+    if (void 0 === d) d = function (e, t) {
+      return t;
+    };else if ("function" != typeof d) {
+      var w = d;
+      d = function (e, t) {
+        for (var r = t, a = w.length - 1; a >= 0; a--) r = w[a].call(e, r);
+        return r;
+      };
+    } else {
+      var M = d;
+      d = function (e, t) {
+        return M.call(e, t);
+      };
+    }
+    e.push(d);
+  }
+  0 !== i && (1 === i ? (f.get = p.get, f.set = p.set) : 2 === i ? f.value = p : 3 === i ? f.get = p : 4 === i && (f.set = p), o ? 1 === i ? (e.push(function (e, t) {
+    return p.get.call(e, t);
+  }), e.push(function (e, t) {
+    return p.set.call(e, t);
+  })) : 2 === i ? e.push(p) : e.push(function (e, t) {
+    return p.call(e, t);
+  }) : Object.defineProperty(t, n, f));
+}
+function applyMemberDecs(e, t, r, a) {
+  for (var n, i, s, o = [], c = new Map(), l = new Map(), u = 0; u < t.length; u++) {
+    var f = t[u];
+    if (Array.isArray(f)) {
+      var d,
+        p,
+        h = f[1],
+        v = f[2],
+        y = f.length > 3,
+        m = 16 & h,
+        g = !!(8 & h),
+        b = r;
+      if (h &= 7, g ? (d = e, 0 !== h && (p = i = i || []), y && !s && (s = function (t) {
+        return _checkInRHS(t) === e;
+      }), b = s) : (d = e.prototype, 0 !== h && (p = n = n || [])), 0 !== h && !y) {
+        var I = g ? l : c,
+          w = I.get(v) || 0;
+        if (!0 === w || 3 === w && 4 !== h || 4 === w && 3 !== h) throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + v);
+        I.set(v, !(!w && h > 2) || h);
+      }
+      applyMemberDec(o, d, f, m, v, h, g, y, p, b, a);
+    }
+  }
+  return pushInitializers(o, n), pushInitializers(o, i), o;
+}
+function pushInitializers(e, t) {
+  t && e.push(function (e) {
+    for (var r = 0; r < t.length; r++) t[r].call(e);
+    return e;
+  });
+}
+function applyClassDecs(e, t, r, a) {
+  if (t.length) {
+    for (var n = [], i = e, s = e.name, o = r ? 2 : 1, c = t.length - 1; c >= 0; c -= o) {
+      var l = {
+        v: !1
+      };
+      try {
+        var u = t[c].call(r ? t[c - 1] : void 0, i, {
+          kind: "class",
+          name: s,
+          addInitializer: createAddInitializerMethod(n, l),
+          metadata: a
+        });
+      } finally {
+        l.v = !0;
+      }
+      void 0 !== u && (assertValidReturnValue(5, u), i = u);
+    }
+    return [defineMetadata(i, a), function () {
+      for (var e = 0; e < n.length; e++) n[e].call(i);
+    }];
+  }
+}
+function defineMetadata(e, t) {
+  return Object.defineProperty(e, Symbol.metadata || Symbol.for("Symbol.metadata"), {
+    configurable: !0,
+    enumerable: !0,
+    value: t
+  });
+}
+function _applyDecs2305(e, t, r, a, n, i) {
+  if (arguments.length >= 6) var s = i[Symbol.metadata || Symbol.for("Symbol.metadata")];
+  var o = Object.create(void 0 === s ? null : s),
+    c = applyMemberDecs(e, t, n, o);
+  return r.length || defineMetadata(e, o), {
+    e: c,
+    get c() {
+      return applyClassDecs(e, r, a, o);
+    }
+  };
+}
+function _checkInRHS(e) {
+  if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (null !== e ? typeof e : "null"));
+  return e;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/index.mjs":
+/*!*************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/index.mjs ***!
+  \*************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BaseEvent: () => (/* reexport safe */ _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__.AbstractEvent),
+/* harmony export */   BasePlugin: () => (/* reexport safe */ _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_1__.AbstractPlugin),
+/* harmony export */   Draggable: () => (/* reexport safe */ _Draggable_Draggable_mjs__WEBPACK_IMPORTED_MODULE_4__["default"]),
+/* harmony export */   Droppable: () => (/* reexport safe */ _Droppable_Droppable_mjs__WEBPACK_IMPORTED_MODULE_9__["default"]),
+/* harmony export */   Plugins: () => (/* reexport module object */ _Plugins_index_mjs__WEBPACK_IMPORTED_MODULE_3__),
+/* harmony export */   Sensors: () => (/* reexport module object */ _Draggable_Sensors_index_mjs__WEBPACK_IMPORTED_MODULE_2__),
+/* harmony export */   Sortable: () => (/* reexport safe */ _Sortable_Sortable_mjs__WEBPACK_IMPORTED_MODULE_13__["default"]),
+/* harmony export */   Swappable: () => (/* reexport safe */ _Swappable_Swappable_mjs__WEBPACK_IMPORTED_MODULE_11__["default"])
+/* harmony export */ });
+/* harmony import */ var _shared_AbstractEvent_AbstractEvent_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shared/AbstractEvent/AbstractEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs");
+/* harmony import */ var _shared_AbstractPlugin_AbstractPlugin_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shared/AbstractPlugin/AbstractPlugin.mjs */ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs");
+/* harmony import */ var _Draggable_Sensors_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Draggable/Sensors/index.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Sensors/index.mjs");
+/* harmony import */ var _Plugins_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Plugins/index.mjs */ "./node_modules/@shopify/draggable/build/esm/Plugins/index.mjs");
+/* harmony import */ var _Draggable_Draggable_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Draggable/Draggable.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Draggable.mjs");
+/* harmony import */ var _Draggable_DragEvent_DragEvent_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Draggable/DragEvent/DragEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DragEvent/DragEvent.mjs");
+/* harmony import */ var _Draggable_DraggableEvent_DraggableEvent_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Draggable/DraggableEvent/DraggableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/DraggableEvent/DraggableEvent.mjs");
+/* harmony import */ var _Draggable_Plugins_Announcement_Announcement_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Draggable/Plugins/Announcement/Announcement.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Announcement/Announcement.mjs");
+/* harmony import */ var _Draggable_Plugins_Mirror_MirrorEvent_MirrorEvent_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Draggable/Plugins/Mirror/MirrorEvent/MirrorEvent.mjs");
+/* harmony import */ var _Droppable_Droppable_mjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Droppable/Droppable.mjs */ "./node_modules/@shopify/draggable/build/esm/Droppable/Droppable.mjs");
+/* harmony import */ var _Droppable_DroppableEvent_DroppableEvent_mjs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Droppable/DroppableEvent/DroppableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Droppable/DroppableEvent/DroppableEvent.mjs");
+/* harmony import */ var _Swappable_Swappable_mjs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Swappable/Swappable.mjs */ "./node_modules/@shopify/draggable/build/esm/Swappable/Swappable.mjs");
+/* harmony import */ var _Swappable_SwappableEvent_SwappableEvent_mjs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Swappable/SwappableEvent/SwappableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Swappable/SwappableEvent/SwappableEvent.mjs");
+/* harmony import */ var _Sortable_Sortable_mjs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Sortable/Sortable.mjs */ "./node_modules/@shopify/draggable/build/esm/Sortable/Sortable.mjs");
+/* harmony import */ var _Sortable_SortableEvent_SortableEvent_mjs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Sortable/SortableEvent/SortableEvent.mjs */ "./node_modules/@shopify/draggable/build/esm/Sortable/SortableEvent/SortableEvent.mjs");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs":
+/*!******************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/shared/AbstractEvent/AbstractEvent.mjs ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AbstractEvent: () => (/* binding */ AbstractEvent)
+/* harmony export */ });
+class AbstractEvent {
+
+  constructor(data) {
+
+    this._canceled = false;
+    this.data = data;
+  }
+
+  get type() {
+    return this.constructor.type;
+  }
+
+  get cancelable() {
+    return this.constructor.cancelable;
+  }
+
+  cancel() {
+    this._canceled = true;
+  }
+
+  canceled() {
+    return this._canceled;
+  }
+
+  clone(data) {
+    return new this.constructor({
+      ...this.data,
+      ...data
+    });
+  }
+}
+
+AbstractEvent.type = 'event';
+
+AbstractEvent.cancelable = false;
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs":
+/*!********************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/shared/AbstractPlugin/AbstractPlugin.mjs ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AbstractPlugin: () => (/* binding */ AbstractPlugin)
+/* harmony export */ });
+class AbstractPlugin {
+
+  constructor(draggable) {
+    this.draggable = draggable;
+  }
+
+  attach() {
+    throw new Error('Not Implemented');
+  }
+
+  detach() {
+    throw new Error('Not Implemented');
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs":
+/*!************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ closest)
+/* harmony export */ });
+function closest(node, value) {
+  if (node == null) {
+    return null;
+  }
+  function conditionFn(currentNode) {
+    if (currentNode == null || value == null) {
+      return false;
+    } else if (isSelector(value)) {
+      return Element.prototype.matches.call(currentNode, value);
+    } else if (isNodeList(value)) {
+      return [...value].includes(currentNode);
+    } else if (isElement(value)) {
+      return value === currentNode;
+    } else if (isFunction(value)) {
+      return value(currentNode);
+    } else {
+      return false;
+    }
+  }
+  let current = node;
+  do {
+    current = current.correspondingUseElement || current.correspondingElement || current;
+    if (conditionFn(current)) {
+      return current;
+    }
+    current = current?.parentNode || null;
+  } while (current != null && current !== document.body && current !== document);
+  return null;
+}
+function isSelector(value) {
+  return Boolean(typeof value === 'string');
+}
+function isNodeList(value) {
+  return Boolean(value instanceof NodeList || value instanceof Array);
+}
+function isElement(value) {
+  return Boolean(value instanceof Node);
+}
+function isFunction(value) {
+  return Boolean(typeof value === 'function');
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/shared/utils/decorators/AutoBind.mjs":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/shared/utils/decorators/AutoBind.mjs ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AutoBind: () => (/* binding */ AutoBind)
+/* harmony export */ });
+function AutoBind(originalMethod, {
+  name,
+  addInitializer
+}) {
+  addInitializer(function () {
+
+    this[name] = originalMethod.bind(this);
+
+  });
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/shared/utils/distance/distance.mjs":
+/*!**************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/shared/utils/distance/distance.mjs ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ distance)
+/* harmony export */ });
+function distance(x1, y1, x2, y2) {
+  return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/shared/utils/requestNextAnimationFrame/requestNextAnimationFrame.mjs":
+/*!************************************************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/shared/utils/requestNextAnimationFrame/requestNextAnimationFrame.mjs ***!
+  \************************************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ requestNextAnimationFrame)
+/* harmony export */ });
+function requestNextAnimationFrame(callback) {
+  return requestAnimationFrame(() => {
+    requestAnimationFrame(callback);
+  });
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/draggable/build/esm/shared/utils/touchCoords/touchCoords.mjs":
+/*!********************************************************************************************!*\
+  !*** ./node_modules/@shopify/draggable/build/esm/shared/utils/touchCoords/touchCoords.mjs ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ touchCoords)
+/* harmony export */ });
+function touchCoords(event) {
+  const {
+    touches,
+    changedTouches
+  } = event;
+  return touches && touches[0] || changedTouches && changedTouches[0];
+}
+
+
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!***********************************!*\
+  !*** ./resources/js/draggable.js ***!
+  \***********************************/
+window.Draggable = __webpack_require__(/*! @shopify/draggable */ "./node_modules/@shopify/draggable/build/esm/index.mjs");
+})();
+
+/******/ })()
+;

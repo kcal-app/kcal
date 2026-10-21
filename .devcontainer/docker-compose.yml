@@ -1,0 +1,5 @@
+services:
+    app:
+        build:
+            additional_contexts:
+                devcontainer-features: '${TMPDIR:-/tmp}/devcontainercli'
