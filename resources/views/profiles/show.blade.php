@@ -5,9 +5,9 @@
         <div class="flex justify-between items-center">
             <h1 class="font-semibold text-2xl text-gray-800 leading-tight">{{ $title }}</h1>
             @can('editProfile', $user)
-                <x-button-link.green href="{{ route('profiles.edit', $user) }}" class="text-sm">
+                <x-button-link.gray href="{{ route('profiles.edit', $user) }}" class="text-sm">
                     Edit Profile
-                </x-button-link.green>
+                </x-button-link.gray>
             @endcan
         </div>
     </x-slot>

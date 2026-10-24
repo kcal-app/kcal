@@ -33,9 +33,9 @@
                     </div>
                 </div>
             </h1>
-            <x-button-link.green href="{{ route('journal-entries.create', ['date' => $date->format('Y-m-d')]) }}" class="text-sm">
+            <x-button-link.gray href="{{ route('journal-entries.create', ['date' => $date->format('Y-m-d')]) }}" class="text-sm">
                 Add Entry
-            </x-button-link.green>
+            </x-button-link.gray>
         </div>
     </x-slot>
     <div class="flex align-top flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">

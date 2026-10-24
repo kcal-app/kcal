@@ -3,9 +3,9 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h1 class="font-semibold text-2xl text-gray-800 leading-tight">Users</h1>
-            <x-button-link.green href="{{ route('users.create') }}">
+            <x-button-link.gray href="{{ route('users.create') }}">
                 Add User
-            </x-button-link.green>
+            </x-button-link.gray>
         </div>
     </x-slot>
     <table class="min-w-max w-full table-auto">

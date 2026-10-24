@@ -3,9 +3,9 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h1 class="font-semibold text-2xl text-gray-800 leading-tight">My Goals</h1>
-            <x-button-link.green href="{{ route('goals.create') }}" class="text-sm">
+            <x-button-link.gray href="{{ route('goals.create') }}" class="text-sm">
                 Add Goal
-            </x-button-link.green>
+            </x-button-link.gray>
         </div>
     </x-slot>
     <table class="w-full table-fixed">
