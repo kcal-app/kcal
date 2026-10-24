@@ -486,6 +486,18 @@ Navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080) to log in!
 Create a `docker-compose.override.yml` file to override any of the default settings
 provided for this environment.
 
+### Laravel Boost
+
+Boost provides AI-powered development tools for Laravel.
+
+To use Boost, run
+
+       php artisan boost:install
+
+And configure it as needed.
+
+See https://laravel.com/framework/docs/boost for detailed documentation.
+
 ### Custom console commands
 
 #### `dev:cache-clear`
