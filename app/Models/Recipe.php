@@ -249,7 +249,7 @@ final class Recipe extends Model implements HasMedia
      *
      * @see https://spatie.be/docs/laravel-medialibrary/v9/converting-images/defining-conversions
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('preview')
             ->width(368)

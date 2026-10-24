@@ -197,7 +197,7 @@ final class User extends Authenticatable implements HasMedia
      *
      * @see https://spatie.be/docs/laravel-medialibrary/v9/converting-images/defining-conversions
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('icon')
             ->width(300)

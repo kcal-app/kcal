@@ -42,7 +42,7 @@ abstract class JsonApiTestCase extends LoggedInTestCase
     /**
      * Provide a template for getting related data.
      */
-    protected function getRelatedData(Model $record, string $related, string $expectedType = NULL): void {
+    protected function getRelatedData(Model $record, string $related, ?string $expectedType = null): void {
         $related_route = route(
             "{$this->routeBase}.relationships.{$related}",
             ['record' => $record]
@@ -55,7 +55,7 @@ abstract class JsonApiTestCase extends LoggedInTestCase
     /**
      * Provide a template for included related data.
      */
-    protected function includeRelatedData(Model $record, string $related, string $expectedType = NULL): void {
+    protected function includeRelatedData(Model $record, string $related, ?string $expectedType = null): void {
         $related_route = route(
             "{$this->routeBase}.read",
             ['record' => $record, 'include' => $related]

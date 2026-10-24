@@ -49,7 +49,7 @@ trait Ingredient
      *
      * @see \Spatie\Tags\HasTags
      */
-    public static function getTagTotals(string $locale = null): DatabaseCollection {
+    public static function getTagTotals(?string $locale = null): DatabaseCollection {
         $locale = $locale ?? app()->getLocale();
         return Tag::query()->join('taggables', 'taggables.tag_id', '=', 'id')
             ->select(['name', DB::raw('count(*) as total')])
