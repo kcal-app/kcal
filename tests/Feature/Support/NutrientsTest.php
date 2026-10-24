@@ -17,10 +17,11 @@ class NutrientsTest extends TestCase
      * @dataProvider foodsInvalidNutrientMultipliersProvider
      */
     public function testCalculateFoodInvalidNutrientMultiplier(
-        Food $food,
+        array $foodAttributes,
         float $amount,
         string $fromUnit,
     ): void {
+        $food = Food::factory()->make($foodAttributes);
         $this->expectException(\DomainException::class);
         Nutrients::calculateFoodNutrientMultiplier($food, $amount, $fromUnit);
     }
@@ -31,11 +32,16 @@ class NutrientsTest extends TestCase
      * @dataProvider foodsValidNutrientMultipliersProvider
      */
     public function testCalculateFoodValidNutrientMultiplier(
-        Food $food,
+        ?string $servingUnit,
         float $amount,
         string $fromUnit,
         float $expectedMultiplier
     ): void {
+        $food = Food::factory()->make([
+            'serving_unit' => $servingUnit,
+            'serving_size' => 1,
+            'serving_weight' => 100,
+        ]);
         $this->assertEquals(
             $expectedMultiplier,
             Nutrients::calculateFoodNutrientMultiplier($food, $amount, $fromUnit)
@@ -86,7 +92,7 @@ class NutrientsTest extends TestCase
     /**
      * Provide example recipe and expected nutrient amounts.
      */
-    public function recipesValidRecipeNutrientAmountsProvider(): array {
+    public static function recipesValidRecipeNutrientAmountsProvider(): array {
         return [
             ['calories', 1, 'cup', 10],
             ['calories', 2, 'cup', 20],
@@ -106,56 +112,37 @@ class NutrientsTest extends TestCase
     /**
      * Provide example foods and expected nutrient multipliers.
      */
-    public function foodsInvalidNutrientMultipliersProvider(): array {
-        $this->refreshApplication();
-
-        /** @var \App\Models\Food $foodInvalidUnit */
-        $foodInvalidUnit = Food::factory()->make(['serving_unit' => 'invalid']);
-
+    public static function foodsInvalidNutrientMultipliersProvider(): array {
         return [
-            [$foodInvalidUnit, 1, 'tsp'],
-            [$foodInvalidUnit, 1, 'tbsp'],
-            [$foodInvalidUnit, 1, 'cup'],
-            [Food::factory()->make(['serving_unit' => 'tsp', 'serving_size' => 1]), 1, 'invalid'],
+            [['serving_unit' => 'invalid'], 1, 'tsp'],
+            [['serving_unit' => 'invalid'], 1, 'tbsp'],
+            [['serving_unit' => 'invalid'], 1, 'cup'],
+            [['serving_unit' => 'tsp', 'serving_size' => 1], 1, 'invalid'],
         ];
     }
 
     /**
      * Provide example foods and expected nutrient multipliers.
      */
-    public function foodsValidNutrientMultipliersProvider(): array {
-        $this->refreshApplication();
-
-        /** @var \App\Models\Food[] $foods */
-        $foods = [
-            'tsp' => Food::factory()->make(['serving_unit' => 'tsp', 'serving_size' => 1]),
-            'tbsp' => Food::factory()->make(['serving_unit' => 'tbsp', 'serving_size' => 1]),
-            'cup' => Food::factory()->make(['serving_unit' => 'cup', 'serving_size' => 1]),
-            'none' => Food::factory()->make(['serving_unit' => null, 'serving_unit_name' => 'head']),
-        ];
-
+    public static function foodsValidNutrientMultipliersProvider(): array {
         return [
-//            [$foods['tsp'], $foods['tsp']->serving_weight, 'oz', Nutrients::$gramsPerOunce],
-            [$foods['tsp'], 1, 'serving', 1],
-            [$foods['tsp'], $foods['tsp']->serving_weight * 1.5, 'gram', 1.5],
-            [$foods['tsp'], 2, 'tsp', 2],
-            [$foods['tsp'], 1, 'tbsp', 3],
-            [$foods['tsp'], 1, 'cup', 48],
-//            [$foods['tbsp'], $foods['tbsp']->serving_weight, 'oz', Nutrients::$gramsPerOunce],
-            [$foods['tbsp'], 1, 'serving', 1],
-            [$foods['tbsp'], $foods['tbsp']->serving_weight * 2, 'gram', 2],
-            [$foods['tbsp'], 2, 'tsp', 2/3],
-            [$foods['tbsp'], 1, 'tbsp', 1],
-            [$foods['tbsp'], 2, 'cup', 32],
-//            [$foods['cup'], $foods['cup']->serving_weight, 'oz', Nutrients::$gramsPerOunce],
-            [$foods['cup'], 1, 'serving', 1],
-            [$foods['cup'], $foods['cup']->serving_weight * 2.25, 'gram', 2.25],
-            [$foods['cup'], 3, 'tsp', 1/16],
-            [$foods['cup'], 2, 'tbsp', 1/8],
-            [$foods['cup'], 5, 'cup', 5],
-//            [$foods['none'], $foods['none']->serving_weight, 'oz', Nutrients::$gramsPerOunce],
-            [$foods['none'], 1, 'serving', 1],
-            [$foods['none'], $foods['none']->serving_weight * 3.0125, 'gram', 3.0125],
+            ['tsp', 1, 'serving', 1],
+            ['tsp', 150, 'gram', 1.5],
+            ['tsp', 2, 'tsp', 2],
+            ['tsp', 1, 'tbsp', 3],
+            ['tsp', 1, 'cup', 48],
+            ['tbsp', 1, 'serving', 1],
+            ['tbsp', 200, 'gram', 2],
+            ['tbsp', 2, 'tsp', 2/3],
+            ['tbsp', 1, 'tbsp', 1],
+            ['tbsp', 2, 'cup', 32],
+            ['cup', 1, 'serving', 1],
+            ['cup', 225, 'gram', 2.25],
+            ['cup', 3, 'tsp', 1/16],
+            ['cup', 2, 'tbsp', 1/8],
+            ['cup', 5, 'cup', 5],
+            [null, 1, 'serving', 1],
+            [null, 301.25, 'gram', 3.0125],
         ];
     }
 }

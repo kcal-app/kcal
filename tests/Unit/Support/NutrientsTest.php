@@ -35,7 +35,7 @@ class NutrientsTest extends TestCase
     /**
      * Provide nutrient amounts for and expected rounded results.
      */
-    public function nutrientAmountsProvider(): array {
+    public static function nutrientAmountsProvider(): array {
         return [
             [0, 'calories', 0], [1, 'calories', 0], [2, 'calories', 0], [3, 'calories', 0], [4, 'calories', 0], [5, 'calories', 5], [21, 'calories', 20], [23, 'calories', 25], [45, 'calories', 45], [50, 'calories', 50],
             [0, 'carbohydrates', 0], [0.1, 'carbohydrates', 0], [0.2, 'carbohydrates', 0], [0.3, 'carbohydrates', 0], [0.4, 'carbohydrates', 0], [0.5, 'carbohydrates', 0], [0.9, 'carbohydrates', 0], [1, 'carbohydrates', 1], [2.25, 'carbohydrates', 2], [2.75, 'carbohydrates', 3],

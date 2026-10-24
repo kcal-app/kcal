@@ -51,7 +51,7 @@ class StringIsPositiveDecimalOrFractionTest extends RulesTestCase
      *
      * @see \Tests\Unit\Rules\StringIsPositiveDecimalOrFractionTest::testStringIsDecimalOrFractionRule()
      */
-    public function invalidDecimalsAndFractions(): array {
+    public static function invalidDecimalsAndFractions(): array {
         return [['-1'], [-1], ['0'], [0], ['string']];
     }
 
@@ -60,7 +60,7 @@ class StringIsPositiveDecimalOrFractionTest extends RulesTestCase
      *
      * @see \Tests\Unit\Rules\StringIsPositiveDecimalOrFractionTest::testStringIsDecimalOrFractionRule()
      */
-    public function validDecimalsAndFractions(): array {
+    public static function validDecimalsAndFractions(): array {
         return [
             ['0.5'], ['1'], ['1.25'], ['1 1/2'], ['2 2/3'],
             [1/3], [1], [2.5]

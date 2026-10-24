@@ -46,7 +46,7 @@ class NumberTest extends TestCase
      *
      * @see \Tests\Unit\Support\NumberTest::testFloatFromString()
      */
-    public function decimalStringFloatsProvider(): array {
+    public static function decimalStringFloatsProvider(): array {
         return [
             ['0.0', 0.0], ['0.125', 0.125], ['0.25', 0.25], ['0.5', 0.5],
             ['0.75', 0.75], ['1.0', 1.0], ['1.25', 1.25], ['1.5', 1.5],
@@ -60,7 +60,7 @@ class NumberTest extends TestCase
      * @see \Tests\Unit\Support\NumberTest::testFloatFromString()
      * @see \Tests\Unit\Support\NumberTest::testFractionStringFromFloat()
      */
-    public function fractionStringFloatsProvider(): array {
+    public static function fractionStringFloatsProvider(): array {
         return [
             ['0', 0.0], ['1/8', 0.125], ['1/4', 0.25], ['1/2', 0.5],
             ['3/4', 0.75], ['1', 1.0], ['1 1/4', 1.25],
