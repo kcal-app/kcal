@@ -4,7 +4,8 @@ namespace App\Services\Csp\Policies;
 
 use Spatie\Csp\Directive;
 use Spatie\Csp\Keyword;
-use Spatie\Csp\Policies\Policy;
+use Spatie\Csp\Policy;
+use Spatie\Csp\Preset;
 use Spatie\Csp\Scheme;
 
 /**
@@ -12,20 +13,20 @@ use Spatie\Csp\Scheme;
  *
  * @see \Spatie\Csp\Policies\Basic
  */
-class DefaultPolicy extends Policy
+class DefaultPolicy implements Preset
 {
-    public function configure(): void
+    public function configure(Policy $policy): void
     {
-        $this
-            ->addDirective(Directive::BASE, Keyword::SELF)
-            ->addDirective(Directive::CONNECT, Keyword::SELF)
-            ->addDirective(Directive::DEFAULT, Keyword::SELF)
-            ->addDirective(Directive::FORM_ACTION, Keyword::SELF)
-            ->addDirective(Directive::IMG, [Keyword::SELF, Keyword::UNSAFE_INLINE, Scheme::DATA])
-            ->addDirective(Directive::MEDIA, Keyword::SELF)
-            ->addDirective(Directive::OBJECT, Keyword::NONE)
-            ->addDirective(Directive::SCRIPT, [Keyword::SELF, Keyword::UNSAFE_EVAL, Keyword::UNSAFE_INLINE])
-            ->addDirective(Directive::STYLE, [Keyword::SELF, Keyword::UNSAFE_INLINE])
-            ->addDirective(Directive::FRAME, Keyword::NONE);
+        $policy
+            ->add(Directive::BASE, Keyword::SELF)
+            ->add(Directive::CONNECT, Keyword::SELF)
+            ->add(Directive::DEFAULT, Keyword::SELF)
+            ->add(Directive::FORM_ACTION, Keyword::SELF)
+            ->add(Directive::IMG, [Keyword::SELF, Keyword::UNSAFE_INLINE, Scheme::DATA])
+            ->add(Directive::MEDIA, Keyword::SELF)
+            ->add(Directive::OBJECT, Keyword::NONE)
+            ->add(Directive::SCRIPT, [Keyword::SELF, Keyword::UNSAFE_EVAL, Keyword::UNSAFE_INLINE])
+            ->add(Directive::STYLE, [Keyword::SELF, Keyword::UNSAFE_INLINE])
+            ->add(Directive::FRAME, Keyword::NONE);
     }
 }

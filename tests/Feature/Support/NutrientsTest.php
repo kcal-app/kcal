@@ -6,6 +6,7 @@ use App\Models\Food;
 use App\Models\IngredientAmount;
 use App\Models\Recipe;
 use App\Support\Nutrients;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class NutrientsTest extends TestCase
@@ -13,9 +14,8 @@ class NutrientsTest extends TestCase
 
     /**
      * Test invalid Food nutrient multiplier calculation.
-     *
-     * @dataProvider foodsInvalidNutrientMultipliersProvider
      */
+    #[DataProvider('foodsInvalidNutrientMultipliersProvider')]
     public function testCalculateFoodInvalidNutrientMultiplier(
         array $foodAttributes,
         float $amount,
@@ -28,9 +28,8 @@ class NutrientsTest extends TestCase
 
     /**
      * Test valid Food nutrient multiplier calculation.
-     *
-     * @dataProvider foodsValidNutrientMultipliersProvider
      */
+    #[DataProvider('foodsValidNutrientMultipliersProvider')]
     public function testCalculateFoodValidNutrientMultiplier(
         ?string $servingUnit,
         float $amount,
@@ -50,9 +49,8 @@ class NutrientsTest extends TestCase
 
     /**
      * Test valid Recipe nutrient amount calculation.
-     *
-     * @dataProvider recipesValidRecipeNutrientAmountsProvider
      */
+    #[DataProvider('recipesValidRecipeNutrientAmountsProvider')]
     public function testCalculateValidRecipeNutrientAmount(
         string $nutrient,
         float $amount,

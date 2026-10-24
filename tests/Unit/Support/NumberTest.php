@@ -3,6 +3,7 @@
 namespace Tests\Unit\Support;
 
 use App\Support\Number;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class NumberTest extends TestCase
@@ -11,11 +12,10 @@ class NumberTest extends TestCase
     /**
      * Test float to string conversion.
      *
-     * @dataProvider decimalStringFloatsProvider
-     * @dataProvider fractionStringFloatsProvider
-     *
      * @see \App\Support\Number::floatFromString()
      */
+    #[DataProvider('decimalStringFloatsProvider')]
+    #[DataProvider('fractionStringFloatsProvider')]
     public function testFloatFromString(string $string, float $expectedFloat): void
     {
         $result = Number::floatFromString($string);
@@ -26,10 +26,9 @@ class NumberTest extends TestCase
     /**
      * Test (rational) string to float conversion.
      *
-     * @dataProvider fractionStringFloatsProvider
-     *
      * @see \App\Support\Number::rationalStringFromFloat()
      */
+    #[DataProvider('fractionStringFloatsProvider')]
     public function testFractionStringFromFloat(string $expectedString, float $float): void
     {
         $result = Number::rationalStringFromFloat($float);

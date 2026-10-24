@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use Algolia\AlgoliaSearch\Exceptions\UnreachableException;
+use Algolia\AlgoliaSearch\Exceptions\AlgoliaException;
 use App\Http\Controllers\IngredientPickerController;
 use App\Models\Food;
 use App\Models\Recipe;
@@ -43,8 +43,8 @@ class IngredientPickerControllerTest extends LoggedInTestCase
      */
     public function testCanSearchWithAlgolia(): void
     {
-        $this->expectException(UnreachableException::class);
-        $this->expectExceptionMessage("Impossible to connect, please check your Algolia Application Id.");
+        $this->expectException(AlgoliaException::class);
+        $this->expectExceptionMessage('`appId` is missing.');
 
         Config::set('scout.driver', 'algolia');
         $response = $this->get($this->buildUrl(['term' => 'butter']));

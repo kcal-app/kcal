@@ -21,8 +21,9 @@ class Words
     public static function __callStatic($method, $parameters): ?Collection {
         if (in_array($method, ['adjectives', 'nouns', 'prepositions', 'verbs'])) {
             $cache_key = __METHOD__ . "::{$method}";
-            if (Cache::has($cache_key)) {
-                return Cache::get($cache_key);
+            $cached_words = Cache::get($cache_key);
+            if (is_array($cached_words)) {
+                return new Collection($cached_words);
             }
 
             $words = new Collection();
@@ -32,7 +33,7 @@ class Words
                 $words->push(...$contents);
             }
 
-            Cache::put($cache_key, $words, 60 * 5);
+            Cache::put($cache_key, $words->all(), 60 * 5);
             return $words;
         }
         throw new \BadMethodCallException();

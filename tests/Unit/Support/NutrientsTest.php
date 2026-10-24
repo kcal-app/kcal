@@ -3,6 +3,7 @@
 namespace Tests\Unit\Support;
 
 use App\Support\Nutrients;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class NutrientsTest extends TestCase
@@ -11,10 +12,9 @@ class NutrientsTest extends TestCase
     /**
      * Test nutrient rounding.
      *
-     * @dataProvider nutrientAmountsProvider
-     *
      * @see \App\Support\Nutrients::round()
      */
+    #[DataProvider('nutrientAmountsProvider')]
     public function testNutrientRounding(float $amount, string $nutrient, float $expectedFloat): void
     {
         $result = Nutrients::round($amount, $nutrient);

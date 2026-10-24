@@ -3,6 +3,7 @@
 namespace Tests\Unit\Rules;
 
 use App\Rules\StringIsPositiveDecimalOrFraction;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StringIsPositiveDecimalOrFractionTest extends RulesTestCase
 {
@@ -19,10 +20,9 @@ class StringIsPositiveDecimalOrFractionTest extends RulesTestCase
     /**
      * Test string is decimal or faction rule with failing values.
      *
-     * @dataProvider invalidDecimalsAndFractions
-     *
      * @see \App\Rules\InArray
      */
+    #[DataProvider('invalidDecimalsAndFractions')]
     public function testStringIsDecimalOrFractionRuleFails(mixed $value): void
     {
         $this->validator->setData([$value]);
@@ -32,10 +32,9 @@ class StringIsPositiveDecimalOrFractionTest extends RulesTestCase
     /**
      * Test string is decimal or faction rule with passing values.
      *
-     * @dataProvider validDecimalsAndFractions
-     *
      * @see \App\Rules\InArray
      */
+    #[DataProvider('validDecimalsAndFractions')]
     public function testStringIsDecimalOrFractionRulePasses(mixed $value): void
     {
         $this->validator->setData([$value]);
