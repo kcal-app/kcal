@@ -19,12 +19,12 @@ class CreateGoalsTable extends Migration
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('name');
             $table->unsignedTinyInteger('days')->nullable();
-            $table->unsignedFloat('calories')->nullable();
-            $table->unsignedFloat('fat')->nullable();
-            $table->unsignedFloat('cholesterol')->nullable();
-            $table->unsignedFloat('sodium')->nullable();
-            $table->unsignedFloat('carbohydrates')->nullable();
-            $table->unsignedFloat('protein')->nullable();
+            $table->float('calories')->unsigned()->nullable();
+            $table->float('fat')->unsigned()->nullable();
+            $table->float('cholesterol')->unsigned()->nullable();
+            $table->float('sodium')->unsigned()->nullable();
+            $table->float('carbohydrates')->unsigned()->nullable();
+            $table->float('protein')->unsigned()->nullable();
             $table->timestamps();
             $table->index('user_id');
         });

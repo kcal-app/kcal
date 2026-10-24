@@ -23,7 +23,7 @@ class CreateRecipesTable extends Migration
             $table->integer('time_cook')->nullable();
             $table->string('source')->nullable();
             $table->unsignedInteger('servings');
-            $table->unsignedFloat('weight')->nullable();
+            $table->float('weight')->unsigned()->nullable();
             $table->decimal('volume', 10, 8)->unsigned()->nullable();
             $table->timestamps();
         });

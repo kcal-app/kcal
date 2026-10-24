@@ -22,13 +22,13 @@ class CreateFoodsTable extends Migration
             $table->decimal('serving_size', 10, 8)->unsigned();
             $table->enum('serving_unit', ['tsp', 'tbsp', 'cup', 'oz'])->nullable();
             $table->string('serving_unit_name')->nullable();
-            $table->unsignedFloat('serving_weight');
-            $table->unsignedFloat('calories')->default(0);
-            $table->unsignedFloat('fat')->default(0);
-            $table->unsignedFloat('cholesterol')->default(0);
-            $table->unsignedFloat('sodium')->default(0);
-            $table->unsignedFloat('carbohydrates')->default(0);
-            $table->unsignedFloat('protein')->default(0);
+            $table->float('serving_weight')->unsigned();
+            $table->float('calories')->unsigned()->default(0);
+            $table->float('fat')->unsigned()->default(0);
+            $table->float('cholesterol')->unsigned()->default(0);
+            $table->float('sodium')->unsigned()->default(0);
+            $table->float('carbohydrates')->unsigned()->default(0);
+            $table->float('protein')->unsigned()->default(0);
             $table->timestamps();
         });
     }

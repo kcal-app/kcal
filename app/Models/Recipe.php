@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Spatie\Image\Manipulations;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -258,7 +258,7 @@ final class Recipe extends Model implements HasMedia
             ->optimize();
 
         $this->addMediaConversion('header')
-            ->fit(Manipulations::FIT_CROP, 1600, 900)
+            ->fit(Fit::Crop, 1600, 900)
             ->sharpen(10)
             ->optimize();
     }

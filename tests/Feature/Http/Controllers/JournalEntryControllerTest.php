@@ -50,7 +50,6 @@ class JournalEntryControllerTest extends HttpControllerTestCase
      */
     public function testCanViewInstance(): void
     {
-        $this->setName('can *not* view instance');
         // Journal entries are not independently viewable.
     }
 
@@ -59,7 +58,6 @@ class JournalEntryControllerTest extends HttpControllerTestCase
      */
     public function testCanEditInstance(): void
     {
-        $this->setName('can *not* edit instance');
         // Journal entries are not editable.
     }
 

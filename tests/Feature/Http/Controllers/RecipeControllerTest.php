@@ -113,7 +113,7 @@ class RecipeControllerTest extends HttpControllerTestCase
         $response = $this->followingRedirects()->post($duplicate_url, ['name' => 'Duplicated Recipe']);
         $response->assertOk();
 
-        $recipe = Recipe::latest()->first();
+        $recipe = Recipe::where('name', 'Duplicated Recipe')->firstOrFail();
         $this->assertEquals('Duplicated Recipe', $recipe->name);
         $this->assertEquals($instance->tags->toArray(), $instance->tags->toArray());
         $this->assertEquals($instance->ingredientAmounts->toArray(), $instance->ingredientAmounts->toArray());

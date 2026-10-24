@@ -46,7 +46,6 @@ class UserControllerTest extends HttpControllerTestCase
      */
     public function testCanViewInstance(): void
     {
-        $this->setName('can *not* view instance');
         // Users are not independently viewable.
     }
 
