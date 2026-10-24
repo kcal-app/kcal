@@ -1,6 +1,6 @@
 ARG MEDIA_LIBRARY_DEPS="jpegoptim optipng pngquant gifsicle"
 
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 ARG MEDIA_LIBRARY_DEPS
 

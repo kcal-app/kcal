@@ -163,7 +163,7 @@ Docker is the recommended deployment method. See [kcal-app/kcal-docker](https://
 
 General requirements for any deployment are:
 
- - PHP 8.3 or later with Composer 2.x and PHP extensions: `bcmath`, `curl`, `gd`, `intl`,
+ - PHP 8.4 or later with Composer 2.x and PHP extensions: `bcmath`, `curl`, `gd`, `intl`,
    `mbstring`, `xml`, `zip`.
  - Web server/proxy (Apache, nginx, etc.)
  - Database (MySQL/MariaDB, PostgreSQL, etc.)
@@ -204,7 +204,7 @@ section for other options if lower memory support is needed.
 
 1. Install dependencies.
 
-       sudo apt-get install elasticsearch mysql-server-8.0 nginx-full php8.3 php8.3-bcmath php8.3-cli php8.3-curl php8.3-gd php8.3-intl php8.3-mbstring php8.3-mysql php8.3-redis php8.3-xml php8.3-zip redis php8.3-fpm
+       sudo apt-get install elasticsearch mysql-server-8.0 nginx-full php8.4 php8.4-bcmath php8.4-cli php8.4-curl php8.4-gd php8.4-intl php8.4-mbstring php8.4-mysql php8.4-redis php8.4-xml php8.4-zip redis php8.4-fpm
 
 1. Start Elasticsearch and configure to run at start up.
 
@@ -256,7 +256,7 @@ section for other options if lower memory support is needed.
            error_page 404 /index.php;
            
            location ~ \.php$ {
-              fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+              fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
               fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
               include fastcgi_params;
            }

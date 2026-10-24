@@ -1,6 +1,6 @@
 FROM node:20-bookworm-slim AS node
 FROM composer:2.8 AS composer
-FROM php:8.3-cli-bookworm
+FROM php:8.4-cli-bookworm
 
 ARG WWWGROUP=1000
 ARG WWWUSER=1000
