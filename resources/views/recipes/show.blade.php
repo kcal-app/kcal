@@ -32,7 +32,7 @@
             @endif
             @if($recipe->description)
                 <section class="mb-2 prose prose-lg">
-                    {!! $recipe->description !!}
+                    {!! \App\Support\HtmlSanitizer::clean($recipe->description) !!}
                 </section>
             @endif
             <section x-data="{ showNutrientsSummary: false }">

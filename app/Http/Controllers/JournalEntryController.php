@@ -293,6 +293,7 @@ class JournalEntryController extends Controller
      */
     public function delete(JournalEntry $journal_entry): View
     {
+        abort_unless($journal_entry->user_id === Auth::id(), 403);
         return view('journal-entries.delete')
             ->with('journal_entry', $journal_entry);
     }
@@ -302,6 +303,7 @@ class JournalEntryController extends Controller
      */
     public function destroy(JournalEntry $journal_entry): RedirectResponse
     {
+        abort_unless($journal_entry->user_id === Auth::id(), 403);
         $journal_entry->delete();
         session()->flash('message', 'Journal entry deleted!');
         return redirect(route('journal-entries.index', [

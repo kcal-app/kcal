@@ -4,6 +4,7 @@ namespace App\JsonApi\Adapters;
 
 use App\Models\JournalEntry;
 use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 use CloudCreativity\LaravelJsonApi\Eloquent\MorphHasMany;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Support\Collection;
@@ -32,6 +33,15 @@ class JournalEntryAdapter extends AdapterBase
     public function __construct(StandardStrategy $paging)
     {
         parent::__construct(new JournalEntry(), $paging);
+    }
+
+    /**
+     * Scope every query (collection index and single-resource read) to the authenticated user's
+     * own records, so one user cannot read another user's journal entries via the JSON:API.
+     */
+    protected function newQuery()
+    {
+        return parent::newQuery()->where($this->model->getTable() . '.user_id', Auth::id());
     }
 
     /**
