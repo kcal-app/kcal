@@ -23,8 +23,15 @@ trait UpdatesUser
             unset($input['password']);
         }
 
-        // Maintain the existing value if it is not on the form.
-        $input['admin'] = $input['admin'] ?? ($user->exists && $user->admin);
+        // Only an admin may set the admin flag. For anyone else (e.g. a user editing their own
+        // profile via ProfileController, which is gated by can:editProfile = owner-only) keep the
+        // stored value, so a non-admin cannot escalate to admin by posting admin=1 to the update.
+        if ($request->user()?->admin) {
+            $input['admin'] = $input['admin'] ?? ($user->exists && $user->admin);
+        }
+        else {
+            unset($input['admin']);
+        }
 
         $user->fill($input)->save();
 
