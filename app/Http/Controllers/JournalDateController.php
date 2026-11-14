@@ -14,6 +14,7 @@ class JournalDateController extends Controller
      */
     public function updateGoal(Request $request, JournalDate $journalDate): RedirectResponse
     {
+        $this->authorize("access", $journalDate);
         $attributes = $request->validate(['goal' => 'exists:App\Models\Goal,id']);
         $journalDate->goal()->associate($attributes['goal'])->save();
         return redirect()->route('journal-entries.index', [

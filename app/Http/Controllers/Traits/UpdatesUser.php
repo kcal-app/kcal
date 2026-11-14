@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Traits;
 
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -23,8 +24,15 @@ trait UpdatesUser
             unset($input['password']);
         }
 
-        // Maintain the existing value if it is not on the form.
-        $input['admin'] = $input['admin'] ?? ($user->exists && $user->admin);
+        // Only an administrator may set the admin flag. For everyone else
+        // (e.g. a user editing their own profile) strip it from the input so
+        // it can never be mass-assigned; the existing value is preserved.
+        if (Gate::allows('administer', User::class)) {
+            $input['admin'] = $input['admin'] ?? ($user->exists && $user->admin);
+        }
+        else {
+            unset($input['admin']);
+        }
 
         $user->fill($input)->save();
 
